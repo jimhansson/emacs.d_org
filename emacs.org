@@ -145,6 +145,6 @@ that I share between work and home
   Last but not least we need to load the part of the .emacs that is
   local to this machine. That is also a org-babel emacs file.
   #+begin_src emacs-lisp
-    (add-to-list 'load-path "~/.emacs.d_org/local")
-    (org-babel-load-file "~/.emacs.d_org/local/emacs.org")
+    (add-to-list 'load-path (concat local-emacs-org-dir "local"))
+    (org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
   #+end_src
