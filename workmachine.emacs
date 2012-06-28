@@ -113,7 +113,6 @@
 ;; otherwise you are prompted each time you start an interactive R session
 (setq ess-ask-for-ess-directory nil)
 
-
 (global-ede-mode t)
 (put 'narrow-to-region 'disabled nil)
 
@@ -142,8 +141,6 @@
  '(c-basic-offset 4)
  '(column-number-mode t)
  '(custom-enabled-themes (quote (tango-dark)))
- '(display-battery-mode t)
- '(display-time-24hr-format t)
  '(ede-project-directories (quote ("c:/Users/jiha/Documents/GitHub/hell")))
  '(exec-path (quote ("c:/oracle/product/11.1.0/client_1" "C:/oracle/product/11.1.0/client_1/bin" "c:/W/10.2_next/iccruntime/bin" "C:/Program Files/Common Files/Microsoft Shared/Windows Live" "C:/windows/system32" "C:/windows" "C:/windows/System32/Wbem" "C:/windows/System32/WindowsPowerShell/v1.0/" "C:/Program Files (x86)/Common Files/Roxio Shared/DLLShared/" "C:/Program Files/WIDCOMM/Bluetooth Software/" "C:/Program Files/WIDCOMM/Bluetooth Software/syswow64" "C:/Program Files (x86)/Common Files/Roxio Shared/OEM/DLLShared/" "C:/Program Files (x86)/Common Files/Roxio Shared/OEM/DLLShared/" "C:/Program Files (x86)/Common Files/Roxio Shared/OEM/12.0/DLLShared/" "C:/Program Files (x86)/Roxio/OEM/AudioCore/" "C:/Program Files (x86)/Intel/Services/IPT/" "c:/Program Files (x86)/Microsoft SQL Server/90/Tools/binn/" "C:/Program Files/TortoiseSVN/bin" "c:/Users/jiha/emacs-24.1/bin" "c:\\cygwin\\bin")))
  '(filesets-data (quote (("OrgFiles" (:tree "C:\\users\\jiha\\Documents\\org" "^.+\\.org$") (:tree-max-level 3)) ("SQL files" (:tree "C:\\W\\10.2_Next\\icc\\api\\dbi\\db_schema\\8.0\\Oracle\\admin" "^.+\\.plb$") (:tree-max-level 2)))))
@@ -156,11 +153,8 @@
  '(org-agenda-files (quote ("c:/Users/jiha/Documents/org/mdms/project.org" "c:/Users/jiha/Documents/org/GTD.org")))
  '(org-agenda-start-with-clockreport-mode t)
  '(org-agenda-start-with-follow-mode t)
- '(org-clock-into-drawer t)
  '(org-enforce-todo-checkbox-dependencies t)
  '(org-enforce-todo-dependencies t)
- '(org-log-into-drawer t)
- '(org-log-redeadline (quote note))
  '(org-modules (quote (org-bbdb org-bibtex org-crypt org-docview org-gnus org-id org-info org-jsinfo org-habit org-irc org-mew org-mhe org-protocol org-rmail org-vm org-wl org-w3m org-mouse)))
  '(read-mail-command (quote gnus))
  '(safe-local-variable-values (quote ((auto-fill-mode))))
@@ -178,7 +172,6 @@
  '(standard-indent 4)
  '(tab-always-indent (quote complete))
  '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
- '(tls-program (quote ("gnutls-cli -p %p %h")))
  '(tool-bar-mode nil)
  '(uniquify-buffer-name-style (quote post-forward) nil (uniquify))
  '(user-full-name "Jim Hansson")
