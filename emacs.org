@@ -4,7 +4,7 @@
 #+EMAIL: jim.hansson@gmail.com
 #+DATE: <2012-06-28 tor>
 #+LANGUAGE: english
-#+STARTUP: hidestars odd hideblocks
+#+STARTUP: hidestars hideblocks
 
 This is my main .emacs file. It is responsible for calling out to the
 local file at different points. This is placed in a git repository
@@ -14,68 +14,68 @@ that I share between work and home
   Basic things that could have been down throu custom-set-variable but
   then I would have harder time to replicate that between machines.
 
-*** Requirements
+** Requirements
 
-    - Emacs 24
-    - a basic .emacs file that calls this after it inits org-babel 
-    - a lot of extra packages. most configuration will check for it
-      
-*** Other important stuff
-***** Only load things that exists.
+   - Emacs 24
+   - a basic .emacs file that calls this after it inits org-babel 
+   - a lot of extra packages. most configuration will check for it
+     
+** Other important stuff
+*** Only load things that exists.
 
-      that can be done this way, use this to avoid errors on machine
-      which don't have every package installed.
+    that can be done this way, use this to avoid errors on machine
+    which don't have every package installed.
 
-      #+begin_example
-        (when (require 'deft nil 'noerror) 
-        (setq
-           deft-extension "org"
-           deft-directory "~/Org/deft/"
-           deft-text-mode 'org-mode)
-        (global-set-key (kbd "<f9>") 'deft))
-      #+end_example
+    #+begin_example
+      (when (require 'deft nil 'noerror) 
+      (setq
+         deft-extension "org"
+         deft-directory "~/Org/deft/"
+         deft-text-mode 'org-mode)
+      (global-set-key (kbd "<f9>") 'deft))
+    #+end_example
 
-*** Setup
+** Setup
 
-    Here we setup some basic things, I dont like the toolbar so that we
-    turn off, I use OrgMode to almost everything(even my .emacs) so
-    that will be my default mode. Almost all computers I use are
-    laptops and who in there right mind uses 12h clocks.
+   Here we setup some basic things, I dont like the toolbar so that we
+   turn off, I use OrgMode to almost everything(even my .emacs) so
+   that will be my default mode. Almost all computers I use are
+   laptops and who in there right mind uses 12h clocks.
 
-    #+begin_src emacs-lisp
-      (tool-bar-mode -1)
-      (setq default-major-mode 'org-mode)
-      (add-hook 'text-mode-hook 'turn-on-auto-fill)
-      (setq display-battery-mode t)
-      (setq display-time-24hr-format t)
-    #+end_src
+   #+begin_src emacs-lisp
+     (tool-bar-mode -1)
+     (setq default-major-mode 'org-mode)
+     (add-hook 'text-mode-hook 'turn-on-auto-fill)
+     (setq display-battery-mode t)
+     (setq display-time-24hr-format t)
+   #+end_src
 
-*** Org-Mode
+** Org-Mode
 
-    #+begin_src emacs-lisp
-      (setq org-deadline-warning-days 7)
-      (setq org-timeline-show-empty-dates t)
-      (setq org-agenda-include-diary nil)
-      ;; resurect clock and clocking history
-      (org-clock-persistence-insinuate)
-    #+end_src
+   #+begin_src emacs-lisp
+     (setq org-deadline-warning-days 7)
+     (setq org-timeline-show-empty-dates t)
+     (setq org-agenda-include-diary nil)
+     ;; resurect clock and clocking history
+     (org-clock-persistence-insinuate)
+   #+end_src
 
-*** Disable warnings for first time users
-    
-    For some reason some questions in emacs are yes/no and some are y/n
-    this trips me sometimes so we turn that off, and the same goes for
-    killing emacs. We also removes some questions that are asked to
-    make sure that the users really wants what is going to happen, I
-    know how to use undo and else I usually have some version control
-    system running so I can go back.
+** Disable warnings for first time users
+   
+   For some reason some questions in emacs are yes/no and some are y/n
+   this trips me sometimes so we turn that off, and the same goes for
+   killing emacs. We also removes some questions that are asked to
+   make sure that the users really wants what is going to happen, I
+   know how to use undo and else I usually have some version control
+   system running so I can go back.
 
-    #+begin_src emacs-lisp
-      ;; Changes all yes/no questions to y/n type
-      (fset 'yes-or-no-p 'y-or-n-p)
-      (set-variable 'confirm-kill-emacs 'yes-or-no-p)
-      ;; more of these as I find them
-      (put 'narrow-to-region 'disabled nil)
-    #+end_src
+   #+begin_src emacs-lisp
+     ;; Changes all yes/no questions to y/n type
+     (fset 'yes-or-no-p 'y-or-n-p)
+     (set-variable 'confirm-kill-emacs 'yes-or-no-p)
+     ;; more of these as I find them
+     (put 'narrow-to-region 'disabled nil)
+   #+end_src
 
 * Coding
 
@@ -128,25 +128,25 @@ that I share between work and home
     
   #+end_src
 
-*** Logging and clocking
-    
-    I want to have the change to enter a message for every change a
-    make to items that are scheduled and for what I make with my
-    time. It's easy to ignore if not needed I just pres C-c C-c, and no
-    message will be saved.
+** Logging and clocking
+   
+   I want to have the change to enter a message for every change a
+   make to items that are scheduled and for what I make with my
+   time. It's easy to ignore if not needed I just pres C-c C-c, and no
+   message will be saved.
 
-    #+begin_src emacs-lisp
-      (setq org-clock-into-drawer t)
-      (setq org-log-into-drawer t)
-      (setq org-log-redeadline (quote note))
-    #+end_src
+   #+begin_src emacs-lisp
+     (setq org-clock-into-drawer t)
+     (setq org-log-into-drawer t)
+     (setq org-log-redeadline (quote note))
+   #+end_src
 
-*** Agenda
-    
-    this the a big part
+** Agenda
+   
+   this the a big part
 
-*** Exports
-*** Babel
+** Exports
+** Babel
 
 * Remember
   
