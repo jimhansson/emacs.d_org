@@ -98,6 +98,9 @@ that I share between work and home
    #+end_src
 
 * Coding
+
+  Here I will place everything that has todo with coding
+
 * OrgMode
    #+begin_src emacs-lisp
      (setq org-agenda-exporter-settings
