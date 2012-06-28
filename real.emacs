@@ -15,6 +15,8 @@
 (require 'org-install)
 (require 'org)
 
+;;you need to change this
+(setq local-emacs-org-dir "~/.emacs.d_org/")
 ;; load neatly organized org file!
-(add-to-list 'load-path "~/.emacs.d_org/")
-(org-babel-load-file "~/.emacs.d_org/emacs.org")
+(add-to-list 'load-path local-emacs-org-dir)
+(org-babel-load-file (concat local-emacs-org-dir "emacs.org"))

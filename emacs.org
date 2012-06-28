@@ -42,7 +42,7 @@ that I share between work and home
 ** Disable warnings for first time users
    
    For some reason some questions in emacs are yes/no and some are y/n
-   this trips me sometimes so we turn that of, and the same goes for
+   this trips me sometimes so we turn that off, and the same goes for
    killing emacs. We also removes some questions that are asked to
    make sure that the users really wants what is going to happen, I
    know how to use undo and else I usually have some version control
