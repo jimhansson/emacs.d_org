@@ -1,0 +1,96 @@
+
+* mab 
+  #+begin_src emacs-lisp
+(setq default-major-mode 'org-mode)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+; dont use tabs for indenting
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 3)
+
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+
+(setq org-log-done nil)
+(setq org-agenda-include-diary nil)
+(setq org-deadline-warning-days 7)
+(setq org-timeline-show-empty-dates t)
+(setq org-insert-mode-line-in-empty-file t)
+
+(autoload 'remember "remember" nil t)
+(autoload 'remember-region "remember" nil t)
+
+(setq org-directory "~/Dokument/orgfiles/")
+(setq org-default-notes-file "~/.notes")
+(setq remember-annotation-functions '(org-remember-annotation))
+(setq remember-handler-functions '(org-remember-handler))
+(add-hook 'remember-mode-hook 'org-remember-apply-template)
+(define-key global-map "\C-cr" 'org-remember)
+
+(setq org-remember-templates
+     '(
+      ("Todo" ?t "** TODO %^{Brief Description} %^g\n%?\nAdded: %U" "~/Dokument/GTD/gtd.org" "Tasks")
+      ("Private" ?p "\n* %^{topic} %T \n%i%?\n" "~/Dokument/GTD/gtd.org" "Private")
+      ("WordofDay" ?w "\n* %^{topic} \n%i%?\n" "~/Dokument/GTD/wotd.org")
+      ))
+
+(define-key global-map [f8] 'remember)
+(define-key global-map [f9] 'remember-region)
+
+(setq org-agenda-exporter-settings
+      '((ps-number-of-columns 1)
+        (ps-landscape-mode t)
+        (htmlize-output-type 'css)))
+
+(setq org-agenda-custom-commands
+'(
+
+("P" "Projects"   
+((tags "PROJECT")))
+
+("H" "Office and Home Lists"
+     ((agenda)
+          (tags-todo "OFFICE")
+          (tags-todo "HOME")
+          (tags-todo "COMPUTER")
+          (tags-todo "DVD")
+          (tags-todo "READING")))
+
+("D" "Daily Action List"
+     (
+          (agenda "" ((org-agenda-ndays 1)
+                      (org-agenda-sorting-strategy
+                       (quote ((agenda time-up priority-down tag-up) )))
+                      (org-deadline-warning-days 0)
+                      ))))
+)
+)
+
+(defun gtd ()
+    (interactive)
+    (find-file "~/Dokument/GTD/gtd.org")
+)
+(global-set-key (kbd "C-c g") 'gtd)
+
+
+(add-hook 'org-agenda-mode-hook 'hl-line-mode)
+
+(global-font-lock-mode t)
+
+(global-set-key "\C-x\C-r" 'prefix-region)
+(global-set-key "\C-x\C-l" 'goto-line)
+;;(global-set-key "\C-x\C-y" 'copy-region-as-kill)
+
+;; Changes all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(set-variable 'confirm-kill-emacs 'yes-or-no-p)
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(put 'narrow-to-region 'disabled nil)
+#+end_src
