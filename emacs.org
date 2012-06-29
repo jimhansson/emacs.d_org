@@ -61,16 +61,6 @@ that I share between work and home
      (setq uniquify-buffer-name-style (quote post-forward))
    #+end_src
 
-** Org-Mode
-
-   #+begin_src emacs-lisp
-     (setq org-deadline-warning-days 7)
-     (setq org-timeline-show-empty-dates t)
-     (setq org-agenda-include-diary nil)
-     ;; resurect clock and clocking history
-     (org-clock-persistence-insinuate)
-   #+end_src
-
 ** Disable warnings for first time users
    
    For some reason some questions in emacs are yes/no and some are y/n
@@ -281,7 +271,15 @@ that I share between work and home
 ** TODO Coding styles
 
 * OrgMode
- 
+** Basic
+   #+begin_src emacs-lisp
+     (setq org-deadline-warning-days 7)
+     (setq org-timeline-show-empty-dates t)
+     (setq org-agenda-include-diary nil)
+     ;; resurect clock and clocking history
+     (org-clock-persistence-insinuate)
+   #+end_src
+
   A large part of the configuration has to do with how org should
   behave. it's a pretty complex mode with lot of things you could
   change. I have tried to make it as simple a possible with sub-trees
@@ -326,7 +324,11 @@ that I share between work and home
     (add-hook 'org-agenda-mode-hook 'hl-line-mode)
     
   #+end_src
-
+** Init
+   #+begin_src emacs-lisp
+   (org-babel-load-file (concat local-org-files-dir "init.org"))
+   (org-babel-load-file (concat shared-org-files-dir "init.org"))
+   #+end_src
 ** Logging and clocking
    
    I want to have the change to enter a message for every change a
@@ -342,11 +344,16 @@ that I share between work and home
 
 ** TODO Agenda
    
-   this the a big part
+   this a big part
 
 ** TODO Exports
 ** Babel
 
+** Post
+   #+begin_src emacs-lisp
+   (org-babel-load-file (concat shared-org-files-dir "post.org"))
+   (org-babel-load-file (concat local-org-files-dir "post.org"))
+   #+end_src
 * Remember
   
   I don't use remember as much at the moment but some day or some
