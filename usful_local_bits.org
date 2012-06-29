@@ -1,0 +1,10 @@
+
+In this file a collect bits and pices that could be good to have in
+local setups.
+
+* Performance
+  
+  #+begin_src emacs-lisp
+  ;; try to improve slow performance on windows.
+  (setq w32-get-true-file-attributes nil)
+  #+end_src

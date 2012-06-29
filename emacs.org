@@ -2,7 +2,7 @@
 #+TITLE: My emacs configuration
 #+AUTHOR: Jim Hansson
 #+EMAIL: jim.hansson@gmail.com
-#+DATE: <2012-06-28 tor>
+#+DATE: <2012-06-28 to>
 #+LANGUAGE: english
 #+STARTUP: hidestars hideblocks
 #+COLUMNS: %50ITEM %4TODO %20TAGS
@@ -49,6 +49,11 @@ that I share between work and home
      (setq display-battery-mode t)
      (setq display-time-24hr-format t)
      (iswitchb-mode 1)
+     ;; show matching paren
+     (show-paren-mode t)
+     ;; I work width some really big files and then it is good to have this
+     ;; so i know how far down I am.
+     (size-indication-mode t)
    #+end_src
 
 ** Uniquify                                                :uniquify:buffers:
@@ -324,11 +329,21 @@ that I share between work and home
     (add-hook 'org-agenda-mode-hook 'hl-line-mode)
     
   #+end_src
+
 ** Init
+
+   because I have more than one computer and also a work computer, I
+   have split my org agenda files into two parts. One that I share
+   between computers and one that is local to that machine(or
+   filesystem I am working in). To Make configuration of org-agenda
+   work with this I have files that I call in my shared org directory
+   and in my local directory. So here is the first call.
+
    #+begin_src emacs-lisp
-   (org-babel-load-file (concat local-org-files-dir "init.org"))
-   (org-babel-load-file (concat shared-org-files-dir "init.org"))
+     (org-babel-load-file (concat local-org-files-dir "init.org"))
+     (org-babel-load-file (concat shared-org-files-dir "init.org"))
    #+end_src
+
 ** Logging and clocking
    
    I want to have the change to enter a message for every change a
@@ -348,12 +363,29 @@ that I share between work and home
 
 ** TODO Exports
 ** Babel
+*** SQL
+    Sometimes I use sql in org-babel for that I have modified version
+    of 'ob-sql.el' my modifications are so I can use it together with
+    oracle. It still need some more fixing before a send a patch for it
+    to the maintainers.
+    #+begin_src emacs-lisp
+      ;; we use a safe way of loading it, it should alawys exist but if it
+      ;; does not, we don't want an error.
+      (when (require 'ob-sql nil 'noerror) 
+        (message "loaded ob-sql, you can now use sql in org-babel snippets")
+        )
+    #+end_src
 
 ** Post
+
+   Read [[Init]]. here is the last call and it gives the local a chance to
+   overide everything from the shared org-directory.
+
    #+begin_src emacs-lisp
-   (org-babel-load-file (concat shared-org-files-dir "post.org"))
-   (org-babel-load-file (concat local-org-files-dir "post.org"))
+     (org-babel-load-file (concat shared-org-files-dir "post.org"))
+     (org-babel-load-file (concat local-org-files-dir "post.org"))
    #+end_src
+
 * Remember
   
   I don't use remember as much at the moment but some day or some
