@@ -48,6 +48,7 @@ that I share between work and home
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
      (setq display-battery-mode t)
      (setq display-time-24hr-format t)
+     (iswitchb-mode 1)
    #+end_src
 
 ** Org-Mode
@@ -77,9 +78,71 @@ that I share between work and home
      (put 'narrow-to-region 'disabled nil)
    #+end_src
 
+* Iswitch Buffers
+
+  some text here.
+  To prevent certain buffers from showing up in the completion list,
+  set 'iswitchb-buffer-ignore': (setq iswitchb-buffer-ignore '("^ "
+  "*Buffer")) This one is useful if you want to lose the *...*
+  special buffers from the list. It's helpful if you're using the
+  JDEE for editing Java apps, as you end up with buffers named
+  org.whatever.package.Class which you might want to eliminate: (setq
+  iswitchb-buffer-ignore '("^\\*")) To prevent switching to another
+  frame, you can add the following to your configuration: (setq
+  iswitchb-default-method 'samewindow)
+
+  #+begin_src emacs-lisp
+    (iswitchb-mode 1)
+    (setq iswitchb-default-method 'samewindow)
+    ;; in your .emacs will allow left/right artist--arrow key navigation of the
+    ;; buffer list, and deactivate up/down in iswitchb. Note that you
+    ;; can by default use C-s and C-r to do this.  If the
+    ;; below fails with "define-key: Symbol's function definition is
+    ;; void: edmacro-parse-keys" you need to load the package defining
+    ;; edmacro with (require 'edmacro).
+    (defun iswitchb-local-keys ()
+      (mapc (lambda (K) 
+              (let* ((key (car K)) (fun (cdr K)))
+                (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
+            '(("<right>" . iswitchb-next-match)
+              ("<left>"  . iswitchb-prev-match)
+              ("<up>"    . ignore             )
+              ("<down>"  . ignore             ))))
+    (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
+  #+end_src
+
+** Iswitch and uniquify compabilitiy
+
+   The library uniquify overrides Emacs default mechanism for making
+   buffer names unique (using suffixes like <2>, <3> etc.) with a
+   more sensible behaviour which use parts of the file names to make
+   the buffer names distinguishable.  Additionally one can configure
+   uniquify to rework the buffer names whenever a buffer is
+   killed. This feature does not play well with IswitchBuffers
+   function iswitchb-kill-buffer, bound to C-k. The following code
+   instructs iswitchb-kill-buffer to update the buffer list after
+   killing a buffer, so that a possible buffer renaming by uniquify
+   is taken in account.
+
+   #+begin_src emacs-lisp
+     (defadvice iswitchb-kill-buffer (after rescan-after-kill activate)
+       "*Regenerate the list of matching buffer names after a kill.
+     Nextcessary if using `uniquify' with `uniquify-after-kill-buffer-p'
+     set to non-nil."
+       (setq iswitchb-buflist iswitchb-matches)
+       (iswitchb-rescan))
+     
+     (defun iswitchb-rescan ()
+       "*Regenerate the list of matching buffer names."
+       (interactive)
+       (iswitchb-make-buflist iswitchb-default)
+       (setq iswitchb-rescan t))
+   #+end_src
+
 * Coding
 
   Here I will place everything that has todo with coding
+** TODO Coding styles
 
 * OrgMode
  
@@ -168,7 +231,7 @@ that I share between work and home
           ))
   #+end_src
 
-* Other Setup
+* TODO Other Setup
   #+begin_src emacs-lisp
     ; dont use tabs for indenting
     (setq-default indent-tabs-mode nil)
