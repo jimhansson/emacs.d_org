@@ -278,20 +278,85 @@ that I share between work and home
     InteractivelyDoThings (ido), which implements regex selection for
     files, directory buffers etc...
 
+* Buffer Menu
+** TODO Font lock
+
+   If you use ElectricBufferList, then simply use this instead for the
+   last line:
+   (add-hook 'electric-buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
+   
+   need to put the right colors on this.
+   #+begin_src emacs-lisp
+     (setq buffer-menu-buffer-font-lock-keywords
+           '(("^....[*]Man .*Man.*"   . font-lock-variable-name-face) ;Man page
+             (".*Dired.*"             . font-lock-comment-face)       ; Dired
+             ("^....[*]shell.*"       . font-lock-preprocessor-face)  ; shell buff
+             (".*[*]scratch[*].*"     . font-lock-function-name-face) ; scratch buffer
+             ("^....[*].*"            . font-lock-string-face)        ; "*" named buffers
+             ("^..[*].*"              . font-lock-constant-face)      ; Modified
+             ("^.[%].*"               . font-lock-keyword-face)))     ; Read only
+     
+     (defun buffer-menu-custom-font-lock  ()
+       (let ((font-lock-unfontify-region-function
+              (lambda (start end)
+                (remove-text-properties start end '(font-lock-face nil)))))
+         (font-lock-unfontify-buffer)
+         (set (make-local-variable 'font-lock-defaults)
+              '(buffer-menu-buffer-font-lock-keywords t))
+         (font-lock-fontify-buffer)))
+     
+     (add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
+    #+end_src
 * TODO Coding
 
   Here I will place everything that has todo with coding
 
 ** TODO Coding styles
+   check out [[http://emacswiki.org/emacs/IndentingC#toc2][emacswiki on indenting]]
+*** Microsoft C & C++ style
+
+    Here is a style that pretty much matches the observed style of
+    Microsoft (R)'s C and C++ code.
+
+    #+begin_src emacs-lisp
+      (c-add-style "microsoft"
+                   '("stroustrup"
+                     (c-offsets-alist
+                      (innamespace . -)
+                      (inline-open . 0)
+                      (inher-cont . c-lineup-multi-inher)
+                      (arglist-cont-nonempty . +)
+                      (template-args-cont . +))))
+      
+    #+end_src
+
+*** OpenBSD style
+
+    Style for OpenBSD? source code, also valid for OpenSSH? and other
+    BSD based OSs source.
+
+    #+begin_src emacs-lisp
+      (c-add-style "openbsd"
+                   '("bsd"
+                     (indent-tabs-mode . t)
+                     (defun-block-intro . 8)
+                     (statement-block-intro . 8)
+                     (statement-case-intro . 8)
+                     (substatement-open . 4)
+                     (substatement . 8)
+                     (arglist-cont-nonempty . 4)
+                     (inclass . 8)
+                     (knr-argdecl-intro . 8)))
+    #+end_src
 
 * OrgMode
 ** Basic
    #+begin_src emacs-lisp
-     (setq org-deadline-warning-days 7)
-     (setq org-timeline-show-empty-dates t)
-     (setq org-agenda-include-diary nil)
-     ;; resurect clock and clocking history
-     (org-clock-persistence-insinuate)
+     ;; do not have so much in my agenda so two weeks is good
+     (setq org-agenda-ndays 14)
+     (setq org-deadline-warning-days 14)
+     (setq org-timeline-show-empty-dates nil)
+     (setq org-agenda-include-diary t)
    #+end_src
 
    A large part of the configuration has to do with how org should
@@ -375,16 +440,30 @@ that I share between work and home
      (setq org-clock-into-drawer t)
      (setq org-log-into-drawer t)
      (setq org-log-redeadline (quote note))
+     ;; resurrect clock and clocking history
+     ;; this need to be placed after Local and Shared init of org-files so
+     ;; we have all files where we should look for clocked in tasks.
+     (org-clock-persistence-insinuate)     
    #+end_src
    
 ** TODO Agenda
    
    this a big part
-
+   #+begin_src emacs-lisp
+    ;; does not work at the moment
+   (setq org-agenda-custom-commands
+   '(("d" "Upcoming deadlines" agenda "" 
+   ((org-agenda-time-grid nil)
+   (org-deadline-warning-days 365)        ;; [1]
+   (org-agenda-entry-types '(:deadline))  ;; [2]
+   ))
+   ;; other commands go here
+   ))
+   #+end_src
 ** TODO Exports
 ** Babel
 *** SQL
-    Sometimes I use sql in org-babel for that I have modified version
+    Sometimes I use sql in org-babel, for that I have modified version
     of 'ob-sql.el' my modifications are so I can use it together with
     oracle. It still need some more fixing before a send a patch for it
     to the maintainers.
