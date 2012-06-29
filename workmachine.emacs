@@ -1,3 +1,4 @@
+;; -*- mode: emacs-lisp -*-
 ;; setup for gnus
 ;; Make Gnus NOT ignore [Gmail] mailboxes
 (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")

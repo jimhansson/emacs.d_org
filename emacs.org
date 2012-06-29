@@ -5,7 +5,7 @@
 #+DATE: <2012-06-28 tor>
 #+LANGUAGE: english
 #+STARTUP: hidestars hideblocks
-
+#+COLUMNS: %50ITEM %4TODO %20TAGS
 This is my main .emacs file. It is responsible for calling out to the
 local file at different points. This is placed in a git repository
 that I share between work and home
@@ -51,6 +51,16 @@ that I share between work and home
      (iswitchb-mode 1)
    #+end_src
 
+** Uniquify                                                :uniquify:buffers:
+
+   Better naming of buffers so we can easly tell the differens between
+   buffers. Have some problem together with Iswitch
+
+   #+begin_src emacs-lisp
+     (require 'uniquify)
+     (setq uniquify-buffer-name-style (quote post-forward))
+   #+end_src
+
 ** Org-Mode
 
    #+begin_src emacs-lisp
@@ -78,7 +88,7 @@ that I share between work and home
      (put 'narrow-to-region 'disabled nil)
    #+end_src
 
-* Iswitch Buffers
+* Iswitch Buffers                                                   :buffers:
 
   some text here.
   To prevent certain buffers from showing up in the completion list,
@@ -111,7 +121,7 @@ that I share between work and home
     (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
   #+end_src
 
-** Iswitch and uniquify compabilitiy
+** Iswitch and uniquify compabilitiy                               :uniquify:
 
    The library uniquify overrides Emacs default mechanism for making
    buffer names unique (using suffixes like <2>, <3> etc.) with a
@@ -139,9 +149,135 @@ that I share between work and home
        (setq iswitchb-rescan t))
    #+end_src
 
-* Coding
+
+** More Iswitch things that I don't use at the moment
+*** Keybindings
+
+    Something most IswitchBuffers users aren't aware of is that you
+    can hit C-k to kill the currently selected buffer.
+
+*** Using Iswitch-Buffer Programmatically
+    
+    From: KinCho
+    Subject: my-icompleting-read
+    Newsgroups: gnu.emacs.sources
+    Date: Tue, 09 Oct 2001 16:28:18 GMT
+    
+    I used iswitchb for a while and really liked it. I began to
+    explore to see if I can borrow iswitchb to make my scripts work
+    like iswitchb as well. Well, it turned out iswitchb is coded in a
+    way that makdes it really easy to borrow it to do regex-style
+    completing-read: 
+
+    (defun my-icompleting-read(prompt choices)
+    (let ((iswitchb-make-buflist-hook
+    (lambda ()
+    (setq iswitchb-temp-buflist choices))))
+    (iswitchb-read-buffer prompt)))
+
+    Another example. Two things. "nil t" to iswitchb-read-buffer
+    requires a choice from the given list with no default. Using an
+    flet is a way to work when there's no hook variable. There is a
+    hook variable. 
+
+    (defvar interesting  (regexp-opt '(".c" ".h" "etc.")))
+    (defvar some-directory "/home/somewhere/etc/")
+
+    ;; Making this more flexible is an exercise for the reader
+    (defun find-a-file (arg &optional non-selective)
+    "Select files using substrings."
+    (interactive "sFile: ")
+    (let ((dir (expand-file-name some-directory))
+    candidates)
+    (flet ((file-match (file)
+    (if non-selective
+    (string-match arg file)
+    (and
+    (string-match interesting file)
+    (string-match arg file)))))
+    (setq candidates (delq nil (loop for file in (directory-files dir)
+    collect (if (file-match file) file)))))
+    (cond
+    ((eq (length candidates) 1)
+    (find-file (format "%s%s" dir (car candidates))))
+    ((eq (length candidates) 0)
+    (if non-selective
+    (message "No such file!")
+    (find-a-file arg t)))
+      (t
+      (flet ((iswitchb-make-buflist (default)
+      (setq iswitchb-buflist candidates)))
+      (find-file (format 
+      "%s%s" dir
+      (iswitchb-read-buffer "File: " nil t))))))))
+      
+    I'm quite new to iswitchb. I've been after eliminating the need to
+    confirm (with TAB or ret) the last left possibility. 
+      
+    I've started with this simple hack, which only displays the
+    desired buffer, but in this way, i don't need to look at the
+    minibuffer (in some cases). 
+    
+    (defun iswitchb-post-command ()
+    "Run after command in 'iswitchb-buffer'."
+    (iswitchb-exhibit)
+    (if (= (length iswitchb-matches) 1)
+    (display-buffer (car iswitchb-matches))))
+    
+    another thing i like, is to have the freedom to decide to open the buffer in other-window/frame after i made the selection: Hence a new minibuffer exiting command:
+    
+    (defun iswitchb-select-buffer-other-window ()
+    "Select the buffer named by the prompt. But in another window."
+    (interactive)
+    (setq iswitchb-method 'otherwindow)
+    (exit-minibuffer))
+    
+    The functionality of iswitchb can also be used to provide a replacement for the usual behaviour of find-file. Instead of hitting Tab to bring up a buffer listing the possible file completions, a list of file completions is continuously updated in the minibuffer:
+    
+    (defun exd-find-file ()
+    "Use functionality from `iswitchb' as a replacement for `find-file'"
+    (interactive)
+    (find-file (exd-iswitchb-find-file "." (directory-files "."))))
+    
+    (defun exd-iswitchb-find-file (dir file-list)
+    "Use functionality from `iswitchb' to select a file for `find-file'.
+    If a directory is selected, enter that directory and generate a new
+    list from which to select a file."
+    ;; sort the file list into directories first
+    (setq file-list
+    (sort file-list
+    (lambda (elt-1 elt-2)
+    (and (file-directory-p (concat dir "/" elt-1))
+    (not (file-directory-p (concat dir "/" elt-2)))))))
+    ;; use iswitchb for minibuffer file list/completion magic
+    (let* (resize-mini-windows
+    (iswitchb-make-buflist-hook
+    (lambda ()
+    (setq iswitchb-temp-buflist file-list)))
+    ;; get the selected file
+    (selected-file (concat dir "/" (iswitchb-read-buffer
+    (concat "Find File: "
+    (expand-file-name dir)
+    "/")))))
+    ;; if the selected file is a directory, recurse, else return file
+    (if (file-directory-p selected-file)
+    (exd-iswitchb-find-file selected-file (directory-files selected-file))
+    selected-file)))
+    
+    See Also:
+    
+    Icicles, and command 'icicle-buffer', which is similar to
+    'iswitchb-buffer' but provides some additional features. Also,
+    Icicles treats all types of minibuffer input the same way:
+    filenames, buffer names, commands, variables...everything. And it
+    lets you use a regexp to match completions, if you like. 
+    InteractivelyDoThings (ido), which implements regex selection for
+    files, directory buffers etc...
+
+* TODO Coding
 
   Here I will place everything that has todo with coding
+
 ** TODO Coding styles
 
 * OrgMode
@@ -204,11 +340,11 @@ that I share between work and home
      (setq org-log-redeadline (quote note))
    #+end_src
 
-** Agenda
+** TODO Agenda
    
    this the a big part
 
-** Exports
+** TODO Exports
 ** Babel
 
 * Remember
