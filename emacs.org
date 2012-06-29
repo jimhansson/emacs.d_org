@@ -6,6 +6,7 @@
 #+LANGUAGE: english
 #+STARTUP: hidestars hideblocks
 #+COLUMNS: %50ITEM %4TODO %20TAGS
+
 This is my main .emacs file. It is responsible for calling out to the
 local file at different points. This is placed in a git repository
 that I share between work and home
@@ -43,18 +44,26 @@ that I share between work and home
    laptops and who in there right mind uses 12h clocks.
 
    #+begin_src emacs-lisp
+     (setq user-full-name "Jim Hansson")
      (tool-bar-mode -1)
      (setq default-major-mode 'org-mode)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
-     (setq display-battery-mode t)
-     (setq display-time-24hr-format t)
-     (iswitchb-mode 1)
      ;; show matching paren
      (show-paren-mode t)
-     ;; I work width some really big files and then it is good to have this
-     ;; so i know how far down I am.
-     (size-indication-mode t)
+     (iswitchb-mode 1)
+(setq filesets-data nil)
    #+end_src
+
+*** Modeline                                                       :modeline:
+    
+    #+begin_src emacs-lisp
+      ;; Things that modifies the modeline
+      (setq display-battery-mode t)
+      (setq display-time-24hr-format t)
+      ;; I work width some really big files and then it is good to have this
+      ;; so i know how far down I am.
+      (setq size-indication-mode t)
+    #+end_src
 
 ** Uniquify                                                :uniquify:buffers:
 
@@ -285,12 +294,12 @@ that I share between work and home
      (org-clock-persistence-insinuate)
    #+end_src
 
-  A large part of the configuration has to do with how org should
-  behave. it's a pretty complex mode with lot of things you could
-  change. I have tried to make it as simple a possible with sub-trees
-  for every main function of OrgMode.
+   A large part of the configuration has to do with how org should
+   behave. it's a pretty complex mode with lot of things you could
+   change. I have tried to make it as simple a possible with sub-trees
+   for every main function of OrgMode.
 
-  #+begin_src emacs-lisp
+   #+begin_src emacs-lisp
     (setq org-agenda-exporter-settings
           '((ps-number-of-columns 1)
             (ps-landscape-mode t)
@@ -328,7 +337,7 @@ that I share between work and home
     
     (add-hook 'org-agenda-mode-hook 'hl-line-mode)
     
-  #+end_src
+   #+end_src
 
 ** Init
 
@@ -343,7 +352,18 @@ that I share between work and home
      (org-babel-load-file (concat local-org-files-dir "init.org"))
      (org-babel-load-file (concat shared-org-files-dir "init.org"))
    #+end_src
-
+   
+** Filesets for OrgFiles                                           :filesets:
+   
+   #+begin_src emacs-lisp
+     ;; hard coded path need to be redone
+     (add-to-list 'filesets-data (quote ("OrgFiles" 
+                                         (:tree "C:\\users\\jiha\\Documents\\org" 
+                                                "^.+\\.org$")
+                                         (:tree-max-level 2))))
+     ;; missing shared org files
+   #+end_src
+ 
 ** Logging and clocking
    
    I want to have the change to enter a message for every change a
@@ -356,7 +376,7 @@ that I share between work and home
      (setq org-log-into-drawer t)
      (setq org-log-redeadline (quote note))
    #+end_src
-
+   
 ** TODO Agenda
    
    this a big part
@@ -441,3 +461,46 @@ that I share between work and home
     (add-to-list 'load-path (concat local-emacs-org-dir "local"))
     (org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
   #+end_src
+
+* Filesets                                                         :filesets:
+
+The commands that can operate on file sets are specified in the global
+custom variable "filesets-commands". You can add your own commands to
+that list. The default value for this variable is: 
+
+("Isearch" multi-isearch-files
+  (filesets-cmd-isearch-getargs))
+ ("Isearch (regexp)" multi-isearch-files-regexp
+  (filesets-cmd-isearch-getargs))
+ ("Query Replace" perform-replace
+  (filesets-cmd-query-replace-getargs))
+ ("Query Replace (regexp)" perform-replace
+  (filesets-cmd-query-replace-regexp-getargs))
+ ("Grep <<selection>>" "grep"
+  ("-n " filesets-get-quoted-selection " " "<<file-name>>"))
+ ("Run Shell Command" filesets-cmd-shell-command
+  (filesets-cmd-shell-command-getargs)))
+
+The values consist of an association list of names, functions, and an
+argument list (or a function that returns one) to be run on a
+filesets' files. So, if you wanted to add a command that does an
+"occur" command on the file set, you could use the "Isearch" entry as
+an example to create your own new entry (that you would add to the
+"filesets-commands" global variable) that would look something like: 
+
+ ("Occur (regexp)" multi-occur-files-regexp
+  (filesets-cmd-occur-getargs))
+
+You would need to write the "multi-occur-files-regexp" and
+"filesets-cmd-occur-getargs" functions (you could use the existing
+"multi-isearch-files-regexp" and "filesets-cmd-isearch-getargs"
+functions as a basis since they would be similar). The same would
+apply for any additional Emacs command that you wanted to add to work
+on file sets. 
+
+  #+begin_src emacs-lisp
+    ;; now when both shared and local config has been parsed we should be
+    ;; able to init the filesets menu.
+    (filesets-init)
+  #+end_src
+  
