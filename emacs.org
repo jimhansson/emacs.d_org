@@ -3,7 +3,7 @@
 #+AUTHOR: Jim Hansson
 #+EMAIL: jim.hansson@gmail.com
 #+DATE: <2012-06-28 to>
-#+LANGUAGE: english
+#+LANGUAGE: English
 #+STARTUP: hidestars hideblocks
 #+COLUMNS: %50ITEM %4TODO %20TAGS
 
@@ -47,11 +47,12 @@ that I share between work and home
      (setq user-full-name "Jim Hansson")
      (tool-bar-mode -1)
      (setq default-major-mode 'org-mode)
-     (add-hook 'text-mode-hook 'turn-on-auto-fill)
+     (add-hook 'text-mode-hooxk 'turn-on-auto-fill)
      ;; show matching paren
      (show-paren-mode t)
      (iswitchb-mode 1)
-(setq filesets-data nil)
+     (setq filesets-data nil)
+     (global-font-lock-mode t)
    #+end_src
 
 *** Modeline                                                       :modeline:
@@ -153,7 +154,6 @@ that I share between work and home
        (setq iswitchb-rescan t))
    #+end_src
 
-
 ** More Iswitch things that I don't use at the moment
 *** Keybindings
 
@@ -173,17 +173,20 @@ that I share between work and home
     way that makdes it really easy to borrow it to do regex-style
     completing-read: 
 
+    #+begin_example emacs-lisp
     (defun my-icompleting-read(prompt choices)
     (let ((iswitchb-make-buflist-hook
     (lambda ()
     (setq iswitchb-temp-buflist choices))))
     (iswitchb-read-buffer prompt)))
+    #+end_example
 
     Another example. Two things. "nil t" to iswitchb-read-buffer
     requires a choice from the given list with no default. Using an
     flet is a way to work when there's no hook variable. There is a
     hook variable. 
 
+    #+begin_example emacs-lisp
     (defvar interesting  (regexp-opt '(".c" ".h" "etc.")))
     (defvar some-directory "/home/somewhere/etc/")
 
@@ -214,6 +217,7 @@ that I share between work and home
       (find-file (format 
       "%s%s" dir
       (iswitchb-read-buffer "File: " nil t))))))))
+    #+end_example
       
     I'm quite new to iswitchb. I've been after eliminating the need to
     confirm (with TAB or ret) the last left possibility. 
@@ -222,22 +226,33 @@ that I share between work and home
     desired buffer, but in this way, i don't need to look at the
     minibuffer (in some cases). 
     
+    #+begin_example emacs-lisp
     (defun iswitchb-post-command ()
     "Run after command in 'iswitchb-buffer'."
     (iswitchb-exhibit)
     (if (= (length iswitchb-matches) 1)
     (display-buffer (car iswitchb-matches))))
+    #+end_example
     
-    another thing i like, is to have the freedom to decide to open the buffer in other-window/frame after i made the selection: Hence a new minibuffer exiting command:
+    another thing i like, is to have the freedom to decide to open the
+    buffer in other-window/frame after i made the selection: Hence a
+    new minibuffer exiting command: 
     
+    #+begin_example emacs-lisp
     (defun iswitchb-select-buffer-other-window ()
     "Select the buffer named by the prompt. But in another window."
     (interactive)
     (setq iswitchb-method 'otherwindow)
     (exit-minibuffer))
+    #+end_example
     
-    The functionality of iswitchb can also be used to provide a replacement for the usual behaviour of find-file. Instead of hitting Tab to bring up a buffer listing the possible file completions, a list of file completions is continuously updated in the minibuffer:
+    The functionality of iswitchb can also be used to provide a
+    replacement for the usual behaviour of find-file. Instead of
+    hitting Tab to bring up a buffer listing the possible file
+    completions, a list of file completions is continuously updated in
+    the minibuffer: 
     
+    #+begin_example emacs-lisp
     (defun exd-find-file ()
     "Use functionality from `iswitchb' as a replacement for `find-file'"
     (interactive)
@@ -267,6 +282,7 @@ that I share between work and home
     (if (file-directory-p selected-file)
     (exd-iswitchb-find-file selected-file (directory-files selected-file))
     selected-file)))
+    #+end_example
     
     See Also:
     
@@ -279,7 +295,7 @@ that I share between work and home
     files, directory buffers etc...
 
 * Buffer Menu
-** TODO Font lock
+** TODO Font lock                                                   :fontlock:
 
    If you use ElectricBufferList, then simply use this instead for the
    last line:
@@ -307,10 +323,31 @@ that I share between work and home
      
      (add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
     #+end_src
+
 * TODO Coding
 
   Here I will place everything that has todo with coding
 
+** TODO CEDET
+    #+begin_src emacs-lisp
+    ;; some comments so we don't get error here
+    #+end_src
+    #+begin_src emacs-lisp
+    ;;  (require 'semantic)
+    #+end_src
+*** EDE
+    #+begin_src emacs-lisp
+    ;;  (global-ede-mode t)
+    #+end_src
+
+*** Code helpers
+
+    #+begin_src emacs-lisp
+    ;;  (semantic-load-enable-excessive-code-helpers)
+    #+end_src
+
+** Flymake
+** Compile  
 ** TODO Coding styles
    check out [[http://emacswiki.org/emacs/IndentingC#toc2][emacswiki on indenting]]
 *** Microsoft C & C++ style
@@ -349,14 +386,190 @@ that I share between work and home
                      (knr-argdecl-intro . 8)))
     #+end_src
 
+* Fly-spell
+
+  My spelling is terrible so we use fly-spell as much as possible when
+  it is available. We turn it on for most text-modes and
+  flyspell-prog-mode for programming. 
+
+  I highly suggest setting ‘flyspell-issue-message-flag’ to nil, as
+  printing messages for every word (when checking the entire buffer)
+  causes an enormous slowdown. 
+
+  #+begin_src emacs-lisp
+    (when (require 'flyspell nil 'noerror)
+      ;; activate flyspell for text-mode and derivatives
+      (dolist (hook '(text-mode-hook))
+        (add-hook hook (lambda () (flyspell-mode 1))))
+      ;; this is how we remove it for a sub-mode
+      ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+      ;;  (add-hook hook (lambda () (flyspell-mode -1))))
+      )
+
+    (setq flyspell-issue-message-flag nil)
+  #+end_src
+
+** Fly-spell for comments when programming                            :coding:
+
+   #+begin_src emacs-lisp
+     ;; Flyspell in C based programming modes
+     (add-hook 'c-mode-hook
+               (lambda ()
+                 (flyspell-prog-mode)))
+     
+     ;; Flyspell in C++ based programming modes
+     (add-hook 'c++-mode-hook
+               (lambda ()
+                 (flyspell-prog-mode)))
+     
+     ;; Flyspell in emacs-lisp mode
+     (add-hook 'lisp-mode-hook
+               (lambda ()
+                 (flyspell-prog-mode)))
+   #+end_src
+
+** TODO word-list for org-files.
+   
+   org-files contains some reserved words like #+begin_* ... these
+   should be included in some sort of wordlist we use. so we don't get
+   a lot of errors on those files.
+
+** TODO don't use flyspell in src samples
+   
+   Or switch to flyspell-prog-mode somehow.
+
+** TODO Avoid false positives
+
+   I recently started using flyspell and am enjoying its features. Is
+   there a way to disable flyspell for certain regexps? For instance,
+   I would like to disable flyspell when typing a url. Otherwise, when
+   entering a url such as
+   http://www.emacswiki.org/cgi-bin/emacs/FlySpell, www, emacswiki,
+   cgi and FlySpell are highlighted as errors. Any advice would be
+   greatly appreciated. – MattLundin 
+
+   There is only one way, using flyspell-generic-check-word-predicate
+   which should be a function. In such a function you can use thing at
+   point. 
+
+   However it is a bit difficult to manage this as this variable may
+   be only one function. I have submitted a patch to Emacs devel to
+   take care of this. 
+
+   Thanks for pointing me to the flyspell-generic-check-word-predicate
+   variable. – MattLundin
+
+** TODO Windows
+   
+   we need to install cygwin and use aspell.
+   http://curiousprogrammer.wordpress.com/2009/04/25/flyspell-windows/
+
+** TODO somehow use #+LANGUAGE in org to choose wordlist.
+** Other flyspell things
+*** Change dictionaries
+
+    As I often need to switch between English and German I use this
+    function:
+
+    #+begin_example emacs-lisp
+      (defun fd-switch-dictionary()
+      (interactive)
+      (let* ((dic ispell-current-dictionary)
+    	 (change (if (string= dic "deutsch8") "english" "deutsch8")))
+        (ispell-change-dictionary change)
+        (message "Dictionary switched from %s to %s" dic change)
+        ))
+    
+      (global-set-key (kbd "<f8>")   'fd-switch-dictionary)
+    #+end_example
+
+    I too cycle through different languages, but not all that is
+    available in the system. I use the following code inside my
+    .emacs. 
+
+    #+begin_example emacs-lisp
+    (let ((langs '("american" "francais" "brasileiro")))
+      (setq lang-ring (make-ring (length langs)))
+      (dolist (elem langs) (ring-insert lang-ring elem)))
+
+    (defun cycle-ispell-languages ()
+      (interactive)
+      (let ((lang (ring-ref lang-ring -1)))
+        (ring-insert lang-ring lang)
+        (ispell-change-dictionary lang)))
+
+    (global-set-key [f6] 'cycle-ispell-languages)
+    #+end_example
+
+    How can I ignore or add a word without using the popup menu?
+
+    Use flyspell-auto-correct-word.
+
+    This is not working for me. With flyspell-auto-correct-word I can
+    go through all suggestions for correction, but I do not get an
+    option to insert the word into my dictionary. Success in adding
+    new words into the personal dictionary.
+
+    I used “M x ispell-region”, and the words that ispell considered
+    having incorrect spellings were highlighted. The point moved to
+    the first “mis-spelled” word. By typing “i”, I inserted the word
+    into my personal dictionary. Later I found that the personal
+    dictionary was stored in the file $HOME/.aspell.en.pws in pure
+    text format. Although the word was added when I used “ispell”
+    instead of “flyspell”, but once added, flyspell also recognized
+    the word as having a correct spelling. :-) This information came
+    from the web page:
+    http://www.delorie.com/gnu/docs/emacs/emacs_109.html . Thanks! 
+
+    Easy Spell Check: key bindings and function to make
+    FlySpell/ispell/aspell easy to use w/ out a mouse 
+
+    Place the below code in your .emacs
+
+    F8 will call ispell (or aspell, etc) for the word the cursor is on
+    (or near). You can also use the built-in key binding
+    M-$. Ctrl-Shift-F8 enables/disables FlySpell for your current
+    buffer (highlights misspelled words as you type) Crtl-Meta-F8 runs
+    FlySpell on your current buffer (highlights all misspelled words
+    in the buffer) Ctrl-F8 calls ispell for the FlySpell highlighted
+    word prior to the cursor’s position Meta-F8 calls ispell for the
+    FlySpell highlighted word after the cursor’s position.
+
+    #+begin_example emacs-lisp
+      ;; easy spell check
+      (global-set-key (kbd "<f8>") 'ispell-word)
+      (global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
+      (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+      (global-set-key (kbd "C-<f8>") 'flyspell-check-previous-highlighted-word)
+      (defun flyspell-check-next-highlighted-word ()
+        "Custom function to spell check next highlighted word"
+        (interactive)
+        (flyspell-goto-next-error)
+        (ispell-word)
+        )
+      (global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
+#+end_example
+
 * OrgMode
+
+** TODO Rework 
+
+   this to support more that 2 different org directories and to not
+   make a difference bewtween them as much as possible.
+
+    (setq org-directory "~/Dokument/orgfiles/")
+    (setq org-default-notes-file "~/.notes")
+
 ** Basic
+
    #+begin_src emacs-lisp
      ;; do not have so much in my agenda so two weeks is good
      (setq org-agenda-ndays 14)
      (setq org-deadline-warning-days 14)
-     (setq org-timeline-show-empty-dates nil)
+     (setq org-timeline-show-empty-dates t)
      (setq org-agenda-include-diary t)
+     (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+     (setq org-insert-mode-line-in-empty-file t)    
    #+end_src
 
    A large part of the configuration has to do with how org should
@@ -364,7 +577,6 @@ that I share between work and home
    change. I have tried to make it as simple a possible with sub-trees
    for every main function of OrgMode.
 
-   #+begin_src emacs-lisp
     (setq org-agenda-exporter-settings
           '((ps-number-of-columns 1)
             (ps-landscape-mode t)
@@ -401,8 +613,6 @@ that I share between work and home
     (global-set-key (kbd "C-c g") 'gtd)
     
     (add-hook 'org-agenda-mode-hook 'hl-line-mode)
-    
-   #+end_src
 
 ** Init
 
@@ -420,15 +630,21 @@ that I share between work and home
    
 ** Filesets for OrgFiles                                           :filesets:
    
+   A Nice fileset definition for my local org files and one for my shared org files.
    #+begin_src emacs-lisp
-     ;; hard coded path need to be redone
-     (add-to-list 'filesets-data (quote ("OrgFiles" 
-                                         (:tree "C:\\users\\jiha\\Documents\\org" 
-                                                "^.+\\.org$")
-                                         (:tree-max-level 2))))
-     ;; missing shared org files
+     ;; for some reason I don't understand this does not work, must have
+     ;; something todo evaluation of variables.
+     ;;(add-to-list 'filesets-data (quote ("OrgFiles" 
+     ;;                                    (:tree local-org-files-dir 
+     ;;                                           "^.+\\.org$")
+     ;;                                    (:tree-max-level 2))))
+     ;;(add-to-list 'filesets-data (quote ("OrgFiles" 
+     ;;                                    (:tree shared-org-files-dir 
+     ;;                                           "^.+\\.org$")
+     ;;                                    (:tree-max-level 2))))
+     
    #+end_src
- 
+
 ** Logging and clocking
    
    I want to have the change to enter a message for every change a
@@ -446,9 +662,8 @@ that I share between work and home
      (org-clock-persistence-insinuate)     
    #+end_src
    
-** TODO Agenda
+** Agenda
    
-   this a big part
    #+begin_src emacs-lisp
     ;; does not work at the moment
    (setq org-agenda-custom-commands
@@ -460,6 +675,7 @@ that I share between work and home
    ;; other commands go here
    ))
    #+end_src
+
 ** TODO Exports
 ** Babel
 *** SQL
@@ -467,6 +683,7 @@ that I share between work and home
     of 'ob-sql.el' my modifications are so I can use it together with
     oracle. It still need some more fixing before a send a patch for it
     to the maintainers.
+
     #+begin_src emacs-lisp
       ;; we use a safe way of loading it, it should alawys exist but if it
       ;; does not, we don't want an error.
@@ -506,28 +723,19 @@ that I share between work and home
   #+end_src
 
 * TODO Other Setup
+
   #+begin_src emacs-lisp
     ; dont use tabs for indenting
     (setq-default indent-tabs-mode nil)
     
-    (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
     (define-key global-map "\C-cl" 'org-store-link)
     (define-key global-map "\C-ca" 'org-agenda)
     
-    (setq org-log-done nil)
-    (setq org-deadline-warning-days 7)
-    (setq org-timeline-show-empty-dates t)
-    (setq org-insert-mode-line-in-empty-file t)
-    
-    (setq org-directory "~/Dokument/orgfiles/")
-    (setq org-default-notes-file "~/.notes")
     (define-key global-map "\C-cr" 'org-remember)
         
     (define-key global-map [f8] 'remember)
     (define-key global-map [f9] 'remember-region)
-    
-    (global-font-lock-mode t)
-    
+        
     (global-set-key "\C-x\C-r" 'prefix-region)
     (global-set-key "\C-x\C-l" 'goto-line)
     ;;(global-set-key "\C-x\C-y" 'copy-region-as-kill)
@@ -541,7 +749,7 @@ that I share between work and home
     (org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
   #+end_src
 
-* Filesets                                                         :filesets:
+* Filesets                                                          :filesets:
 
 The commands that can operate on file sets are specified in the global
 custom variable "filesets-commands". You can add your own commands to
@@ -583,3 +791,5 @@ on file sets.
     (filesets-init)
   #+end_src
   
+
+#  LocalWords:  Uniquify Iswitch
