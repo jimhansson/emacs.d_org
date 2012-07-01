@@ -52,7 +52,10 @@ that I share between work and home
      (show-paren-mode t)
      (iswitchb-mode 1)
      (setq filesets-data nil)
+     (display-battery-mode)
      (global-font-lock-mode t)
+     ;; binds ctrl + § to dabbrev as good enough completion 
+     (global-set-key (kbd "C-\§") 'dabbrev-expand)
    #+end_src
 
 *** Modeline                                                       :modeline:
@@ -328,37 +331,21 @@ that I share between work and home
 
   Here I will place everything that has todo with coding
 
-** TODO CEDET
-
-   Use a local installation of CEDET so we have control over what
-   version we use. This means that we should not use any version from
-   ELPA or local package system.
-
-   #+begin_src emacs-lisp
-     (require 'edmacro)
-     ;; using my own
-     (load-file "~/.emacs.d_org/cedet-1.1/common/cedet.el")
-     (global-ede-mode t)                      ; Enable the Project management system
-     (semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion 
-     (global-srecode-minor-mode 1)
-   #+end_src
-   
-   #+begin_src emacs-lisp
-   ;;  (require 'semantic)
-   #+end_src
-
-*** EDE
-    #+begin_src emacs-lisp
-    ;;  (global-ede-mode t)
-    #+end_src
-
-*** Code helpers
-
-    #+begin_src emacs-lisp
-    ;;  (semantic-load-enable-excessive-code-helpers)
-    #+end_src
-
 ** Flymake
+*** Flymake Cursor
+
+    The normal operation of flymake allows the user to see the error
+    message for a particular line by “hovering” the mouse over the
+    line. This is inconvenient for people who try to use the keyboard
+    for all input. FlymakeCursor was designed to address that: it
+    displays the flymake error in the minibuffer region, when the
+    cursor is placed on a line containing a flymake error. 
+
+    This works in any language that flymake supports
+
+    #+begin_src emacs-lisp
+      (load-file (concat local-emacs-org-dir "flymake-cursor.el"))
+    #+end_src
 ** Compile  
 ** TODO Coding styles
    check out [[http://emacswiki.org/emacs/IndentingC#toc2][emacswiki on indenting]]
@@ -397,7 +384,89 @@ that I share between work and home
                      (inclass . 8)
                      (knr-argdecl-intro . 8)))
     #+end_src
+** Visual Studio Integration
 
+   Integration with VS, We have aseperate file with commands to tell
+   visual studio to do things. at the moment we only have to commands
+   but it should be simple to extend it with others.
+   #+begin_src emacs-lisp
+     ;; this should only be done on windows to save startup time.
+     (load-file (concat local-emacs-org-dir "./devenv-tricks.el"))
+     ;; Now in those mode where it might be useful do something like
+     ;;(global-set-key [f9] 'devenv-toggle-breakpoint)
+     ;;(global-set-key [f5] 'devenv-debug)
+   #+end_src
+
+** TODO CEDET
+
+   Use a local installation of CEDET so we have control over what
+   version we use. This means that we should not use any version from
+   ELPA or local package system.
+
+   #+begin_src emacs-lisp
+     (require 'edmacro)
+     ;; using my own
+     (load-file (concat local-emacs-org-dir "cedet-1.1/common/cedet.el"))
+     (global-ede-mode t)                      ; Enable the Project management system
+     (semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion 
+     (global-srecode-minor-mode 1)
+   #+end_src
+   
+   #+begin_src emacs-lisp
+   ;;  (require 'semantic)
+   #+end_src
+
+*** EDE
+    #+begin_src emacs-lisp
+    ;;  (global-ede-mode t)
+    #+end_src
+
+*** Code helpers
+
+    #+begin_src emacs-lisp
+    ;;  (semantic-load-enable-excessive-code-helpers)
+    #+end_src
+
+** TODO Completion
+*** Language
+**** C#
+     
+     #+begin_src emacs-lisp
+       (add-to-list 'load-path (concat local-emacs-org-dir "csharp"))
+       (load-file (concat local-emacs-org-dir "csharp/csharp-completion.el"))
+     #+end_src
+
+     The `cscomp-assembly-search-paths' should hold a list of
+     directories to search for assemblies that get referenced via using
+     clauses in the modules you edit.  This will try default to
+     something reasonable, including the "typical" .NET 2.0 and 3.5
+     directories, as well as the default locations for reference
+     assemblies.  If you have non-default locations for these things,
+     you should set them here. Also, if you have other libraries (for
+     example, the WCF Rest Starter kit, or the Windows Automation
+     assemblies) that you reference within your code, you can include
+     the appropriate directory in this list.
+    
+     #+begin_example emacs-lisp
+      (eval-after-load "csharp-completion"
+       '(progn
+          (setq cscomp-assembly-search-paths
+            (list "c:\\.net3.5ra"    ;; <<- locations of reference assemblies
+                  "c:\\.net3.0ra"    ;; <<-
+                    ...              ;; <<- other assembly directories you use
+                  "c:\\.net2.0"      ;; <<- location of .NET Framework assemblies
+                  "c:\\.net3.5"      ;; <<- ditto
+          ))))
+     #+end_example
+
+     #+begin_src emacs-lisp
+         ;; this should be placed in a c# hook
+         ;; C# code completion
+         ;;(require 'csharp-completion)
+         ;;(csharp-analysis-mode 1)
+         ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
+         ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
+     #+end_src
 * Fly-spell
 
   My spelling is terrible so we use fly-spell as much as possible when
