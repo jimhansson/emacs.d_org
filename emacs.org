@@ -126,7 +126,7 @@ that I share between work and home
     (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
   #+end_src
 
-** Iswitch and uniquify compabilitiy                               :uniquify:
+** Iswitch and uniquify compabilitiy                                :uniquify:
 
    The library uniquify overrides Emacs default mechanism for making
    buffer names unique (using suffixes like <2>, <3> etc.) with a
@@ -329,12 +329,24 @@ that I share between work and home
   Here I will place everything that has todo with coding
 
 ** TODO CEDET
-    #+begin_src emacs-lisp
-    ;; some comments so we don't get error here
-    #+end_src
-    #+begin_src emacs-lisp
-    ;;  (require 'semantic)
-    #+end_src
+
+   Use a local installation of CEDET so we have control over what
+   version we use. This means that we should not use any version from
+   ELPA or local package system.
+
+   #+begin_src emacs-lisp
+     (require 'edmacro)
+     ;; using my own
+     (load-file "~/.emacs.d_org/cedet-1.1/common/cedet.el")
+     (global-ede-mode t)                      ; Enable the Project management system
+     (semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion 
+     (global-srecode-minor-mode 1)
+   #+end_src
+   
+   #+begin_src emacs-lisp
+   ;;  (require 'semantic)
+   #+end_src
+
 *** EDE
     #+begin_src emacs-lisp
     ;;  (global-ede-mode t)
