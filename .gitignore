@@ -1,3 +1,7 @@
 local
 emacs.el
 *.html
+csharp/*.dll
+*~
+
+
