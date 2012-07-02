@@ -474,10 +474,13 @@ that I share between work and home
    like a low c-basic-offset 2
 
    #+begin_src emacs-lisp
+     ;; use tabs for indentation later we setup spaces for alignment.
+     (setq-default indent-tabs-mode t)
+     ;; I want as much as possible on my screens.
      (setq-default c-basic-offset 2)
      (setq-default tab-width 2) ; or any other preferred value
    #+end_src
-
+   
    #+begin_src emacs-lisp
      ;; smart tabs, tabs for indentation, spaces for alignment
      (defadvice align (around smart-tabs activate)
@@ -520,6 +523,13 @@ that I share between work and home
      (smart-tabs-advice c-indent-line c-basic-offset)
      (smart-tabs-advice c-indent-region c-basic-offset)
      ;; smart tabs - end
+   #+end_src
+
+*** SQL
+
+   #+begin_src emacs-lisp
+     (eval-after-load "sql"
+       '(load-library "sql-indent"))
    #+end_src
 
 * Fly-spell
