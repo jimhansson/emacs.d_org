@@ -555,7 +555,9 @@ that I share between work and home
   printing messages for every word (when checking the entire buffer)
   causes an enormous slowdown. 
 
-  #+begin_src emacs-lisp
+  deactivated at the moment until we have fixed cygwin ispell or
+  aspell.
+  #+begin_example emacs-lisp
     (when (require 'flyspell nil 'noerror)
       ;; activate flyspell for text-mode and derivatives
       (dolist (hook '(text-mode-hook))
@@ -566,7 +568,7 @@ that I share between work and home
       )
 
     (setq flyspell-issue-message-flag nil)
-  #+end_src
+  #+end_example
 
 ** Fly-spell for comments when programming                            :coding:
 
