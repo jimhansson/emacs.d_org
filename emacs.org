@@ -96,6 +96,19 @@ that I share between work and home
      (put 'narrow-to-region 'disabled nil)
    #+end_src
 
+* Auto complete
+
+  #+begin_src emacs-lisp
+    (add-to-list 'load-path (concat local-emacs-org-dir 
+                                    "auto-complete"))
+    (require 'auto-complete-config)
+    (add-to-list 'ac-dictionary-directories (concat local-emacs-org-dir 
+                                                    "ac-dicts"))
+    (ac-config-default)
+    ;;(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+    (ac-flyspell-workaround)
+  #+end_src
+
 * Iswitch Buffers                                                   :buffers:
 
   some text here.
@@ -453,16 +466,16 @@ that I share between work and home
           (setq cscomp-assembly-search-paths
             (list "c:\\.net3.5ra"    ;; <<- locations of reference assemblies
                   "c:\\.net3.0ra"    ;; <<-
-                    ...              ;; <<- other assembly directories you use
                   "c:\\.net2.0"      ;; <<- location of .NET Framework assemblies
                   "c:\\.net3.5"      ;; <<- ditto
           ))))
      #+end_example
 
      #+begin_src emacs-lisp
+  
          ;; this should be placed in a c# hook
          ;; C# code completion
-         ;;(require 'csharp-completion)
+         (require 'csharp-completion)
          ;;(csharp-analysis-mode 1)
          ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
          ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
