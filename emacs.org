@@ -153,7 +153,8 @@ that I share between work and home
                           (filename . "emacs.org")))
              ("Org" (or (or (mode . org-mode)
                             (filename . "OrgMode"))
-                        (name . "*Org Agenda*")))
+                        (or (name . "*Org Agenda*")
+                            (name . "diary"))))
              ("code" (or (mode . csharp-mode)
                          (mode . c++-mode)))
              ("Web Dev" (or (mode . html-mode)
@@ -189,6 +190,19 @@ that I share between work and home
                   (size 9 -1 :right) " "
                   (mode 16 16 :left :elide) " " filename-and-process)
             (mark " " (name 16 -1) " " filename)))
+
+ 
+(defun switch-buffers-between-frames ()
+  "switch-buffers-between-frames switches the buffers between the two last frames"
+  (interactive)
+  (let ((this-frame-buffer nil)
+	(other-frame-buffer nil))
+    (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
+    (other-frame 1)
+    (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
+    (switch-to-buffer this-frame-buffer)
+    (other-frame 1)
+    (switch-to-buffer other-frame-buffer)))
   #+end_src
   
 ** Iswitch and uniquify compabilitiy                                :uniquify:
@@ -788,8 +802,11 @@ that I share between work and home
      (setq org-expiry-wait "+2m")
      (org-expiry-insinuate)
      (load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
-#+end_src
-
+     (require 'org-crypt)
+     (org-crypt-use-before-save-magic)
+     (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+   #+end_src
+   
    A large part of the configuration has to do with how org should
    behave. it's a pretty complex mode with lot of things you could
    change. I have tried to make it as simple a possible with sub-trees
