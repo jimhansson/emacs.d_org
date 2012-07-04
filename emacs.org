@@ -54,8 +54,8 @@ that I share between work and home
      (setq filesets-data nil)
      (display-battery-mode)
      (global-font-lock-mode t)
-     ;; binds ctrl + § to dabbrev as good enough completion 
-     (global-set-key (kbd "C-\§") 'dabbrev-expand)
+     ;; binds ctrl + � to dabbrev as good enough completion 
+     (global-set-key (kbd "C-\�") 'dabbrev-expand)
    #+end_src
 
 *** Modeline                                                       :modeline:
@@ -348,7 +348,7 @@ that I share between work and home
 *** Flymake Cursor
 
     The normal operation of flymake allows the user to see the error
-    message for a particular line by “hovering” the mouse over the
+    message for a particular line by  hovering  the mouse over the
     line. This is inconvenient for people who try to use the keyboard
     for all input. FlymakeCursor was designed to address that: it
     displays the flymake error in the minibuffer region, when the
@@ -479,7 +479,7 @@ that I share between work and home
          (require 'csharp-completion)
          ;;(csharp-analysis-mode 1)
          ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
-         ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
+         ;;(local-set-key "\M-�."   'cscomp-complete-at-point-menu)
      #+end_src
 ** Indentation
 
@@ -552,7 +552,7 @@ that I share between work and home
   it is available. We turn it on for most text-modes and
   flyspell-prog-mode for programming. 
 
-  I highly suggest setting ‘flyspell-issue-message-flag’ to nil, as
+  I highly suggest setting  flyspell-issue-message-flag  to nil, as
   printing messages for every word (when checking the entire buffer)
   causes an enormous slowdown. 
 
@@ -608,7 +608,7 @@ that I share between work and home
    entering a url such as
    http://www.emacswiki.org/cgi-bin/emacs/FlySpell, www, emacswiki,
    cgi and FlySpell are highlighted as errors. Any advice would be
-   greatly appreciated. – MattLundin 
+   greatly appreciated.   MattLundin 
 
    There is only one way, using flyspell-generic-check-word-predicate
    which should be a function. In such a function you can use thing at
@@ -619,7 +619,7 @@ that I share between work and home
    take care of this. 
 
    Thanks for pointing me to the flyspell-generic-check-word-predicate
-   variable. – MattLundin
+   variable.   MattLundin
 
 ** TODO Windows
    
@@ -672,13 +672,13 @@ that I share between work and home
     option to insert the word into my dictionary. Success in adding
     new words into the personal dictionary.
 
-    I used “M x ispell-region”, and the words that ispell considered
+    I used  M x ispell-region , and the words that ispell considered
     having incorrect spellings were highlighted. The point moved to
-    the first “mis-spelled” word. By typing “i”, I inserted the word
+    the first  mis-spelled  word. By typing  i , I inserted the word
     into my personal dictionary. Later I found that the personal
     dictionary was stored in the file $HOME/.aspell.en.pws in pure
-    text format. Although the word was added when I used “ispell”
-    instead of “flyspell”, but once added, flyspell also recognized
+    text format. Although the word was added when I used  ispell 
+    instead of  flyspell , but once added, flyspell also recognized
     the word as having a correct spelling. :-) This information came
     from the web page:
     http://www.delorie.com/gnu/docs/emacs/emacs_109.html . Thanks! 
@@ -694,8 +694,8 @@ that I share between work and home
     buffer (highlights misspelled words as you type) Crtl-Meta-F8 runs
     FlySpell on your current buffer (highlights all misspelled words
     in the buffer) Ctrl-F8 calls ispell for the FlySpell highlighted
-    word prior to the cursor’s position Meta-F8 calls ispell for the
-    FlySpell highlighted word after the cursor’s position.
+    word prior to the cursor s position Meta-F8 calls ispell for the
+    FlySpell highlighted word after the cursor s position.
 
     #+begin_example emacs-lisp
       ;; easy spell check
@@ -730,9 +730,16 @@ that I share between work and home
      (setq org-deadline-warning-days 14)
      (setq org-timeline-show-empty-dates t)
      (setq org-agenda-include-diary t)
+     (setq org-feed-alist)
      (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-     (setq org-insert-mode-line-in-empty-file t)    
-   #+end_src
+     (setq org-insert-mode-line-in-empty-file t)
+     ;; setup automatic expiring of old entries with creation date
+     ;; if entries does not have creation date they will never expire.
+     (load-file (concat local-emacs-org-dir "org-modules/org-expiry.el"))
+     (setq org-expiry-wait "+2m")
+     (org-expiry-insinuate)
+     (load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
+#+end_src
 
    A large part of the configuration has to do with how org should
    behave. it's a pretty complex mode with lot of things you could
