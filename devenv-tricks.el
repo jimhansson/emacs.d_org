@@ -1,6 +1,7 @@
+
 ;; Command to point VS.NET at our current file & line
 (defun devenv-my-current-line ()
-  "Return the current buffer line at point.  The first line is 0."
+  "Returns the current buffer line at point.  The first line is 0."
   (save-excursion
     (beginning-of-line)
     (count-lines (point-min) (point))))
@@ -14,16 +15,16 @@
   (interactive)
   (save-some-buffers)
   (let ((val1
-	   (devenv-cmd "File.OpenFile \"" (buffer-file-name (current-buffer)) "\""))
-	(val2
-	   (devenv-cmd "Edit.GoTo " (int-to-string (+ (devenv-my-current-line) 1)))))
+     (devenv-cmd "File.OpenFile \"" (buffer-file-name (current-buffer)) "\""))
+  (val2
+     (devenv-cmd "Edit.GoTo " (int-to-string (+ (devenv-my-current-line) 1)))))
     (cond ((zerop (+ val1 val2))
-	      ;(iconify-frame)  ;; what I really want here is to raise the VS.NET window
-	         t)
-	    ((or (= val1 1) (= val2 1))
-	        (error "command failed"))  ;; hm, how do I get the output of the command?
-	      (t
-	          (error "couldn't run DevEnvCommand")))))
+        ;(iconify-frame)  ;; what I really want here is to raise the VS.NET window
+           t)
+      ((or (= val1 1) (= val2 1))
+          (error "command failed"))  ;; hm, how do I get the output of the command?
+        (t
+            (error "couldn't run DevEnvCommand")))))
 
 ;; Command to toggle a VS.NET breakpoint at the current line.
 (defun devenv-toggle-breakpoint ()
