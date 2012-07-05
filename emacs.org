@@ -147,62 +147,62 @@ that I share between work and home
   #+end_src
   
   #+begin_src emacs-lisp
-    (setq ibuffer-saved-filter-groups
-          '(("home"
-             ("Emacs" (or (filename . ".emacs.d")
-                          (filename . "emacs.org")))
-             ("Org" (or (or (mode . org-mode)
-                            (filename . "OrgMode"))
-                        (or (name . "*Org Agenda*")
-                            (name . "diary"))))
-             ("code" (or (mode . csharp-mode)
-                         (mode . c++-mode)))
-             ("Web Dev" (or (mode . html-mode)
-                            (mode . css-mode)))
-             ("SQL" (or (or (filename . ".plb")
-                            (filename . ".sql"))
-                        (or (mode . sqli-mode)
-                            (name . "*SQL*"))))
-             ("VC" (or (name . "\*svn")
-                       (name . "\*magit")))
-             ("ERC" (mode . erc-mode))
-             ("Help" (or (name . "\*Help\*")
-                         (name . "\*Apropos\*")
-                         (name . "\*info\*"))))))
+        (setq ibuffer-saved-filter-groups
+              '(("home"
+                 ("Emacs" (or (filename . ".emacs.d")
+                              (filename . "emacs.org")))
+                 ("Org" (or (or (mode . org-mode)
+                                (filename . "OrgMode"))
+                            (or (name . "*Org Agenda*")
+                                (name . "diary"))))
+                 ("code" (or (mode . csharp-mode)
+                             (mode . c++-mode)))
+                 ("Web Dev" (or (mode . html-mode)
+                                (mode . css-mode)))
+                 ("SQL" (or (or (filename . ".plb")
+                                (filename . ".sql"))
+                            (or (mode . sqli-mode)
+                                (name . "*SQL*"))))
+                 ("VC" (or (name . "\*svn")
+                           (name . "\*magit")))
+                 ("ERC" (mode . erc-mode))
+                 ("Help" (or (name . "\*Help\*")
+                             (name . "\*Apropos\*")
+                             (name . "\*info\*"))))))
+        
+        (add-hook 'ibuffer-mode-hook 
+                  '(lambda ()
+                     (ibuffer-auto-mode 1)
+                     (ibuffer-switch-to-saved-filter-groups "home")))
+        
+        ;; Switching to ibuffer puts the cursor on the most recent buffer
+        (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+          "Open ibuffer with cursor pointed to most recent buffer name"
+          (let ((recent-buffer-name (buffer-name)))
+            ad-do-it
+            (ibuffer-jump-to-buffer recent-buffer-name)))
+        (ad-activate 'ibuffer)
+        
+        
+        (setq ibuffer-formats
+              '((mark modified read-only " "
+                      (name 25 25 :left :elide) " "
+                      (size 9 -1 :right) " "
+                      (mode 16 16 :left :elide) " " filename-and-process)
+                (mark " " (name 16 -1) " " filename)))
     
-    (add-hook 'ibuffer-mode-hook 
-              '(lambda ()
-                 (ibuffer-auto-mode 1)
-                 (ibuffer-switch-to-saved-filter-groups "home")))
-    
-    ;; Switching to ibuffer puts the cursor on the most recent buffer
-    (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
-      "Open ibuffer with cursor pointed to most recent buffer name"
-      (let ((recent-buffer-name (buffer-name)))
-        ad-do-it
-        (ibuffer-jump-to-buffer recent-buffer-name)))
-    (ad-activate 'ibuffer)
-    
-    
-    (setq ibuffer-formats
-          '((mark modified read-only " "
-                  (name 25 25 :left :elide) " "
-                  (size 9 -1 :right) " "
-                  (mode 16 16 :left :elide) " " filename-and-process)
-            (mark " " (name 16 -1) " " filename)))
-
- 
-(defun switch-buffers-between-frames ()
-  "switch-buffers-between-frames switches the buffers between the two last frames"
-  (interactive)
-  (let ((this-frame-buffer nil)
-	(other-frame-buffer nil))
-    (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
-    (other-frame 1)
-    (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
-    (switch-to-buffer this-frame-buffer)
-    (other-frame 1)
-    (switch-to-buffer other-frame-buffer)))
+     
+    (defun switch-buffers-between-frames ()
+      "switch-buffers-between-frames switches the buffers between the two last frames"
+      (interactive)
+      (let ((this-frame-buffer nil)
+            (other-frame-buffer nil))
+        (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
+        (other-frame 1)
+        (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
+        (switch-to-buffer this-frame-buffer)
+        (other-frame 1)
+        (switch-to-buffer other-frame-buffer)))
   #+end_src
   
 ** Iswitch and uniquify compabilitiy                                :uniquify:
@@ -510,7 +510,6 @@ that I share between work and home
      
      #+begin_src emacs-lisp
        (add-to-list 'load-path (concat local-emacs-org-dir "csharp"))
-       (load-file (concat local-emacs-org-dir "csharp/csharp-completion.el"))
      #+end_src
 
      The `cscomp-assembly-search-paths' should hold a list of
@@ -536,13 +535,22 @@ that I share between work and home
      #+end_example
 
      #+begin_src emacs-lisp
-  
-         ;; this should be placed in a c# hook
-         ;; C# code completion
-         (require 'csharp-completion)
-         ;;(csharp-analysis-mode 1)
-         ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
-         ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
+        ;; only on windows do we use csharp completion.
+       
+       (when (require 'Powershell nil 'noerror)
+         (when (require 'csharp-completion nil 'noerror) 
+           (defun jiha-csharp-mode-hook  
+             ;; C# code completion
+             (load-file (concat local-emacs-org-dir "csharp/csharp-completion.el"))
+             ;;(csharp-analysis-mode 1)
+             ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
+             ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
+             )
+         
+           (add-to-list 'csharp-mode-hook
+                        'jiha-csharp-mode-hook))
+       )
+       
      #+end_src
 ** Indentation
 
