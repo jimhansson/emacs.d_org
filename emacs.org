@@ -537,7 +537,7 @@ that I share between work and home
      #+begin_src emacs-lisp
         ;; only on windows do we use csharp completion.
        
-       (when (require 'Powershell nil 'noerror)
+       (when (require 'powershell nil 'noerror)
          (when (require 'csharp-completion nil 'noerror) 
            (defun jiha-csharp-mode-hook  
              ;; C# code completion
