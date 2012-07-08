@@ -1,4 +1,4 @@
- -*- mode: org -*-
+# -*- mode: org -*-
 #+TITLE: My emacs configuration
 #+AUTHOR: Jim Hansson
 #+EMAIL: jim.hansson@gmail.com
@@ -56,7 +56,7 @@ that I share between work and home
      (global-font-lock-mode t)
      ;; binds ctrl + § to dabbrev as good enough completion 
      (global-set-key (kbd "C-\§") 'dabbrev-expand)
-     
+     (setq-default indent-tabs-mode t)
      ;; whitespace-mode things
      
      ;; less color in whitespace mode, The yellow and red is to distracting
@@ -644,6 +644,7 @@ that I share between work and home
      (eval-after-load "sql"
        '(load-library "sql-indent"))
    #+end_src
+
 
 * Fly-spell
 
