@@ -179,21 +179,30 @@ that I share between work and home
               '(("home"
                  ("Emacs" (or (filename . ".emacs.d")
                               (filename . "emacs.org")))
-                 ("Org" (or (or (mode . org-mode)
-                                (filename . "OrgMode"))
-                            (or (name . "*Org Agenda*")
-                                (name . "diary"))))
+                 ("Org" (or (mode . org-mode)
+                            (filename . "OrgMode")
+                            (name . "*Org Agenda*")
+                            (name . "diary")))
                  ("code" (or (mode . csharp-mode)
                              (mode . c++-mode)))
                  ("Web Dev" (or (mode . html-mode)
                                 (mode . css-mode)))
-                 ("SQL" (or (or (filename . ".plb")
-                                (filename . ".sql"))
-                            (or (mode . sqli-mode)
-                                (name . "*SQL*"))))
+                 ("SQL" (or (filename . ".plb")
+                            (filename . ".sql")
+                            (mode . sqli-mode)
+                            (name . "*SQL*")))
                  ("VC" (or (name . "\*svn")
                            (name . "\*magit")))
                  ("ERC" (mode . erc-mode))
+                 ("gnus" (or
+                            (mode . message-mode)
+                            (mode . bbdb-mode)
+                            (mode . mail-mode)
+                            (mode . gnus-group-mode)
+                            (mode . gnus-summary-mode)
+                            (mode . gnus-article-mode)
+                            (name . "^\\.bbdb$")
+                            (name . "^\\.newsrc-dribble")))
                  ("Help" (or (name . "\*Help\*")
                              (name . "\*Apropos\*")
                              (name . "\*info\*"))))))
@@ -900,6 +909,47 @@ that I share between work and home
      (org-babel-load-file (concat shared-org-files-dir "init.org"))
    #+end_src
    
+** Smarter headlines
+
+   from: http://lists.gnu.org/archive/html/emacs-orgmode/2007-10/msg00551.html
+   Hi,
+   
+   Here's a small piece of elisp code that might be useful to some of
+   you.  Pressing '*' now inserts '*' as before, but if there are only
+   spaces between the beginning of the current line and the point,
+   then all of them are converted to stars.  Useful for inserting new
+   headlines.
+   
+   Longer explanaition: assume you have the following structure:
+   
+   * first level headline
+   _* second level headline
+   __* third level headline
+
+   (_ denotes an invisible star) Since stars are invisible, I often
+   find myself trying to create a new subheadline by just inserting a
+   single star
+
+   * first level headline
+   _* second level headline
+   __* third level headline
+      *
+
+   which of course doesn't normally work, hence this elisp code.
+
+   #+begin_src emacs-lisp
+     (defun local-org-insert-stars ()
+       (interactive)
+       (when (looking-back "^ *" (point-at-bol))
+         (replace-string " " "*" nil (point-at-bol) (point)))
+       (insert "*"))
+     
+     (define-key org-mode-map "*" 'local-org-insert-stars)
+   #+end_src
+   Haven't thoroughly tested it, but it seems to work ok.
+
+   Piotr
+
 ** Filesets for OrgFiles                                           :filesets:
    
    A Nice fileset definition for my local org files and one for my shared org files.
@@ -1084,7 +1134,8 @@ on file sets.
     
     (erc-autojoin-mode 1)
     (setq erc-autojoin-channels-alist
-          '(("freenode.net" "#emacs" "#org-mode" "#erc")
+          ;; localhost should have a ssh tunnel to 85.238.219.29
+          '(("localhost" "#emacs" "#org-mode" "#erc")
             ("oftc.net" "#BitlBee")))
     
     (defun irc-maybe ()
@@ -1121,10 +1172,11 @@ on file sets.
     (defvar erc-insert-post-hook)
     (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)
     (setq erc-truncate-buffer-on-save t)
-
+    
     (erc-timestamp-mode t)
     (setq erc-timestamp-format "[%R-%m/%d]")
     
     (global-set-key (kbd "C-c I") 'reset-erc-track-mode)
     (setq erc-auto-query 'buffer)
+    
   #+end_src
