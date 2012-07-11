@@ -838,6 +838,7 @@ that I share between work and home
      (setq org-agenda-ndays 14)
      (setq org-deadline-warning-days 14)
      (setq org-timeline-show-empty-dates t)
+     (setq org-agenda-repeating-timestamp-show-all nil)
      (setq org-agenda-include-diary t)
      (setq org-feed-alist)
      (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -851,6 +852,7 @@ that I share between work and home
      (require 'org-crypt)
      (org-crypt-use-before-save-magic)
      (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+     (run-at-time "00:59" 3600 'org-save-all-org-buffers)
    #+end_src
    
    A large part of the configuration has to do with how org should
@@ -1142,11 +1144,13 @@ on file sets.
       "Connect to IRC."
       (interactive)
       (when (y-or-n-p "IRC? ")
+        ;; should be a ssh tunnel to freenode
         (erc :server "localhost" :port 6667
              :nick "kurohin" :full-name "Jim Hansson")
-        (erc :server "irc.oftc.net" :port 6667
-             :nick "kurohin" :full-name "Jim Hansson")
-        (erc :server "testing.bitlbee.org" :port 6667
+        ;;(erc :server "irc.oftc.net" :port 6667
+        ;;     :nick "kurohin" :full-name "Jim Hansson")
+        ;; should be a ssh tunnel to testing.bitlbee.org
+        (erc :server "localhost" :port 7000
              :nick "kurohin" :full-name "Jim Hansson")))
     
     ;; logging:
@@ -1180,3 +1184,19 @@ on file sets.
     (setq erc-auto-query 'buffer)
     
   #+end_src
+
+* BBDB
+
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (concat local-emacs-org-dir "bbdb-2.35/lisp"))
+  (require 'bbdb)
+  (bbdb-initialize 'gnus 'message)
+  (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+#+end_src
+
+  other stuff i might need
+  (provide 'bbdb-autoloads)
+  (if
+  (and load-file-name
+  (file-name-directory load-file-name))
+  (add-to-list 'load-path (file-name-directory load-file-name)))
