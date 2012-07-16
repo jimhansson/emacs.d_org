@@ -175,37 +175,39 @@ that I share between work and home
   #+end_src
   
   #+begin_src emacs-lisp
-        (setq ibuffer-saved-filter-groups
-              '(("home"
-                 ("Emacs" (or (filename . ".emacs.d")
-                              (filename . "emacs.org")))
-                 ("Org" (or (mode . org-mode)
-                            (filename . "OrgMode")
-                            (name . "*Org Agenda*")
-                            (name . "diary")))
-                 ("code" (or (mode . csharp-mode)
-                             (mode . c++-mode)))
-                 ("Web Dev" (or (mode . html-mode)
-                                (mode . css-mode)))
-                 ("SQL" (or (filename . ".plb")
-                            (filename . ".sql")
-                            (mode . sqli-mode)
-                            (name . "*SQL*")))
-                 ("VC" (or (name . "\*svn")
-                           (name . "\*magit")))
-                 ("ERC" (mode . erc-mode))
-                 ("gnus" (or
-                            (mode . message-mode)
-                            (mode . bbdb-mode)
-                            (mode . mail-mode)
-                            (mode . gnus-group-mode)
-                            (mode . gnus-summary-mode)
-                            (mode . gnus-article-mode)
-                            (name . "^\\.bbdb$")
-                            (name . "^\\.newsrc-dribble")))
-                 ("Help" (or (name . "\*Help\*")
-                             (name . "\*Apropos\*")
-                             (name . "\*info\*"))))))
+    (setq ibuffer-saved-filter-groups
+          '(("home"
+             ("Emacs" (or (filename . ".emacs.d")
+                          (filename . "emacs.org")
+                          (filename . ".emacs")))
+             ("Org" (or (filename . ".org")
+                        (filename . "OrgMode")
+                        (name . "*Org Agenda*")
+                        (name . "diary")))
+             ("code" (or (mode . csharp-mode)
+                         (mode . c++-mode)
+                         (mode . lisp-mode)))
+             ("Web Dev" (or (mode . html-mode)
+                            (mode . css-mode)))
+             ("SQL" (or (filename . ".plb")
+                        (filename . ".sql")
+                        (mode . sqli-mode)
+                        (name . "*SQL*")))
+             ("VC" (or (name . "\*svn")
+                       (name . "\*magit")))
+             ("ERC" (mode . erc-mode))
+             ("gnus" (or
+                      (mode . message-mode)
+                      (mode . bbdb-mode)
+                      (mode . mail-mode)
+                      (mode . gnus-group-mode)
+                      (mode . gnus-summary-mode)
+                      (mode . gnus-article-mode)
+                      (name . "^\\.bbdb$")
+                      (name . "^\\.newsrc-dribble")))
+             ("Help" (or (name . "\*Help\*")
+                         (name . "\*Apropos\*")
+                         (name . "\*info\*"))))))
         
         (add-hook 'ibuffer-mode-hook 
                   '(lambda ()
@@ -240,6 +242,7 @@ that I share between work and home
         (switch-to-buffer this-frame-buffer)
         (other-frame 1)
         (switch-to-buffer other-frame-buffer)))
+    
   #+end_src
   
 ** Iswitch and uniquify compabilitiy                                :uniquify:
@@ -847,7 +850,7 @@ that I share between work and home
      ;; if entries does not have creation date they will never expire.
      (load-file (concat local-emacs-org-dir "org-modules/org-expiry.el"))
      (setq org-expiry-wait "+2m")
-     (org-expiry-insinuate)
+     ;;(org-expiry-insinuate)
      (load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
      (require 'org-crypt)
      (org-crypt-use-before-save-magic)
@@ -986,18 +989,21 @@ that I share between work and home
      (org-clock-persistence-insinuate)     
    #+end_src
    
+   #+begin_src emacs-lisp
+
+   #+end_src
 ** Agenda
    
    #+begin_src emacs-lisp
-    ;; does not work at the moment
-   (setq org-agenda-custom-commands
-   '(("d" "Upcoming deadlines" agenda "" 
-   ((org-agenda-time-grid nil)
-   (org-deadline-warning-days 365)        ;; [1]
-   (org-agenda-entry-types '(:deadline))  ;; [2]
-   ))
-   ;; other commands go here
-   ))
+      ;; does not work at the moment
+     (setq org-agenda-custom-commands
+           '(("d" "Upcoming deadlines" agenda "" 
+              ((org-agenda-time-grid nil)
+               (org-deadline-warning-days 365)        ;; [1]
+               (org-agenda-entry-types '(:deadline))  ;; [2]
+               ))
+             ;; other commands go here
+             ))
    #+end_src
 
 ** TODO Exports
