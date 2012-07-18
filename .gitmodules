@@ -4,3 +4,6 @@
 [submodule "bbdb2"]
 	path = bbdb2
 	url = http://git.savannah.gnu.org/r/bbdb.git
+[submodule "google-maps"]
+	path = google-maps
+	url = https://github.com/emacsmirror/google-maps.git
