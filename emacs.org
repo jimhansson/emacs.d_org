@@ -11,6 +11,8 @@ This is my main .emacs file. It is responsible for calling out to the
 local file at different points. This is placed in a git repository
 that I share between work and home
 
+* Bugs
+
 * Introduction
   Basic things that could have been down throu custom-set-variable but
   then I would have harder time to replicate that between machines.
@@ -195,7 +197,8 @@ that I share between work and home
                         (name . "*SQL*")))
              ("VC" (or (name . "\*svn")
                        (name . "\*magit")))
-             ("ERC" (mode . erc-mode))
+             ("ERC" (or (mode . erc-mode)
+                        (mode . erc-list-mode)))
              ("gnus" (or
                       (mode . message-mode)
                       (mode . bbdb-mode)
@@ -657,7 +660,6 @@ that I share between work and home
        '(load-library "sql-indent"))
    #+end_src
 
-
 * Fly-spell
 
   My spelling is terrible so we use fly-spell as much as possible when
@@ -992,7 +994,7 @@ that I share between work and home
    #+begin_src emacs-lisp
 
    #+end_src
-** Agenda
+** Agenda                                                            :habits:
    
    #+begin_src emacs-lisp
       ;; does not work at the moment
@@ -1004,6 +1006,11 @@ that I share between work and home
                ))
              ;; other commands go here
              ))
+     (setq org-habit-graph-column 50)
+     (setq org-agenda-tags-column 75)
+     (setq org-habit-show-habits-only-for-today nil)
+     (setq org-habit-preceding-days 15)
+     (setq org-habit-following-days 10)
    #+end_src
 
 ** TODO Exports
@@ -1032,6 +1039,13 @@ that I share between work and home
      (org-babel-load-file (concat local-org-files-dir "post.org"))
    #+end_src
 
+* Org-sync
+#+begin_src emacs-lisp
+  (load-file "org-modules/org-element.el")
+  (load-file "org-sync2/os.el") ;; org-sync
+  (load-file "org-sync2/os-github.el") ;; github
+  ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
+#+end_src
 * Remember
   
   I don't use remember as much at the moment but some day or some

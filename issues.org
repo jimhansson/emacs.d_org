@@ -1,0 +1,14 @@
+
+
+* Bugs of emacs.d_org
+:PROPERTIES:
+:url:      https://api.github.com/repos/jimhansson/emacs.d_org
+ :END:
+** OPEN test issue
+:PROPERTIES:
+:author:   "jimhansson"
+:date-creation: (20486 52215)
+:date-modification: (20486 52215)
+:id:       1
+:END:
+some text, some more text
