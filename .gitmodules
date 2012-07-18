@@ -1,0 +1,3 @@
+[submodule "emacs-calfw"]
+	path = emacs-calfw
+	url = https://github.com/kiwanami/emacs-calfw.git
