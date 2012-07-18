@@ -1,6 +1,3 @@
 [submodule "emacs-calfw"]
 	path = emacs-calfw
 	url = https://github.com/kiwanami/emacs-calfw.git
-[submodule "bbdb"]
-	path = bbdb
-	url = http://git.savannah.gnu.org/r/bbdb.git
