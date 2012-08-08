@@ -65,7 +65,7 @@ that I share between work and home
      (setq whitespace-style (quote (spaces tabs newline space-mark 
                                            tab-mark newline-mark)))
      
-     ;; make whitespace-mode use "" for newline and “” for tab.
+     ;; make whitespace-mode use "" for newline and -> for tab.
      ;; together with the rest of its defaults
      (setq whitespace-display-mappings
            '(
@@ -1039,13 +1039,14 @@ that I share between work and home
      (org-babel-load-file (concat local-org-files-dir "post.org"))
    #+end_src
 
-* Org-sync
-#+begin_src emacs-lisp
-  (load-file "org-modules/org-element.el")
-  (load-file "org-sync2/os.el") ;; org-sync
-  (load-file "org-sync2/os-github.el") ;; github
-  ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
-#+end_src
+** Org-sync
+   #+begin_example emacs-lisp
+     (load-file "org-modules/org-element.el")
+     (load-file "org-sync2/os.el") ;; org-sync
+     (load-file "org-sync2/os-github.el") ;; github
+     ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
+   #+end_exmaple
+
 * Remember
   
   I don't use remember as much at the moment but some day or some
@@ -1208,7 +1209,7 @@ on file sets.
 * BBDB
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat local-emacs-org-dir "bbdb-2.35/lisp"))
+  (add-to-list 'load-path (concat local-emacs-org-dir "bbdb2/lisp"))
   (require 'bbdb)
   (bbdb-initialize 'gnus 'message)
   (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
