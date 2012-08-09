@@ -3,7 +3,7 @@
 * Bugs of emacs.d_org
 :PROPERTIES:
 :url:      https://api.github.com/repos/jimhansson/emacs.d_org
- :END:
+:END:
 ** OPEN test issue
 :PROPERTIES:
 :author:   "jimhansson"

@@ -846,6 +846,7 @@ that I share between work and home
      (setq org-agenda-repeating-timestamp-show-all nil)
      (setq org-agenda-include-diary t)
      (setq org-feed-alist)
+     (setq org-cycle-separator-lines 0)
      (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
      (setq org-insert-mode-line-in-empty-file t)
      ;; setup automatic expiring of old entries with creation date
@@ -985,10 +986,26 @@ that I share between work and home
      (setq org-clock-into-drawer t)
      (setq org-log-into-drawer t)
      (setq org-log-redeadline (quote note))
+     ;; Show lot sof clocking history so it's easy to pick items off the list
+     (setq org-clock-history-length 72)
+     ;; Resume clocking task on clock-in if the clock is open
+     (setq org-clock-in-resume t)
+     ;; This removes clocked tasks with 0:00 duration
+     (setq org-clock-out-remove-zero-time-clocks t)
+     ;; Clock out when moving task to a done state
+     (setq org-clock-out-when-done t)
+     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+     (setq org-clock-persist t)
+     ;; Do not prompt to resume an active clock
+     (setq org-clock-persist-query-resume nil)
+     ;; Enable auto clock resolution for finding open clocks
+     (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+     ;; Include current clocking task in clock reports
+     (setq org-clock-report-include-clocking-task t) 
      ;; resurrect clock and clocking history
      ;; this need to be placed after Local and Shared init of org-files so
      ;; we have all files where we should look for clocked in tasks.
-     (org-clock-persistence-insinuate)     
+     (org-clock-persistence-insinuate)
    #+end_src
    
    #+begin_src emacs-lisp
@@ -997,7 +1014,7 @@ that I share between work and home
 ** Agenda                                                            :habits:
    
    #+begin_src emacs-lisp
-      ;; does not work at the moment
+     ;; does not work at the moment
      (setq org-agenda-custom-commands
            '(("d" "Upcoming deadlines" agenda "" 
               ((org-agenda-time-grid nil)
@@ -1005,12 +1022,20 @@ that I share between work and home
                (org-agenda-entry-types '(:deadline))  ;; [2]
                ))
              ;; other commands go here
+             ("W" "Weekly" 
+              ((agenda "" 
+                       ((org-agenda-ndays 7)
+                        (org-agenda-log-mode t)
+                        )
+                       )
+               ))
              ))
      (setq org-habit-graph-column 50)
      (setq org-agenda-tags-column 75)
      (setq org-habit-show-habits-only-for-today nil)
      (setq org-habit-preceding-days 15)
      (setq org-habit-following-days 10)
+     
    #+end_src
 
 ** TODO Exports
