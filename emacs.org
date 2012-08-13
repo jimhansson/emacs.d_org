@@ -1235,9 +1235,9 @@ on file sets.
 
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat local-emacs-org-dir "bbdb2/lisp"))
-  (require 'bbdb)
-  (bbdb-initialize 'gnus 'message)
-  (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+  ;;(require 'bbdb)
+  ;;(bbdb-initialize 'gnus 'message)
+  ;;(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
 #+end_src
 
   other stuff i might need
