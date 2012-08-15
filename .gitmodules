@@ -10,3 +10,6 @@
 [submodule "org-sync2"]
 	path = org-sync2
 	url = https://github.com/emacsmirror/org-sync.git
+[submodule "edb"]
+	path = edb
+	url = https://github.com/emacsmirror/edb.git
