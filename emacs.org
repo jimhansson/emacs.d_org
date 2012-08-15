@@ -826,7 +826,7 @@ that I share between work and home
       (global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
 #+end_example
 
-* TODO OrgMode
+* OrgMode
 
 ** TODO Rework 
 
@@ -866,42 +866,10 @@ that I share between work and home
    change. I have tried to make it as simple a possible with sub-trees
    for every main function of OrgMode.
 
-    (setq org-agenda-exporter-settings
-          '((ps-number-of-columns 1)
-            (ps-landscape-mode t)
-            (htmlize-output-type 'css)))
-    
-    (setq org-agenda-custom-commands
-          '(
-            
-            ("P" "Projects"   
-             ((tags "PROJECT")))
-            
-            ("H" "Office and Home Lists"
-             ((agenda)
-              (tags-todo "OFFICE")
-              (tags-todo "HOME")
-              (tags-todo "COMPUTER")
-              (tags-todo "DVD")
-              (tags-todo "READING")))
-            
-            ("D" "Daily Action List"
-             (
-              (agenda "" ((org-agenda-ndays 1)
-                          (org-agenda-sorting-strategy
-                           (quote ((agenda time-up priority-down tag-up) )))
-                          (org-deadline-warning-days 0)
-                          ))))
-            )
-          )
-    
-    (defun gtd ()
-      (interactive)
-      (find-file "~/Dokument/GTD/gtd.org")
-      )
-    (global-set-key (kbd "C-c g") 'gtd)
-    
-    (add-hook 'org-agenda-mode-hook 'hl-line-mode)
+*** TODO setup what org-modules we should have
+
+    at the moment this is done on by customize and that means we need
+    to do it on every machine.
 
 ** Init
 
