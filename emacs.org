@@ -12,7 +12,6 @@ local file at different points. This is placed in a git repository
 that I share between work and home
 
 * Bugs
-
 * Introduction
   Basic things that could have been down throu custom-set-variable but
   then I would have harder time to replicate that between machines.
@@ -141,7 +140,6 @@ that I share between work and home
 
 * Iswitch Buffers                                                   :buffers:
 
-  some text here.
   To prevent certain buffers from showing up in the completion list,
   set 'iswitchb-buffer-ignore': (setq iswitchb-buffer-ignore '("^ "
   "*Buffer")) This one is useful if you want to lose the *...*
