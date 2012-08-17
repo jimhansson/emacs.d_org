@@ -825,7 +825,6 @@ that I share between work and home
 #+end_example
 
 * OrgMode
-
 ** TODO Rework 
 
    this to support more that 2 different org directories and to not
@@ -868,7 +867,7 @@ that I share between work and home
 
     at the moment this is done on by customize and that means we need
     to do it on every machine.
-
+    
 ** Init
 
    because I have more than one computer and also a work computer, I
@@ -1038,6 +1037,131 @@ that I share between work and home
      ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
    #+end_exmaple
 
+
+* Google Integration
+  most of these things comes from http://julien.danjou.info/
+  this needs oauth2 from elpa
+** Google maps                                                          :org:
+   #+begin_src emacs-lisp
+     (add-to-list 'load-path (concat local-emacs-org-dir "google-maps"))
+     (require 'google-maps)
+     (require 'org-location-google-maps)  
+   #+end_src
+   You can then use M-x google-maps and type a location.
+   
+   Various key bindings are available. Here's a few:
+   
+   + or - to zoom in or out;
+   left, right, up, down to move;
+   z to set a zoom level via prefix;
+   q to quit;
+   m to add or remove markers;
+   c to center the map on a place;
+   C to remove centering;
+   t to change the maptype;
+   w to copy the URL of the map to the kill-ring;
+   h to show your home.
+   You can integrate directly Google Maps into Org-mode:
+
+   Then you can use C-c M-L to enter a location assisted by Google
+   geocoding service. Pressing C-c M-l will show you a map.
+
+   If you want to use advanced feature, you should take a look at
+   google-maps-static-show and google-maps-geocode-request functions.
+
+** Google Weather                                                       :org:
+
+   The easiest way to use it is to load it from your .emacs:
+
+   #+begin_src emacs-lisp
+     (add-to-list 'load-path (concat local-emacs-org-dir "google-weather"))
+     (require 'google-weather)  
+   #+end_src
+
+   The function are documented, therefore you should not have any
+   difficulty to use them.
+
+   If you want to use org-google-weather to add weather forecasts in
+   your agenda, just add the following in your .emacs.
+
+   #+begin_src emacs-lisp
+     (require 'org-google-weather)  
+   #+end_src
+   Then, add the following in one of your Org file.
+
+   #+begin_example
+     * Weather
+       %%(org-google-weather "New York")
+   #+end_example
+
+   You can set the language as second argument. You should know that
+   the unit system used is language dependent. By default, American
+   English is used, therefore with Fahrenheit degrees, but if you want
+   to have English with Celsius degrees, you can use "en-gb".
+*** TODO copy icons for the different weather symbols.
+    we need the symbols from [[/usr/share/icons/gnome/16x16/status]] to be
+    added to the repo so we also have them on windows. 
+    these are the one needed.
+    - "weather-showers-scattered.png")
+    - "weather-snow.png")
+    - "weather-storm.png")
+    - "weather-overcast.png")
+    - "weather-showers.png")
+    - "weather-clear.png")
+    - "weather-overcast.png")
+    - "weather-fog.png")
+    - "weather-storm.png")
+    - "weather-fog.png")
+    - "weather-fog.png")
+    - "weather-snow.png")
+    - "weather-clear.png")
+    - "weather-overcast.png")
+    - "weather-storm.png")
+    - "weather-overcast.png")
+    - "weather-clear.png")
+    - "weather-few-clouds.png")
+    - "weather-showers.png")
+    - "weather-snow.png")
+    - "weather-snow.png")
+    - "weather-fog.png")
+    - "weather-snow.png")
+    - "weather-storm.png")
+    - "weather-storm.png")
+    - "weather-clear.png"))
+
+
+** Google Contacts                                                   :oauth2:
+   http://julien.danjou.info/projects/emacs-packages#google-contacts
+
+   The easiest way to use it is to load it from your .emacs:
+   #+begin_src emacs-lisp
+     (add-to-list 'load-path (concat local-emacs-org-dir "google-contacts"))
+     (require 'google-contacts)
+   #+end_src
+   You can then use M-x google-contacts and type a query string.
+   
+   Various key bindings are available. Here's a few:
+   
+   n or p to go the next or previous record;
+   g to refresh the result, bypassing the cache;
+   m to send an e-mail to a contact;
+   s to make a new search;
+   q to quit.
+   You can integrate directly Google Contacts into Gnus:
+
+   #+begin_src emacs-lisp
+     (require 'google-contacts-gnus)    
+   #+end_src
+   Then you can use ; to go to a contact information while reading an
+   e-mail.
+   
+   You can integrate directly Google Contacts into message-mode;
+
+   #+begin_src emacs-lisp
+     (require 'google-contacts-message)
+   #+end_src
+   Then you can use TAB to go to complete e-mail addresses in the
+   header fields.
 * Remember
   
   I don't use remember as much at the moment but some day or some

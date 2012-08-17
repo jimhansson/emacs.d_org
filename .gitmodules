@@ -13,3 +13,9 @@
 [submodule "edb"]
 	path = edb
 	url = https://github.com/emacsmirror/edb.git
+[submodule "google-weather"]
+	path = google-weather
+	url = http://git.naquadah.org/git/google-weather-el.git
+[submodule "google-contacts"]
+	path = google-contacts
+	url = http://git.naquadah.org/git/google-contacts.el.git
