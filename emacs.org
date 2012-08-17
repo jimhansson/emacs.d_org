@@ -1003,6 +1003,27 @@ that I share between work and home
      
    #+end_src
 
+   From Julien Danjou we borrow a function to be able to get our own
+   Holidays and Vaction days marked in the right face.  for this to
+   kick in you need to set the category on items to "Holidays" or
+   "Vacation".
+   #+begin_src emacs-lisp
+   (setq org-agenda-day-face-function
+      (defun jd:org-agenda-day-face-holidays-function (date)
+        "Compute DATE face for holidays."
+        (unless (org-agenda-todayp date)
+          (dolist (file (org-agenda-files nil 'ifmode))
+            (let ((face
+                   (dolist (entry (org-agenda-get-day-entries file date))
+                     (let ((category (with-temp-buffer
+                                       (insert entry)
+                                       (org-get-category (point-min)))))
+                       (when (or (string= "Holidays" category)
+                                 (string= "Vacation" category))
+                         (return 'org-agenda-date-weekend))))))
+              (when face (return face)))))))
+   #+end_src
+
 ** TODO Exports
 ** Babel
 *** SQL
@@ -1336,3 +1357,7 @@ on file sets.
   (and load-file-name
   (file-name-directory load-file-name))
   (add-to-list 'load-path (file-name-directory load-file-name)))
+
+* List of others configurations that you can look at and steal ideas from
+
+  - http://git.naquadah.org/git/~jd/emacs.d.git :: http://julien.danjou.info/
