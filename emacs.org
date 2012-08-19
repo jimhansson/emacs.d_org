@@ -1058,7 +1058,6 @@ that I share between work and home
      ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
    #+end_exmaple
 
-
 * Google Integration
   most of these things comes from http://julien.danjou.info/
   this needs oauth2 from elpa
@@ -1106,7 +1105,37 @@ that I share between work and home
    your agenda, just add the following in your .emacs.
 
    #+begin_src emacs-lisp
-     (require 'org-google-weather)  
+     (require 'org-google-weather)
+     ;; We have the icons in a subdirectory
+     (setq org-google-weather-icon-directory (concat local-emacs-org-dir "google-weather-icons"))
+     ;; here we map icons names to different weather conditions
+     (setq org-google-weather-icon-alist
+           '((chance_of_rain . "weather-showers-scattered.svg")
+             (chance_of_snow . "weather-snow.svg")
+             (chance_of_storm . "weather-storm.svg")
+             (cn_cloudy . "weather-overcast.svg")
+             (cn_heavyrun . "weather-showers.svg")
+             (cn_sunny . "weather-clear.svg")
+             (cloudy . "weather-overcast.svg")
+             (dust . "weather-fog.svg")
+             (flurries . "weather-storm.svg")
+             (fog . "weather-fog.svg")
+             (haze . "weather-fog.svg")
+             (icy . "weather-snow.svg")
+             (jp_sunny . "weather-clear.svg")
+             (jp_cloudy . "weather-overcast.svg")
+             (mist . "weather-storm.svg")
+             (mostly_cloudy . "weather-overcast.svg")
+             (mostly_sunny . "weather-clear.svg")
+             (partly_cloudy . "weather-few-clouds.svg")
+             (rain . "weather-showers.svg")
+             (rain_snow . "weather-snow.svg")
+             (sleet . "weather-snow.svg")
+             (smoke . "weather-fog.svg")
+             (snow . "weather-snow.svg")
+             (storm . "weather-storm.svg")
+             (thunderstorm . "weather-storm.svg")
+             (sunny . "weather-clear.svg")) )
    #+end_src
    Then, add the following in one of your Org file.
 
@@ -1119,36 +1148,22 @@ that I share between work and home
    the unit system used is language dependent. By default, American
    English is used, therefore with Fahrenheit degrees, but if you want
    to have English with Celsius degrees, you can use "en-gb".
-*** TODO copy icons for the different weather symbols.
+*** DONE copy icons for the different weather symbols.
     we need the symbols from [[/usr/share/icons/gnome/16x16/status]] to be
     added to the repo so we also have them on windows. 
     these are the one needed.
-    - "weather-showers-scattered.png")
-    - "weather-snow.png")
-    - "weather-storm.png")
-    - "weather-overcast.png")
-    - "weather-showers.png")
-    - "weather-clear.png")
-    - "weather-overcast.png")
-    - "weather-fog.png")
-    - "weather-storm.png")
-    - "weather-fog.png")
-    - "weather-fog.png")
-    - "weather-snow.png")
-    - "weather-clear.png")
-    - "weather-overcast.png")
-    - "weather-storm.png")
-    - "weather-overcast.png")
     - "weather-clear.png")
     - "weather-few-clouds.png")
+    - "weather-fog.png")
+    - "weather-overcast.png")
+    - "weather-showers-scattered.png")
     - "weather-showers.png")
     - "weather-snow.png")
-    - "weather-snow.png")
-    - "weather-fog.png")
-    - "weather-snow.png")
     - "weather-storm.png")
-    - "weather-storm.png")
-    - "weather-clear.png"))
+
+*** TODO make sure it works on windows with svg or else change to png's
+*** TODO modify the svg's to be smaller.
+*** We want weather first on every day
 
 
 ** Google Contacts                                                   :oauth2:
