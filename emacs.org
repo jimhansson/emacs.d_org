@@ -1079,9 +1079,10 @@ that I share between work and home
   most of these things comes from http://julien.danjou.info/
 ** Google maps                                                          :org:
    #+begin_src emacs-lisp
-     (add-to-list 'load-path (concat local-emacs-org-dir "google-maps"))
-     (require 'google-maps)
-     (require 'org-location-google-maps)  
+     (add-to-list 'load-path (concat local-emacs-org-dir
+                                     "google-maps"))
+     (when (require 'google-maps nil 'noerror)
+       (when (require 'org-location-google-maps nil 'noerror)))
    #+end_src
    You can then use M-x google-maps and type a location.
    
@@ -1111,7 +1112,7 @@ that I share between work and home
 
    #+begin_src emacs-lisp
      (add-to-list 'load-path (concat local-emacs-org-dir "google-weather"))
-     (require 'google-weather)  
+     (when (require 'google-weather nil 'noerror))
    #+end_src
 
    The function are documented, therefore you should not have any
@@ -1121,37 +1122,38 @@ that I share between work and home
    your agenda, just add the following in your .emacs.
 
    #+begin_src emacs-lisp
-     (require 'org-google-weather)
-     ;; We have the icons in a subdirectory
-     (setq org-google-weather-icon-directory (concat local-emacs-org-dir "google-weather-icons"))
-     ;; here we map icons names to different weather conditions
-     (setq org-google-weather-icon-alist
-           '((chance_of_rain . "weather-showers-scattered.svg")
-             (chance_of_snow . "weather-snow.svg")
-             (chance_of_storm . "weather-storm.svg")
-             (cn_cloudy . "weather-overcast.svg")
-             (cn_heavyrun . "weather-showers.svg")
-             (cn_sunny . "weather-clear.svg")
-             (cloudy . "weather-overcast.svg")
-             (dust . "weather-fog.svg")
-             (flurries . "weather-storm.svg")
-             (fog . "weather-fog.svg")
-             (haze . "weather-fog.svg")
-             (icy . "weather-snow.svg")
-             (jp_sunny . "weather-clear.svg")
-             (jp_cloudy . "weather-overcast.svg")
-             (mist . "weather-storm.svg")
-             (mostly_cloudy . "weather-overcast.svg")
-             (mostly_sunny . "weather-clear.svg")
-             (partly_cloudy . "weather-few-clouds.svg")
-             (rain . "weather-showers.svg")
-             (rain_snow . "weather-snow.svg")
-             (sleet . "weather-snow.svg")
-             (smoke . "weather-fog.svg")
-             (snow . "weather-snow.svg")
-             (storm . "weather-storm.svg")
-             (thunderstorm . "weather-storm.svg")
-             (sunny . "weather-clear.svg")) )
+     (when (require 'org-google-weather nil 'noerror)
+       ;; We have the icons in a subdirectory
+       (setq org-google-weather-icon-directory (concat local-emacs-org-dir 
+                                                       "google-weather-icons"))
+       ;; here we map icons names to different weather conditions
+       (setq org-google-weather-icon-alist
+             '((chance_of_rain . "weather-showers-scattered.svg")
+               (chance_of_snow . "weather-snow.svg")
+               (chance_of_storm . "weather-storm.svg")
+               (cn_cloudy . "weather-overcast.svg")
+               (cn_heavyrun . "weather-showers.svg")
+               (cn_sunny . "weather-clear.svg")
+               (cloudy . "weather-overcast.svg")
+               (dust . "weather-fog.svg")
+               (flurries . "weather-storm.svg")
+               (fog . "weather-fog.svg")
+               (haze . "weather-fog.svg")
+               (icy . "weather-snow.svg")
+               (jp_sunny . "weather-clear.svg")
+               (jp_cloudy . "weather-overcast.svg")
+               (mist . "weather-storm.svg")
+               (mostly_cloudy . "weather-overcast.svg")
+               (mostly_sunny . "weather-clear.svg")
+               (partly_cloudy . "weather-few-clouds.svg")
+               (rain . "weather-showers.svg")
+               (rain_snow . "weather-snow.svg")
+               (sleet . "weather-snow.svg")
+               (smoke . "weather-fog.svg")
+               (snow . "weather-snow.svg")
+               (storm . "weather-storm.svg")
+               (thunderstorm . "weather-storm.svg")
+               (sunny . "weather-clear.svg"))))
    #+end_src
    Then, add the following in one of your Org file.
 
@@ -1191,7 +1193,7 @@ that I share between work and home
    The easiest way to use it is to load it from your .emacs:
    #+begin_src emacs-lisp
      (add-to-list 'load-path (concat local-emacs-org-dir "google-contacts"))
-     (require 'google-contacts)
+     (when (require 'google-contacts nil 'noerror))
    #+end_src
    You can then use M-x google-contacts and type a query string.
    
@@ -1205,7 +1207,7 @@ that I share between work and home
    You can integrate directly Google Contacts into Gnus:
 
    #+begin_src emacs-lisp
-     (require 'google-contacts-gnus)    
+     (when (require 'google-contacts-gnus nil 'noerror))
    #+end_src
    Then you can use ; to go to a contact information while reading an
    e-mail.
@@ -1213,7 +1215,7 @@ that I share between work and home
    You can integrate directly Google Contacts into message-mode;
 
    #+begin_src emacs-lisp
-     (require 'google-contacts-message)
+     (when (require 'google-contacts-message nil 'noerror))
    #+end_src
    Then you can use TAB to go to complete e-mail addresses in the
    header fields.
