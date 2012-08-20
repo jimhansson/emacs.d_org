@@ -30,11 +30,6 @@ that I share between work and home
 
     #+begin_example
       (when (require 'deft nil 'noerror) 
-      (setq
-         deft-extension "org"
-         deft-directory "~/Org/deft/"
-         deft-text-mode 'org-mode)
-      (global-set-key (kbd "<f9>") 'deft))
     #+end_example
 
 ** Setup
@@ -48,7 +43,7 @@ that I share between work and home
      (setq user-full-name "Jim Hansson")
      (tool-bar-mode -1)
      (setq default-major-mode 'org-mode)
-     (add-hook 'text-mode-hooxk 'turn-on-auto-fill)
+     (add-hook 'text-mode-hook 'turn-on-auto-fill)
      ;; show matching paren
      (show-paren-mode t)
      (iswitchb-mode 1)
@@ -58,6 +53,30 @@ that I share between work and home
      ;; binds ctrl + § to dabbrev as good enough completion 
      (global-set-key (kbd "C-\§") 'dabbrev-expand)
      (setq-default indent-tabs-mode t)
+   #+end_src
+
+*** Modeline                                                       :modeline:
+    
+    #+begin_src emacs-lisp
+      ;; Things that modifies the modeline
+      (setq display-battery-mode t)
+      (setq display-time-24hr-format t)
+      ;; I work width some really big files and then it is good to have this
+      ;; so i know how far down I am.
+      (setq size-indication-mode t)
+    #+end_src
+    
+** Whitespace
+
+   I use whitespace mode a lot, maybe because I dont have configured
+   the programming modes to "do the right thing" yet and some other
+   programmers around me are experts at leaving trailing whitespaces
+   and mixing tabs and spaces. <rant>the same persons ussally write
+   really long lines to, and have 8 levels of indentation in the same
+   method and uses indent depth of 4 or 8, I wonder how wide their
+   screen is.</rant>
+
+   #+begin_src emacs-lisp
      ;; whitespace-mode things
      
      ;; less color in whitespace mode, The yellow and red is to distracting
@@ -78,26 +97,15 @@ that I share between work and home
              (tab-mark 9 [8677 9] [92 9]) ; tab
              ))
      
+     ;; My own whitespace cleanup function should be bound to something.
+     ;; or used in some save-hook don't know how this work together with smart-tabs
      (defun jiha-whitespace-cleanup ()
        (interactive)
        (let (whitespace-style (indentation::tab 
                                space-before-tab::tab
                                trailing))
          (whitespace-cleanup-region)))
-     
    #+end_src
-
-*** Modeline                                                       :modeline:
-    
-    #+begin_src emacs-lisp
-      ;; Things that modifies the modeline
-      (setq display-battery-mode t)
-      (setq display-time-24hr-format t)
-      ;; I work width some really big files and then it is good to have this
-      ;; so i know how far down I am.
-      (setq size-indication-mode t)
-    #+end_src
-
 ** Uniquify                                                :uniquify:buffers:
 
    Better naming of buffers so we can easly tell the differens between
