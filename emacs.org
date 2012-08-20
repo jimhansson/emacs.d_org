@@ -142,10 +142,12 @@ that I share between work and home
   First setup package archives
   #+begin_src emacs-lisp
     ; Setup package archives
+    (setq package-archives ())
     (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
     (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
     ; http://marmalade-repo.org/ 
     (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+    
   #+end_src
 
   Then use M-x list-packages to find and install these packages.
@@ -274,6 +276,27 @@ that I share between work and home
     
   #+end_src
   
+  #+begin_example emacs-lisp
+    ; coloring
+    
+    ; howto define a face
+    (defface jiha-ibuffer-readonly-face-example '((t (:foreground "Red" :weight bold)))
+      "Ibuffer readonly face")
+    
+    ; these are the the standard faces used but with new names so we can
+    ; change them in a simple way.
+    (defface jiha-ibuffer-readonly-face 'font-lock-constant-face)
+    (defface jiha-ibuffer-compressed-file-name-regex-face 'font-lock-doc-face)
+    (defface jiha-ibuffer-dired-mode-face 'font-lock-function-name-face)
+    (defface jiha-ibuffer-help-modes-face 'font-lock-comment-face)
+    (defface jiha-ibuffer-some-weird-face 'italic)
+    
+    ; format of the list is priority, condition, face
+    ; highest priority wins
+    ;;(setq 'ibuffer-fontification-alist
+    ;;      '(10 (Form)
+    ;;           (face)))                 
+  #+end_example
 ** Iswitch and uniquify compabilitiy                                :uniquify:
 
    The library uniquify overrides Emacs default mechanism for making
@@ -442,6 +465,9 @@ that I share between work and home
     InteractivelyDoThings (ido), which implements regex selection for
     files, directory buffers etc...
 
+** TODO mera saker för ibuffer
+   http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
+   kolla in ibuffer-expert och ibuffer-auto-mode
 * Buffer Menu
 ** TODO Font lock                                                   :fontlock:
 
@@ -912,6 +938,49 @@ that I share between work and home
      (org-babel-load-file (concat shared-org-files-dir "init.org"))
    #+end_src
    
+** Auto Archiving of done entries
+
+   Would be nice if we could auto archive things that have been done
+   for 1 month or something similier. does not work at the moment need
+   to find out why it hangs.
+
+   #+begin_example emacs-lisp
+     ; found on the emacs-orgmode mailing list.
+     ; helping aboudreault with finding errors in it.
+     (defvar org-my-archive-expiry-days 2
+       "The number of days after which a completed task should be auto-archived.
+     This can be 0 for immediate, or a floating point value.")
+     
+     (defun org-my-archive-done-tasks ()
+       (interactive)
+       (save-excursion
+         (goto-char (point-min))
+         (let ((done-regexp
+                (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
+               (state-regexp
+                (concat "- State \"\\(" (regexp-opt org-done-keywords)
+                        "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
+           (while (re-search-forward done-regexp nil t)
+             (let ((end (save-excursion
+                          (outline-next-heading)
+                          (point)))
+                   begin)
+               (goto-char (line-beginning-position))
+               (setq begin (point))
+               (when (re-search-forward state-regexp end t)
+                 (let* ((time-string (match-string 2))
+                        (when-closed (org-parse-time-string time-string)))
+                   (if (>= (time-to-number-of-days
+                            (time-subtract (current-time)
+                                           (apply #'encode-time when-closed)))
+                           org-my-archive-expiry-days)
+                       (org-archive-subtree)))))))))
+     
+     (defalias 'archive-done-tasks 'asdflökg)
+   #+end_example
+   
+*** DONE tell aboudreault if it works
+    it does not. hangs emacs
 ** Smarter headlines
 
    from: http://lists.gnu.org/archive/html/emacs-orgmode/2007-10/msg00551.html
