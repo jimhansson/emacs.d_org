@@ -126,16 +126,19 @@ that I share between work and home
    #+end_src
 
 * Requirements from elpa
-  First setup this in you .emacs file.
-  #+begin_example emacs-lisp
-    (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
-                             ("gnu" . "http://elpa.gnu.org/packages/")))     
+  First setup package archives
+  #+begin_src emacs-lisp
+    ; Setup package archives
+    (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
+    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
     ; http://marmalade-repo.org/ 
     (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-  #+end_example
+  #+end_src
 
   Then use M-x list-packages to find and install these packages.
   - oauth2 :: for google integration
+              for some reason I need to add oauth directory to
+              load-path, should not elpa take care of that.
 
 * Auto complete
 
