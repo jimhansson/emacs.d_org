@@ -125,6 +125,18 @@ that I share between work and home
      (put 'narrow-to-region 'disabled nil)
    #+end_src
 
+* Requirements from elpa
+  First setup this in you .emacs file.
+  #+begin_example emacs-lisp
+    (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
+                             ("gnu" . "http://elpa.gnu.org/packages/")))     
+    ; http://marmalade-repo.org/ 
+    (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+  #+end_example
+
+  Then use M-x list-packages to find and install these packages.
+  - oauth2 :: for google integration
+
 * Auto complete
 
   #+begin_src emacs-lisp
@@ -506,6 +518,7 @@ that I share between work and home
    Integration with VS, We have aseperate file with commands to tell
    visual studio to do things. at the moment we only have to commands
    but it should be simple to extend it with others.
+
    #+begin_src emacs-lisp
      ;; this should only be done on windows to save startup time.
      (org-babel-load-file (concat local-emacs-org-dir "devenv-tricks.org"))
@@ -534,6 +547,7 @@ that I share between work and home
    ;;  (require 'semantic)
    #+end_src
 
+*** TODO change this to be a submodule instead
 *** EDE
     #+begin_src emacs-lisp
     ;;  (global-ede-mode t)
@@ -1056,11 +1070,10 @@ that I share between work and home
      (load-file "org-sync2/os.el") ;; org-sync
      (load-file "org-sync2/os-github.el") ;; github
      ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
-   #+end_exmaple
+   #+end_example
 
 * Google Integration
   most of these things comes from http://julien.danjou.info/
-  this needs oauth2 from elpa
 ** Google maps                                                          :org:
    #+begin_src emacs-lisp
      (add-to-list 'load-path (concat local-emacs-org-dir "google-maps"))
@@ -1162,8 +1175,11 @@ that I share between work and home
     - "weather-storm.png")
 
 *** TODO make sure it works on windows with svg or else change to png's
+    :LOGBOOK:
+    CLOCK: [2012-08-20 må 10:35]
+    :END:
 *** TODO modify the svg's to be smaller.
-*** We want weather first on every day
+*** TODO We want weather first on every day
 
 
 ** Google Contacts                                                   :oauth2:
@@ -1289,9 +1305,7 @@ on file sets.
     (filesets-init)
   #+end_src
   
-
-#  LocalWords:  Uniquify Iswitch
-* ERC
+* TODO ERC
 
   #+begin_src emacs-lisp
     (require 'erc-join)    
@@ -1308,7 +1322,7 @@ on file sets.
     
     (erc-autojoin-mode 1)
     (setq erc-autojoin-channels-alist
-          ;; localhost should have a ssh tunnel to 85.238.219.29
+          ;; localhost should have a ssh tunnel to my server
           '(("localhost" "#emacs" "#org-mode" "#erc")
             ("oftc.net" "#BitlBee")))
     
@@ -1376,3 +1390,5 @@ on file sets.
 * List of others configurations that you can look at and steal ideas from
 
   - http://git.naquadah.org/git/~jd/emacs.d.git :: http://julien.danjou.info/
+
+#  LocalWords:  Uniquify Iswitch
