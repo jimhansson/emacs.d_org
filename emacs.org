@@ -33,6 +33,12 @@ that I share between work and home
     #+end_example
 
 ** Setup
+   
+   Some user information
+   #+begin_src emacs-lisp
+     (setq user-full-name "Jim Hansson")
+     (setq user-mail-address "jim.hansson@powel.se")   
+   #+end_src
 
    Here we setup some basic things, I dont like the toolbar so that we
    turn off, I use OrgMode to almost everything(even my .emacs) so
@@ -40,7 +46,6 @@ that I share between work and home
    laptops and who in there right mind uses 12h clocks.
 
    #+begin_src emacs-lisp
-     (setq user-full-name "Jim Hansson")
      (tool-bar-mode -1)
      (setq default-major-mode 'org-mode)
      (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -1189,7 +1194,7 @@ that I share between work and home
 
 *** TODO make sure it works on windows with svg or else change to png's
     :LOGBOOK:
-    CLOCK: [2012-08-20 må 10:35]
+    CLOCK: [2012-08-20 må 10:35]--[2012-08-20 må 11:46] =>  1:11
     :END:
 *** TODO modify the svg's to be smaller.
 *** TODO We want weather first on every day
