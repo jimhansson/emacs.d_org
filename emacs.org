@@ -4,12 +4,16 @@
 #+EMAIL: jim.hansson@gmail.com
 #+DATE: <2012-06-28 to>
 #+LANGUAGE: English
-#+STARTUP: hidestars hideblocks
-#+COLUMNS: %50ITEM %4TODO %20TAGS
 
 This is my main .emacs file. It is responsible for calling out to the
 local file at different points. This is placed in a git repository
 that I share between work and home
+
+
+* File setup
+#+STARTUP: hidestars hideblocks
+#+COLUMNS: %50ITEM %4TODO %20TAGS
+#+LINK: norang http://doc.norang.ca/org-mode.html#
 
 * Bugs
 * Introduction
@@ -519,6 +523,8 @@ that I share between work and home
     #+end_src
 ** Compile  
 ** TODO Coding styles
+   :LOGBOOK:
+   :END:
    check out [[http://emacswiki.org/emacs/IndentingC#toc2][emacswiki on indenting]]
 *** Microsoft C & C++ style
 
@@ -900,6 +906,8 @@ that I share between work and home
      (setq org-agenda-include-diary t)
      (setq org-feed-alist)
      (setq org-cycle-separator-lines 0)
+     (setq org-use-fast-todo-selection t)
+     (setq org-treat-S-cursor-todo-selection-as-state-change nil)
      (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
      (setq org-insert-mode-line-in-empty-file t)
      ;; setup automatic expiring of old entries with creation date
@@ -924,6 +932,27 @@ that I share between work and home
     at the moment this is done on by customize and that means we need
     to do it on every machine.
     
+** standard Todo states and transitions
+   :LOGBOOK:
+   - State "DONE"       from "TODO"       [2012-08-20 må 17:19]
+   :END:
+
+   This is from [[norang:TodoKeywords]] it's proberbly more than I need.
+   #+begin_src emacs-lisp
+     (setq org-todo-keywords
+           (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+                   (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE"))))
+     
+     (setq org-todo-keyword-faces
+           (quote (("TODO" :foreground "red" :weight bold)
+                   ("NEXT" :foreground "light blue" :weight bold)
+                   ("DONE" :foreground "green" :weight bold)
+                   ("WAITING" :foreground "orange" :weight bold)
+                   ("HOLD" :foreground "magenta" :weight bold)
+                   ("CANCELLED" :foreground "green" :weight bold)
+                   ("PHONE" :foreground "green" :weight bold))))
+ 
+   #+end_src
 ** Init
 
    because I have more than one computer and also a work computer, I
