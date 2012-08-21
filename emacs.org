@@ -19,7 +19,7 @@ that I share between work and home
 * Introduction
   Basic things that could have been down throu custom-set-variable but
   then I would have harder time to replicate that between machines.
-
+  
 ** Requirements
 
    - Emacs 24
@@ -172,6 +172,49 @@ that I share between work and home
     (ac-flyspell-workaround)
   #+end_src
 
+* Some Basic faces                                                    :faces:
+
+  I use the possiblity that a face can inherit from one, or more faces
+  to setup faces along a few different axis.
+  #+begin_src emacs-lisp
+
+    (defgroup jiha-faces nil "Configuration for faces")
+    ; expirment
+    ; defines the basic faces used to for indicating how important thing is
+    (defface jiha-need-attention-face 
+      '((t (:foreground "Red")))
+      "Some text"
+      :group 'jiha-faces)
+    
+    (defface jiha-notice-me-face      
+      '((t (:foreground "salmon")))
+      "Some text"
+      :group 'jiha-faces)
+    
+    (defface jiha-warning-face 
+      '((t (:foreground "Yellow")))
+      "Some text"
+      :group 'jiha-faces)
+    
+    (defface jiha-good-thing-face
+      '((t (:foreground "Green")))
+      "Some Text"
+      :group 'jiha-faces)
+    
+    ; Face to tell that it should not be changed or can not be changed
+    (defface jiha-donotwrite-face
+      '((t (:foreground "Red")))
+      "Some Text"
+      :group 'jiha-faces)
+    
+    ; Things that dont really exist, or not a file
+    (defface jiha-not-real-face 
+      '((t (:slant italic :group jiha-faces)))
+      "Some Text"
+      :group 'jiha-faces)
+    
+  #+end_src
+
 * Iswitch Buffers                                                   :buffers:
 
   To prevent certain buffers from showing up in the completion list,
@@ -279,28 +322,42 @@ that I share between work and home
         (switch-to-buffer other-frame-buffer)))
     
   #+end_src
-  
-  #+begin_example emacs-lisp
-    ; coloring
-    
-    ; howto define a face
-    (defface jiha-ibuffer-readonly-face-example '((t (:foreground "Red" :weight bold)))
-      "Ibuffer readonly face")
-    
-    ; these are the the standard faces used but with new names so we can
-    ; change them in a simple way.
-    (defface jiha-ibuffer-readonly-face 'font-lock-constant-face)
-    (defface jiha-ibuffer-compressed-file-name-regex-face 'font-lock-doc-face)
-    (defface jiha-ibuffer-dired-mode-face 'font-lock-function-name-face)
-    (defface jiha-ibuffer-help-modes-face 'font-lock-comment-face)
-    (defface jiha-ibuffer-some-weird-face 'italic)
-    
-    ; format of the list is priority, condition, face
-    ; highest priority wins
-    ;;(setq 'ibuffer-fontification-alist
-    ;;      '(10 (Form)
-    ;;           (face)))                 
-  #+end_example
+
+** Colours in buffer list                                             :faces:
+
+   #+begin_src emacs-lisp
+     ; coloring
+       
+     ; these are the the standard faces used but with new names so we can
+     ; change them in a simple way.
+     (defface jiha-ibuffer-readonly-face 
+       '((t (:inherit  (jiha-donotwrite-face font-lock-constant-face))))
+       "Some Text"
+       :group 'jiha-faces)
+     (defface jiha-ibuffer-compressed-file-name-regex-face 
+       '((t (:inherit font-lock-doc-face)))
+       "Some Text"
+       :group 'jiha-faces)
+     (defface jiha-ibuffer-dired-mode-face 
+       '((t (:inherit font-lock-function-name-face)))
+       "Some Text"
+       :group 'jiha-faces)
+     (defface jiha-ibuffer-help-modes-face 
+       '((t (:inherit font-lock-comment-face)))
+       "Some Text"
+       :group 'jiha-faces)
+     (defface jiha-ibuffer-some-weird-face 
+       '((t (:slant italic)))
+       "Some Text"
+       :group 'jiha-faces)
+     
+     ; format of the list is priority, condition, face
+     ; highest priority wins
+     ;;(setq 'ibuffer-fontification-alist
+     ;;      '(10 (Form)
+     ;;           (face)))                 
+     
+   #+end_src
 ** Iswitch and uniquify compabilitiy                                :uniquify:
 
    The library uniquify overrides Emacs default mechanism for making
@@ -932,6 +989,39 @@ that I share between work and home
     at the moment this is done on by customize and that means we need
     to do it on every machine.
     
+** Org todo keyword faces                                             :faces:
+   All kewords are should be bold, that tells me they are keywords
+   #+begin_src emacs-lisp
+     ;; All keywords should be in bold so it's easy to se them as keywords
+     (defface jiha-org-keywords-face 
+       '((t (:inherit default :weight extra-bold)))
+       "some String"
+       :group 'jiha-faces)
+     
+     (defface jiha-org-todo-keywords-face
+       '((t (:inherit (jiha-warning-face
+                       jiha-org-keywords-face))))
+       "Some Text"
+       :group 'jiha-faces)
+     (defface jiha-org-done-keywords-face
+       '((t (:inherit (jiha-good-thing-face 
+                       jiha-org-keywords-face))))
+       "Some Text"
+       :group 'jiha-faces)
+     
+     (defface jiha-org-onhold-keywords-face
+       '((t (:inherit (jiha-notice-me-face
+                       jiha-org-keywords-face))))
+       "Some Text"
+       :group 'jiha-faces)
+     
+     (defface jiha-org-not-important-keywords-face
+       '((t (:inherit (jiha-not-real-face
+                       jiha-good-thing-face
+                       jiha-org-keywords-face))))
+       "Some Text"
+       :group 'jiha-faces)
+   #+end_src
 ** standard Todo states and transitions
    :LOGBOOK:
    - State "DONE"       from "TODO"       [2012-08-20 må 17:19]
@@ -944,14 +1034,14 @@ that I share between work and home
                    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE"))))
      
      (setq org-todo-keyword-faces
-           (quote (("TODO" :foreground "red" :weight bold)
+           (quote (("TODO"      . jiha-org-todo-keywords-face)
                    ("NEXT" :foreground "light blue" :weight bold)
-                   ("DONE" :foreground "green" :weight bold)
-                   ("WAITING" :foreground "orange" :weight bold)
-                   ("HOLD" :foreground "magenta" :weight bold)
-                   ("CANCELLED" :foreground "green" :weight bold)
-                   ("PHONE" :foreground "green" :weight bold))))
- 
+                   ("DONE"      . jiha-org-done-keywords-face)
+                   ("WAITING"   . jiha-org-onhold-keywords-face)
+                   ("HOLD"      . jiha-org-onhold-keywords-face)
+                   ("CANCELLED" . jiha-org-not-important-keywords-face)
+                   ("PHONE"     . jiha-org-not-important-keywords-face))))
+      
    #+end_src
 ** Init
 
@@ -1292,12 +1382,15 @@ that I share between work and home
 
 *** TODO make sure it works on windows with svg or else change to png's
     :LOGBOOK:
+    CLOCK: [2012-08-21 ti 11:11]--[2012-08-21 ti 11:13] =>  0:02
+    - I does not work with svg, need png's on windows. emacs on
+      windows does not support svg.
     CLOCK: [2012-08-20 må 10:35]--[2012-08-20 må 11:46] =>  1:11
     :END:
 *** TODO modify the svg's to be smaller.
 *** TODO We want weather first on every day
-
-
+    tried setting with high priority that may bump it up the
+    agenda. will have to check that at home.
 ** Google Contacts                                                   :oauth2:
    http://julien.danjou.info/projects/emacs-packages#google-contacts
 
@@ -1495,7 +1588,7 @@ on file sets.
   ;;(bbdb-initialize 'gnus 'message)
   ;;(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
 #+end_src
-
+  
   other stuff i might need
   (provide 'bbdb-autoloads)
   (if
