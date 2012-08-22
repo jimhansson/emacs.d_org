@@ -192,7 +192,7 @@ that I share between work and home
       :group 'jiha-faces)
     
     (defface jiha-warning-face 
-      '((t (:foreground "Yellow")))
+      '((t (:foreground "Orange")))
       "Some text"
       :group 'jiha-faces)
     
@@ -618,6 +618,14 @@ that I share between work and home
                        (inclass . 8)
                        (knr-argdecl-intro . 8)))
       #+end_src
+***** Google C++ Style
+
+      This is the C++ style that I personaly finds to be best.
+
+      #+begin_src emacs-lisp
+        (require 'google-c-style nil 'noerror)
+      #+end_src
+
 *** Visual Studio Integration
 
     Integration with VS, We have aseperate file with commands to tell
@@ -772,11 +780,11 @@ that I share between work and home
 
 ***** SQL
 
-     #+begin_src emacs-lisp
+      #+begin_src emacs-lisp
        (eval-after-load "sql"
          '(load-library "sql-indent"))
-     #+end_src
-
+      #+end_src
+      
 * Fly-spell
 
   My spelling is terrible so we use fly-spell as much as possible when
