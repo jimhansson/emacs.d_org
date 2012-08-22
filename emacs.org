@@ -140,6 +140,7 @@ that I share between work and home
       (set-variable 'confirm-kill-emacs 'yes-or-no-p)
       ;; more of these as I find them
       (put 'narrow-to-region 'disabled nil)
+      (setq safe-local-variable-values (quote ((auto-fill-mode . t))))
     #+end_src
 
 * Requirements from elpa
@@ -1642,4 +1643,4 @@ on file sets.
 
   - http://git.naquadah.org/git/~jd/emacs.d.git :: http://julien.danjou.info/
 
-#  LocalWords:  Uniquify Iswitch emacs src
+#  LocalWords:  Uniquify Iswitch emacs src Whitespace
