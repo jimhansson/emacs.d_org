@@ -192,7 +192,7 @@ that I share between work and home
       :group 'jiha-faces)
     
     (defface jiha-warning-face 
-      '((t (:foreground "Yellow")))
+      '((t (:foreground "Orange")))
       "Some text"
       :group 'jiha-faces)
     
@@ -772,10 +772,10 @@ that I share between work and home
 
 *** SQL
 
-   #+begin_src emacs-lisp
+   #+begin_example emacs-lisp
      (eval-after-load "sql"
        '(load-library "sql-indent"))
-   #+end_src
+   #+end_example
 
 * Fly-spell
 
