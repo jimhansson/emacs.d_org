@@ -796,21 +796,23 @@ that I share between work and home
   printing messages for every word (when checking the entire buffer)
   causes an enormous slowdown. 
 
-  deactivated at the moment until we have fixed cygwin ispell or
-  aspell.
-  #+begin_example emacs-lisp
-    (when (require 'flyspell nil 'noerror)
-      ;; activate flyspell for text-mode and derivatives
-      (dolist (hook '(text-mode-hook))
-        (add-hook hook (lambda () (flyspell-mode 1))))
-      ;; this is how we remove it for a sub-mode
-      ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-      ;;  (add-hook hook (lambda () (flyspell-mode -1))))
+  deactivated on windows at the moment until we have fixed cygwin
+  ispell or Aspell.
+  #+begin_src emacs-lisp
+    (if (eq system-type 'linux)
+        ((when (require 'flyspell nil 'noerror)
+           ;; activate flyspell for text-mode and derivatives
+           (dolist (hook '(text-mode-hook))
+             (add-hook hook (lambda () (flyspell-mode 1))))
+           ;; this is how we remove it for a sub-mode
+           ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+           ;;  (add-hook hook (lambda () (flyspell-mode -1))))
+           )
+        
+         (setq flyspell-issue-message-flag nil))
       )
-
-    (setq flyspell-issue-message-flag nil)
-  #+end_example
-
+  #+end_src
+  
 *** Fly-spell for comments when programming                          :coding:
 
     #+begin_src emacs-lisp
@@ -1640,4 +1642,4 @@ on file sets.
 
   - http://git.naquadah.org/git/~jd/emacs.d.git :: http://julien.danjou.info/
 
-#  LocalWords:  Uniquify Iswitch
+#  LocalWords:  Uniquify Iswitch emacs src
