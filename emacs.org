@@ -633,12 +633,13 @@ that I share between work and home
     but it should be simple to extend it with others.
 
     #+begin_src emacs-lisp
-      ;; this should only be done on windows to save startup time.
-      (org-babel-load-file (concat local-emacs-org-dir "devenv-tricks.org"))
-      ;; Now in those mode where it might be useful do something like
-      ;;(global-set-key [f9] 'devenv-toggle-breakpoint)
-      ;;(global-set-key [f5] 'devenv-debug)
-      (global-set-key [f3] 'devenv-switch-to-devenv)
+      ;; only on windows to save startup-time
+      (if (eq system-type 'windows-nt)
+          ((org-babel-load-file (concat local-emacs-org-dir "devenv-tricks.org"))
+           ;; Now in those mode where it might be useful do something like
+           ;; (global-set-key [f9] 'devenv-toggle-breakpoint)
+           ;; (global-set-key [f5] 'devenv-debug)
+           (global-set-key [f3] 'devenv-switch-to-devenv)))
     #+end_src
 
 *** TODO CEDET
