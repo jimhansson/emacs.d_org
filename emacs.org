@@ -287,7 +287,9 @@ that I share between work and home
              ("Help" (or (name . "\*Help\*")
                          (name . "\*Apropos\*")
                          (name . "\*info\*"))))))
-        
+   #+end_src
+
+   #+begin_src emacs-lisp
         (add-hook 'ibuffer-mode-hook 
                   '(lambda ()
                      (ibuffer-auto-mode 1)
@@ -320,8 +322,7 @@ that I share between work and home
         (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
         (switch-to-buffer this-frame-buffer)
         (other-frame 1)
-        (switch-to-buffer other-frame-buffer)))
-    
+        (switch-to-buffer other-frame-buffer))) 
   #+end_src
 
 *** Colours in buffer list                                            :faces:
@@ -527,7 +528,10 @@ that I share between work and home
       InteractivelyDoThings (ido), which implements regex selection for
       files, directory buffers etc...
 
-*** TODO mera saker för ibuffer
+*** DONE mera saker för ibuffer
+    :LOGBOOK:
+    - State "DONE"       from "TODO"       [2012-08-23 Thu 00:03]
+    :END:
     http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
     kolla in ibuffer-expert och ibuffer-auto-mode
 * Buffer Menu
