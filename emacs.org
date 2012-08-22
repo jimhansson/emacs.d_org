@@ -360,7 +360,7 @@ that I share between work and home
       ;;           (face)))                 
       
     #+end_src
-*** Iswitch and uniquify compabilitiy                              :uniquify:
+*** Iswitch and uniquify compatibility                              :uniquify:
 
     The library uniquify overrides Emacs default mechanism for making
     buffer names unique (using suffixes like <2>, <3> etc.) with a
