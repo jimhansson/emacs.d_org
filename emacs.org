@@ -1066,9 +1066,9 @@ that I share between work and home
     This is from [[norang:TodoKeywords]] it's proberbly more than I need.
     #+begin_src emacs-lisp
       (setq org-todo-keywords
-            (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+            (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
                     (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
-                    (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/!)"))))
+                    (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)"))))
       
       (setq org-todo-keyword-faces
             (quote (("TODO"      . jiha-org-todo-keywords-face)
