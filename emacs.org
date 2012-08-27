@@ -1006,6 +1006,25 @@ that I share between work and home
       at the moment this is done on by customize and that means we need
       to do it on every machine.
       
+*** RSS feeds
+
+    #+begin_src emacs-lisp
+      (let ((feedfile (format "%s/%s" shared-org-files-dir "feeds.org")))
+        (setq org-feed-alist
+              `(("Slashdot"
+                 "http://rss.slashdot.org/Slashdot/slashdotatom"
+                 ,feedfile
+                 "Slashdot")
+                ("Bruce"
+                 "http://feeds.feedburner.com/schneier/fulltext"
+                 ,feedfile
+                 "Bruce Schneier On Security")
+                ("PiratPartiet"
+                 "http://live.piratpartiet.se/rss20.xml"
+                 ,feedfile
+                 "PiratPartiet SE"))))
+    #+end_src
+
 *** Org todo keyword faces                                            :faces:
     All kewords are should be bold, that tells me they are keywords
     #+begin_src emacs-lisp
@@ -1049,7 +1068,7 @@ that I share between work and home
       (setq org-todo-keywords
             (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
                     (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
-                    (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/!"))))
+                    (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/!)"))))
       
       (setq org-todo-keyword-faces
             (quote (("TODO"      . jiha-org-todo-keywords-face)
