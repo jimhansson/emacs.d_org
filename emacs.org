@@ -14,7 +14,7 @@ that I share between work and home
 #+STARTUP: hidestars hideblocks
 #+COLUMNS: %50ITEM %4TODO %20TAGS
 #+LINK: norang http://doc.norang.ca/org-mode.html#
-
+  
 * Bugs
 * Introduction
   Basic things that could have been down throu custom-set-variable but
@@ -1258,6 +1258,41 @@ that I share between work and home
       
     #+end_src
 
+    functions to use in the agenda view, include calles to these
+    functions in one of your agenda files like this %%(diary-sun*) and
+    it will be called.
+    #+begin_src emacs-lisp
+      ;; functions to use in the dairy to get seperated sunrise and sunset times.
+      ;; if we use %%(dairy-sunrise-sunset) we get it on one line, this gives us
+      ;; two lines or only one if we want to.
+      (defun diary-sunrise ()
+        (let ((dss (diary-sunrise-sunset)))
+          (with-temp-buffer
+            (insert dss)
+            (goto-char (point-min))
+            (while (re-search-forward " ([^)]*)" nil t)
+              (replace-match "" nil nil))
+            (goto-char (point-min))
+            (search-forward ",")
+            (buffer-substring (point-min) (match-beginning 0)))))
+      
+      (defun diary-sunset ()
+        (let ((dss (diary-sunrise-sunset))
+              start end)
+          (with-temp-buffer
+            (insert dss)
+            (goto-char (point-min))
+            (while (re-search-forward " ([^)]*)" nil t)
+              (replace-match "" nil nil))
+            (goto-char (point-min))
+            (search-forward ", ")
+            (setq start (match-end 0))
+            (search-forward " at")
+            (setq end (match-beginning 0))
+            (goto-char start)
+            (capitalize-word 1)
+            (buffer-substring start end))))
+    #+end_src
     From Julien Danjou we borrow a function to be able to get our own
     Holidays and Vaction days marked in the right face.  for this to
     kick in you need to set the category on items to "Holidays" or
