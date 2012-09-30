@@ -389,6 +389,7 @@ that I share between work and home
     #+end_src
 
 *** More Iswitch things that I don't use at the moment
+    http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
 ***** Keybindings
 
       Something most IswitchBuffers users aren't aware of is that you
@@ -528,12 +529,6 @@ that I share between work and home
       InteractivelyDoThings (ido), which implements regex selection for
       files, directory buffers etc...
 
-*** DONE mera saker för ibuffer
-    :LOGBOOK:
-    - State "DONE"       from "TODO"       [2012-08-23 Thu 00:03]
-    :END:
-    http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
-    kolla in ibuffer-expert och ibuffer-auto-mode
 * Buffer Menu
 *** TODO Font lock                                                 :fontlock:
 
@@ -1000,7 +995,7 @@ that I share between work and home
     behave. it's a pretty complex mode with lot of things you could
     change. I have tried to make it as simple a possible with sub-trees
     for every main function of OrgMode.
-
+    
 ***** TODO setup what org-modules we should have
 
       at the moment this is done on by customize and that means we need
@@ -1134,9 +1129,6 @@ that I share between work and home
       
       (defalias 'archive-done-tasks 'asdflökg)
     #+end_example
-    
-***** DONE tell aboudreault if it works
-      it does not. hangs emacs
 *** Smarter headlines
 
     from: http://lists.gnu.org/archive/html/emacs-orgmode/2007-10/msg00551.html
@@ -1232,8 +1224,7 @@ that I share between work and home
 
     #+end_src
 *** Agenda                                                           :habits:
-    
-    #+begin_src emacs-lisp
+    #+begin_example emacs-lisp
       ;; does not work at the moment
       (setq org-agenda-custom-commands
             '(("d" "Upcoming deadlines" agenda "" 
@@ -1250,54 +1241,20 @@ that I share between work and home
                         )
                 ))
               ))
+    #+end_example
+    #+begin_src emacs-lisp
       (setq org-habit-graph-column 50)
       (setq org-agenda-tags-column 75)
       (setq org-habit-show-habits-only-for-today nil)
       (setq org-habit-preceding-days 15)
-      (setq org-habit-following-days 10)
-      
-    #+end_src
-
-    functions to use in the agenda view, include calles to these
-    functions in one of your agenda files like this %%(diary-sun*) and
-    it will be called.
-    #+begin_src emacs-lisp
-      ;; functions to use in the dairy to get seperated sunrise and sunset times.
-      ;; if we use %%(dairy-sunrise-sunset) we get it on one line, this gives us
-      ;; two lines or only one if we want to.
-      (defun diary-sunrise ()
-        (let ((dss (diary-sunrise-sunset)))
-          (with-temp-buffer
-            (insert dss)
-            (goto-char (point-min))
-            (while (re-search-forward " ([^)]*)" nil t)
-              (replace-match "" nil nil))
-            (goto-char (point-min))
-            (search-forward ",")
-            (buffer-substring (point-min) (match-beginning 0)))))
-      
-      (defun diary-sunset ()
-        (let ((dss (diary-sunrise-sunset))
-              start end)
-          (with-temp-buffer
-            (insert dss)
-            (goto-char (point-min))
-            (while (re-search-forward " ([^)]*)" nil t)
-              (replace-match "" nil nil))
-            (goto-char (point-min))
-            (search-forward ", ")
-            (setq start (match-end 0))
-            (search-forward " at")
-            (setq end (match-beginning 0))
-            (goto-char start)
-            (capitalize-word 1)
-            (buffer-substring start end))))
+      (setq org-habit-following-days 10)      
     #+end_src
 
     From Julien Danjou we borrow a function to be able to get our own
     Holidays and Vaction days marked in the right face.  for this to
     kick in you need to set the category on items to "Holidays" or
     "Vacation".
+
     #+begin_src emacs-lisp
     (setq org-agenda-day-face-function
        (defun jd:org-agenda-day-face-holidays-function (date)
@@ -1315,6 +1272,52 @@ that I share between work and home
                (when face (return face)))))))
     #+end_src
 
+***** Diary integration
+
+      functions to use in the agenda view, include calles to these
+      functions in one of your agenda files like this %%(diary-sun*) and
+      it will be called.
+      #+begin_src emacs-lisp
+        ;; functions to use in the dairy to get seperated sunrise and sunset times.
+        ;; if we use %%(dairy-sunrise-sunset) we get it on one line, this gives us
+        ;; two lines or only one if we want to.
+        (defun diary-sunrise ()
+          (let ((dss (diary-sunrise-sunset)))
+            (with-temp-buffer
+              (insert dss)
+              (goto-char (point-min))
+              (while (re-search-forward " ([^)]*)" nil t)
+                (replace-match "" nil nil))
+              (goto-char (point-min))
+              (search-forward ",")
+              (buffer-substring (point-min) (match-beginning 0)))))
+        
+        (defun diary-sunset ()
+          (let ((dss (diary-sunrise-sunset))
+                start end)
+            (with-temp-buffer
+              (insert dss)
+              (goto-char (point-min))
+              (while (re-search-forward " ([^)]*)" nil t)
+                (replace-match "" nil nil))
+              (goto-char (point-min))
+              (search-forward ", ")
+              (setq start (match-end 0))
+              (search-forward " at")
+              (setq end (match-beginning 0))
+              (goto-char start)
+              (capitalize-word 1)
+              (buffer-substring start end))))
+      #+end_src
+      
+      We also need to set where on earth we are because without that
+      information the dairy-sun* functions can not do it's job and
+      will ask every time we start where on earht we are.
+      #+begin_src emacs-lisp
+        (setq calendar-latitude 63.1766)
+        (setq calendar-longitude 14.636068)
+        (setq calendar-location-name "Östersund, Sweden")
+      #+end_src
 *** TODO Exports
 *** Babel
 ***** SQL
@@ -1381,8 +1384,6 @@ that I share between work and home
     google-maps-static-show and google-maps-geocode-request functions.
 
 *** Google Weather                                                      :org:
-
-    The easiest way to use it is to load it from your .emacs:
 
     #+begin_src emacs-lisp
       (add-to-list 'load-path (concat local-emacs-org-dir "google-weather"))
@@ -1550,7 +1551,7 @@ that I share between work and home
 
   #+begin_src emacs-lisp
     ; dont use tabs for indenting
-    (setq-default indent-tabs-mode nil)
+    (setq-default indent-tabs-mode t)
     
     (define-key global-map "\C-cl" 'org-store-link)
     (define-key global-map "\C-ca" 'org-agenda)
