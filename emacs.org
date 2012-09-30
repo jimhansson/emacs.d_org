@@ -1293,6 +1293,7 @@ that I share between work and home
             (capitalize-word 1)
             (buffer-substring start end))))
     #+end_src
+
     From Julien Danjou we borrow a function to be able to get our own
     Holidays and Vaction days marked in the right face.  for this to
     kick in you need to set the category on items to "Holidays" or
