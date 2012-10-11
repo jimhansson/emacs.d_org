@@ -662,7 +662,10 @@ that I share between work and home
       ;;  (require 'semantic)
     #+end_src
 
-***** TODO change this to be a submodule instead
+***** DONE change this to be a submodule instead
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2012-10-11 to 16:04]
+			:END:
 ***** EDE
       #+begin_src emacs-lisp
       ;;  (global-ede-mode t)
