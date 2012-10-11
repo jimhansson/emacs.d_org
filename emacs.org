@@ -163,7 +163,7 @@ that I share between work and home
     this trips me sometimes so we turn that off, and the same goes for
     killing emacs. We also removes some questions that are asked to
     make sure that the users really wants what is going to happen, I
-    know how to use undo and else I usually have some version control
+    know how to use undo and  I usually have some version control
     system running so I can go back.
 
     #+begin_src emacs-lisp
@@ -1485,7 +1485,6 @@ that I share between work and home
 * TODO Other Setup
 
   #+begin_src emacs-lisp
-    ; dont use tabs for indenting
     (setq-default indent-tabs-mode t)
     
     (define-key global-map "\C-cl" 'org-store-link)
