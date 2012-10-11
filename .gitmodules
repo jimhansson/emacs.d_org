@@ -13,9 +13,12 @@
 [submodule "edb"]
 	path = edb
 	url = https://github.com/emacsmirror/edb.git
-[submodule "google-weather"]
-	path = google-weather
-	url = http://git.naquadah.org/git/google-weather-el.git
 [submodule "google-contacts"]
 	path = google-contacts
 	url = http://git.naquadah.org/git/google-contacts.el.git
+[submodule "cedet"]
+	path = cedet
+	url = https://git.gitorious.org/cedet-mirror/cedet-mirror.git
+[submodule "cedet-src"]
+	path = cedet-src
+	url = https://git.gitorious.org/cedet-mirror/cedet-mirror.git

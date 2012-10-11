@@ -11,4 +11,124 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
   :END:
   it does not. hangs emacs
 
+* Google Weather																												:org:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2012-10-11 to 16:56
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Google Integration
+	:ARCHIVE_CATEGORY: emacs
+	:END:
+
+	#+begin_src emacs-lisp
+		(add-to-list 'load-path (concat local-emacs-org-dir "google-weather"))
+		(when (require 'google-weather nil 'noerror))
+	#+end_src
+
+	The function are documented, therefore you should not have any
+	difficulty to use them.
+
+	If you want to use org-google-weather to add weather forecasts in
+	your agenda, just add the following in your .emacs.
+
+	#+begin_src emacs-lisp
+		(when (require 'org-google-weather nil 'noerror)
+			;; We have the icons in a subdirectory
+			(setq org-google-weather-icon-directory (concat local-emacs-org-dir 
+																											"google-weather-icons"))
+			;; here we map icons names to different weather conditions
+			;; on windows we use png's else svg's
+			(if (eq system-type 'windows-nt)
+					(setq org-google-weather-icon-alist
+								'((chance_of_rain . "weather-showers-scattered.png")
+									(chance_of_snow . "weather-snow.png")
+									(chance_of_storm . "weather-storm.png")
+									(cn_cloudy . "weather-overcast.png")
+									(cn_heavyrun . "weather-showers.png")
+									(cn_sunny . "weather-clear.png")
+									(cloudy . "weather-overcast.png")
+									(dust . "weather-fog.png")
+									(flurries . "weather-storm.png")
+									(fog . "weather-fog.png")
+									(haze . "weather-fog.png")
+									(icy . "weather-snow.png")
+									(jp_sunny . "weather-clear.png")
+									(jp_cloudy . "weather-overcast.png")
+									(mist . "weather-storm.png")
+									(mostly_cloudy . "weather-overcast.png")
+									(mostly_sunny . "weather-clear.png")
+									(partly_cloudy . "weather-few-clouds.png")
+									(rain . "weather-showers.png")
+									(rain_snow . "weather-snow.png")
+									(sleet . "weather-snow.png")
+									(smoke . "weather-fog.png")
+									(snow . "weather-snow.png")
+									(storm . "weather-storm.png")
+									(thunderstorm . "weather-storm.png")
+									(sunny . "weather-clear.png")))
+				(setq org-google-weather-icon-alist
+								'((chance_of_rain . "weather-showers-scattered.svg")
+									(chance_of_snow . "weather-snow.svg")
+									(chance_of_storm . "weather-storm.svg")
+									(cn_cloudy . "weather-overcast.svg")
+									(cn_heavyrun . "weather-showers.svg")
+									(cn_sunny . "weather-clear.svg")
+									(cloudy . "weather-overcast.svg")
+									(dust . "weather-fog.svg")
+									(flurries . "weather-storm.svg")
+									(fog . "weather-fog.svg")
+									(haze . "weather-fog.svg")
+									(icy . "weather-snow.svg")
+									(jp_sunny . "weather-clear.svg")
+									(jp_cloudy . "weather-overcast.svg")
+									(mist . "weather-storm.svg")
+									(mostly_cloudy . "weather-overcast.svg")
+									(mostly_sunny . "weather-clear.svg")
+									(partly_cloudy . "weather-few-clouds.svg")
+									(rain . "weather-showers.svg")
+									(rain_snow . "weather-snow.svg")
+									(sleet . "weather-snow.svg")
+									(smoke . "weather-fog.svg")
+									(snow . "weather-snow.svg")
+									(storm . "weather-storm.svg")
+									(thunderstorm . "weather-storm.svg")
+									(sunny . "weather-clear.svg")))))
+	#+end_src
+	Then, add the following in one of your Org file.
+
+	#+begin_example
+		* Weather
+			%%(org-google-weather "New York")
+	#+end_example
+
+	You can set the language as second argument. You should know that
+	the unit system used is language dependent. By default, American
+	English is used, therefore with Fahrenheit degrees, but if you want
+	to have English with Celsius degrees, you can use "en-gb".
+*** TODO find out why emacs for windows does not support svg, and fix it.
+		The svgs looks so much nicer.
+*** TODO modify the svg's to be smaller.
+*** TODO We want weather first on every day
+		tried setting with high priority that may bump it up the
+		agenda. will have to check that at home.
+*** DONE copy icons for the different weather symbols.
+		we need the symbols from [[/usr/share/icons/gnome/16x16/status]] to be
+		added to the repo so we also have them on windows. 
+		these are the one needed.
+		- "weather-clear.png")
+		- "weather-few-clouds.png")
+		- "weather-fog.png")
+		- "weather-overcast.png")
+		- "weather-showers-scattered.png")
+		- "weather-showers.png")
+		- "weather-snow.png")
+		- "weather-storm.png")
+*** DONE make sure it works on windows with svg or else change to png's
+		:LOGBOOK:
+		CLOCK: [2012-08-21 ti 11:11]--[2012-08-21 ti 11:13] =>  0:02
+		- I does not work with svg, need png's on windows. emacs on
+			windows does not support svg.
+		CLOCK: [2012-08-20 må 10:35]--[2012-08-20 må 11:46] =>  1:11
+		:END:
+
+
 
