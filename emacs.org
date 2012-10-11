@@ -686,13 +686,18 @@ that I share between work and home
     ELPA or local package system.
 
     #+begin_src emacs-lisp
-      (require 'edmacro)
       ;; using my own, not now, have problems with projects
-      ;; (load-file (concat local-emacs-org-dir "cedet-1.1/common/cedet.el"))
+      (load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
+      (require 'edmacro)
       (require 'cedet)
-      (global-ede-mode t)                      ; Enable the Project management system
-      ;; (semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion 
-      ;;(global-srecode-minor-mode 1)
+      ;; Enable EDE (Project Management) features
+      (global-ede-mode t)                    
+      (semantic-load-enable-gaudy-code-helpers)
+      ;; Enable prototype help and smart completion 
+      ;; (semantic-load-enable-code-helpers)
+      ;; Enable SRecode (Template management) minor-mode.
+      (global-srecode-minor-mode 1)
+      
     #+end_src
     
     #+begin_src emacs-lisp
