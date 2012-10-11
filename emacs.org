@@ -650,15 +650,16 @@ that I share between work and home
 
     #+begin_src emacs-lisp
       (require 'edmacro)
-      ;; using my own
-      (load-file (concat local-emacs-org-dir "cedet-1.1/common/cedet.el"))
+      ;; using my own, not now, have problems with projects
+      ;; (load-file (concat local-emacs-org-dir "cedet-1.1/common/cedet.el"))
+      (require 'cedet)
       (global-ede-mode t)                      ; Enable the Project management system
-      (semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion 
-      (global-srecode-minor-mode 1)
+      ;; (semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion 
+      ;;(global-srecode-minor-mode 1)
     #+end_src
     
     #+begin_src emacs-lisp
-    ;;  (require 'semantic)
+      ;;  (require 'semantic)
     #+end_src
 
 ***** TODO change this to be a submodule instead
@@ -716,8 +717,9 @@ that I share between work and home
                 ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
                 )
             
-              (add-to-list 'csharp-mode-hook
-                           'jiha-csharp-mode-hook))
+              ;;(add-to-list 'csharp-mode-hook
+              ;;             'jiha-csharp-mode-hook)
+            )
           )
           
         #+end_src
@@ -802,8 +804,8 @@ that I share between work and home
     (if (eq system-type 'linux)
         ((when (require 'flyspell nil 'noerror)
            ;; activate flyspell for text-mode and derivatives
-           (dolist (hook '(text-mode-hook))
-             (add-hook hook (lambda () (flyspell-mode 1))))
+           ;;(dolist (hook '(text-mode-hook))
+           ;;  (add-hook hook (lambda () (flyspell-mode 1))))
            ;; this is how we remove it for a sub-mode
            ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
            ;;  (add-hook hook (lambda () (flyspell-mode -1))))
