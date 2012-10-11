@@ -1,4 +1,4 @@
-# -*- mode: org -*-
+# -*- mode: org; indent-tabs-mode: nil -*-
 #+TITLE: My emacs configuration
 #+AUTHOR: Jim Hansson
 #+EMAIL: jim.hansson@gmail.com
@@ -25,10 +25,10 @@ that I share between work and home
     - Emacs 24
     - a basic .emacs file that calls this after it inits org-babel 
     - a lot of extra packages. most configuration will check for it
-		
+    
 ***** What you need to have in your normal .emacs
 
-			#+begin_example
+      #+begin_example
         ;; -*- mode: emacs-lisp -*-
         ;; this is what is needed in the real .emacs file.
         ;; remember to change the paths at the bottom of this file
@@ -57,7 +57,7 @@ that I share between work and home
         ;; load neatly organized org file!
         (add-to-list 'load-path local-emacs-org-dir)
         (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
-			#+end_example
+      #+end_example
 *** Other important stuff
 ***** Only load things that exists.
 
@@ -206,9 +206,9 @@ that I share between work and home
   #+end_src
 
 *** TODO cleanup
-		why do I have both auto-complete and auto-complete-1.3.1
-		directory. I should only have one and that one should be a
-		submodule instead.
+    why do I have both auto-complete and auto-complete-1.3.1
+    directory. I should only have one and that one should be a
+    submodule instead.
 
 * Some Basic faces                                                    :faces:
 
@@ -616,8 +616,9 @@ that I share between work and home
         (load-file (concat local-emacs-org-dir "flymake-cursor.el"))
       #+end_src
 *** Compile  
-*** TODO Coding styles
+*** DONE Coding styles
     :LOGBOOK:
+    - State "DONE"       from "TODO"       [2012-10-11 Thu 22:35]
     :END:
     check out [[http://emacswiki.org/emacs/IndentingC#toc2][emacswiki on indenting]]
 ***** Microsoft C & C++ style
@@ -684,9 +685,15 @@ that I share between work and home
     Use a local installation of CEDET so we have control over what
     version we use. This means that we should not use any version from
     ELPA or local package system.
+    
+    If you get some problem with this code it might be that you have
+    not byte-compiled it, I do not check-in byte-compiled files into
+    the repo. You then need to folow the instructions in
+    cedet/cedet-build.el. So on a new checkout this is a common
+    problem.
 
     #+begin_src emacs-lisp
-      ;; using my own, not now, have problems with projects
+      ;; using my own
       (load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
       (require 'edmacro)
       (require 'cedet)
@@ -699,15 +706,11 @@ that I share between work and home
       (global-srecode-minor-mode 1)
       
     #+end_src
-    
+
     #+begin_src emacs-lisp
       ;;  (require 'semantic)
     #+end_src
 
-***** DONE change this to be a submodule instead
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2012-10-11 to 16:04]
-			:END:
 ***** EDE
       #+begin_src emacs-lisp
       ;;  (global-ede-mode t)
@@ -718,7 +721,10 @@ that I share between work and home
       #+begin_src emacs-lisp
       ;;  (semantic-load-enable-excessive-code-helpers)
       #+end_src
-
+***** DONE change this to be a submodule instead
+      :LOGBOOK:
+      - State "DONE"       from "TODO"       [2012-10-11 to 16:04]
+      :END:
 *** TODO Completion
 ***** Language
 ******* C#
@@ -782,6 +788,11 @@ that I share between work and home
       (setq-default tab-width 2) ; or any other preferred value
     #+end_src
     
+    This can be hard for other to replicate in there enviroment, If
+    they are using VisualStudio the need Resharper to replicate this
+    behavior. The could do without resharper and set VS to ident with
+    tabs and manually align things with spaces when needed.
+
     #+begin_src emacs-lisp
       ;; smart tabs, tabs for indentation, spaces for alignment
       (defadvice align (around smart-tabs activate)
@@ -926,7 +937,7 @@ that I share between work and home
       (defun fd-switch-dictionary()
       (interactive)
       (let* ((dic ispell-current-dictionary)
-    	 (change (if (string= dic "deutsch8") "english" "deutsch8")))
+       (change (if (string= dic "deutsch8") "english" "deutsch8")))
         (ispell-change-dictionary change)
         (message "Dictionary switched from %s to %s" dic change)
         ))
@@ -1369,7 +1380,7 @@ that I share between work and home
 *** Babel
 ***** SQL
       Sometimes I use sql in org-babel, for that I have modified version
-      of 'ob-sql.el' my modifications are so I can use it together with
+      of [[ob-sql.el]] my modifications are so I can use it together with
       oracle. It still need some more fixing before a send a patch for it
       to the maintainers.
 
@@ -1398,6 +1409,9 @@ that I share between work and home
       (org-babel-load-file (concat shared-org-files-dir "post.org"))
       (org-babel-load-file (concat local-org-files-dir "post.org"))
     #+end_src
+
+*** TODO tabs in org-mode
+    should not use tabs for indentation in org-mode.
 
 * Google Integration
   most of these things comes from http://julien.danjou.info/
