@@ -20,9 +20,16 @@ that I share between work and home
     this need to be taken care of by elpa so I don't need to hardcode
     paths with versions in them.
 * Introduction
-  Basic things that could have been down throu custom-set-variable but
+  Basic things that could have been done throu custom-set-variable but
   then I would have harder time to replicate that between machines.
   
+  when doing a new installation on either windows or linux check the
+  items with the tags below for specific things you have to do outside
+  emacs to get things working.
+
+  - instw :: for windows specific things.
+  - instl :: for linux specific things.
+
 *** Requirements
 
     - Emacs 24
@@ -61,7 +68,6 @@ that I share between work and home
 
     Not so important, but nice to have.
     - pretty-lambdada :: Show the word `lambda' as the Greek letter.
-
 
 ***** What you need to have in your normal .emacs
 
@@ -171,6 +177,11 @@ that I share between work and home
       (put 'narrow-to-region 'disabled nil)
       (setq safe-local-variable-values (quote ((auto-fill-mode . t))))
     #+end_src
+
+*** TODO move everthing out of Introduction that does not belong there
+    Introduction should only be about requirements and about this
+    config, not really do any configuration.
+
 * Some Basic faces                                                    :faces:
 
   I use the possiblity that a face can inherit from one, or more faces
@@ -1142,6 +1153,7 @@ that I share between work and home
       ;; things are not knowm before you have used them once, this solves
       ;; that problem at least partially.
       (org-require-autoloaded-modules)
+      (require 'org-protocol)
     #+end_src
     
     A large part of the configuration has to do with how org should
@@ -1153,7 +1165,82 @@ that I share between work and home
 
       at the moment this is done on by customize and that means we need
       to do it on every machine.
+
+*** Org Protocol                                        :instw:instl:outlook:
+
+    this is an example on how you could setup windows to accept
+    org-protocol: urls and route them to emacsclientw. the path on the
+    last row is the bit you might need to adapt for your installation.
+
+    #+begin_example
+      Windows Registry Editor Version 5.00
       
+      [HKEY_CLASSES_ROOT\org-protocol]
+      @="URL:Org Protocol"
+      "URL Protocol"=""
+      [HKEY_CLASSES_ROOT\org-protocol\shell]
+      [HKEY_CLASSES_ROOT\org-protocol\shell\open]
+      [HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
+      @="C:\Users\jiha\emacs-24.1\bin\emacsclientw.exe %1"
+    #+end_example
+
+    for linux you could configure gnome like this.
+
+    #+begin_example
+      gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/command '/usr/local/bin/emacsclient %s' --type String
+      gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/enabled --type Boolean true
+    #+end_example
+
+***** TODO adobe acrobat reader
+***** TODO Web-browser integration
+*** Org Capture
+
+    This is needed by both the [[Org-outlook integration]] and by 
+    [[Org Protocol]]. First some basic setup of org-capture.
+
+    #+begin_src emacs-lisp
+      ;;(setq org-default-notes-file (concat org-directory "/notes.org"))
+      (define-key global-map "\C-cc" 'org-capture)
+    #+end_src
+
+    We need some good capture templates. remember that the template
+    "key" need to be exactly one character long for it to work with
+    org-protocol.
+
+    org-capture-templates is a list with structs the tells how and
+    where things shall be put. first we clear it then we use
+    add-to-list to append template after template.
+
+    #+begin_src emacs-lisp
+      ;; clear the templates list
+      (setq org-capture-templates '())
+      
+      ;; next we start to add the templates we want.
+      ;; This is the default one.
+      (add-to-list 'org-capture-templates
+                   ;; w has special meaning as a default for capture.
+                   '("w"
+                    "Default template"
+                    entry
+                    (file+headline "~/org/capture.org" "Notes")
+                    "* %^{Title}\n\n  Source: %u, %c\n\n  %i"
+                    :empty-lines 1))
+      
+      ;; This one is called from my integration in outlook throu org-protocol
+      ;; Only useful on my workmachine but is not in the way on my home machine
+      (add-to-list 'org-capture-templates
+                   '("o"
+                    "Outlook integration - creates items from mails."
+                    entry
+                    (file+headline "mdms.org" "Tasks")
+                    "***** %^{Title}\n\n more things here\n"
+                    :empty-lines 1))
+      
+      ;; more templates here.
+    #+end_src
+
+***** TODO solve the problem with default notes file.
+
 *** RSS feeds
 
     #+begin_src emacs-lisp
@@ -1244,12 +1331,21 @@ that I share between work and home
       (org-babel-load-file (concat shared-org-files-dir "init.org"))
     #+end_src
     
-*** TODO Org-outlook integration
+*** TODO Org-outlook integration                              :instw:outlook:
+    :LOGBOOK:
+    CLOCK: [2012-10-12 fr 23:55]--[2012-10-13 lö 00:56] =>  1:01
+    - works somewhat, I still need to create the capture template that
+      it uses.
+    :END:
+    :PROPERTIES:
+    :ORDERED:  t
+    :END:
     
     integrating org-mode with outlook, until i get GNUS to behave as I
-    want. first of you need this registry hack(for outlook 2007).
+    want. first of, you need this registry hack(for outlook 2007).
 
     #+begin_example 
+      Windows Registry Editor Version 5.00
       Windows Registry Editor Version 5.00
       
       [HKEY_CLASSES_ROOT\outlook]
@@ -1273,21 +1369,23 @@ that I share between work and home
     here is one for 2010, still need to make sure paths are right.
 
     #+begin_example
+      Windows Registry Editor Version 5.00
+      
       [HKEY_CLASSES_ROOT\outlook]
-      “URL Protocol”=”"
-      @=”URL:Outlook Folders”
+      URL Protocol=
+      @="URL:Outlook Folders"
       
       [HKEY_CLASSES_ROOT\outlook\DefaultIcon]
-      @=”\”C:\\Program Files (x86)\\Microsoft Office\\Office14\\1033\\OUTLLIBR.DLL,-7511\”"
+      @="C:\\Program Files\\Microsoft Office\\Office14\\1033\\OUTLLIBR.DLL,-7511"
       
       [HKEY_CLASSES_ROOT\outlook\shell]
-      @=”open”
+      @="open"
       
       [HKEY_CLASSES_ROOT\outlook\shell\open]
-      @=”"
+      @=""
       
       [HKEY_CLASSES_ROOT\outlook\shell\open\command]
-      @=”\”C:\\Program Files (x86)\\Microsoft Office\\Office14\\OUTLOOK.EXE\” /select \”%1\”"
+      @="C:\\Program Files\\Microsoft Office\\Office14\\OUTLOOK.EXE /select %1"
     #+end_example
     
     You also need this macro in outlook, this has been adapted for
@@ -1296,6 +1394,12 @@ that I share between work and home
 
     you should also add a button for this macro in the ribbon
     interface of outlook.
+
+    have som example scripts in these files [[file:guid.vbs]] and
+    [[file:task.vbs]] don't really now what they do, use with care. We
+    also has a whole module that I am using today on my workcomputer
+    to create items in org from mails in outlook
+    [[file:workmachine/integration.bas]]
 
     #+begin_example vb
       Public Declare PtrSafe Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ( _
@@ -1411,14 +1515,14 @@ that I share between work and home
       (add-to-list 'load-path "~/.emacs.d/elpa/org-outlook-0.3/")
       (when (require 'org-outlook nil 'noerror)
         ;; Location of outlook exe so we can call it.
-        (setq-default 'org-outlook-location 
+        (setq-default org-outlook-location 
                       "C:/Program Files/Microsoft Office/Office14/OUTLOOK.EXE")
         ;; Capturing system for org-protocol outlook: subprotocol. 
         ;; Supports org-capture
-        ;;(setq-default 'org-outlook-capture 'org-capture)
+        (setq-default org-outlook-capture 'org-capture)
 
         ;; Default template for org-capture or remember.
-        ;;(setq-default 'org-protocol-outlook-default-template-key nil)
+        ;;(setq-default org-protocol-outlook-default-template-key nil)
         )
     #+end_src
 
