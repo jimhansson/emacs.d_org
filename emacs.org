@@ -214,6 +214,63 @@ that I share between work and home
     
   #+end_src
 
+* Global things
+*** Midnight
+
+    Midnight mode is a package by SamSteingold? that comes with Emacs
+    for running configured actions at every “midnight”. By default,
+    the ‘midnight-hook’ is configured to just run the CleanBufferList
+    command. 
+
+    Run ‘M-x customize-group RET midnight RET’ to configure and easily
+    turn on Midnight mode. 
+
+    Many people choose to configure Midnight mode entirely in their
+    InitFile. That is how it will be explained below, since some
+    EmacsLisp bits are needed even with CustomMode?. 
+
+    To use Midnight mode, it needs to be included with ‘require’.
+
+    #+begin_src emacs-lisp
+      (require 'midnight)    
+    #+end_src
+
+    It also needs to be enabled with the function ‘midnight-delay-set’
+    which also defines “midnight”.
+
+    #+begin_src emacs-lisp
+      ;;(midnight-delay-set 'midnight-delay "4:30am")
+      ;;Some people use the number of seconds after midnight:
+      (midnight-delay-set 'midnight-delay 16200) ;; (eq (* 4.5 60 60) "4:30am")
+    #+end_src
+
+    To add other actions to be run at midnight, add to the hook
+    ‘midnight-hook’. 
+    
+    #+begin_example emacs-lisp
+      (add-hook 'midnight-hook (lambda
+                          (with-current-buffer "*cvs*"
+           (call-interactively 'cvs-update))))
+      (add-hook 'midnight-hook 'calendar)
+
+      ;;You can disable midnight mode with ‘cancel-timer’.
+
+      (cancel-timer 'midnight-timer)
+    #+end_example
+
+    If you want to have “midnight” occur multiple times a day, you can
+    change the ‘midnight-period’ from 24 hours to something else. 
+
+    #+begin_example emacs-lisp
+      (setq midnight-period 7200) ;; (eq (* 2 60 60) "2 hours")    
+    #+end_example
+    
+    As of 2009-10-02, DeskTop mode does not preserve the value of
+    ‘buffer-display-time’ for buffers, so the buffer’s “age” is
+    effectively restarted. This means that buffers restored by a
+    Desktop sessions are considered “new” by CleanBufferList, even
+    though they may be considered “old”. 
+
 * Minor modes
   We configure the basics of minor modes first, before the majors
   modes. in the major modes configuration we may adapt th minor modes
@@ -1122,20 +1179,22 @@ that I share between work and home
 
     This is from [[norang:TodoKeywords]] it's proberbly more than I need.
     #+begin_src emacs-lisp
-      (setq org-todo-keywords
-            (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
-                    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
-                    (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)"))))
-      
-      (setq org-todo-keyword-faces
-            (quote (("TODO"      . jiha-org-todo-keywords-face)
-                    ("NEXT" :foreground "light blue" :weight bold)
-                    ("DONE"      . jiha-org-done-keywords-face)
-                    ("WAITING"   . jiha-org-onhold-keywords-face)
-                    ("HOLD"      . jiha-org-onhold-keywords-face)
-                    ("CANCELLED" . jiha-org-not-important-keywords-face)
-                    ("PHONE"     . jiha-org-not-important-keywords-face))))
-       
+            (setq org-todo-keywords
+                  (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
+                          (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
+                          (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)")
+                          (sequence "ESTIMATE" "|" "ESTIMATED"))))
+            
+            (setq org-todo-keyword-faces
+                  (quote (("TODO"      . jiha-org-todo-keywords-face)
+                          ("NEXT" :foreground "light blue" :weight bold)
+                          ("DONE"      . jiha-org-done-keywords-face)
+                          ("WAITING"   . jiha-org-onhold-keywords-face)
+                          ("HOLD"      . jiha-org-onhold-keywords-face)
+                          ("ESTIMATE"  . jiha-org-onhold-keywords-face)
+                          ("CANCELLED" . jiha-org-not-important-keywords-face)
+                          ("PHONE"     . jiha-org-not-important-keywords-face))))
+             
     #+end_src
 
 *** Org todo keyword faces                                            :faces:
@@ -1687,6 +1746,8 @@ on file sets.
 
 * List of others configurations that you can look at and steal ideas from
 
-  - http://git.naquadah.org/git/~jd/emacs.d.git :: http://julien.danjou.info/
+  - Julien Danjou :: http://git.naquadah.org/git/~jd/emacs.d.git
+  - Thomas Krennwallner's :: http://www.postsubmeta.net/MyConfig/Emacs 
 
 #  LocalWords:  Uniquify Iswitch emacs src Whitespace
+
