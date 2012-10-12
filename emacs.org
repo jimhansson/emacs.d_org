@@ -430,8 +430,6 @@ that I share between work and home
 *** Auto complete
 
     #+begin_src emacs-lisp
-      (add-to-list 'load-path (concat local-emacs-org-dir 
-                                      "auto-complete"))
       (require 'auto-complete-config)
       (add-to-list 'ac-dictionary-directories (concat local-emacs-org-dir 
                                                       "ac-dicts"))
