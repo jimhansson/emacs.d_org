@@ -16,6 +16,9 @@ that I share between work and home
 #+LINK: norang http://doc.norang.ca/org-mode.html#
   
 * Bugs
+*** TODO Elpa does not add things to load path
+    this need to be taken care of by elpa so I don't need to hardcode
+    paths with versions in them.
 * Introduction
   Basic things that could have been down throu custom-set-variable but
   then I would have harder time to replicate that between machines.
@@ -384,6 +387,21 @@ that I share between work and home
         )
       (global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
 #+end_example
+*** Fly-make
+***** Flymake Cursor
+
+      The normal operation of flymake allows the user to see the error
+      message for a particular line by “hovering” the mouse over the
+      line. This is inconvenient for people who try to use the keyboard
+      for all input. FlymakeCursor was designed to address that: it
+      displays the flymake error in the minibuffer region, when the
+      cursor is placed on a line containing a flymake error. 
+
+      This works in any language that flymake supports
+
+      #+begin_src emacs-lisp
+        (load-file (concat local-emacs-org-dir "flymake-cursor.el"))
+      #+end_src
     
 *** Whitespace
 
@@ -427,9 +445,14 @@ that I share between work and home
     #+end_src
 
 
-*** Auto complete
+*** Auto-complete
 
     #+begin_src emacs-lisp
+      ;; I should not need to add this to load path that should be
+      ;; done by elpa magic.
+      (add-to-list 'load-path "~/.emacs.d/elpa/popup-0.5")
+      (add-to-list 'load-path "~/.emacs.d/elpa/auto-complete-1.4")
+      (require 'auto-complete)
       (require 'auto-complete-config)
       (add-to-list 'ac-dictionary-directories (concat local-emacs-org-dir 
                                                       "ac-dicts"))
@@ -438,11 +461,14 @@ that I share between work and home
       (ac-flyspell-workaround)
     #+end_src
 
-***** TODO cleanup
+***** DONE cleanup
+      :LOGBOOK:
+      - State "DONE"       from "TODO"       [2012-10-12 fr 11:02]
+      :END:
       why do I have both auto-complete and auto-complete-1.3.1
       directory. I should only have one and that one should be a
       submodule instead. and one from elpa!
-
+*** Font-lock
 * Iswitch Buffers                                                   :buffers:
 
   To prevent certain buffers from showing up in the completion list,
@@ -790,23 +816,8 @@ that I share between work and home
 
   Here I will place everything that has todo with coding
 
-*** Flymake
-***** Flymake Cursor
-
-      The normal operation of flymake allows the user to see the error
-      message for a particular line by “hovering” the mouse over the
-      line. This is inconvenient for people who try to use the keyboard
-      for all input. FlymakeCursor was designed to address that: it
-      displays the flymake error in the minibuffer region, when the
-      cursor is placed on a line containing a flymake error. 
-
-      This works in any language that flymake supports
-
-      #+begin_src emacs-lisp
-        (load-file (concat local-emacs-org-dir "flymake-cursor.el"))
-      #+end_src
 *** Compile  
-*** DONE Coding styles
+*** Coding styles
     :LOGBOOK:
     - State "DONE"       from "TODO"       [2012-10-11 Thu 22:35]
     :END:
@@ -860,6 +871,7 @@ that I share between work and home
     visual studio to do things. at the moment we only have to commands
     but it should be simple to extend it with others.
 
+    This only work with VS 2008 and NOT with 2010.
     #+begin_src emacs-lisp
       ;; only on windows to save startup-time
       (if (eq system-type 'windows-nt)
@@ -967,7 +979,7 @@ that I share between work and home
 *** Indentation
 
     I usually use tabs for indentation and spaces for alignment, Emacs
-    are one of the few eviroment that support that kind of thing. I
+    are one of the few envirement that support that kind of thing. I
     like a low c-basic-offset 2
 
     #+begin_src emacs-lisp
