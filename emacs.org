@@ -102,7 +102,7 @@ that I share between work and home
       which don't have every package installed.
 
       #+begin_example
-        (when (require 'deft nil 'noerror) 
+        (when (require 'deft nil 'noerror)) 
       #+end_example
 
 *** Setup
@@ -276,7 +276,7 @@ that I share between work and home
   modes. in the major modes configuration we may adapt th minor modes
   for that specific major mode, but here we have the general
   configuration of the minor mode.
-
+*** Auto-fill
 *** Fly-spell
 
     My spelling is terrible so we use fly-spell as much as possible when
@@ -1244,6 +1244,184 @@ that I share between work and home
       (org-babel-load-file (concat shared-org-files-dir "init.org"))
     #+end_src
     
+*** TODO Org-outlook integration
+    
+    integrating org-mode with outlook, until i get GNUS to behave as I
+    want. first of you need this registry hack(for outlook 2007).
+
+    #+begin_example 
+      Windows Registry Editor Version 5.00
+      
+      [HKEY_CLASSES_ROOT\outlook]
+      "URL Protocol"=""
+      @="URL:Outlook Folders"
+      
+      [HKEY_CLASSES_ROOT\outlook\DefaultIcon]
+      @="C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLLIB.DLL,-9403"
+      
+      [HKEY_CLASSES_ROOT\outlook\shell]
+      @="open"
+      
+      [HKEY_CLASSES_ROOT\outlook\shell\open]
+      @=""
+      
+      [HKEY_CLASSES_ROOT\outlook\shell\open\command]
+      @="\"C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLOOK.EXE\" /select \"%1\""
+      
+    #+end_example
+
+    here is one for 2010, still need to make sure paths are right.
+
+    #+begin_example
+      [HKEY_CLASSES_ROOT\outlook]
+      “URL Protocol”=”"
+      @=”URL:Outlook Folders”
+      
+      [HKEY_CLASSES_ROOT\outlook\DefaultIcon]
+      @=”\”C:\\Program Files (x86)\\Microsoft Office\\Office14\\1033\\OUTLLIBR.DLL,-7511\”"
+      
+      [HKEY_CLASSES_ROOT\outlook\shell]
+      @=”open”
+      
+      [HKEY_CLASSES_ROOT\outlook\shell\open]
+      @=”"
+      
+      [HKEY_CLASSES_ROOT\outlook\shell\open\command]
+      @=”\”C:\\Program Files (x86)\\Microsoft Office\\Office14\\OUTLOOK.EXE\” /select \”%1\”"
+    #+end_example
+    
+    You also need this macro in outlook, this has been adapted for
+    outlook 2010 but you still need to adapt it when it comes to what
+    folders it should do it work in.
+
+    you should also add a button for this macro in the ribbon
+    interface of outlook.
+
+    #+begin_example vb
+      Public Declare PtrSafe Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ( _
+          ByVal hWnd As Long, _
+          ByVal lpOperation As String, _
+          ByVal lpFile As String, _
+          ByVal lpParameters As String, _
+          ByVal lpDirectory As String, _
+          ByVal nShowCmd As Long) As Long
+      
+      
+      'Slightly Modified http://www.freevbcode.com/ShowCode.Asp?ID=5137
+      Function URLEncode(EncodeStr As String) As String
+          Dim i As Integer
+          Dim erg As String
+          
+          erg = EncodeStr
+      
+          ' *** First replace '%' chr
+          erg = Replace(erg, "%", Chr(1))
+      
+          ' *** then '+' chr
+          erg = Replace(erg, "+", Chr(2))
+          
+          For i = 0 To 255
+              Select Case i
+                  ' *** Allowed 'regular' characters
+                  Case 37, 43, 48 To 57, 65 To 90, 97 To 122
+                  
+                  Case 1  ' *** Replace original %
+                      erg = Replace(erg, Chr(i), "%25")
+              
+                  Case 2  ' *** Replace original +
+                      erg = Replace(erg, Chr(i), "%2B")
+                      
+                  Case 32
+                      erg = Replace(erg, Chr(i), "%20") 'org-protocol likes %20 instead of +
+              
+                  Case 3 To 15
+                      erg = Replace(erg, Chr(i), "%0" & Hex(i))
+              
+                  Case Else
+                      erg = Replace(erg, Chr(i), "%" & Hex(i))
+                      
+              End Select
+          Next
+          
+          URLEncode = erg
+          
+      End Function
+            
+      Sub CreateTaskFromItem()
+          Dim T As Variant
+          Dim Outlook As New Outlook.Application
+          Dim ie As Object
+          Set ie = CreateObject("InternetExplorer.Application")
+      
+          
+          Dim orgfile As Variant
+          Dim Pos As Integer
+          Dim taskf As Object
+          
+          Set myNamespace = Outlook.GetNamespace("MAPI")
+      
+          ' Change this to be your personal folder item.  If it remains
+          ' on the server it keeps the Outlook ID originally given.  If
+          ' you move it to another folder, it will assign it to another
+          ' ID, but keep that ID as long as you don't move it back to the
+          ' server. (*sigh*  I wish it kept the same ID.)
+      
+          ' Technically this is unnecessary, but with my limited exchange
+          ' account size,  I move my emails to \"Personal Folders\\@ActionTasks\" and
+          ' then (possibly) refile from there.
+          
+
+          ' we take things from this head folder in outlook
+          Set myPersonalFolder = myNamespace.Folders.Item("Jim.Hansson@powel.se")
+          Set allPersonalFolders = myPersonalFolder.Folders
+          
+          T = ""
+          For Each Folder In allPersonalFolders
+              ' and move them to this folder
+              If Folder.Name = "Actions" Then
+                  Set taskf = Folder
+                  Exit For
+              End If
+          Next
+      
+          ' End moving message.
+          
+          If Outlook.Application.ActiveExplorer.Selection.Count > 0 Then
+              For i = 1 To Outlook.Application.ActiveExplorer.Selection.Count
+                      Set objMail = Outlook.ActiveExplorer.Selection.Item(i)
+                      Set objMail = objMail.Move(taskf)
+                      objMail.Save 'Maybe this will update EntryID
+                      ' Note that o is the Outlook capture template.
+                      T = "org-protocol:/outlook:/o/" + URLEncode(objMail.EntryID) _
+                          + "/" + URLEncode(objMail.Subject) _
+                          + "/" + URLEncode(objMail.SenderName) _
+                          + "/" + URLEncode(objMail.SenderEmailAddress)
+                      ShellExecute 0, "open", T, vbNullString, vbNullString, vbNormalFocus
+              Next
+          End If
+      End Sub
+    #+end_example
+
+    then we need to load the org-module and setup some basic things,
+    like where to find outlook binary to call. how to capture things
+    from outlook
+
+    #+begin_src emacs-lisp
+      ;; Setup outlook integration with org-mode.
+      (add-to-list 'load-path "~/.emacs.d/elpa/org-outlook-0.3/")
+      (when (require 'org-outlook nil 'noerror)
+        ;; Location of outlook exe so we can call it.
+        (setq-default 'org-outlook-location 
+                      "C:/Program Files/Microsoft Office/Office14/OUTLOOK.EXE")
+        ;; Capturing system for org-protocol outlook: subprotocol. 
+        ;; Supports org-capture
+        ;;(setq-default 'org-outlook-capture 'org-capture)
+
+        ;; Default template for org-capture or remember.
+        ;;(setq-default 'org-protocol-outlook-default-template-key nil)
+        )
+    #+end_src
+
 *** Auto Archiving of done entries
 
     Would be nice if we could auto archive things that have been done
