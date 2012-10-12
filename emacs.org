@@ -176,21 +176,37 @@ that I share between work and home
     #+end_src
 
 * Requirements from elpa
+
   First setup package archives
   #+begin_src emacs-lisp
     ; Setup package archives
     (setq package-archives ())
     (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
     (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-    ; http://marmalade-repo.org/ 
     (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-    
+    (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
   #+end_src
 
   Then use M-x list-packages to find and install these packages.
   - oauth2 :: for google integration
               for some reason I need to add oauth directory to
               load-path, should not elpa take care of that.
+  - bookmark+ :: can do so much more than the normal bookmark
+                 package.
+  - magit :: good mode to handle git repos from within emacs, the
+             normal VC functions in emacs are not so good at that.
+  - org-magit :: Allows for links from org into magit buffers.
+  - guess-style :: for coding
+  - guess-offset :: for coding
+  - csharp-mode :: for coding
+
+  Good things to have on Windows
+  - org-outlook :: integration with outlook
+  - powershell :: for coding
+  - tfs :: for Team Foundation Server.
+
+  Not so important, but nice to have.
+  - pretty-lambdada :: Show the word `lambda' as the Greek letter.
 
 * Auto complete
 
