@@ -129,6 +129,31 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 			windows does not support svg.
 		CLOCK: [2012-08-20 må 10:35]--[2012-08-20 må 11:46] =>  1:11
 		:END:
+* Remember
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2012-10-13 lö 10:36
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_CATEGORY: emacs
+	:END:
+  
+  I don't use remember as much at the moment but some day or some
+  other function once I have found out which I shall use. Most of this
+  has been copied from someones GTD.org setup.
+
+  #+begin_src emacs-lisp
+    (autoload 'remember "remember" nil t)
+    (autoload 'remember-region "remember" nil t)
+    (setq remember-annotation-functions '(org-remember-annotation))
+    (setq remember-handler-functions '(org-remember-handler))
+    (add-hook 'remember-mode-hook 'org-remember-apply-template)
+    (setq org-remember-templates
+         '(
+          ("Todo" ?t "** TODO %^{Brief Description} %^g\n%?\nAdded: %U" "~/Dokument/GTD/gtd.org" "Tasks")
+          ("Private" ?p "\n* %^{topic} %T \n%i%?\n" "~/Dokument/GTD/gtd.org" "Private")
+          ("WordofDay" ?w "\n* %^{topic} \n%i%?\n" "~/Dokument/GTD/wotd.org")
+          ))
+  #+end_src
+
 
 
 

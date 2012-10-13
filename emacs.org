@@ -137,6 +137,8 @@ that I share between work and home
       ;; binds ctrl + § to dabbrev as good enough completion 
       (global-set-key (kbd "C-\§") 'dabbrev-expand)
       (setq-default indent-tabs-mode t)
+      (setq column-number-mode t)
+      (setq global-auto-revert-mode t)
     #+end_src
 
 *** Modeline                                                       :modeline:
@@ -175,7 +177,8 @@ that I share between work and home
       (set-variable 'confirm-kill-emacs 'yes-or-no-p)
       ;; more of these as I find them
       (put 'narrow-to-region 'disabled nil)
-      (setq safe-local-variable-values (quote ((auto-fill-mode . t))))
+      (setq safe-local-variable-values 
+            (quote ((auto-fill-mode . t) (indent-tab-mode))))
     #+end_src
 
 *** TODO move everthing out of Introduction that does not belong there
@@ -225,7 +228,7 @@ that I share between work and home
     
   #+end_src
 
-* Global things
+* Global Things
 *** Midnight
 
     Midnight mode is a package by SamSteingold? that comes with Emacs
@@ -282,7 +285,7 @@ that I share between work and home
     Desktop sessions are considered “new” by CleanBufferList, even
     though they may be considered “old”. 
 
-* Minor modes
+* Minor Modes
   We configure the basics of minor modes first, before the majors
   modes. in the major modes configuration we may adapt th minor modes
   for that specific major mode, but here we have the general
@@ -1135,6 +1138,7 @@ that I share between work and home
       (setq org-feed-alist)
       (setq org-odd-levels-only t)
       (setq org-cycle-separator-lines 0)
+      (setq org-enforce-todo-dependencies t)
       (setq org-use-fast-todo-selection t)
       (setq org-treat-S-cursor-todo-selection-as-state-change nil)
       (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -1161,10 +1165,15 @@ that I share between work and home
     change. I have tried to make it as simple a possible with sub-trees
     for every main function of OrgMode.
     
-***** TODO setup what org-modules we should have
+*** Org Modules
 
-      at the moment this is done on by customize and that means we need
-      to do it on every machine.
+    #+begin_src emacs-lisp
+      ;; need to do some cleanup here.
+      (setq org-modules '(org-bbdb org-bibtex org-docview org-gnus 
+                                   org-info org-jsinfo org-habit 
+                                   org-irc org-mew org-mhe org-rmail 
+                                   org-vm org-wl org-w3m))    
+    #+end_src
 
 *** Org Protocol                                        :instw:instl:outlook:
 
@@ -1771,7 +1780,8 @@ that I share between work and home
           )
       #+end_src
 
-*** Org-sync
+*** Org Sync
+
     #+begin_example emacs-lisp
       (load-file "org-modules/org-element.el")
       (load-file "org-sync2/os.el") ;; org-sync
@@ -1854,26 +1864,6 @@ that I share between work and home
     #+end_src
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
-* Remember
-  
-  I don't use remember as much at the moment but some day or some
-  other function once I have found out which I shall use. Most of this
-  has been copied from someones GTD.org setup.
-
-  #+begin_src emacs-lisp
-    (autoload 'remember "remember" nil t)
-    (autoload 'remember-region "remember" nil t)
-    (setq remember-annotation-functions '(org-remember-annotation))
-    (setq remember-handler-functions '(org-remember-handler))
-    (add-hook 'remember-mode-hook 'org-remember-apply-template)
-    (setq org-remember-templates
-         '(
-          ("Todo" ?t "** TODO %^{Brief Description} %^g\n%?\nAdded: %U" "~/Dokument/GTD/gtd.org" "Tasks")
-          ("Private" ?p "\n* %^{topic} %T \n%i%?\n" "~/Dokument/GTD/gtd.org" "Private")
-          ("WordofDay" ?w "\n* %^{topic} \n%i%?\n" "~/Dokument/GTD/wotd.org")
-          ))
-  #+end_src
-
 * TODO Other Setup
 
   #+begin_src emacs-lisp
