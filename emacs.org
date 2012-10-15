@@ -138,6 +138,9 @@ that I share between work and home
       (setq-default indent-tabs-mode t)
       (setq column-number-mode t)
       (setq global-auto-revert-mode t)
+      (setq inhibit-startup-screen t)
+      (setq inhibit-splash-screen t)
+      (setq initial-buffer-choice t)
       ;; This stops calls to sync when saving files, this might save battery on laptops, I only
       ;; have SSD so that does not affect me so much. Setting might make it easier to loss data
       ;; also.
@@ -316,6 +319,15 @@ that I share between work and home
       
       ;; This I don't know what it does.
       (setq auto-window-vscroll nil)
+      
+      ;; Mouse scroll
+      ;; scroll one line at a time (less "jumpy" than defaults)
+      ;; one line at a time
+      (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+      ;; don't accelerate scrolling
+      (setq mouse-wheel-progressive-speed t)
+      ;; scroll window under mouse
+      (setq mouse-wheel-follow-mouse 't)
     #+end_src
 
 * Minor Modes
@@ -617,6 +629,42 @@ that I share between work and home
         (set-face-background hl-line-face "gray13")
         )
     #+end_src
+
+*** Electric pair, indent.... mode
+
+*** Show Paren
+    
+    It is a global mode but I want it buffer local so first we make it buffer local then
+    we setup a default that is off, then we will activate it in those major modes we want
+    it in.
+
+    then we add rainbow colors on nested parens
+
+    (require 'highlight-parentheses) is one
+    (require 'rainbow-delimiters) is another
+
+    advice it so it tells me what row matching paren is when it is off-screen.
+    #+begin_src emacs-lisp
+      ;; Only works sometime
+      (defadvice show-paren-function
+        (after show-matching-paren-offscreen activate)
+        "If the matching paren is offscreen, show the matching line in the
+        echo area. Has no effect if the character before point is not of
+        the syntax class ')'."
+        (interactive)
+        (if (not (minibuffer-prompt))
+            (let ((matching-text nil))
+              ;; Only call `blink-matching-open' if the character before point
+              ;; is a close parentheses type character. Otherwise, there's not
+              ;; really any point, and `blink-matching-open' would just echo
+              ;; "Mismatched parentheses", which gets really annoying.
+              (if (char-equal (char-syntax (char-before (point))) ?\))
+                  (setq matching-text (blink-matching-open)))
+              (if (not (null matching-text))
+                  (message matching-text)))))
+    #+end_src
+
+***** TODO Activate it in those major modes we want it in.
 
 * Iswitch Buffers                                                   :buffers:
 
@@ -961,7 +1009,7 @@ that I share between work and home
       (add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
      #+end_src
 
-* TODO Coding
+* Todo Coding
 
   Here I will place everything that has todo with coding
 
@@ -1315,15 +1363,24 @@ that I share between work and home
       
       ;; This one is called from my integration in outlook throu org-protocol
       ;; Only useful on my workmachine but is not in the way on my home machine
+      ;; Placeholders Replacement 
+      ;; %:link URL of the email
+      ;; %:description The title of the message
+      ;; %:title The title of the message 
+      ;; %:initial Selected text.
+      ;; %:sender Sender's name
+      ;; %:sender-email Sender's Email
       (add-to-list 'org-capture-templates
                    '("o"
                     "Outlook integration - creates items from mails."
                     entry
-                    (file+headline "mdms.org" "Tasks")
-                    "***** %^{Title}\n\n more things here\n"
-                    :empty-lines 1))
+                    (file+headline "c:/Users/jiha/Documents/org/mdms/mdms.org" "Inbox")
+                    "***** TODO %c\n     %U\n\n     More %:initial %?\n"
+                    :prepend
+                    :clock-resume))
       
       ;; more templates here.
+      
     #+end_src
 
 ***** TODO solve the problem with default notes file.
