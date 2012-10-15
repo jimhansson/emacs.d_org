@@ -154,6 +154,22 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
           ))
   #+end_src
 
+* DONE cleanup
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2012-10-12 fr 11:02]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2012-10-15 må 10:56
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Minor Modes/Auto-complete
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	why do I have both auto-complete and auto-complete-1.3.1
+	directory. I should only have one and that one should be a
+	submodule instead. and one from elpa!
+
+
 
 
 

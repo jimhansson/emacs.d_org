@@ -125,7 +125,6 @@ that I share between work and home
     laptops and who in there right mind uses 12h clocks.
 
     #+begin_src emacs-lisp
-      (tool-bar-mode -1)
       (setq default-major-mode 'org-mode)
       (add-hook 'text-mode-hook 'turn-on-auto-fill)
       ;; show matching paren
@@ -139,6 +138,10 @@ that I share between work and home
       (setq-default indent-tabs-mode t)
       (setq column-number-mode t)
       (setq global-auto-revert-mode t)
+      ;; This stops calls to sync when saving files, this might save battery on laptops, I only
+      ;; have SSD so that does not affect me so much. Setting might make it easier to loss data
+      ;; also.
+      ;;(write-region-inhibit-fsync t)
     #+end_src
 
 *** Modeline                                                       :modeline:
@@ -285,12 +288,60 @@ that I share between work and home
     Desktop sessions are considered “new” by CleanBufferList, even
     though they may be considered “old”. 
 
+*** Tool-Bar
+
+    #+begin_src emacs-lisp
+      (tool-bar-mode -1)
+    #+end_src
+
+*** Menu-Bar
+    
+    Good as it is.
+
+*** Scroll-Bar
+
+    #+begin_src emacs-lisp
+      ;; Allways want scroll-bars on right side.
+      (setq scroll-bar-mod right)
+      ;;(setq scroll-bar-width ??)
+    #+end_src
+
 * Minor Modes
+
   We configure the basics of minor modes first, before the majors
   modes. in the major modes configuration we may adapt th minor modes
   for that specific major mode, but here we have the general
   configuration of the minor mode.
-*** Auto-fill
+
+*** Auto-Fill
+    
+    #+begin_src emacs-lisp
+      (setq-default fill-column 90)
+      ;; insert double space after colon
+      ;;(setq-default colon-double-space t)
+      
+      ;; You can control how emacs breaks lines when filling by adding functions to this hook,
+      ;; If the function returns non-nil it will not break the line. the function get point as
+      ;; argument.
+      ;; (add-hook fill-nobreak-predicate fill-single-word-nobreak-p ...)
+    #+end_src
+
+*** Auto-Saving
+    
+    #+begin_src emacs-lisp
+      ;; auto-save is a buffer-local minor mode, that means you can turn it on/off for the
+      ;; specific file your are editing.
+      
+      ;; This means that after 500 chars we will autosave, the normal here is 300 chars
+      (setq auto-save-interval 500)
+      ;; after 90 seconds of idle time we will autosave, normal is 30 but I don't want it to run
+      ;; just because I had to look something up in a mail.
+      (setq auto-save-timeout 90)
+      
+      ;; there is also a hook you could use to do things before auto-saving is done.
+      ;;(add-hook 'auto-save-hook ...)
+    #+end_src
+
 *** Fly-spell
 
     My spelling is terrible so we use fly-spell as much as possible when
@@ -515,7 +566,6 @@ that I share between work and home
           (whitespace-cleanup-region)))
     #+end_src
 
-
 *** Auto-complete
 
     #+begin_src emacs-lisp
@@ -532,14 +582,30 @@ that I share between work and home
       (ac-flyspell-workaround)
     #+end_src
 
-***** DONE cleanup
-      :LOGBOOK:
-      - State "DONE"       from "TODO"       [2012-10-12 fr 11:02]
-      :END:
-      why do I have both auto-complete and auto-complete-1.3.1
-      directory. I should only have one and that one should be a
-      submodule instead. and one from elpa!
 *** Font-lock
+*** Hl-Line
+
+    Makes it easier to find current line i am on, it will highlight the current line if I
+    am inactive for 5 seconds and turn it of as soon as I start typing.
+
+    #+begin_src emacs-lisp
+      ;; normal hl-line is not good enough, we need some more functions, this add that.
+      (when (require 'hl-line+ nil 'noerror)
+        ;; Only use hl-line when we are idle, as soon as I start typing it is removed and does
+        ;; then not interfere with my other faces.
+        (toggle-hl-line-when-idle 1)
+      
+        ;; we also needs to set an interval that tells us how long we need to idle before hl-line
+        ;; turns on
+        (hl-line-when-idle-interval 5)
+      
+        ;; I we need to remove hl-line for a specific mode, list them here.
+        ;; (setq hl-line-inhibit-highlighting-for-modes)      
+      
+        (set-face-background hl-line-face "gray13")
+        )
+    #+end_src
+
 * Iswitch Buffers                                                   :buffers:
 
   To prevent certain buffers from showing up in the completion list,
