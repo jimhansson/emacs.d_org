@@ -298,12 +298,24 @@ that I share between work and home
     
     Good as it is.
 
-*** Scroll-Bar
+*** Scrolling
 
     #+begin_src emacs-lisp
+      ;; This removes most of the jumping, but it might still jump.
+      
       ;; Allways want scroll-bars on right side.
-      (setq scroll-bar-mod right)
+      (setq scroll-bar-mod 'right)
       ;;(setq scroll-bar-width ??)
+      
+      ;; we don't want scroll margin when scrolling horizontal, because when we are editing
+      ;; thing far out to the right, it should not jump until it needs to.
+      (setq vscroll-margin 7)
+      
+      ;; Smoother scrolling, less jumping.
+      (setq scroll-step 1)
+      
+      ;; This I don't know what it does.
+      (setq auto-window-vscroll nil)
     #+end_src
 
 * Minor Modes
