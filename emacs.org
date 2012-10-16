@@ -1172,6 +1172,11 @@ that I share between work and home
           )
           
         #+end_src
+******* TODO ASPX
+        detta behöver multi-mode vilket jag inte har för tillfället.
+        #+begin_example emacs-lisp
+          (require 'aspx-mode nil 'noerror)
+        #+end_example
 *** Indentation
 
     I usually use tabs for indentation and spaces for alignment, Emacs
@@ -1374,8 +1379,9 @@ that I share between work and home
                     "Outlook integration - creates items from mails."
                     entry
                     (file+headline "c:/Users/jiha/Documents/org/mdms/mdms.org" "Inbox")
-                    "***** TODO %c\n     %U\n\n     More %:initial %?\n"
+                    "***** TODO %c\n     %U\n\n     More %:initial %? \n\n"
                     :prepend
+                    :empty-lines 1
                     :clock-resume))
       
       ;; more templates here.
