@@ -146,17 +146,6 @@ that I share between work and home
       ;; also.
       ;;(write-region-inhibit-fsync t)
     #+end_src
-
-*** Modeline                                                       :modeline:
-    
-    #+begin_src emacs-lisp
-      ;; Things that modifies the modeline
-      (setq display-battery-mode t)
-      (setq display-time-24hr-format t)
-      ;; I work width some really big files and then it is good to have this
-      ;; so i know how far down I am.
-      (setq size-indication-mode t)
-    #+end_src
     
 *** Uniquify                                               :uniquify:buffers:
 
@@ -190,7 +179,6 @@ that I share between work and home
 *** TODO move everthing out of Introduction that does not belong there
     Introduction should only be about requirements and about this
     config, not really do any configuration.
-
 * Some Basic faces                                                    :faces:
 
   I use the possiblity that a face can inherit from one, or more faces
@@ -235,6 +223,55 @@ that I share between work and home
   #+end_src
 
 * Global Things
+*** Tool-Bar
+
+    #+begin_src emacs-lisp
+      (tool-bar-mode -1)
+    #+end_src
+
+*** Menu-Bar
+    
+    Good as it is.
+
+*** Mode-line                                                      :modeline:
+    
+    #+begin_src emacs-lisp
+      ;; Things that modifies the modeline
+      (setq display-battery-mode t)
+      (setq display-time-24hr-format t)
+      ;; I work width some really big files and then it is good to have this
+      ;; so i know how far down I am.
+      (setq size-indication-mode t)
+    #+end_src
+
+*** Scrolling
+
+    #+begin_src emacs-lisp
+      ;; This removes most of the jumping, but it might still jump.
+      
+      ;; Allways want scroll-bars on right side.
+      (setq scroll-bar-mod 'right)
+      ;;(setq scroll-bar-width ??)
+      
+      ;; we don't want scroll margin when scrolling horizontal, because when we are editing
+      ;; thing far out to the right, it should not jump until it needs to.
+      (setq vscroll-margin 7)
+      
+      ;; Smoother scrolling, less jumping.
+      (setq scroll-step 1)
+      
+      ;; This I don't know what it does.
+      (setq auto-window-vscroll nil)
+      
+      ;; Mouse scroll
+      ;; scroll one line at a time (less "jumpy" than defaults)
+      ;; one line at a time
+      (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+      ;; don't accelerate scrolling
+      (setq mouse-wheel-progressive-speed t)
+      ;; scroll window under mouse
+      (setq mouse-wheel-follow-mouse 't)
+    #+end_src
 *** Midnight
 
     Midnight mode is a package by SamSteingold? that comes with Emacs
@@ -290,45 +327,6 @@ that I share between work and home
     effectively restarted. This means that buffers restored by a
     Desktop sessions are considered “new” by CleanBufferList, even
     though they may be considered “old”. 
-
-*** Tool-Bar
-
-    #+begin_src emacs-lisp
-      (tool-bar-mode -1)
-    #+end_src
-
-*** Menu-Bar
-    
-    Good as it is.
-
-*** Scrolling
-
-    #+begin_src emacs-lisp
-      ;; This removes most of the jumping, but it might still jump.
-      
-      ;; Allways want scroll-bars on right side.
-      (setq scroll-bar-mod 'right)
-      ;;(setq scroll-bar-width ??)
-      
-      ;; we don't want scroll margin when scrolling horizontal, because when we are editing
-      ;; thing far out to the right, it should not jump until it needs to.
-      (setq vscroll-margin 7)
-      
-      ;; Smoother scrolling, less jumping.
-      (setq scroll-step 1)
-      
-      ;; This I don't know what it does.
-      (setq auto-window-vscroll nil)
-      
-      ;; Mouse scroll
-      ;; scroll one line at a time (less "jumpy" than defaults)
-      ;; one line at a time
-      (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-      ;; don't accelerate scrolling
-      (setq mouse-wheel-progressive-speed t)
-      ;; scroll window under mouse
-      (setq mouse-wheel-follow-mouse 't)
-    #+end_src
 
 * Minor Modes
 
@@ -666,6 +664,7 @@ that I share between work and home
 
 ***** TODO Activate it in those major modes we want it in.
 
+* Major Modes
 * Iswitch Buffers                                                   :buffers:
 
   To prevent certain buffers from showing up in the completion list,
@@ -1009,7 +1008,7 @@ that I share between work and home
       (add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
      #+end_src
 
-* Todo Coding
+* TODO Coding
 
   Here I will place everything that has todo with coding
 
