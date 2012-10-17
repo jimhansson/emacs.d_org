@@ -1012,7 +1012,7 @@ that I share between work and home
 
   Here I will place everything that has todo with coding
 
-*** Compile  
+*** Compile
 *** Coding styles
     :LOGBOOK:
     - State "DONE"       from "TODO"       [2012-10-11 Thu 22:35]
@@ -1123,6 +1123,14 @@ that I share between work and home
       :LOGBOOK:
       - State "DONE"       from "TODO"       [2012-10-11 to 16:04]
       :END:
+
+*** TODO ECB
+
+    #+begin_src emacs-lisp
+      (add-to-list 'load-path (concat local-emacs-org-dir "ecb"))
+      (require 'ecb)
+    #+end_src
+
 *** TODO Completion
 ***** Language
 ******* C#

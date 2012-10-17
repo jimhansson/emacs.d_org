@@ -22,3 +22,6 @@
 [submodule "cedet-src"]
 	path = cedet-src
 	url = https://git.gitorious.org/cedet-mirror/cedet-mirror.git
+[submodule "ecb"]
+	path = ecb
+	url = https://github.com/emacsmirror/ecb.git
