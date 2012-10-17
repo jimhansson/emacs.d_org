@@ -1127,8 +1127,8 @@ that I share between work and home
 *** TODO ECB
 
     #+begin_src emacs-lisp
-      (add-to-list 'load-path (concat local-emacs-org-dir "ecb"))
-      (require 'ecb)
+     ;; (add-to-list 'load-path (concat local-emacs-org-dir "ecb"))
+     ;; (require 'ecb)
     #+end_src
 
 *** TODO Completion
@@ -1254,6 +1254,7 @@ that I share between work and home
        (eval-after-load "sql"
          '(load-library "sql-indent"))
       #+end_src
+
 
 * OrgMode
 *** TODO Rework 
@@ -2148,21 +2149,10 @@ on file sets.
     
   #+end_src
 
-* BBDB
+* TODO BBDB
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat local-emacs-org-dir "bbdb2/lisp"))
-  ;;(require 'bbdb)
-  ;;(bbdb-initialize 'gnus 'message)
-  ;;(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
 #+end_src
-  
-  other stuff i might need
-  (provide 'bbdb-autoloads)
-  (if
-  (and load-file-name
-  (file-name-directory load-file-name))
-  (add-to-list 'load-path (file-name-directory load-file-name)))
 
 * List of others configurations that you can look at and steal ideas from
 

@@ -1,24 +1,15 @@
 [submodule "emacs-calfw"]
 	path = emacs-calfw
 	url = https://github.com/kiwanami/emacs-calfw.git
-[submodule "bbdb2"]
-	path = bbdb2
-	url = http://git.savannah.gnu.org/r/bbdb.git
 [submodule "google-maps"]
 	path = google-maps
 	url = https://github.com/emacsmirror/google-maps.git
 [submodule "org-sync2"]
 	path = org-sync2
 	url = https://github.com/emacsmirror/org-sync.git
-[submodule "edb"]
-	path = edb
-	url = https://github.com/emacsmirror/edb.git
 [submodule "google-contacts"]
 	path = google-contacts
 	url = http://git.naquadah.org/git/google-contacts.el.git
-[submodule "cedet"]
-	path = cedet
-	url = https://git.gitorious.org/cedet-mirror/cedet-mirror.git
 [submodule "cedet-src"]
 	path = cedet-src
 	url = https://git.gitorious.org/cedet-mirror/cedet-mirror.git
