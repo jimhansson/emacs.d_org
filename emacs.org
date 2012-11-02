@@ -713,7 +713,8 @@ that I share between work and home
                         (name . "diary")))
              ("code" (or (mode . csharp-mode)
                          (mode . c++-mode)
-                         (mode . lisp-mode)))
+                         (mode . lisp-mode)
+                         (mode . c-mode)))
              ("Web Dev" (or (mode . html-mode)
                             (mode . css-mode)))
              ("SQL" (or (filename . ".plb")
@@ -737,30 +738,30 @@ that I share between work and home
                          (name . "\*Apropos\*")
                          (name . "\*info\*"))))))
    #+end_src
-
-   #+begin_src emacs-lisp
-        (add-hook 'ibuffer-mode-hook 
-                  '(lambda ()
-                     (ibuffer-auto-mode 1)
-                     (ibuffer-switch-to-saved-filter-groups "home")))
-        
-        ;; Switching to ibuffer puts the cursor on the most recent buffer
-        (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
-          "Open ibuffer with cursor pointed to most recent buffer name"
-          (let ((recent-buffer-name (buffer-name)))
-            ad-do-it
-            (ibuffer-jump-to-buffer recent-buffer-name)))
-        (ad-activate 'ibuffer)
-        
-        
-        (setq ibuffer-formats
-              '((mark modified read-only " "
-                      (name 25 25 :left :elide) " "
-                      (size 9 -1 :right) " "
-                      (mode 16 16 :left :elide) " " filename-and-process)
-                (mark " " (name 16 -1) " " filename)))
+  
+  #+begin_src emacs-lisp
+    (add-hook 'ibuffer-mode-hook 
+              '(lambda ()
+                 (ibuffer-auto-mode 1)
+                 (ibuffer-switch-to-saved-filter-groups "home")))
     
-     
+    ;; Switching to ibuffer puts the cursor on the most recent buffer
+    (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+      "Open ibuffer with cursor pointed to most recent buffer name"
+      (let ((recent-buffer-name (buffer-name)))
+        ad-do-it
+        (ibuffer-jump-to-buffer recent-buffer-name)))
+    (ad-activate 'ibuffer)
+    
+    
+    (setq ibuffer-formats
+          '((mark modified read-only " "
+                  (name 25 25 :left :elide) " "
+                  (size 9 -1 :right) " "
+                  (mode 16 16 :left :elide) " " filename-and-process)
+            (mark " " (name 16 -1) " " filename)))
+    
+    
     (defun switch-buffers-between-frames ()
       "switch-buffers-between-frames switches the buffers between the two last frames"
       (interactive)
@@ -809,7 +810,7 @@ that I share between work and home
       ;;           (face)))                 
       
     #+end_src
-*** Iswitch and uniquify compatibility                              :uniquify:
+*** Iswitch and uniquify compatibility                                                    :uniquify:
 
     The library uniquify overrides Emacs default mechanism for making
     buffer names unique (using suffixes like <2>, <3> etc.) with a
@@ -979,7 +980,7 @@ that I share between work and home
       files, directory buffers etc...
 
 * Buffer Menu
-*** TODO Font lock                                                 :fontlock:
+*** TODO Font lock                                                                        :fontlock:
 
     If you use ElectricBufferList, then simply use this instead for the
     last line:
@@ -1110,6 +1111,7 @@ that I share between work and home
     #+end_src
 
 ***** EDE
+
       #+begin_src emacs-lisp
       ;;  (global-ede-mode t)
       #+end_src
@@ -1119,10 +1121,6 @@ that I share between work and home
       #+begin_src emacs-lisp
       ;;  (semantic-load-enable-excessive-code-helpers)
       #+end_src
-***** DONE change this to be a submodule instead
-      :LOGBOOK:
-      - State "DONE"       from "TODO"       [2012-10-11 to 16:04]
-      :END:
 
 *** TODO ECB
 
@@ -1314,7 +1312,7 @@ that I share between work and home
                                    org-vm org-wl org-w3m))    
     #+end_src
 
-*** Org Protocol                                        :instw:instl:outlook:
+*** Org Protocol                                                                          :instw:instl:outlook:
 
     this is an example on how you could setup windows to accept
     org-protocol: urls and route them to emacsclientw. the path on the
@@ -1332,6 +1330,7 @@ that I share between work and home
       @="C:\Users\jiha\emacs-24.1\bin\emacsclientw.exe %1"
     #+end_example
 
+
     for linux you could configure gnome like this.
 
     #+begin_example
@@ -1339,8 +1338,43 @@ that I share between work and home
       gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/enabled --type Boolean true
     #+end_example
 
-***** TODO adobe acrobat reader
-***** TODO Web-browser integration
+***** adobe acrobat reader                                                                :instw:insti:
+
+      Add these scripts to <somewhere>\Adobe\Reader 10.0\Reader\Javascripts makes it easy
+      to takes notes from pdf's and store links to where they are.
+
+      #+begin_example javascript
+        // from http://article.gmane.org/gmane.emacs.orgmode/6810
+        app.addMenuItem({cName:"org-capture", 
+                        cParent:"Tools", 
+                        cExec:"app.launchURL('org-protocol://capture://' + 
+                                              encodeURIComponent(this.URL) + 
+                                              '/' + 
+                                              encodeURIComponent(this.info.Title) + 
+                                              '/');"});
+      #+end_example
+
+      #+begin_example
+        // from http://article.gmane.org/gmane.emacs.orgmode/6810
+        app.addMenuItem({cName:"org-store-link", cParent:"Tools",
+                         cExec:"app.launchURL('org-protocol://store-link://' + 
+                                               encodeURIComponent(this.URL) + 
+                                               '/' + 
+                                               encodeURIComponent(this.info.Title));"});
+      #+end_example
+
+***** Web-browser integration
+
+      Add these as bookmarks in webbrowsers
+
+      #+begin_example javascript
+        javascript:location.href='org-protocol://capture://'+ encodeURIComponent(location.href)+'/'+ encodeURIComponent(document.title)+'/'+ encodeURIComponent(window.getSelection())
+      #+end_example
+      
+      #+begin_example javascript
+        javascript:location.href='org-protocol://store-link://' + encodeURIComonent(location.href) + '/' + encodeURIComponent(document.title)
+      #+end_example
+
 *** Org Capture
 
     This is needed by both the [[Org-outlook integration]] and by 
@@ -1442,7 +1476,7 @@ that I share between work and home
              
     #+end_src
 
-*** Org todo keyword faces                                            :faces:
+*** Org todo keyword faces                                                                :faces:
     All kewords are should be bold, that tells me they are keywords
     #+begin_src emacs-lisp
       ;; All keywords should be in bold so it's easy to se them as keywords
@@ -1489,19 +1523,11 @@ that I share between work and home
       (org-babel-load-file (concat shared-org-files-dir "init.org"))
     #+end_src
     
-*** TODO Org-outlook integration                              :instw:outlook:
-    :LOGBOOK:
-    CLOCK: [2012-10-12 fr 23:55]--[2012-10-13 lö 00:56] =>  1:01
-    - works somewhat, I still need to create the capture template that
-      it uses.
-    :END:
-    :PROPERTIES:
-    :ORDERED:  t
-    :END:
+*** Org-outlook integration                                                               :instw:outlook:
     
     integrating org-mode with outlook, until i get GNUS to behave as I
     want. first of, you need this registry hack(for outlook 2007).
-
+ 
     #+begin_example 
       Windows Registry Editor Version 5.00
       Windows Registry Editor Version 5.00
@@ -1545,7 +1571,7 @@ that I share between work and home
       [HKEY_CLASSES_ROOT\outlook\shell\open\command]
       @="C:\\Program Files\\Microsoft Office\\Office14\\OUTLOOK.EXE /select %1"
     #+end_example
-    
+
     You also need this macro in outlook, this has been adapted for
     outlook 2010 but you still need to adapt it when it comes to what
     folders it should do it work in.
@@ -1567,8 +1593,7 @@ that I share between work and home
           ByVal lpParameters As String, _
           ByVal lpDirectory As String, _
           ByVal nShowCmd As Long) As Long
-      
-      
+            
       'Slightly Modified http://www.freevbcode.com/ShowCode.Asp?ID=5137
       Function URLEncode(EncodeStr As String) As String
           Dim i As Integer
@@ -1819,24 +1844,6 @@ that I share between work and home
 
     #+end_src
 *** Agenda                                                           :habits:
-    #+begin_example emacs-lisp
-      ;; does not work at the moment
-      (setq org-agenda-custom-commands
-            '(("d" "Upcoming deadlines" agenda "" 
-               ((org-agenda-time-grid nil)
-                (org-deadline-warning-days 365)        ;; [1]
-                (org-agenda-entry-types '(:deadline))  ;; [2]
-                ))
-              ;; other commands go here
-              ("W" "Weekly" 
-               ((agenda "" 
-                        ((org-agenda-ndays 7)
-                         (org-agenda-log-mode t)
-                         )
-                        )
-                ))
-              ))
-    #+end_example
     #+begin_src emacs-lisp
       (setq org-habit-graph-column 50)
       (setq org-agenda-tags-column 75)
@@ -1866,7 +1873,7 @@ that I share between work and home
                           (return 'org-agenda-date-weekend))))))
                (when face (return face)))))))
     #+end_src
-
+    
 ***** Diary integration
 
       functions to use in the agenda view, include calles to these

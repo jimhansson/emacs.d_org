@@ -168,6 +168,18 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	why do I have both auto-complete and auto-complete-1.3.1
 	directory. I should only have one and that one should be a
 	submodule instead. and one from elpa!
+* DONE change this to be a submodule instead
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2012-10-11 to 16:04]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2012-10-18 to 22:49
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Coding/CEDET
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
 
 
 
