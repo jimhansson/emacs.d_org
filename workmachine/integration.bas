@@ -94,7 +94,8 @@ Sub CreateTaskFromItem()
                 T = "org-protocol:/outlook:/o/" + URLEncode(objMail.EntryID) _
                     + "/" + URLEncode(objMail.Subject) _
                     + "/" + URLEncode(objMail.SenderName) _
-                    + "/" + URLEncode(objMail.SenderEmailAddress)
+                    + "/" + URLEncode(objMail.SenderEmailAddress) _
+                    + "/" + URLEncode(objMail.Body)
                 ShellExecute 0, "open", T, vbNullString, vbNullString, vbNormalFocus
         Next
     End If

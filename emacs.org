@@ -1317,7 +1317,7 @@ that I share between work and home
     this is an example on how you could setup windows to accept
     org-protocol: urls and route them to emacsclientw. the path on the
     last row is the bit you might need to adapt for your installation.
-
+    
     #+begin_example
       Windows Registry Editor Version 5.00
       
@@ -1342,7 +1342,7 @@ that I share between work and home
 
       Add these scripts to <somewhere>\Adobe\Reader 10.0\Reader\Javascripts makes it easy
       to takes notes from pdf's and store links to where they are.
-
+      
       #+begin_example javascript
         // from http://article.gmane.org/gmane.emacs.orgmode/6810
         app.addMenuItem({cName:"org-capture", 
@@ -1353,8 +1353,8 @@ that I share between work and home
                                               encodeURIComponent(this.info.Title) + 
                                               '/');"});
       #+end_example
-
-      #+begin_example
+      
+      #+begin_example javascript
         // from http://article.gmane.org/gmane.emacs.orgmode/6810
         app.addMenuItem({cName:"org-store-link", cParent:"Tools",
                          cExec:"app.launchURL('org-protocol://store-link://' + 
@@ -1376,7 +1376,7 @@ that I share between work and home
       #+end_example
 
 *** Org Capture
-
+    
     This is needed by both the [[Org-outlook integration]] and by 
     [[Org Protocol]]. First some basic setup of org-capture.
 
@@ -1422,13 +1422,12 @@ that I share between work and home
                     "Outlook integration - creates items from mails."
                     entry
                     (file+headline "c:/Users/jiha/Documents/org/mdms/mdms.org" "Inbox")
-                    "***** TODO %c\n     %U\n\n     More %:initial %? \n\n"
+                    "***** TODO %c\n     %U\n     %?\n     #+begin_quote\n       %:initial\n     #+end_quote\n"
                     :prepend
                     :empty-lines 1
                     :clock-resume))
       
       ;; more templates here.
-      
     #+end_src
 
 ***** TODO solve the problem with default notes file.
@@ -1524,6 +1523,8 @@ that I share between work and home
     #+end_src
     
 *** Org-outlook integration                                                               :instw:outlook:
+
+    http://www.emacswiki.org/emacs/org-outlook.el
     
     integrating org-mode with outlook, until i get GNUS to behave as I
     want. first of, you need this registry hack(for outlook 2007).
@@ -1657,7 +1658,7 @@ that I share between work and home
           ' account size,  I move my emails to \"Personal Folders\\@ActionTasks\" and
           ' then (possibly) refile from there.
           
-
+      
           ' we take things from this head folder in outlook
           Set myPersonalFolder = myNamespace.Folders.Item("Jim.Hansson@powel.se")
           Set allPersonalFolders = myPersonalFolder.Folders
@@ -1682,7 +1683,8 @@ that I share between work and home
                       T = "org-protocol:/outlook:/o/" + URLEncode(objMail.EntryID) _
                           + "/" + URLEncode(objMail.Subject) _
                           + "/" + URLEncode(objMail.SenderName) _
-                          + "/" + URLEncode(objMail.SenderEmailAddress)
+                          + "/" + URLEncode(objMail.SenderEmailAddress) _
+                          + "/" + URLEncode(objMail.Body)
                       ShellExecute 0, "open", T, vbNullString, vbNullString, vbNormalFocus
               Next
           End If
@@ -1692,7 +1694,7 @@ that I share between work and home
     then we need to load the org-module and setup some basic things,
     like where to find outlook binary to call. how to capture things
     from outlook
-
+    
     #+begin_src emacs-lisp
       ;; Setup outlook integration with org-mode.
       (add-to-list 'load-path "~/.emacs.d/elpa/org-outlook-0.3/")
@@ -1705,10 +1707,21 @@ that I share between work and home
         (setq-default org-outlook-capture 'org-capture)
 
         ;; Default template for org-capture or remember.
-        ;;(setq-default org-protocol-outlook-default-template-key nil)
+        ;;(setq-default org-protocol-outlook-default-template-key o)
         )
     #+end_src
 
+***** TODO fix line-endings and indentation of imported mail.
+      
+      this is one way, but we need something better, we need to convert it to the format
+      of the buffer that it is supposed to go to. this is only a display hack.
+      #+begin_example elisp
+        (defun dos-remove-eol ()
+          "Do not show ^M in files containing mixed UNIX and DOS line endings."
+          (interactive)
+          (setq buffer-display-table (make-display-table))
+          (aset buffer-display-table ?\^M []))
+      #+end_example
 *** Auto Archiving of done entries
 
     Would be nice if we could auto archive things that have been done
