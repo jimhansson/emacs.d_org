@@ -72,7 +72,6 @@ that I share between work and home
 ***** What you need to have in your normal .emacs
 
       #+begin_example
-        ;; -*- mode: emacs-lisp -*-
         ;; this is what is needed in the real .emacs file.
         ;; remember to change the paths at the bottom of this file
         ; found on EmacsWiki
@@ -91,12 +90,13 @@ that I share between work and home
         (require 'org)
         
         ;; all these paths need '/' at the end
+        (setq my-org-directories
+              '("c:/Users/jiha/Documents/github/emacs.d_org/"
+                "c:/Users/jiha/Documents/github/shared_org/"
+                "c:/Users/jiha/Documents/org/"))
         ;; you need to change this
         (setq local-emacs-org-dir "c:/Users/jiha/Documents/github/emacs.d_org/")
-        ;; where shared org files are
-        (setq shared-org-files-dir "c:/Users/jiha/Documents/github/shared_org/")
-        ;; where local org files are
-        (setq local-org-files-dir "c:/Users/jiha/Documents/org/")
+        
         ;; load neatly organized org file!
         (add-to-list 'load-path local-emacs-org-dir)
         (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
@@ -613,6 +613,7 @@ that I share between work and home
     #+begin_src emacs-lisp
       ;; normal hl-line is not good enough, we need some more functions, this add that.
       (when (require 'hl-line+ nil 'noerror)
+        (message "loaded hl-line+")
         ;; Only use hl-line when we are idle, as soon as I start typing it is removed and does
         ;; then not interfere with my other faces.
         (toggle-hl-line-when-idle 1)
@@ -625,8 +626,10 @@ that I share between work and home
         ;; (setq hl-line-inhibit-highlighting-for-modes)      
       
         (set-face-background hl-line-face "gray13")
+        (set-face-foreground hl-line-face "white")
         )
     #+end_src
+***** TODO fix face of hl-line so it does not interfer with other things.
 
 *** Electric pair, indent.... mode
 
@@ -1179,7 +1182,7 @@ that I share between work and home
           
         #+end_src
 ******* TODO ASPX
-        detta behöver multi-mode vilket jag inte har för tillfället.
+        this requires multi-mode which I don't have at the moment.
         #+begin_example emacs-lisp
           (require 'aspx-mode nil 'noerror)
         #+end_example
@@ -1255,15 +1258,23 @@ that I share between work and home
 
 
 * OrgMode
-*** TODO Rework 
+*** DONE Rework
+    :LOGBOOK:
+    - State "DONE"       from "NEXT"       [2013-03-03 sö 21:23] \\
+      yeah!!!
+    CLOCK: [2013-03-03 sö 19:39]--[2013-03-03 sö 21:23] =>  1:44
+    CLOCK: [2013-03-03 sö 15:34]--[2013-03-03 sö 16:38] =>  1:04
+    :END:
 
     this to support more that 2 different org directories and to not
     make a difference bewtween them as much as possible.
 
-     (setq org-directory "~/Dokument/orgfiles/")
-     (setq org-default-notes-file "~/.notes")
-
 *** Basic
+    
+    A large part of the configuration has to do with how org should
+    behave. it's a pretty complex mode with lot of things you could
+    change. I have tried to make it as simple a possible with sub-trees
+    for every main function of OrgMode.
 
     #+begin_src emacs-lisp
       ;; do not have so much in my agenda so two weeks is good
@@ -1296,11 +1307,6 @@ that I share between work and home
       (org-require-autoloaded-modules)
       (require 'org-protocol)
     #+end_src
-    
-    A large part of the configuration has to do with how org should
-    behave. it's a pretty complex mode with lot of things you could
-    change. I have tried to make it as simple a possible with sub-trees
-    for every main function of OrgMode.
     
 *** Org Modules
 
@@ -1434,23 +1440,23 @@ that I share between work and home
 
 *** RSS feeds
 
-    #+begin_src emacs-lisp
-      (let ((feedfile (format "%s/%s" shared-org-files-dir "feeds.org")))
-        (setq org-feed-alist
-              `(("Slashdot"
-                 "http://rss.slashdot.org/Slashdot/slashdotatom"
-                 ,feedfile
-                 "Slashdot")
-                ("Bruce"
-                 "http://feeds.feedburner.com/schneier/fulltext"
-                 ,feedfile
-                 "Bruce Schneier On Security")
-                ("PiratPartiet"
-                 "http://live.piratpartiet.se/rss20.xml"
-                 ,feedfile
-                 "PiratPartiet SE"))))
-    #+end_src
-*** standard Todo states and transitions
+	  #+begin_src emacs-lisp
+		  (let ((feedfile "~/feeds.org"))
+			  (setq org-feed-alist
+						  `(("Slashdot"
+							   "http://rss.slashdot.org/Slashdot/slashdotatom"
+							   ,feedfile
+							   "Slashdot")
+							  ("Bruce"
+							   "http://feeds.feedburner.com/schneier/fulltext"
+							   ,feedfile
+							   "Bruce Schneier On Security")
+							  ("PiratPartiet"
+							   "http://live.piratpartiet.se/rss20.xml"
+							   ,feedfile
+							   "PiratPartiet SE"))))
+	  #+end_src
+*** Standard Todo states and transitions
     :LOGBOOK:
     - State "DONE"       from "TODO"       [2012-08-20 må 17:19]
     :END:
@@ -1510,16 +1516,22 @@ that I share between work and home
     #+end_src
 *** Init
 
-    because I have more than one computer and also a work computer, I
-    have split my org agenda files into two parts. One that I share
-    between computers and one that is local to that machine(or
-    filesystem I am working in). To Make configuration of org-agenda
-    work with this I have files that I call in my shared org directory
-    and in my local directory. So here is the first call.
+    because I have more than one computer and also a work computer, I have split my org
+    agenda files into X number of parts. One that I share between computers and one that
+    is local to that machine(or filesystem I am working in). To make configuration of
+    org-agenda work with this I have a list of directories called my-org-directories and
+    will call special files in those directories at specific times
 
     #+begin_src emacs-lisp
-      (org-babel-load-file (concat local-org-files-dir "init.org"))
-      (org-babel-load-file (concat shared-org-files-dir "init.org"))
+      ;; for every directory in my-org-directories call init.org
+      ;; every init.org file may setup local-org-agenda-files with files that should form a part
+      ;; of the org agenda this is added to org-agenda-files here with directory concated
+      ;; before. 
+      (dolist (directory my-org-directories) 
+        (setq local-org-agenda-files '())
+        (org-babel-load-file (concat directory "init.org"))
+        (dolist (file local-org-agenda-files)
+          (add-to-list 'org-agenda-files (concat directory file))))
     #+end_src
     
 *** Org-outlook integration                                                               :instw:outlook:
@@ -1804,20 +1816,17 @@ that I share between work and home
     Piotr
 
 *** Filesets for OrgFiles                                          :filesets:
-    
-    A Nice fileset definition for my local org files and one for my shared org files.
+
+    Creates filesets for all org files.
+
     #+begin_src emacs-lisp
-      ;; for some reason I don't understand this does not work, must have
-      ;; something todo evaluation of variables.
-      ;;(add-to-list 'filesets-data (quote ("OrgFiles" 
-      ;;                                    (:tree local-org-files-dir 
-      ;;                                           "^.+\\.org$")
-      ;;                                    (:tree-max-level 2))))
-      ;;(add-to-list 'filesets-data (quote ("OrgFiles" 
-      ;;                                    (:tree shared-org-files-dir 
-      ;;                                           "^.+\\.org$")
-      ;;                                    (:tree-max-level 2))))
-      
+            (dolist (directory my-org-directories)
+              (let ((directory-part (concat "Org: " (car (last (split-string directory "/") 2)))))
+                (add-to-list 'filesets-data 
+                             (list directory-part
+                                   (list ':tree
+                                         directory
+                                         "^.+\\.org$")))))
     #+end_src
 
 *** Logging and clocking
@@ -1848,7 +1857,7 @@ that I share between work and home
       ;; Include current clocking task in clock reports
       (setq org-clock-report-include-clocking-task t) 
       ;; resurrect clock and clocking history
-      ;; this need to be placed after Local and Shared init of org-files so
+      ;; this need to be placed after init of org-files so
       ;; we have all files where we should look for clocked in tasks.
       (org-clock-persistence-insinuate)
     #+end_src
@@ -1857,6 +1866,7 @@ that I share between work and home
 
     #+end_src
 *** Agenda                                                           :habits:
+
     #+begin_src emacs-lisp
       (setq org-habit-graph-column 50)
       (setq org-agenda-tags-column 75)
@@ -1960,12 +1970,15 @@ that I share between work and home
 
 *** Post
 
-    Read [[Init]]. here is the last call and it gives the local a chance to
-    overide everything from the shared org-directory.
+    Read [[Init]]. here is the last call and it gives the local a chance to overide everything
+    from the shared org-directory. This calls post.org in reverse order compared to init.
 
     #+begin_src emacs-lisp
-      (org-babel-load-file (concat shared-org-files-dir "post.org"))
-      (org-babel-load-file (concat local-org-files-dir "post.org"))
+      ; (org-babel-load-file (concat shared-org-files-dir "post.org"))
+      ; (org-babel-load-file (concat local-org-files-dir "post.org"))
+      
+      (dolist (directory (reverse my-org-directories)) 
+        (org-babel-load-file (concat directory "init.org")))
     #+end_src
 
 *** TODO tabs in org-mode
@@ -2098,7 +2111,7 @@ apply for any additional Emacs command that you wanted to add to work
 on file sets. 
 
   #+begin_src emacs-lisp
-    ;; now when both shared and local config has been parsed we should be
+    ;; now when all org-directories has been parsed we should be
     ;; able to init the filesets menu.
     (filesets-init)
   #+end_src
