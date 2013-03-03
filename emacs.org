@@ -69,38 +69,38 @@ that I share between work and home
     Not so important, but nice to have.
     - pretty-lambdada :: Show the word `lambda' as the Greek letter.
 
-***** What you need to have in your normal .emacs
+*** What you need to have in your normal .emacs
 
-      #+begin_example
-        ;; this is what is needed in the real .emacs file.
-        ;; remember to change the paths at the bottom of this file
-        ; found on EmacsWiki
-        (setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
-                                 ("gnu" . "http://elpa.gnu.org/packages/")))
-        ; http://marmalade-repo.org/
-        (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-        
-        (add-to-list 'load-path "~/.emacs.d/")
-        (require 'cl)
-        
-        ;; set-up org babel
-        (setq org-babel-load-languages '((emacs-lisp . t)))
-        (setq org-confirm-babel-evaluate nil)
-        (require 'org-install)
-        (require 'org)
-        
-        ;; all these paths need '/' at the end
-        (setq my-org-directories
-              '("c:/Users/jiha/Documents/github/emacs.d_org/"
-                "c:/Users/jiha/Documents/github/shared_org/"
-                "c:/Users/jiha/Documents/org/"))
-        ;; you need to change this
-        (setq local-emacs-org-dir "c:/Users/jiha/Documents/github/emacs.d_org/")
-        
-        ;; load neatly organized org file!
-        (add-to-list 'load-path local-emacs-org-dir)
-        (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
-      #+end_example
+    #+begin_example
+      ;; this is what is needed in the real .emacs file.
+      ;; remember to change the paths at the bottom of this file
+      ; found on EmacsWiki
+      (setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
+                               ("gnu" . "http://elpa.gnu.org/packages/")))
+      ; http://marmalade-repo.org/
+      (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+      
+      (add-to-list 'load-path "~/.emacs.d/")
+      (require 'cl)
+      
+      ;; set-up org babel
+      (setq org-babel-load-languages '((emacs-lisp . t)))
+      (setq org-confirm-babel-evaluate nil)
+      (require 'org-install)
+      (require 'org)
+      
+      ;; all these paths need '/' at the end
+      (setq my-org-directories
+            '("c:/Users/jiha/Documents/github/emacs.d_org/"
+              "c:/Users/jiha/Documents/github/shared_org/"
+              "c:/Users/jiha/Documents/org/"))
+      ;; you need to change this
+      (setq local-emacs-org-dir "c:/Users/jiha/Documents/github/emacs.d_org/")
+      
+      ;; load neatly organized org file!
+      (add-to-list 'load-path local-emacs-org-dir)
+      (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
+    #+end_example
 *** Other important stuff
 ***** Only load things that exists.
 
@@ -111,72 +111,11 @@ that I share between work and home
         (when (require 'deft nil 'noerror)) 
       #+end_example
 
-*** Setup
-    
-    Some user information
-    #+begin_src emacs-lisp
-      (setq user-full-name "Jim Hansson")
-      (setq user-mail-address "jim.hansson@powel.se")   
-    #+end_src
-
-    Here we setup some basic things, I dont like the toolbar so that we
-    turn off, I use OrgMode to almost everything(even my .emacs) so
-    that will be my default mode. Almost all computers I use are
-    laptops and who in there right mind uses 12h clocks.
-
-    #+begin_src emacs-lisp
-      (setq default-major-mode 'org-mode)
-      (add-hook 'text-mode-hook 'turn-on-auto-fill)
-      ;; show matching paren
-      (show-paren-mode t)
-      (iswitchb-mode 1)
-      (setq filesets-data nil)
-      (display-battery-mode)
-      (global-font-lock-mode t)
-      ;; binds ctrl + § to dabbrev as good enough completion 
-      (global-set-key (kbd "C-\§") 'dabbrev-expand)
-      (setq-default indent-tabs-mode t)
-      (setq column-number-mode t)
-      (setq global-auto-revert-mode t)
-      (setq inhibit-startup-screen t)
-      (setq inhibit-splash-screen t)
-      (setq initial-buffer-choice t)
-      ;; This stops calls to sync when saving files, this might save battery on laptops, I only
-      ;; have SSD so that does not affect me so much. Setting might make it easier to loss data
-      ;; also.
-      ;;(write-region-inhibit-fsync t)
-    #+end_src
-    
-*** Uniquify                                               :uniquify:buffers:
-
-    Better naming of buffers so we can easly tell the differens between
-    buffers. Have some problem together with Iswitch
-
-    #+begin_src emacs-lisp
-      (require 'uniquify)
-      (setq uniquify-buffer-name-style (quote post-forward))
-    #+end_src
-
-*** Disable warnings for first time users
-    
-    For some reason some questions in emacs are yes/no and some are y/n
-    this trips me sometimes so we turn that off, and the same goes for
-    killing emacs. We also removes some questions that are asked to
-    make sure that the users really wants what is going to happen, I
-    know how to use undo and  I usually have some version control
-    system running so I can go back.
-
-    #+begin_src emacs-lisp
-      ;; Changes all yes/no questions to y/n type
-      (fset 'yes-or-no-p 'y-or-n-p)
-      (set-variable 'confirm-kill-emacs 'yes-or-no-p)
-      ;; more of these as I find them
-      (put 'narrow-to-region 'disabled nil)
-      (setq safe-local-variable-values 
-            (quote ((auto-fill-mode . t) (indent-tab-mode))))
-    #+end_src
-
-*** TODO move everthing out of Introduction that does not belong there
+*** DONE move everthing out of Introduction that does not belong there
+    :LOGBOOK:
+    - State "DONE"       from "TODO"       [2013-03-03 sö 22:19] \\
+      done
+    :END:
     Introduction should only be about requirements and about this
     config, not really do any configuration.
 * Some Basic faces                                                    :faces:
@@ -223,6 +162,71 @@ that I share between work and home
   #+end_src
 
 * Global Things
+*** Setup
+    
+    Some user information
+    #+begin_src emacs-lisp
+      (setq user-full-name "Jim Hansson")
+      (setq user-mail-address "jim.hansson@powel.se")   
+    #+end_src
+
+    Here we setup some basic things, I dont like the toolbar so that we
+    turn off, I use OrgMode to almost everything(even my .emacs) so
+    that will be my default mode. Almost all computers I use are
+    laptops and who in there right mind uses 12h clocks.
+
+    #+begin_src emacs-lisp
+      (setq default-major-mode 'org-mode)
+      (add-hook 'text-mode-hook 'turn-on-auto-fill)
+      ;; show matching paren
+      (show-paren-mode t)
+      (iswitchb-mode 1)
+      (setq filesets-data nil)
+      (display-battery-mode)
+      (global-font-lock-mode t)
+      ;; binds ctrl + § to dabbrev as good enough completion 
+      (global-set-key (kbd "C-\§") 'dabbrev-expand)
+      (setq-default indent-tabs-mode t)
+      (setq column-number-mode t)
+      (setq global-auto-revert-mode t)
+      (setq inhibit-startup-screen t)
+      (setq inhibit-splash-screen t)
+      (setq initial-buffer-choice t)
+      ;; This stops calls to sync when saving files, this might save battery on laptops, I only
+      ;; have SSD so that does not affect me so much. Setting might make it easier to loss data
+      ;; also.
+      ;;(write-region-inhibit-fsync t)
+    #+end_src
+
+*** Disable warnings for first time users
+    
+    For some reason some questions in emacs are yes/no and some are y/n
+    this trips me sometimes so we turn that off, and the same goes for
+    killing emacs. We also removes some questions that are asked to
+    make sure that the users really wants what is going to happen, I
+    know how to use undo and  I usually have some version control
+    system running so I can go back.
+
+    #+begin_src emacs-lisp
+      ;; Changes all yes/no questions to y/n type
+      (fset 'yes-or-no-p 'y-or-n-p)
+      (set-variable 'confirm-kill-emacs 'yes-or-no-p)
+      ;; more of these as I find them
+      (put 'narrow-to-region 'disabled nil)
+      (setq safe-local-variable-values 
+            (quote ((auto-fill-mode . t) (indent-tab-mode))))
+    #+end_src
+    
+*** Uniquify                                               :uniquify:buffers:
+
+    Better naming of buffers so we can easly tell the differens between
+    buffers. Have some problem together with Iswitch
+
+    #+begin_src emacs-lisp
+      (require 'uniquify)
+      (setq uniquify-buffer-name-style (quote post-forward))
+    #+end_src
+
 *** Tool-Bar
 
     #+begin_src emacs-lisp
@@ -1387,7 +1391,6 @@ that I share between work and home
     [[Org Protocol]]. First some basic setup of org-capture.
 
     #+begin_src emacs-lisp
-      ;;(setq org-default-notes-file (concat org-directory "/notes.org"))
       (define-key global-map "\C-cc" 'org-capture)
     #+end_src
 
@@ -1436,7 +1439,11 @@ that I share between work and home
       ;; more templates here.
     #+end_src
 
-***** TODO solve the problem with default notes file.
+***** DONE solve the problem with default notes file.
+      :LOGBOOK:
+      - State "DONE"       from "TODO"       [2013-03-03 sö 22:15] \\
+        Not a problem when all my templates contain a target.
+      :END:
 
 *** RSS feeds
 
@@ -2053,15 +2060,9 @@ that I share between work and home
     
     (define-key global-map "\C-cl" 'org-store-link)
     (define-key global-map "\C-ca" 'org-agenda)
-    
-    (define-key global-map "\C-cr" 'org-remember)
-        
-    (define-key global-map [f8] 'remember)
-    (define-key global-map [f9] 'remember-region)
-        
+            
     (global-set-key "\C-x\C-r" 'prefix-region)
     (global-set-key "\C-x\C-l" 'goto-line)
-    ;;(global-set-key "\C-x\C-y" 'copy-region-as-kill)
   #+end_src
 
 * Load Local settings
