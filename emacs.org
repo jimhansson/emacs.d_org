@@ -667,11 +667,126 @@ that I share between work and home
 									(setq matching-text (blink-matching-open)))
 							(if (not (null matching-text))
 									(message matching-text)))))
+
 		#+end_src
 
 ***** TODO Activate it in those major modes we want it in.
-
+			- all programing-modes
+			- org-mode
 * Major Modes
+*** PLSQL
+		
+		#+begin_src emacs-lisp
+      (when (require 'plsql nil 'noerror) )
+		#+end_src
+*** SQL-mode
+***** Support Multiple connections
+
+			If you work with multiple connections, you need to rename them such that the next
+			sql-foo command creates a new SQL buffer instead of popping you to the existing
+			one. Use M-x sql-rename-buffer for that, or the SQL menu entry. To do it
+			autmatically, after every connection, use the following in your ~/.emacs file: 
+
+			#+begin_src emacs-lisp
+        (add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
+			#+end_src
+
+			Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
+			
+    	#+begin_example
+        connect vdb/vdb@vdbdev;     
+    	#+end_example
+
+			This does not set ‘sql-alternate-buffer-name’, so a subsequent renaming will not
+			produce a new name. Subsequent connections will also not provide the correct default
+			parameters. Here is an Oracle-specific solution, including an automatic renaming of
+			the buffer: 
+			
+			
+			#+begin_src emacs-lisp
+        (defun my-sql-connect-watch (line)
+          "Watch for connect statements and set variables accordingly.
+        Add this to `comint-input-filter-functions'."
+          (set-text-properties 0 (length line) nil line)
+          (when (string-match "connect \\([a-z_]+\\)/\\([a-z_]+\\)@\\([a-z_]+\\)" line)
+            (setq sql-user (match-string 1 line)
+                  sql-password (match-string 2 line)
+                  sql-database (match-string 3 line)
+                  sql-alternate-buffer-name (sql-make-alternate-buffer-name))
+            (sql-rename-buffer)))
+        (add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
+			#+end_src
+
+***** SQLPlus support
+
+			#+begin_src 
+			 (require 'sqlplus)
+			#+end_src
+***** Remove linenumbers from sqlplus output
+
+			SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
+			adds a line number to the beginning of the next line. This line number is not part
+			of the SQL command; it just allows you to refer to and edit specific lines in your
+			SQL command. SQL*Plus acts like the standard text editor. SQL*Plus is on the
+			TheTruePath. 
+
+			This may make SQL*Plus error reporting less comprehensible when using SqlMode. Here
+			is an example of the line number junk: 
+
+			#+begin_example
+        ...
+          2    3    4       from v$parameter p, all_tables u
+                  *
+        ERROR at line 2:
+        ORA-00942: table or view does not exist     
+			#+end_example
+			This only happens if you enter multi-line SQL statements by using C-j instead of RET
+			between lines (ie. using sql-accumulate-and-indent instead of comint-send-input). If
+			you enter SQL statements one at a time, you’ll be fine. 
+
+			The following elisp function must be added to comint-preoutput-filter-functions in
+			order to strip the line numbers junk from the output: 
+
+			#+begin_src emacs-lisp
+        (defun eat-sqlplus-junk (str)
+          "Eat the line numbers SQL*Plus returns.
+        Put this on `comint-preoutput-filter-functions' if you are
+        running SQL*Plus.
+        If the line numbers are not eaten, you get stuff like this:
+        ...
+          2    3    4       from v$parameter p, all_tables u
+                  *
+        ERROR at line 2:
+        ORA-00942: table or view does not exist
+        The mismatch is very annoying."
+          (interactive "s")
+          (while (string-match " [ 1-9][0-9]  " str)
+            (setq str (replace-match "" nil nil str)))
+          str)
+			#+end_src
+			Test it by evaluating the following expression:
+
+			#+begin_example
+        (string= "     from" (eat-sqlplus-junk "  2    3    4       from"))
+			#+end_example
+
+			Install it by adding the following expression to your .emacs; it will check wether
+			the iSQL mode you have just started is indeed running SQL*Plus, and if it is, it
+			will add eat-sqlplus-junk to comint-preoutput-filter-functions. 
+
+			#+begin_src emacs-lisp
+        (defun install-eat-sqlplus-junk ()
+          "Install `comint-preoutput-filter-functions' if appropriate.
+            Add this function to `sql-interactive-mode-hook' in your .emacs:
+            \(add-hook 'sql-mode-hook 'install-eat-sqlplus-junk)"
+          (if (string= (car (process-command (get-buffer-process sql-buffer)))
+                       sql-oracle-program)
+              (add-to-list 'comint-preoutput-filter-functions
+                           'eat-sqlplus-junk)))
+
+        (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
+			#+end_src
+
 * Iswitch Buffers                                                   :buffers:
 
 	To prevent certain buffers from showing up in the completion list,
@@ -1255,7 +1370,7 @@ that I share between work and home
 
 ***** SQL
 
-			#+begin_src emacs-lisp
+		  #+begin_src emacs-lisp
 			 (eval-after-load "sql"
 				 '(load-library "sql-indent"))
 			#+end_src
