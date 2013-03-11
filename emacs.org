@@ -19,6 +19,8 @@ that I share between work and home
 		this need to be taken care of by elpa so I don't need to hardcode
 		paths with versions in them.
 
+*** TODO I don't want submodules to show up in git status
+
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -338,7 +340,7 @@ that I share between work and home
 	modes. in the major modes configuration we may adapt th minor modes
 	for that specific major mode, but here we have the general
 	configuration of the minor mode.
-
+	
 *** Auto-Fill
 		
 		#+begin_src emacs-lisp
@@ -1387,7 +1389,7 @@ that I share between work and home
 
 		this to support more that 2 different org directories and to not
 		make a difference bewtween them as much as possible.
-
+		
 *** Basic
 		
 		A large part of the configuration has to do with how org should
@@ -2109,6 +2111,14 @@ that I share between work and home
       decided to use tabs instead.
     :END:
 		should not use tabs for indentation in org-mode.
+
+
+*** TODO work jornal
+		
+		once maybe twice a week I would like to log what I have done that week it would be
+		nice with a capture template for that, a personal jornal would also be nice but may be
+		harder to fix because of that I could not hardcode the path to the file. maybe using
+		local config could fix that.
 
 * Google Integration
 	most of these things comes from http://julien.danjou.info/
