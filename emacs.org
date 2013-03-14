@@ -20,6 +20,9 @@ that I share between work and home
 		paths with versions in them.
 
 *** TODO I don't want submodules to show up in git status
+		:LOGBOOK:
+		CLOCK: [2013-03-11 må 22:13]--[2013-03-11 må 22:52] =>  0:39
+		:END:
 
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
