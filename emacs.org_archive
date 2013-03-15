@@ -180,6 +180,22 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	:ARCHIVE_TODO: DONE
 	:END:
 
+* DONE move everthing out of Introduction that does not belong there
+	:LOGBOOK:
+	- State "DONE"			 from "TODO"			 [2013-03-03 sö 22:19] \\
+		done
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-15 fr 10:11
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Introduction
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	Introduction should only be about requirements and about this
+	config, not really do any configuration.
+
+
 
 
 
