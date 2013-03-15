@@ -785,7 +785,9 @@ that I share between work and home
 
         (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
 			#+end_src
+***** TODO Placeholder support in sql querys
 
+			
 * Iswitch Buffers                                                   :buffers:
 
 	To prevent certain buffers from showing up in the completion list,
@@ -2315,7 +2317,11 @@ on file sets.
 #+end_src
 
 
-* TODO windows context menu integration																:instw:
+* DONE windows context menu integration																:instw:
+	:LOGBOOK:
+	- State "DONE"       from "TODO"  [2013-03-15 fr 10:38]
+		works fine
+	:END:
 	Starting Emacs From Global Context Menu
 	
 	Here is a simple but useful way to access Emacs. It adds the option to open a file in
