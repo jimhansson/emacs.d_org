@@ -785,9 +785,25 @@ that I share between work and home
 
         (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
 			#+end_src
-***** TODO Placeholder support in sql querys
+***** DONE Placeholder support in sql querys
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
+			CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
+			:END:
 
-			
+			#+begin_src emacs-lisp
+        (eval-after-load "sql"
+          '(load-library "sql-with-placeholders"))
+        (add-hook 'sql-mode-hook (lambda nil
+                                   (local-set-key [(control c) (control b)] 
+                                                  'sql-send-buffer-with-placeholders)
+                                   (local-set-key [(control c) (control c)] 
+                                                  'sql-send-paragraph-with-placeholders)
+                                   (local-set-key [(control c) (control r)] 
+                                                  'sql-send-region-with-placeholders)))
+        
+			#+end_src
+***** TODO need to test all this to see if it works.
 * Iswitch Buffers                                                   :buffers:
 
 	To prevent certain buffers from showing up in the completion list,
