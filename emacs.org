@@ -804,6 +804,23 @@ that I share between work and home
         
 			#+end_src
 ***** TODO need to test all this to see if it works.
+*** nXML
+***** TODO add local directory for storing extra schemsa
+***** TODO Schema for soap and wsdl
+***** TODO support validation
+			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
+***** Tools used for convertering to RelaxNG
+			- http://debeissat.nicolas.free.fr/XSDtoRNG.php :: can be used to convert from XSD
+           to RelaxNG that nXML uses, web-based
+			- https://code.google.com/p/jing-trang/ :: also a tool for converting between
+					 RelaxNG and other formats, you need java installed, commandline.
+					 #+begin_example
+             #>java -jar tranq.jar
+             usage: java com.thaiopensource.relaxng.translate.Driver [-C catalogFileOrUri] [-
+             I rng|rnc|dtd|xml] [-O rng|rnc|dtd|xsd] [-i input-param] [-o output-param] input
+             FileOrUri ... outputFile
+					 #+end_example
+
 * Iswitch Buffers                                                   :buffers:
 
 	To prevent certain buffers from showing up in the completion list,
@@ -2378,3 +2395,8 @@ on file sets.
 
 #	 LocalWords:	Uniquify Iswitch emacs src Whitespace
 
+
+
+
+toma
+patroN
