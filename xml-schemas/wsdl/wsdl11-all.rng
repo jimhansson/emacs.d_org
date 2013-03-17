@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+				 ns="http://schemas.xmlsoap.org/wsdl/http/" 
+				 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<rng:define xmlns:rng="http://relaxng.org/ns/structure/1.0" 
+						name="wxsSchema">
+<rng:externalRef href="../xmlschema.rng"/>
+</rng:define>
+    <start>
+        <choice>
+            <ref name="operation2"/>
+            <ref name="urlEncoded"/>
+            <ref name="address"/>
+            <ref name="binding"/>
+            <ref name="urlReplacement"/>
+            <ref name="body"/>
+            <ref name="operation"/>
+            <ref name="address2"/>
+            <ref name="binding3"/>
+            <ref name="headerfault"/>
+            <ref name="fault2"/>
+            <ref name="header"/>
+            <ref name="content"/>
+            <ref name="multipartRelated"/>
+            <ref name="part2"/>
+            <ref name="mimeXml"/>
+            <ref name="port"/>
+            <ref name="definitions"/>
+            <ref name="fault"/>
+            <ref name="message"/>
+            <ref name="portType"/>
+            <ref name="operation3"/>
+            <ref name="input"/>
+            <ref name="documentation"/>
+            <ref name="service"/>
+            <ref name="binding2"/>
+            <ref name="import"/>
+            <ref name="types"/>
+            <ref name="part"/>
+            <ref name="output"/>
+        </choice>
+    </start>
+    <define name="import">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">import</name>
+                <ref name="anonymous1"/>
+                <attribute name="namespace">
+                    <data type="anyURI"/>
+                </attribute>
+                <attribute name="location">
+                    <data type="anyURI"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="definitions">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">definitions</name>
+                <ref name="anonymous1"/>
+                <zeroOrMore>
+                    <ref name="import"/>
+                </zeroOrMore>
+                <optional>
+                    <ref name="types"/>
+                </optional>
+                <zeroOrMore>
+                    <ref name="message"/>
+                </zeroOrMore>
+                <zeroOrMore>
+                    <ref name="portType"/>
+                </zeroOrMore>
+                <zeroOrMore>
+                    <ref name="binding2"/>
+                </zeroOrMore>
+                <zeroOrMore>
+                    <ref name="service"/>
+                </zeroOrMore>
+                <zeroOrMore>
+                    <choice>
+                        <ref name="operation2"/>
+                        <ref name="urlEncoded"/>
+                        <ref name="address"/>
+                        <ref name="binding"/>
+                        <ref name="urlReplacement"/>
+                        <ref name="body"/>
+                        <ref name="operation"/>
+                        <ref name="address2"/>
+                        <ref name="binding3"/>
+                        <ref name="headerfault"/>
+                        <ref name="fault2"/>
+                        <ref name="header"/>
+                        <ref name="content"/>
+                        <ref name="multipartRelated"/>
+                        <ref name="part2"/>
+                        <ref name="mimeXml"/>
+                    </choice>
+                </zeroOrMore>
+                <optional>
+                    <attribute name="targetNamespace">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="name">
+                        <data type="NMTOKEN"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="fault">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">fault</name>
+                <ref name="anonymous1"/>
+                <attribute name="name">
+                    <data type="NMTOKEN"/>
+                </attribute>
+                <attribute name="message">
+                    <data type="QName"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="binding">
+        <choice>
+            <notAllowed/>
+            <element name="binding">
+                <attribute name="verb">
+                    <data type="NMTOKEN"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="content">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/mime/">content</name>
+                <optional>
+                    <attribute name="part">
+                        <data type="NMTOKEN"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="type">
+                        <data type="string"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="body">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/soap/">body</name>
+                <optional>
+                    <attribute name="namespace">
+                        <ref name="anyURI"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="use">
+                        <ref name="useChoice"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="parts">
+                        <data type="NMTOKENS"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="encodingStyle">
+                        <ref name="anyURI2"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="paramType">
+        <group>
+            <ref name="anonymous1"/>
+            <optional>
+                <attribute name="name">
+                    <data type="NMTOKEN"/>
+                </attribute>
+            </optional>
+            <attribute name="message">
+                <data type="QName"/>
+            </attribute>
+        </group>
+        <empty/>
+    </define>
+    <define name="useChoice">
+        <choice>
+            <value type="string">encoded</value>
+            <value type="string">literal</value>
+        </choice>
+    </define>
+    <define name="headerfault">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/soap/">headerfault</name>
+                <optional>
+                    <attribute name="namespace">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="encodingStyle">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+                <attribute name="use">
+                    <choice>
+                        <value type="string">encoded</value>
+                        <value type="string">literal</value>
+                    </choice>
+                </attribute>
+                <attribute name="parts">
+                    <data type="NMTOKENS"/>
+                </attribute>
+                <attribute name="message">
+                    <data type="QName"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="mimeXml">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/mime/">mimeXml</name>
+                <optional>
+                    <attribute name="part">
+                        <data type="NMTOKEN"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="portType">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">portType</name>
+                <ref name="anonymous1"/>
+                <zeroOrMore>
+                    <ref name="operation3"/>
+                </zeroOrMore>
+                <attribute name="name">
+                    <data type="NCName"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="startWithExtensionsType">
+        <notAllowed/>
+    </define>
+    <define name="input">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">input</name>
+                <ref name="paramType"/>
+            </element>
+        </choice>
+    </define>
+    <define name="port">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">port</name>
+                <ref name="anonymous1"/>
+                <optional>
+                    <choice>
+                        <ref name="operation2"/>
+                        <ref name="urlEncoded"/>
+                        <ref name="address"/>
+                        <ref name="binding"/>
+                        <ref name="urlReplacement"/>
+                        <ref name="body"/>
+                        <ref name="operation"/>
+                        <ref name="address2"/>
+                        <ref name="binding3"/>
+                        <ref name="headerfault"/>
+                        <ref name="fault2"/>
+                        <ref name="header"/>
+                        <ref name="content"/>
+                        <ref name="multipartRelated"/>
+                        <ref name="part2"/>
+                        <ref name="mimeXml"/>
+                    </choice>
+                </optional>
+                <attribute name="name">
+                    <data type="NCName"/>
+                </attribute>
+                <attribute name="binding">
+                    <data type="QName"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="urlEncoded">
+        <choice>
+            <notAllowed/>
+            <element name="urlEncoded">
+                <empty/>
+            </element>
+        </choice>
+    </define>
+    <define name="anyURI">
+        <data type="anyURI"/>
+    </define>
+    <define name="part">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">part</name>
+                <optional>
+                    <ref name="documentation"/>
+                </optional>
+                <optional>
+                    <attribute name="name">
+                        <data type="NMTOKEN"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="type">
+                        <data type="QName"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="element">
+                        <data type="QName"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="address">
+        <choice>
+            <notAllowed/>
+            <element name="address">
+                <attribute name="location">
+                    <data type="anyURI"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="operation">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/soap/">operation</name>
+                <optional>
+                    <attribute name="style">
+                        <choice>
+                            <value type="string">document</value>
+                            <value type="string">rpc</value>
+                        </choice>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="soapAction">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="part2">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/mime/">part</name>
+                <attribute name="name">
+                    <data type="NMTOKEN"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="types">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">types</name>
+                <ref name="anonymous1"/>
+                <zeroOrMore>
+                    <choice>
+                        <ref name="operation2"/>
+                        <ref name="urlEncoded"/>
+                        <ref name="address"/>
+                        <ref name="binding"/>
+                        <ref name="urlReplacement"/>
+                        <ref name="body"/>
+                        <ref name="operation"/>
+                        <ref name="address2"/>
+                        <ref name="binding3"/>
+                        <ref name="headerfault"/>
+                        <ref name="fault2"/>
+                        <ref name="header"/>
+                        <ref name="content"/>
+                        <ref name="multipartRelated"/>
+                        <ref name="part2"/>
+                        <ref name="mimeXml"/>
+                    </choice>
+                </zeroOrMore>
+            </element>
+        </choice>
+    </define>
+    <define name="service">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">service</name>
+                <ref name="anonymous1"/>
+                <zeroOrMore>
+                    <ref name="port"/>
+                </zeroOrMore>
+                <optional>
+                    <choice>
+                        <ref name="operation2"/>
+                        <ref name="urlEncoded"/>
+                        <ref name="address"/>
+                        <ref name="binding"/>
+                        <ref name="urlReplacement"/>
+                        <ref name="body"/>
+                        <ref name="operation"/>
+                        <ref name="address2"/>
+                        <ref name="binding3"/>
+                        <ref name="headerfault"/>
+                        <ref name="fault2"/>
+                        <ref name="header"/>
+                        <ref name="content"/>
+                        <ref name="multipartRelated"/>
+                        <ref name="part2"/>
+                        <ref name="mimeXml"/>
+                    </choice>
+                </optional>
+                <attribute name="name">
+                    <data type="NCName"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="output">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">output</name>
+                <ref name="paramType"/>
+            </element>
+        </choice>
+    </define>
+    <define name="message">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">message</name>
+                <ref name="anonymous1"/>
+                <zeroOrMore>
+                    <ref name="part"/>
+                </zeroOrMore>
+                <attribute name="name">
+                    <data type="NCName"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="address2">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/soap/">address</name>
+                <attribute name="location">
+                    <data type="anyURI"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="binding2">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">binding</name>
+                <ref name="anonymous0"/>
+                <zeroOrMore>
+                    <element>
+                        <name ns="http://schemas.xmlsoap.org/wsdl/">operation</name>
+                        <ref name="anonymous0"/>
+                        <optional>
+                            <element>
+                                <name ns="http://schemas.xmlsoap.org/wsdl/">input</name>
+                                <ref name="startWithExtensionsType"/>
+                            </element>
+                        </optional>
+                        <optional>
+                            <element>
+                                <name ns="http://schemas.xmlsoap.org/wsdl/">output</name>
+                                <ref name="startWithExtensionsType"/>
+                            </element>
+                        </optional>
+                        <zeroOrMore>
+                            <element>
+                                <name ns="http://schemas.xmlsoap.org/wsdl/">fault</name>
+                                <ref name="anonymous0"/>
+                                <attribute name="name">
+                                    <data type="NMTOKEN"/>
+                                </attribute>
+                            </element>
+                        </zeroOrMore>
+                        <attribute name="name">
+                            <data type="NCName"/>
+                        </attribute>
+                    </element>
+                </zeroOrMore>
+                <attribute name="name">
+                    <data type="NCName"/>
+                </attribute>
+                <attribute name="type">
+                    <data type="QName"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="anonymous0">
+        <ref name="anonymous1"/>
+        <zeroOrMore>
+            <choice>
+                <ref name="operation2"/>
+                <ref name="urlEncoded"/>
+                <ref name="address"/>
+                <ref name="binding"/>
+                <ref name="urlReplacement"/>
+                <ref name="body"/>
+                <ref name="operation"/>
+                <ref name="address2"/>
+                <ref name="binding3"/>
+                <ref name="headerfault"/>
+                <ref name="fault2"/>
+                <ref name="header"/>
+                <ref name="content"/>
+                <ref name="multipartRelated"/>
+                <ref name="part2"/>
+                <ref name="mimeXml"/>
+            </choice>
+        </zeroOrMore>
+    </define>
+    <define name="anonymous1">
+        <optional>
+            <ref name="documentation"/>
+        </optional>
+    </define>
+    <define name="header">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/soap/">header</name>
+                <optional>
+                    <attribute name="namespace">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="encodingStyle">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+                <attribute name="use">
+                    <choice>
+                        <value type="string">encoded</value>
+                        <value type="string">literal</value>
+                    </choice>
+                </attribute>
+                <attribute name="parts">
+                    <data type="NMTOKENS"/>
+                </attribute>
+                <attribute name="message">
+                    <data type="QName"/>
+                </attribute>
+                <ref name="headerfault"/>
+            </element>
+        </choice>
+    </define>
+    <define name="operation2">
+        <choice>
+            <notAllowed/>
+            <element name="operation">
+                <attribute name="location">
+                    <data type="anyURI"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+    <define name="fault2">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/soap/">fault</name>
+                <optional>
+                    <attribute name="parts">
+                        <notAllowed/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="namespace">
+                        <ref name="anyURI"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="use">
+                        <ref name="useChoice"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="encodingStyle">
+                        <ref name="anyURI2"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="documentation">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">documentation</name>
+                <mixed>
+                    <oneOrMore>
+                        
+                            <choice>
+                                <ref name="operation2"/>
+                                <ref name="urlEncoded"/>
+                                <ref name="address"/>
+                                <ref name="binding"/>
+                                <ref name="urlReplacement"/>
+                                <ref name="body"/>
+                                <ref name="operation"/>
+                                <ref name="address2"/>
+                                <ref name="binding3"/>
+                                <ref name="headerfault"/>
+                                <ref name="fault2"/>
+                                <ref name="header"/>
+                                <ref name="content"/>
+                                <ref name="multipartRelated"/>
+                                <ref name="part2"/>
+                                <ref name="mimeXml"/>
+                                <ref name="port"/>
+                                <ref name="definitions"/>
+                                <ref name="fault"/>
+                                <ref name="message"/>
+                                <ref name="portType"/>
+                                <ref name="operation3"/>
+                                <ref name="input"/>
+                                <ref name="documentation"/>
+                                <ref name="service"/>
+                                <ref name="binding2"/>
+                                <ref name="import"/>
+                                <ref name="types"/>
+                                <ref name="part"/>
+                                <ref name="output"/>
+                            </choice>
+                        
+                    </oneOrMore>
+                </mixed>
+                <optional>
+                    <attribute>
+                        <name ns="http://schemas.xmlsoap.org/wsdl/">arrayType</name>
+                        <data type="string"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="binding3">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/soap/">binding</name>
+                <optional>
+                    <attribute name="style">
+                        <choice>
+                            <value type="string">document</value>
+                            <value type="string">rpc</value>
+                        </choice>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="transport">
+                        <data type="anyURI"/>
+                    </attribute>
+                </optional>
+            </element>
+        </choice>
+    </define>
+    <define name="multipartRelated">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/mime/">multipartRelated</name>
+                <zeroOrMore>
+                    <ref name="part2"/>
+                </zeroOrMore>
+            </element>
+        </choice>
+    </define>
+    <define name="anyURI2">
+        <data type="anyURI"/>
+    </define>
+    <define name="urlReplacement">
+        <choice>
+            <notAllowed/>
+            <element name="urlReplacement">
+                <empty/>
+            </element>
+        </choice>
+    </define>
+    <define name="operation3">
+        <choice>
+            <notAllowed/>
+            <element>
+                <name ns="http://schemas.xmlsoap.org/wsdl/">operation</name>
+                <ref name="anonymous1"/>
+                <choice>
+                    <ref name="input"/>
+                    <ref name="output"/>
+                </choice>
+                <optional>
+                    <choice>
+                        <ref name="input"/>
+                        <ref name="output"/>
+                    </choice>
+                </optional>
+                <zeroOrMore>
+                    <ref name="fault"/>
+                </zeroOrMore>
+                <attribute name="name">
+                    <data type="NCName"/>
+                </attribute>
+            </element>
+        </choice>
+    </define>
+</grammar>

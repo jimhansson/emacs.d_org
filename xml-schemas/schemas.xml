@@ -3,9 +3,15 @@
 
 	<uri pattern="*.wsdl" typeId="WSDL"/>
 	<documentElement prefix="wsdl" typeId="WSDL"/>
+
+  <uri pattern="*.xsd" typeId="XML Schema"/>
+  <namespace ns="http://www.w3.org/2001/XMLSchema" typeId="XML Schema"/>
+  <documentElement localName="schema" typeId="XML Schema"/>
+
 	<documentElement prefix="soap" typeId="SOAP"/>
 
-  <typeId id="WSDL" uri="wsdl.rnc"/>
+  <typeId id="XML Schema" uri="xmlschema.rnc"/>
+  <typeId id="WSDL" uri="wsdl/wsdl-all.rnc"/>
   <typeId id="SOAP" uri="soap.rnc"/>
 
 </locatingRules>

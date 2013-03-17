@@ -1,0 +1,358 @@
+default namespace = "http://schemas.xmlsoap.org/wsdl/soap/"
+namespace ns1 = "http://schemas.xmlsoap.org/wsdl/http/"
+namespace ns2 = "http://schemas.xmlsoap.org/wsdl/mime/"
+namespace ns3 = "http://schemas.xmlsoap.org/wsdl/"
+
+wxsSchema = external "../xmlschema.rnc" inherit = ns1
+start =
+  operation2
+  | urlEncoded
+  | address
+  | binding
+  | urlReplacement
+  | body
+  | operation
+  | address2
+  | binding3
+  | headerfault
+  | fault2
+  | header
+  | content
+  | multipartRelated
+  | part2
+  | mimeXml
+  | port
+  | definitions
+  | fault
+  | message
+  | portType
+  | operation3
+  | input
+  | documentation
+  | service
+  | binding2
+  | import
+  | types
+  | part
+  | output
+import =
+  notAllowed
+  | element ns3:import {
+      anonymous1,
+      attribute namespace { xsd:anyURI },
+      attribute location { xsd:anyURI }
+    }
+definitions =
+  notAllowed
+  | element ns3:definitions {
+      anonymous1,
+      import*,
+      types?,
+      message*,
+      portType*,
+      binding2*,
+      service*,
+      (operation2
+       | urlEncoded
+       | address
+       | binding
+       | urlReplacement
+       | body
+       | operation
+       | address2
+       | binding3
+       | headerfault
+       | fault2
+       | header
+       | content
+       | multipartRelated
+       | part2
+       | mimeXml)*,
+      attribute targetNamespace { xsd:anyURI }?,
+      attribute name { xsd:NMTOKEN }?
+    }
+fault =
+  notAllowed
+  | element ns3:fault {
+      anonymous1,
+      attribute name { xsd:NMTOKEN },
+      attribute message { xsd:QName }
+    }
+binding =
+  notAllowed
+  | element ns1:binding {
+      attribute verb { xsd:NMTOKEN }
+    }
+content =
+  notAllowed
+  | element ns2:content {
+      attribute part { xsd:NMTOKEN }?,
+      attribute type { xsd:string }?
+    }
+body =
+  notAllowed
+  | element body {
+      attribute namespace { anyURI }?,
+      attribute use { useChoice }?,
+      attribute parts { xsd:NMTOKENS }?,
+      attribute encodingStyle { anyURI2 }?
+    }
+paramType =
+  (anonymous1,
+   attribute name { xsd:NMTOKEN }?,
+   attribute message { xsd:QName }),
+  empty
+useChoice = xsd:string "encoded" | xsd:string "literal"
+headerfault =
+  notAllowed
+  | element headerfault {
+      attribute namespace { xsd:anyURI }?,
+      attribute encodingStyle { xsd:anyURI }?,
+      attribute use { xsd:string "encoded" | xsd:string "literal" },
+      attribute parts { xsd:NMTOKENS },
+      attribute message { xsd:QName }
+    }
+mimeXml =
+  notAllowed
+  | element ns2:mimeXml {
+      attribute part { xsd:NMTOKEN }?
+    }
+portType =
+  notAllowed
+  | element ns3:portType {
+      anonymous1,
+      operation3*,
+      attribute name { xsd:NCName }
+    }
+startWithExtensionsType = notAllowed
+input =
+  notAllowed
+  | element ns3:input { paramType }
+port =
+  notAllowed
+  | element ns3:port {
+      anonymous1,
+      (operation2
+       | urlEncoded
+       | address
+       | binding
+       | urlReplacement
+       | body
+       | operation
+       | address2
+       | binding3
+       | headerfault
+       | fault2
+       | header
+       | content
+       | multipartRelated
+       | part2
+       | mimeXml)?,
+      attribute name { xsd:NCName },
+      attribute binding { xsd:QName }
+    }
+urlEncoded =
+  notAllowed
+  | element ns1:urlEncoded { empty }
+anyURI = xsd:anyURI
+part =
+  notAllowed
+  | element ns3:part {
+      documentation?,
+      attribute name { xsd:NMTOKEN }?,
+      attribute type { xsd:QName }?,
+      attribute element { xsd:QName }?
+    }
+address =
+  notAllowed
+  | element ns1:address {
+      attribute location { xsd:anyURI }
+    }
+operation =
+  notAllowed
+  | element operation {
+      attribute style { xsd:string "document" | xsd:string "rpc" }?,
+      attribute soapAction { xsd:anyURI }?
+    }
+part2 =
+  notAllowed
+  | element ns2:part {
+      attribute name { xsd:NMTOKEN }
+    }
+types =
+  notAllowed
+  | element ns3:types {
+      anonymous1,
+      (operation2
+       | urlEncoded
+       | address
+       | binding
+       | urlReplacement
+       | body
+       | operation
+       | address2
+       | binding3
+       | headerfault
+       | fault2
+       | header
+       | content
+       | multipartRelated
+       | part2
+       | mimeXml)*
+    }
+service =
+  notAllowed
+  | element ns3:service {
+      anonymous1,
+      port*,
+      (operation2
+       | urlEncoded
+       | address
+       | binding
+       | urlReplacement
+       | body
+       | operation
+       | address2
+       | binding3
+       | headerfault
+       | fault2
+       | header
+       | content
+       | multipartRelated
+       | part2
+       | mimeXml)?,
+      attribute name { xsd:NCName }
+    }
+output =
+  notAllowed
+  | element ns3:output { paramType }
+message =
+  notAllowed
+  | element ns3:message {
+      anonymous1,
+      part*,
+      attribute name { xsd:NCName }
+    }
+address2 =
+  notAllowed
+  | element address {
+      attribute location { xsd:anyURI }
+    }
+binding2 =
+  notAllowed
+  | element ns3:binding {
+      anonymous0,
+      element ns3:operation {
+        anonymous0,
+        element ns3:input { startWithExtensionsType }?,
+        element ns3:output { startWithExtensionsType }?,
+        element ns3:fault {
+          anonymous0,
+          attribute name { xsd:NMTOKEN }
+        }*,
+        attribute name { xsd:NCName }
+      }*,
+      attribute name { xsd:NCName },
+      attribute type { xsd:QName }
+    }
+anonymous0 =
+  anonymous1,
+  (operation2
+   | urlEncoded
+   | address
+   | binding
+   | urlReplacement
+   | body
+   | operation
+   | address2
+   | binding3
+   | headerfault
+   | fault2
+   | header
+   | content
+   | multipartRelated
+   | part2
+   | mimeXml)*
+anonymous1 = documentation?
+header =
+  notAllowed
+  | element header {
+      attribute namespace { xsd:anyURI }?,
+      attribute encodingStyle { xsd:anyURI }?,
+      attribute use { xsd:string "encoded" | xsd:string "literal" },
+      attribute parts { xsd:NMTOKENS },
+      attribute message { xsd:QName },
+      headerfault
+    }
+operation2 =
+  notAllowed
+  | element ns1:operation {
+      attribute location { xsd:anyURI }
+    }
+fault2 =
+  notAllowed
+  | element fault {
+      attribute parts { notAllowed }?,
+      attribute namespace { anyURI }?,
+      attribute use { useChoice }?,
+      attribute encodingStyle { anyURI2 }?
+    }
+documentation =
+  notAllowed
+  | element ns3:documentation {
+      mixed {
+        (operation2
+         | urlEncoded
+         | address
+         | binding
+         | urlReplacement
+         | body
+         | operation
+         | address2
+         | binding3
+         | headerfault
+         | fault2
+         | header
+         | content
+         | multipartRelated
+         | part2
+         | mimeXml
+         | port
+         | definitions
+         | fault
+         | message
+         | portType
+         | operation3
+         | input
+         | documentation
+         | service
+         | binding2
+         | import
+         | types
+         | part
+         | output)+
+      },
+      attribute ns3:arrayType { xsd:string }?
+    }
+binding3 =
+  notAllowed
+  | element binding {
+      attribute style { xsd:string "document" | xsd:string "rpc" }?,
+      attribute transport { xsd:anyURI }?
+    }
+multipartRelated =
+  notAllowed
+  | element ns2:multipartRelated { part2* }
+anyURI2 = xsd:anyURI
+urlReplacement =
+  notAllowed
+  | element ns1:urlReplacement { empty }
+operation3 =
+  notAllowed
+  | element ns3:operation {
+      anonymous1,
+      (input | output),
+      (input | output)?,
+      fault*,
+      attribute name { xsd:NCName }
+    }
