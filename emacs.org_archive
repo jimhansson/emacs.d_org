@@ -129,6 +129,75 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 			windows does not support svg.
 		CLOCK: [2012-08-20 må 10:35]--[2012-08-20 må 11:46] =>  1:11
 		:END:
+* Remember
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2012-10-13 lö 10:36
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_CATEGORY: emacs
+	:END:
+  
+  I don't use remember as much at the moment but some day or some
+  other function once I have found out which I shall use. Most of this
+  has been copied from someones GTD.org setup.
+
+  #+begin_src emacs-lisp
+    (autoload 'remember "remember" nil t)
+    (autoload 'remember-region "remember" nil t)
+    (setq remember-annotation-functions '(org-remember-annotation))
+    (setq remember-handler-functions '(org-remember-handler))
+    (add-hook 'remember-mode-hook 'org-remember-apply-template)
+    (setq org-remember-templates
+         '(
+          ("Todo" ?t "** TODO %^{Brief Description} %^g\n%?\nAdded: %U" "~/Dokument/GTD/gtd.org" "Tasks")
+          ("Private" ?p "\n* %^{topic} %T \n%i%?\n" "~/Dokument/GTD/gtd.org" "Private")
+          ("WordofDay" ?w "\n* %^{topic} \n%i%?\n" "~/Dokument/GTD/wotd.org")
+          ))
+  #+end_src
+
+* DONE cleanup
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2012-10-12 fr 11:02]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2012-10-15 må 10:56
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Minor Modes/Auto-complete
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	why do I have both auto-complete and auto-complete-1.3.1
+	directory. I should only have one and that one should be a
+	submodule instead. and one from elpa!
+* DONE change this to be a submodule instead
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2012-10-11 to 16:04]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2012-10-18 to 22:49
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Coding/CEDET
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+* DONE move everthing out of Introduction that does not belong there
+	:LOGBOOK:
+	- State "DONE"			 from "TODO"			 [2013-03-03 sö 22:19] \\
+		done
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-15 fr 10:11
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Introduction
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	Introduction should only be about requirements and about this
+	config, not really do any configuration.
+
+
+
+
 
 
 

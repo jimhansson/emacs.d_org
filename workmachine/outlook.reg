@@ -1,0 +1,17 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\outlook]
+URL Protocol=
+@="URL:Outlook Folders"
+
+[HKEY_CLASSES_ROOT\outlook\DefaultIcon]
+@="C:\\Program Files\\Microsoft Office\\Office14\\1033\\OUTLLIBR.DLL,-7511"
+
+[HKEY_CLASSES_ROOT\outlook\shell]
+@="open"
+
+[HKEY_CLASSES_ROOT\outlook\shell\open]
+@=""
+
+[HKEY_CLASSES_ROOT\outlook\shell\open\command]
+@="C:\\Program Files\\Microsoft Office\\Office14\\OUTLOOK.EXE /select %1"

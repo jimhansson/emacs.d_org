@@ -1,0 +1,22 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+           targetNamespace="http://schemas.xmlsoap.org/wsdl/http/">
+  <xs:element name="address" type="http:addressType"/>
+  <xs:complexType name="addressType">
+    <xs:attribute name="location" type="xs:anyURI" use="required"/>
+  </xs:complexType>
+  <xs:element name="binding" type="http:bindingType"/>
+  <xs:complexType name="bindingType">
+    <xs:attribute name="verb" type="xs:NMTOKEN" use="required"/>
+  </xs:complexType>
+  <xs:element name="operation" type="http:operationType"/>
+  <xs:complexType name="operationType">
+    <xs:attribute name="location" type="xs:anyURI" use="required"/>
+  </xs:complexType>
+  <xs:element name="urlEncoded">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="urlReplacement">
+    <xs:complexType/>
+  </xs:element>
+</xs:schema>

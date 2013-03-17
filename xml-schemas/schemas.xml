@@ -1,0 +1,11 @@
+<!-- local schemas used by me -->
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+
+	<uri pattern="*.wsdl" typeId="WSDL"/>
+	<documentElement prefix="wsdl" typeId="WSDL"/>
+	<documentElement prefix="soap" typeId="SOAP"/>
+
+  <typeId id="WSDL" uri="wsdl.rnc"/>
+  <typeId id="SOAP" uri="soap.rnc"/>
+
+</locatingRules>

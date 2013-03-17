@@ -1,4 +1,4 @@
-# -*- mode: org; indent-tabs-mode: nil -*-
+# -*- mode: org; -*-
 #+TITLE: My emacs configuration
 #+AUTHOR: Jim Hansson
 #+EMAIL: jim.hansson@gmail.com
@@ -9,595 +9,1177 @@ This is my main .emacs file. It is responsible for calling out to the
 local file at different points. This is placed in a git repository
 that I share between work and home
 
-
 * File setup
 #+STARTUP: hidestars hideblocks
 #+COLUMNS: %50ITEM %4TODO %20TAGS
 #+LINK: norang http://doc.norang.ca/org-mode.html#
 #+LINK: wiki http://emacswiki.org/emacs/  
 * Bugs
+*** TODO Elpa does not add things to load path
+		this need to be taken care of by elpa so I don't need to hardcode
+		paths with versions in them.
+
+*** TODO I don't want submodules to show up in git status
+		:LOGBOOK:
+		CLOCK: [2013-03-11 må 22:13]--[2013-03-11 må 22:52] =>  0:39
+		:END:
+
+*** TODO start using dsvn not psvn, psvn is to slow.
+
 * Introduction
-  Basic things that could have been down throu custom-set-variable but
-  then I would have harder time to replicate that between machines.
-  
+	Basic things that could have been done throu custom-set-variable but
+	then I would have harder time to replicate that between machines.
+	
+	when doing a new installation on either windows or linux check the
+	items with the tags below for specific things you have to do outside
+	emacs to get things working.
+	
+	- instw :: for windows specific things.
+	- instl :: for linux specific things.
+
 *** Requirements
 
-    - Emacs 24
-    - a basic .emacs file that calls this after it inits org-babel 
-    - a lot of extra packages. most configuration will check for it
-    
-***** What you need to have in your normal .emacs
+		- Emacs 24
+		- a basic .emacs file that calls this after it inits org-babel 
+		- a lot of extra packages. most configuration will check for it
 
-      #+begin_example
-        ;; -*- mode: emacs-lisp -*-
-        ;; this is what is needed in the real .emacs file.
-        ;; remember to change the paths at the bottom of this file
-        ; found on EmacsWiki
-        (setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
-                                 ("gnu" . "http://elpa.gnu.org/packages/")))
-        ; http://marmalade-repo.org/
-        (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-        
-        (add-to-list 'load-path "~/.emacs.d/")
-        (require 'cl)
-        
-        ;; set-up org babel
-        (setq org-babel-load-languages '((emacs-lisp . t)))
-        (setq org-confirm-babel-evaluate nil)
-        (require 'org-install)
-        (require 'org)
-        
-        ;; all these paths need '/' at the end
-        ;; you need to change this
-        (setq local-emacs-org-dir "c:/Users/jiha/Documents/github/emacs.d_org/")
-        ;; where shared org files are
-        (setq shared-org-files-dir "c:/Users/jiha/Documents/github/shared_org/")
-        ;; where local org files are
-        (setq local-org-files-dir "c:/Users/jiha/Documents/org/")
-        ;; load neatly organized org file!
-        (add-to-list 'load-path local-emacs-org-dir)
-        (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
-      #+end_example
+*** Requirements from elpa
+
+		First setup package archives
+		#+begin_src emacs-lisp
+			; Setup package archives
+			(setq package-archives ())
+			(add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
+			(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+			(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+			(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+		#+end_src
+
+		Then use M-x list-packages to find and install these packages.
+		- oauth2 :: for google integration
+								for some reason I need to add oauth directory to
+								load-path, should not elpa take care of that.
+		- bookmark+ :: can do so much more than the normal bookmark
+									 package.
+		- magit :: good mode to handle git repos from within emacs, the
+							 normal VC functions in emacs are not so good at that.
+		- org-magit :: Allows for links from org into magit buffers.
+		- guess-style :: for coding
+		- guess-offset :: for coding
+		- csharp-mode :: for coding
+
+		Good things to have on Windows
+		- org-outlook :: integration with outlook
+		- powershell :: for coding
+		- tfs :: for Team Foundation Server.
+
+		Not so important, but nice to have.
+		- pretty-lambdada :: Show the word `lambda' as the Greek letter.
+
+*** What you need to have in your normal .emacs
+
+		#+begin_example
+			;; this is what is needed in the real .emacs file.
+			;; remember to change the paths at the bottom of this file
+			; found on EmacsWiki
+			(setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
+															 ("gnu" . "http://elpa.gnu.org/packages/")))
+			; http://marmalade-repo.org/
+			(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+			
+			(add-to-list 'load-path "~/.emacs.d/")
+			(require 'cl)
+			
+			;; set-up org babel
+			(setq org-babel-load-languages '((emacs-lisp . t)))
+			(setq org-confirm-babel-evaluate nil)
+			(require 'org-install)
+			(require 'org)
+			
+			;; all these paths need '/' at the end
+			(setq my-org-directories
+						'("c:/Users/jiha/Documents/github/emacs.d_org/"
+							"c:/Users/jiha/Documents/github/shared_org/"
+							"c:/Users/jiha/Documents/org/"))
+			;; you need to change this
+			(setq local-emacs-org-dir "c:/Users/jiha/Documents/github/emacs.d_org/")
+			
+			;; load neatly organized org file!
+			(add-to-list 'load-path local-emacs-org-dir)
+			(org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
+		#+end_example
 *** Other important stuff
 ***** Only load things that exists.
 
-      that can be done this way, use this to avoid errors on machine
-      which don't have every package installed.
+			that can be done this way, use this to avoid errors on machine
+			which don't have every package installed.
 
-      #+begin_example
-        (when (require 'deft nil 'noerror) 
-      #+end_example
-
-*** Setup
-    
-    Some user information
-    #+begin_src emacs-lisp
-      (setq user-full-name "Jim Hansson")
-      (setq user-mail-address "jim.hansson@powel.se")   
-    #+end_src
-
-    Here we setup some basic things, I dont like the toolbar so that we
-    turn off, I use OrgMode to almost everything(even my .emacs) so
-    that will be my default mode. Almost all computers I use are
-    laptops and who in there right mind uses 12h clocks.
-
-    #+begin_src emacs-lisp
-      (tool-bar-mode -1)
-      (setq default-major-mode 'org-mode)
-      (add-hook 'text-mode-hook 'turn-on-auto-fill)
-      ;; show matching paren
-      (show-paren-mode t)
-      (iswitchb-mode 1)
-      (setq filesets-data nil)
-      (display-battery-mode)
-      (global-font-lock-mode t)
-      ;; binds ctrl + § to dabbrev as good enough completion 
-      (global-set-key (kbd "C-\§") 'dabbrev-expand)
-      (setq-default indent-tabs-mode t)
-    #+end_src
-
-*** Modeline                                                       :modeline:
-    
-    #+begin_src emacs-lisp
-      ;; Things that modifies the modeline
-      (setq display-battery-mode t)
-      (setq display-time-24hr-format t)
-      ;; I work width some really big files and then it is good to have this
-      ;; so i know how far down I am.
-      (setq size-indication-mode t)
-    #+end_src
-    
-*** Whitespace
-
-    I use whitespace mode a lot, maybe because I dont have configured
-    the programming modes to "do the right thing" yet and some other
-    programmers around me are experts at leaving trailing whitespaces
-    and mixing tabs and spaces. <rant>the same persons ussally write
-    really long lines to, and have 8 levels of indentation in the same
-    method and uses indent depth of 4 or 8, I wonder how wide their
-    screen is.</rant>
-
-    #+begin_src emacs-lisp
-      ;; whitespace-mode things
-      
-      ;; less color in whitespace mode, The yellow and red is to distracting
-      (setq whitespace-style (quote (spaces tabs newline space-mark 
-                                            tab-mark newline-mark)))
-      
-      ;; make whitespace-mode use "" for newline and -> for tab.
-      ;; together with the rest of its defaults
-      (setq whitespace-display-mappings
-            '(
-              (space-mark 32 [183] [46]) ; normal space, ·
-              (space-mark 160 [164] [95])
-              (space-mark 2208 [2212] [95])
-              (space-mark 2336 [2340] [95])
-              (space-mark 3616 [3620] [95])
-              (space-mark 3872 [3876] [95])
-              (newline-mark 10 [8629 10]) ; newlne
-              (tab-mark 9 [8677 9] [92 9]) ; tab
-              ))
-      
-      ;; My own whitespace cleanup function should be bound to something.
-      ;; or used in some save-hook don't know how this work together with smart-tabs
-      (defun jiha-whitespace-cleanup ()
-        (interactive)
-        (let (whitespace-style (indentation::tab 
-                                space-before-tab::tab
-                                trailing))
-          (whitespace-cleanup-region)))
-    #+end_src
-*** Uniquify                                               :uniquify:buffers:
-
-    Better naming of buffers so we can easly tell the differens between
-    buffers. Have some problem together with Iswitch
-
-    #+begin_src emacs-lisp
-      (require 'uniquify)
-      (setq uniquify-buffer-name-style (quote post-forward))
-    #+end_src
-
-*** Disable warnings for first time users
-    
-    For some reason some questions in emacs are yes/no and some are y/n
-    this trips me sometimes so we turn that off, and the same goes for
-    killing emacs. We also removes some questions that are asked to
-    make sure that the users really wants what is going to happen, I
-    know how to use undo and  I usually have some version control
-    system running so I can go back.
-
-    #+begin_src emacs-lisp
-      ;; Changes all yes/no questions to y/n type
-      (fset 'yes-or-no-p 'y-or-n-p)
-      (set-variable 'confirm-kill-emacs 'yes-or-no-p)
-      ;; more of these as I find them
-      (put 'narrow-to-region 'disabled nil)
-      (setq safe-local-variable-values (quote ((auto-fill-mode . t))))
-    #+end_src
-
-* Requirements from elpa
-  First setup package archives
-  #+begin_src emacs-lisp
-    ; Setup package archives
-    (setq package-archives ())
-    (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
-    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-    ; http://marmalade-repo.org/ 
-    (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-    
-  #+end_src
-
-  Then use M-x list-packages to find and install these packages.
-  - oauth2 :: for google integration
-              for some reason I need to add oauth directory to
-              load-path, should not elpa take care of that.
-
-* Auto complete
-
-  #+begin_src emacs-lisp
-    (add-to-list 'load-path (concat local-emacs-org-dir 
-                                    "auto-complete"))
-    (require 'auto-complete-config)
-    (add-to-list 'ac-dictionary-directories (concat local-emacs-org-dir 
-                                                    "ac-dicts"))
-    (ac-config-default)
-    ;;(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-    (ac-flyspell-workaround)
-  #+end_src
-
-*** TODO cleanup
-    why do I have both auto-complete and auto-complete-1.3.1
-    directory. I should only have one and that one should be a
-    submodule instead.
-
+			#+begin_example
+				(when (require 'deft nil 'noerror)) 
+			#+end_example
 * Some Basic faces                                                    :faces:
 
-  I use the possiblity that a face can inherit from one, or more faces
-  to setup faces along a few different axis.
-  #+begin_src emacs-lisp
+	I use the possiblity that a face can inherit from one, or more faces
+	to setup faces along a few different axis.
+	#+begin_src emacs-lisp
 
-    (defgroup jiha-faces nil "Configuration for faces")
-    ; expirment
-    ; defines the basic faces used to for indicating how important thing is
-    (defface jiha-need-attention-face 
-      '((t (:foreground "Red")))
-      "Some text"
-      :group 'jiha-faces)
-    
-    (defface jiha-notice-me-face      
-      '((t (:foreground "salmon")))
-      "Some text"
-      :group 'jiha-faces)
-    
-    (defface jiha-warning-face 
-      '((t (:foreground "Orange")))
-      "Some text"
-      :group 'jiha-faces)
-    
-    (defface jiha-good-thing-face
-      '((t (:foreground "Green")))
-      "Some Text"
-      :group 'jiha-faces)
-    
-    ; Face to tell that it should not be changed or can not be changed
-    (defface jiha-donotwrite-face
-      '((t (:foreground "Red")))
-      "Some Text"
-      :group 'jiha-faces)
-    
-    ; Things that dont really exist, or not a file
-    (defface jiha-not-real-face 
-      '((t (:slant italic :group jiha-faces)))
-      "Some Text"
-      :group 'jiha-faces)
-    
-  #+end_src
+		(defgroup jiha-faces nil "Configuration for faces")
+		; expirment
+		; defines the basic faces used to for indicating how important thing is
+		(defface jiha-need-attention-face 
+			'((t (:foreground "Red")))
+			"Some text"
+			:group 'jiha-faces)
+		
+		(defface jiha-notice-me-face			
+			'((t (:foreground "salmon")))
+			"Some text"
+			:group 'jiha-faces)
+		
+		(defface jiha-warning-face 
+			'((t (:foreground "Orange")))
+			"Some text"
+			:group 'jiha-faces)
+		
+		(defface jiha-good-thing-face
+			'((t (:foreground "Green")))
+			"Some Text"
+			:group 'jiha-faces)
+		
+		; Face to tell that it should not be changed or can not be changed
+		(defface jiha-donotwrite-face
+			'((t (:foreground "Red")))
+			"Some Text"
+			:group 'jiha-faces)
+		
+		; Things that dont really exist, or not a file
+		(defface jiha-not-real-face 
+			'((t (:slant italic :group jiha-faces)))
+			"Some Text"
+			:group 'jiha-faces)
+		
+	#+end_src
+
+* Global Things
+*** Setup
+		
+		Some user information
+		#+begin_src emacs-lisp
+			(setq user-full-name "Jim Hansson")
+			(setq user-mail-address "jim.hansson@powel.se")		
+		#+end_src
+
+		Here we setup some basic things, I dont like the toolbar so that we
+		turn off, I use OrgMode to almost everything(even my .emacs) so
+		that will be my default mode. Almost all computers I use are
+		laptops and who in there right mind uses 12h clocks.
+
+		#+begin_src emacs-lisp
+			(setq default-major-mode 'org-mode)
+			(add-hook 'text-mode-hook 'turn-on-auto-fill)
+			;; show matching paren
+			(show-paren-mode t)
+			(iswitchb-mode 1)
+			(setq filesets-data nil)
+			(display-battery-mode)
+			(global-font-lock-mode t)
+			;; binds ctrl + § to dabbrev as good enough completion 
+			(global-set-key (kbd "C-\§") 'dabbrev-expand)
+			(setq-default indent-tabs-mode t)
+			(setq column-number-mode t)
+			(setq global-auto-revert-mode t)
+			(setq inhibit-startup-screen t)
+			(setq inhibit-splash-screen t)
+			(setq initial-buffer-choice t)
+			;; This stops calls to sync when saving files, this might save battery on laptops, I only
+			;; have SSD so that does not affect me so much. Setting might make it easier to loss data
+			;; also.
+			;;(write-region-inhibit-fsync t)
+		#+end_src
+
+*** Disable warnings for first time users
+		
+		For some reason some questions in emacs are yes/no and some are y/n
+		this trips me sometimes so we turn that off, and the same goes for
+		killing emacs. We also removes some questions that are asked to
+		make sure that the users really wants what is going to happen, I
+		know how to use undo and	I usually have some version control
+		system running so I can go back.
+
+		#+begin_src emacs-lisp
+			;; Changes all yes/no questions to y/n type
+			(fset 'yes-or-no-p 'y-or-n-p)
+			(set-variable 'confirm-kill-emacs 'yes-or-no-p)
+			;; more of these as I find them
+			(put 'narrow-to-region 'disabled nil)
+			(setq safe-local-variable-values 
+						(quote ((auto-fill-mode . t) (indent-tab-mode))))
+		#+end_src
+
+*** Uniquify                                               :uniquify:buffers:
+
+		Better naming of buffers so we can easly tell the differens between
+		buffers. Have some problem together with Iswitch
+
+		#+begin_src emacs-lisp
+			(require 'uniquify)
+			(setq uniquify-buffer-name-style (quote post-forward))
+		#+end_src
+
+*** Tool-Bar
+
+		#+begin_src emacs-lisp
+			(tool-bar-mode -1)
+		#+end_src
+
+*** Menu-Bar
+		
+		Good as it is.
+
+*** Mode-line                                                      :modeline:
+		
+		#+begin_src emacs-lisp
+			;; Things that modifies the modeline
+			(setq display-battery-mode t)
+			(setq display-time-24hr-format t)
+			;; I work width some really big files and then it is good to have this
+			;; so i know how far down I am.
+			(setq size-indication-mode t)
+		#+end_src
+
+*** Scrolling
+
+		#+begin_src emacs-lisp
+			;; This removes most of the jumping, but it might still jump.
+			
+			;; Allways want scroll-bars on right side.
+			(setq scroll-bar-mod 'right)
+			;;(setq scroll-bar-width ??)
+			
+			;; we don't want scroll margin when scrolling horizontal, because when we are editing
+			;; thing far out to the right, it should not jump until it needs to.
+			(setq vscroll-margin 7)
+			
+			;; Smoother scrolling, less jumping.
+			(setq scroll-step 1)
+			
+			;; This I don't know what it does.
+			(setq auto-window-vscroll nil)
+			
+			;; Mouse scroll
+			;; scroll one line at a time (less "jumpy" than defaults)
+			;; one line at a time
+			(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+			;; don't accelerate scrolling
+			(setq mouse-wheel-progressive-speed t)
+			;; scroll window under mouse
+			(setq mouse-wheel-follow-mouse 't)
+		#+end_src
+*** Midnight
+
+		Midnight mode is a package by SamSteingold? that comes with Emacs
+		for running configured actions at every “midnight”. By default,
+		the ‘midnight-hook’ is configured to just run the CleanBufferList
+		command. 
+
+		Run ‘M-x customize-group RET midnight RET’ to configure and easily
+		turn on Midnight mode. 
+
+		Many people choose to configure Midnight mode entirely in their
+		InitFile. That is how it will be explained below, since some
+		EmacsLisp bits are needed even with CustomMode?. 
+
+		To use Midnight mode, it needs to be included with ‘require’.
+
+		#+begin_src emacs-lisp
+			(require 'midnight)		 
+		#+end_src
+
+		It also needs to be enabled with the function ‘midnight-delay-set’
+		which also defines “midnight”.
+
+		#+begin_src emacs-lisp
+			;;(midnight-delay-set 'midnight-delay "4:30am")
+			;;Some people use the number of seconds after midnight:
+			(midnight-delay-set 'midnight-delay 16200) ;; (eq (* 4.5 60 60) "4:30am")
+		#+end_src
+
+		To add other actions to be run at midnight, add to the hook
+		‘midnight-hook’. 
+		
+		#+begin_example emacs-lisp
+			(add-hook 'midnight-hook (lambda
+													(with-current-buffer "*cvs*"
+					 (call-interactively 'cvs-update))))
+			(add-hook 'midnight-hook 'calendar)
+
+			;;You can disable midnight mode with ‘cancel-timer’.
+
+			(cancel-timer 'midnight-timer)
+		#+end_example
+
+		If you want to have “midnight” occur multiple times a day, you can
+		change the ‘midnight-period’ from 24 hours to something else. 
+
+		#+begin_example emacs-lisp
+			(setq midnight-period 7200) ;; (eq (* 2 60 60) "2 hours")		 
+		#+end_example
+		
+		As of 2009-10-02, DeskTop mode does not preserve the value of
+		‘buffer-display-time’ for buffers, so the buffer’s “age” is
+		effectively restarted. This means that buffers restored by a
+		Desktop sessions are considered “new” by CleanBufferList, even
+		though they may be considered “old”. 
+
+* Minor Modes
+
+	We configure the basics of minor modes first, before the majors
+	modes. in the major modes configuration we may adapt th minor modes
+	for that specific major mode, but here we have the general
+	configuration of the minor mode.
+	
+*** Auto-Fill
+		
+		#+begin_src emacs-lisp
+			(setq-default fill-column 90)
+			;; insert double space after colon
+			;;(setq-default colon-double-space t)
+			
+			;; You can control how emacs breaks lines when filling by adding functions to this hook,
+			;; If the function returns non-nil it will not break the line. the function get point as
+			;; argument.
+			;; (add-hook fill-nobreak-predicate fill-single-word-nobreak-p ...)
+		#+end_src
+
+*** Auto-Saving
+		
+		#+begin_src emacs-lisp
+			;; auto-save is a buffer-local minor mode, that means you can turn it on/off for the
+			;; specific file your are editing.
+			
+			;; This means that after 500 chars we will autosave, the normal here is 300 chars
+			(setq auto-save-interval 500)
+			;; after 90 seconds of idle time we will autosave, normal is 30 but I don't want it to run
+			;; just because I had to look something up in a mail.
+			(setq auto-save-timeout 90)
+			
+			;; there is also a hook you could use to do things before auto-saving is done.
+			;;(add-hook 'auto-save-hook ...)
+		#+end_src
+
+*** Fly-spell
+
+		My spelling is terrible so we use fly-spell as much as possible when
+		it is available. We turn it on for most text-modes and
+		flyspell-prog-mode for programming. 
+
+		I highly suggest setting ‘flyspell-issue-message-flag’ to nil, as
+		printing messages for every word (when checking the entire buffer)
+		causes an enormous slowdown. 
+
+		deactivated on windows at the moment until we have fixed cygwin
+		ispell or Aspell.
+		#+begin_src emacs-lisp
+			(if (eq system-type 'linux)
+					((when (require 'flyspell nil 'noerror)
+						 ;; activate flyspell for text-mode and derivatives
+						 ;;(dolist (hook '(text-mode-hook))
+						 ;;	 (add-hook hook (lambda () (flyspell-mode 1))))
+						 ;; this is how we remove it for a sub-mode
+						 ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+						 ;;	 (add-hook hook (lambda () (flyspell-mode -1))))
+						 )
+					
+					 (setq flyspell-issue-message-flag nil))
+				)
+		#+end_src
+		
+***** Fly-spell for comments when programming                        :coding:
+
+			#+begin_src emacs-lisp
+				;; Flyspell in C based programming modes
+				(add-hook 'c-mode-hook
+									(lambda ()
+										(flyspell-prog-mode)))
+				
+				;; Flyspell in C++ based programming modes
+				(add-hook 'c++-mode-hook
+									(lambda ()
+										(flyspell-prog-mode)))
+				
+				;; Flyspell in emacs-lisp mode
+				(add-hook 'lisp-mode-hook
+									(lambda ()
+										(flyspell-prog-mode)))
+			#+end_src
+
+***** TODO word-list for org-files.
+			
+			org-files contains some reserved words like #+begin_* ... these
+			should be included in some sort of wordlist we use. so we don't get
+			a lot of errors on those files.
+
+***** TODO don't use flyspell in src samples
+			
+			Or switch to flyspell-prog-mode somehow.
+
+***** TODO Avoid false positives
+
+			I recently started using flyspell and am enjoying its features. Is
+			there a way to disable flyspell for certain regexps? For instance,
+			I would like to disable flyspell when typing a url. Otherwise, when
+			entering a url such as
+			http://www.emacswiki.org/cgi-bin/emacs/FlySpell, www, emacswiki,
+			cgi and FlySpell are highlighted as errors. Any advice would be
+			greatly appreciated. – MattLundin 
+
+			There is only one way, using flyspell-generic-check-word-predicate
+			which should be a function. In such a function you can use thing at
+			point. 
+
+			However it is a bit difficult to manage this as this variable may
+			be only one function. I have submitted a patch to Emacs devel to
+			take care of this. 
+
+			Thanks for pointing me to the flyspell-generic-check-word-predicate
+			variable. – MattLundin
+
+***** TODO Windows
+			
+			we need to install cygwin and use aspell.
+			http://curiousprogrammer.wordpress.com/2009/04/25/flyspell-windows/
+
+***** TODO somehow use #+LANGUAGE in org to choose wordlist.
+***** Other flyspell things
+******* Change dictionaries
+
+		As I often need to switch between English and German I use this
+		function:
+
+		#+begin_example emacs-lisp
+			(defun fd-switch-dictionary()
+			(interactive)
+			(let* ((dic ispell-current-dictionary)
+			 (change (if (string= dic "deutsch8") "english" "deutsch8")))
+				(ispell-change-dictionary change)
+				(message "Dictionary switched from %s to %s" dic change)
+				))
+		
+			(global-set-key (kbd "<f8>")	 'fd-switch-dictionary)
+		#+end_example
+
+		I too cycle through different languages, but not all that is
+		available in the system. I use the following code inside my
+		.emacs. 
+
+		#+begin_example emacs-lisp
+		(let ((langs '("american" "francais" "brasileiro")))
+			(setq lang-ring (make-ring (length langs)))
+			(dolist (elem langs) (ring-insert lang-ring elem)))
+
+		(defun cycle-ispell-languages ()
+			(interactive)
+			(let ((lang (ring-ref lang-ring -1)))
+				(ring-insert lang-ring lang)
+				(ispell-change-dictionary lang)))
+
+		(global-set-key [f6] 'cycle-ispell-languages)
+		#+end_example
+
+		How can I ignore or add a word without using the popup menu?
+
+		Use flyspell-auto-correct-word.
+
+		This is not working for me. With flyspell-auto-correct-word I can
+		go through all suggestions for correction, but I do not get an
+		option to insert the word into my dictionary. Success in adding
+		new words into the personal dictionary.
+
+		I used “M x ispell-region”, and the words that ispell considered
+		having incorrect spellings were highlighted. The point moved to
+		the first “mis-spelled” word. By typing “i”, I inserted the word
+		into my personal dictionary. Later I found that the personal
+		dictionary was stored in the file $HOME/.aspell.en.pws in pure
+		text format. Although the word was added when I used “ispell”
+		instead of “flyspell”, but once added, flyspell also recognized
+		the word as having a correct spelling. :-) This information came
+		from the web page:
+		http://www.delorie.com/gnu/docs/emacs/emacs_109.html . Thanks! 
+
+		Easy Spell Check: key bindings and function to make
+		FlySpell/ispell/aspell easy to use w/ out a mouse 
+
+		Place the below code in your .emacs
+
+		F8 will call ispell (or aspell, etc) for the word the cursor is on
+		(or near). You can also use the built-in key binding
+		M-$. Ctrl-Shift-F8 enables/disables FlySpell for your current
+		buffer (highlights misspelled words as you type) Crtl-Meta-F8 runs
+		FlySpell on your current buffer (highlights all misspelled words
+		in the buffer) Ctrl-F8 calls ispell for the FlySpell highlighted
+		word prior to the cursor’s position Meta-F8 calls ispell for the
+		FlySpell highlighted word after the cursor’s position.
+
+		#+begin_example emacs-lisp
+			;; easy spell check
+			(global-set-key (kbd "<f8>") 'ispell-word)
+			(global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
+			(global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+			(global-set-key (kbd "C-<f8>") 'flyspell-check-previous-highlighted-word)
+			(defun flyspell-check-next-highlighted-word ()
+				"Custom function to spell check next highlighted word"
+				(interactive)
+				(flyspell-goto-next-error)
+				(ispell-word)
+				)
+			(global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
+#+end_example
+*** Fly-make
+***** Flymake Cursor
+
+			The normal operation of flymake allows the user to see the error
+			message for a particular line by “hovering” the mouse over the
+			line. This is inconvenient for people who try to use the keyboard
+			for all input. FlymakeCursor was designed to address that: it
+			displays the flymake error in the minibuffer region, when the
+			cursor is placed on a line containing a flymake error. 
+
+			This works in any language that flymake supports
+
+			#+begin_src emacs-lisp
+				(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
+			#+end_src
+		
+*** Whitespace
+
+		I use whitespace mode a lot, maybe because I dont have configured
+		the programming modes to "do the right thing" yet and some other
+		programmers around me are experts at leaving trailing whitespaces
+		and mixing tabs and spaces. <rant>the same persons ussally write
+		really long lines to, and have 8 levels of indentation in the same
+		method and uses indent depth of 4 or 8, I wonder how wide their
+		screens are.</rant>
+
+		#+begin_src emacs-lisp
+			;; whitespace-mode things
+			
+			;; less color in whitespace mode, The yellow and red is to distracting
+			(setq whitespace-style (quote (spaces tabs newline space-mark 
+																						tab-mark newline-mark)))
+			
+			;; make whitespace-mode use "" for newline and -> for tab.
+			;; together with the rest of its defaults
+			(setq whitespace-display-mappings
+						'(
+							(space-mark 32 [183] [46]) ; normal space, ·
+							(space-mark 160 [164] [95])
+							(space-mark 2208 [2212] [95])
+							(space-mark 2336 [2340] [95])
+							(space-mark 3616 [3620] [95])
+							(space-mark 3872 [3876] [95])
+							(newline-mark 10 [8629 10]) ; newlne
+							(tab-mark 9 [8677 9] [92 9]) ; tab
+							))
+			
+			;; My own whitespace cleanup function should be bound to something.
+			;; or used in some save-hook don't know how this work together with smart-tabs
+			(defun jiha-whitespace-cleanup ()
+				(interactive)
+				(let (whitespace-style (indentation::tab 
+																space-before-tab::tab
+																trailing))
+					(whitespace-cleanup-region)))
+		#+end_src
+
+*** Auto-complete
+
+		#+begin_src emacs-lisp
+			;; I should not need to add this to load path that should be
+			;; done by elpa magic.
+			(add-to-list 'load-path "~/.emacs.d/elpa/popup-0.5")
+			(add-to-list 'load-path "~/.emacs.d/elpa/auto-complete-1.4")
+			;;(require 'auto-complete)
+			;;(require 'auto-complete-config)
+			;;(add-to-list 'ac-dictionary-directories (concat local-emacs-org-dir 
+			;;																								"ac-dicts"))
+			;;(ac-config-default)
+			;;(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+			;;(ac-flyspell-workaround)
+		#+end_src
+
+*** Font-lock
+*** Hl-Line
+
+		Makes it easier to find current line i am on, it will highlight the current line if I
+		am inactive for 5 seconds and turn it of as soon as I start typing.
+
+		#+begin_src emacs-lisp
+			;; normal hl-line is not good enough, we need some more functions, this add that.
+			(when (require 'hl-line+ nil 'noerror)
+				(message "loaded hl-line+")
+				;; Only use hl-line when we are idle, as soon as I start typing it is removed and does
+				;; then not interfere with my other faces.
+				(toggle-hl-line-when-idle 1)
+			
+				;; we also needs to set an interval that tells us how long we need to idle before hl-line
+				;; turns on
+				(hl-line-when-idle-interval 5)
+			
+				;; I we need to remove hl-line for a specific mode, list them here.
+				;; (setq hl-line-inhibit-highlighting-for-modes)			
+			
+				(set-face-background hl-line-face "gray13")
+				(set-face-foreground hl-line-face "white")
+				)
+		#+end_src
+***** TODO fix face of hl-line so it does not interfer with other things.
+
+*** Electric pair, indent.... mode
+
+*** Show Paren
+		
+		It is a global mode but I want it buffer local so first we make it buffer local then
+		we setup a default that is off, then we will activate it in those major modes we want
+		it in.
+
+		then we add rainbow colors on nested parens
+
+		(require 'highlight-parentheses) is one
+		(require 'rainbow-delimiters) is another
+
+		advice it so it tells me what row matching paren is when it is off-screen.
+		#+begin_src emacs-lisp
+			;; Only works sometime
+			(defadvice show-paren-function
+				(after show-matching-paren-offscreen activate)
+				"If the matching paren is offscreen, show the matching line in the
+				echo area. Has no effect if the character before point is not of
+				the syntax class ')'."
+				(interactive)
+				(if (not (minibuffer-prompt))
+						(let ((matching-text nil))
+							;; Only call `blink-matching-open' if the character before point
+							;; is a close parentheses type character. Otherwise, there's not
+							;; really any point, and `blink-matching-open' would just echo
+							;; "Mismatched parentheses", which gets really annoying.
+							(if (char-equal (char-syntax (char-before (point))) ?\))
+									(setq matching-text (blink-matching-open)))
+							(if (not (null matching-text))
+									(message matching-text)))))
+
+		#+end_src
+
+***** TODO Activate it in those major modes we want it in.
+			- all programing-modes
+			- org-mode
+* Major Modes
+*** PLSQL
+		
+		#+begin_src emacs-lisp
+      (when (require 'plsql nil 'noerror) )
+		#+end_src
+*** SQL-mode
+***** Support Multiple connections
+
+			If you work with multiple connections, you need to rename them such that the next
+			sql-foo command creates a new SQL buffer instead of popping you to the existing
+			one. Use M-x sql-rename-buffer for that, or the SQL menu entry. To do it
+			autmatically, after every connection, use the following in your ~/.emacs file: 
+
+			#+begin_src emacs-lisp
+        (add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
+			#+end_src
+
+			Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
+			
+    	#+begin_example
+        connect vdb/vdb@vdbdev;     
+    	#+end_example
+
+			This does not set ‘sql-alternate-buffer-name’, so a subsequent renaming will not
+			produce a new name. Subsequent connections will also not provide the correct default
+			parameters. Here is an Oracle-specific solution, including an automatic renaming of
+			the buffer: 
+			
+			
+			#+begin_src emacs-lisp
+        (defun my-sql-connect-watch (line)
+          "Watch for connect statements and set variables accordingly.
+        Add this to `comint-input-filter-functions'."
+          (set-text-properties 0 (length line) nil line)
+          (when (string-match "connect \\([a-z_]+\\)/\\([a-z_]+\\)@\\([a-z_]+\\)" line)
+            (setq sql-user (match-string 1 line)
+                  sql-password (match-string 2 line)
+                  sql-database (match-string 3 line)
+                  sql-alternate-buffer-name (sql-make-alternate-buffer-name))
+            (sql-rename-buffer)))
+        (add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
+			#+end_src
+
+***** SQLPlus support
+
+			#+begin_src 
+			 (require 'sqlplus)
+			#+end_src
+***** Remove linenumbers from sqlplus output
+
+			SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
+			adds a line number to the beginning of the next line. This line number is not part
+			of the SQL command; it just allows you to refer to and edit specific lines in your
+			SQL command. SQL*Plus acts like the standard text editor. SQL*Plus is on the
+			TheTruePath. 
+
+			This may make SQL*Plus error reporting less comprehensible when using SqlMode. Here
+			is an example of the line number junk: 
+
+			#+begin_example
+        ...
+          2    3    4       from v$parameter p, all_tables u
+                  *
+        ERROR at line 2:
+        ORA-00942: table or view does not exist     
+			#+end_example
+			This only happens if you enter multi-line SQL statements by using C-j instead of RET
+			between lines (ie. using sql-accumulate-and-indent instead of comint-send-input). If
+			you enter SQL statements one at a time, you’ll be fine. 
+
+			The following elisp function must be added to comint-preoutput-filter-functions in
+			order to strip the line numbers junk from the output: 
+
+			#+begin_src emacs-lisp
+        (defun eat-sqlplus-junk (str)
+          "Eat the line numbers SQL*Plus returns.
+        Put this on `comint-preoutput-filter-functions' if you are
+        running SQL*Plus.
+        If the line numbers are not eaten, you get stuff like this:
+        ...
+          2    3    4       from v$parameter p, all_tables u
+                  *
+        ERROR at line 2:
+        ORA-00942: table or view does not exist
+        The mismatch is very annoying."
+          (interactive "s")
+          (while (string-match " [ 1-9][0-9]  " str)
+            (setq str (replace-match "" nil nil str)))
+          str)
+			#+end_src
+			Test it by evaluating the following expression:
+
+			#+begin_example
+        (string= "     from" (eat-sqlplus-junk "  2    3    4       from"))
+			#+end_example
+
+			Install it by adding the following expression to your .emacs; it will check wether
+			the iSQL mode you have just started is indeed running SQL*Plus, and if it is, it
+			will add eat-sqlplus-junk to comint-preoutput-filter-functions. 
+
+			#+begin_src emacs-lisp
+        (defun install-eat-sqlplus-junk ()
+          "Install `comint-preoutput-filter-functions' if appropriate.
+            Add this function to `sql-interactive-mode-hook' in your .emacs:
+            \(add-hook 'sql-mode-hook 'install-eat-sqlplus-junk)"
+          (if (string= (car (process-command (get-buffer-process sql-buffer)))
+                       sql-oracle-program)
+              (add-to-list 'comint-preoutput-filter-functions
+                           'eat-sqlplus-junk)))
+
+        (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
+			#+end_src
+***** DONE Placeholder support in sql querys
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
+			CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
+			:END:
+
+			#+begin_src emacs-lisp
+        (eval-after-load "sql"
+          '(load-library "sql-with-placeholders"))
+        (add-hook 'sql-mode-hook (lambda nil
+                                   (local-set-key [(control c) (control b)] 
+                                                  'sql-send-buffer-with-placeholders)
+                                   (local-set-key [(control c) (control c)] 
+                                                  'sql-send-paragraph-with-placeholders)
+                                   (local-set-key [(control c) (control r)] 
+                                                  'sql-send-region-with-placeholders)))
+        
+			#+end_src
+***** TODO need to test all this to see if it works.
+*** nXML
+		:LOGBOOK:
+		CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 13:23] =>  1:15
+		:END:
+
+		#+begin_src emacs-lisp      
+      ;;(add-to-list 'rng-schema-locating-files
+      ;;             (concat local-emacs-org-dir "xml-schemas/schemas.xml"))
+		#+end_src
+***** DONE add local directory for storing extra schemsa
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-17 sö 13:23]
+			:END:
+***** TODO Schema for soap and wsdl
+***** TODO support validation
+			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
+***** Tools used for convertering to RelaxNG
+			- http://debeissat.nicolas.free.fr/XSDtoRNG.php :: can be used to convert from XSD
+           to RelaxNG that nXML uses, web-based
+			- https://code.google.com/p/jing-trang/ :: also a tool for converting between
+					 RelaxNG and other formats, you need java installed, commandline.
+					 #+begin_example
+             #>java -jar tranq.jar
+             usage: java com.thaiopensource.relaxng.translate.Driver [-C catalogFileOrUri] [-
+             I rng|rnc|dtd|xml] [-O rng|rnc|dtd|xsd] [-i input-param] [-o output-param] input
+             FileOrUri ... outputFile
+					 #+end_example
+***** links
+			- howto specify things in schemas.xml ::
+           http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
 
 * Iswitch Buffers                                                   :buffers:
 
-  To prevent certain buffers from showing up in the completion list,
-  set 'iswitchb-buffer-ignore': (setq iswitchb-buffer-ignore '("^ "
-  "*Buffer")) This one is useful if you want to lose the *...*
-  special buffers from the list. It's helpful if you're using the
-  JDEE for editing Java apps, as you end up with buffers named
-  org.whatever.package.Class which you might want to eliminate: (setq
-  iswitchb-buffer-ignore '("^\\*")) To prevent switching to another
-  frame, you can add the following to your configuration: (setq
-  iswitchb-default-method 'samewindow)
+	To prevent certain buffers from showing up in the completion list,
+	set 'iswitchb-buffer-ignore': (setq iswitchb-buffer-ignore '("^ "
+	"*Buffer")) This one is useful if you want to lose the *...*
+	special buffers from the list. It's helpful if you're using the
+	JDEE for editing Java apps, as you end up with buffers named
+	org.whatever.package.Class which you might want to eliminate: (setq
+	iswitchb-buffer-ignore '("^\\*")) To prevent switching to another
+	frame, you can add the following to your configuration: (setq
+	iswitchb-default-method 'samewindow)
 
-  #+begin_src emacs-lisp
-    (iswitchb-mode 1)
-    ;; rebind the normal key for buffer list to ibuffer
-    (global-set-key (kbd "C-x C-b") 'ibuffer)
-    (setq ibuffer-expert t)
-    (setq ibuffer-show-empty-filter-groups nil)
-    (setq iswitchb-default-method 'samewindow)
-    ;; in your .emacs will allow left/right artist--arrow key navigation of the
-    ;; buffer list, and deactivate up/down in iswitchb. Note that you
-    ;; can by default use C-s and C-r to do this.  If the
-    ;; below fails with "define-key: Symbol's function definition is
-    ;; void: edmacro-parse-keys" you need to load the package defining
-    ;; edmacro with (require 'edmacro).
-    (defun iswitchb-local-keys ()
-      (mapc (lambda (K) 
-              (let* ((key (car K)) (fun (cdr K)))
-                (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
-            '(("<right>" . iswitchb-next-match)
-              ("<left>"  . iswitchb-prev-match)
-              ("<up>"    . ignore             )
-              ("<down>"  . ignore             ))))
-    (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
-  #+end_src
-  
-  #+begin_src emacs-lisp
-    (setq ibuffer-saved-filter-groups
-          '(("home"
-             ("Emacs" (or (filename . ".emacs.d")
-                          (filename . "emacs.org")
-                          (filename . ".emacs")))
-             ("Org" (or (filename . ".org")
-                        (filename . "OrgMode")
-                        (name . "*Org Agenda*")
-                        (name . "diary")))
-             ("code" (or (mode . csharp-mode)
-                         (mode . c++-mode)
-                         (mode . lisp-mode)))
-             ("Web Dev" (or (mode . html-mode)
-                            (mode . css-mode)))
-             ("SQL" (or (filename . ".plb")
-                        (filename . ".sql")
-                        (mode . sqli-mode)
-                        (name . "*SQL*")))
-             ("VC" (or (name . "\*svn")
-                       (name . "\*magit")))
-             ("ERC" (or (mode . erc-mode)
-                        (mode . erc-list-mode)))
-             ("gnus" (or
-                      (mode . message-mode)
-                      (mode . bbdb-mode)
-                      (mode . mail-mode)
-                      (mode . gnus-group-mode)
-                      (mode . gnus-summary-mode)
-                      (mode . gnus-article-mode)
-                      (name . "^\\.bbdb$")
-                      (name . "^\\.newsrc-dribble")))
-             ("Help" (or (name . "\*Help\*")
-                         (name . "\*Apropos\*")
-                         (name . "\*info\*"))))))
-   #+end_src
-
-   #+begin_src emacs-lisp
-        (add-hook 'ibuffer-mode-hook 
-                  '(lambda ()
-                     (ibuffer-auto-mode 1)
-                     (ibuffer-switch-to-saved-filter-groups "home")))
-        
-        ;; Switching to ibuffer puts the cursor on the most recent buffer
-        (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
-          "Open ibuffer with cursor pointed to most recent buffer name"
-          (let ((recent-buffer-name (buffer-name)))
-            ad-do-it
-            (ibuffer-jump-to-buffer recent-buffer-name)))
-        (ad-activate 'ibuffer)
-        
-        
-        (setq ibuffer-formats
-              '((mark modified read-only " "
-                      (name 25 25 :left :elide) " "
-                      (size 9 -1 :right) " "
-                      (mode 16 16 :left :elide) " " filename-and-process)
-                (mark " " (name 16 -1) " " filename)))
-    
-     
-    (defun switch-buffers-between-frames ()
-      "switch-buffers-between-frames switches the buffers between the two last frames"
-      (interactive)
-      (let ((this-frame-buffer nil)
-            (other-frame-buffer nil))
-        (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
-        (other-frame 1)
-        (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
-        (switch-to-buffer this-frame-buffer)
-        (other-frame 1)
-        (switch-to-buffer other-frame-buffer))) 
-  #+end_src
+	#+begin_src emacs-lisp
+		(iswitchb-mode 1)
+		;; rebind the normal key for buffer list to ibuffer
+		(global-set-key (kbd "C-x C-b") 'ibuffer)
+		(setq ibuffer-expert t)
+		(setq ibuffer-show-empty-filter-groups nil)
+		(setq iswitchb-default-method 'samewindow)
+		;; in your .emacs will allow left/right artist--arrow key navigation of the
+		;; buffer list, and deactivate up/down in iswitchb. Note that you
+		;; can by default use C-s and C-r to do this.	 If the
+		;; below fails with "define-key: Symbol's function definition is
+		;; void: edmacro-parse-keys" you need to load the package defining
+		;; edmacro with (require 'edmacro).
+		(defun iswitchb-local-keys ()
+			(mapc (lambda (K) 
+							(let* ((key (car K)) (fun (cdr K)))
+								(define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
+						'(("<right>" . iswitchb-next-match)
+							("<left>"	 . iswitchb-prev-match)
+							("<up>"		 . ignore							)
+							("<down>"	 . ignore							))))
+		(add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
+	#+end_src
+	
+	#+begin_src emacs-lisp
+		(setq ibuffer-saved-filter-groups
+					'(("home"
+						 ("Emacs" (or (filename . ".emacs.d")
+													(filename . "emacs.org")
+													(filename . ".emacs")))
+						 ("Org" (or (filename . ".org")
+												(filename . "OrgMode")
+												(name . "*Org Agenda*")
+												(name . "diary")))
+						 ("code" (or (mode . csharp-mode)
+												 (mode . c++-mode)
+												 (mode . lisp-mode)
+												 (mode . c-mode)))
+						 ("Web Dev" (or (mode . html-mode)
+														(mode . css-mode)))
+						 ("SQL" (or (filename . ".plb")
+												(filename . ".sql")
+												(mode . sqli-mode)
+												(name . "*SQL*")))
+						 ("VC" (or (name . "\*svn")
+											 (name . "\*magit")))
+						 ("ERC" (or (mode . erc-mode)
+												(mode . erc-list-mode)))
+						 ("gnus" (or
+											(mode . message-mode)
+											(mode . bbdb-mode)
+											(mode . mail-mode)
+											(mode . gnus-group-mode)
+											(mode . gnus-summary-mode)
+											(mode . gnus-article-mode)
+											(name . "^\\.bbdb$")
+											(name . "^\\.newsrc-dribble")))
+						 ("Help" (or (name . "\*Help\*")
+												 (name . "\*Apropos\*")
+												 (name . "\*info\*"))))))
+	 #+end_src
+	
+	#+begin_src emacs-lisp
+		(add-hook 'ibuffer-mode-hook 
+							'(lambda ()
+								 (ibuffer-auto-mode 1)
+								 (ibuffer-switch-to-saved-filter-groups "home")))
+		
+		;; Switching to ibuffer puts the cursor on the most recent buffer
+		(defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+			"Open ibuffer with cursor pointed to most recent buffer name"
+			(let ((recent-buffer-name (buffer-name)))
+				ad-do-it
+				(ibuffer-jump-to-buffer recent-buffer-name)))
+		(ad-activate 'ibuffer)
+		
+		
+		(setq ibuffer-formats
+					'((mark modified read-only " "
+									(name 25 25 :left :elide) " "
+									(size 9 -1 :right) " "
+									(mode 16 16 :left :elide) " " filename-and-process)
+						(mark " " (name 16 -1) " " filename)))
+		
+		
+		(defun switch-buffers-between-frames ()
+			"switch-buffers-between-frames switches the buffers between the two last frames"
+			(interactive)
+			(let ((this-frame-buffer nil)
+						(other-frame-buffer nil))
+				(setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
+				(other-frame 1)
+				(setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
+				(switch-to-buffer this-frame-buffer)
+				(other-frame 1)
+				(switch-to-buffer other-frame-buffer))) 
+	#+end_src
 
 *** Colours in buffer list                                            :faces:
 
-    #+begin_src emacs-lisp
-      ; coloring
-        
-      ; these are the the standard faces used but with new names so we can
-      ; change them in a simple way.
-      (defface jiha-ibuffer-readonly-face 
-        '((t (:inherit  (jiha-donotwrite-face font-lock-constant-face))))
-        "Some Text"
-        :group 'jiha-faces)
-      (defface jiha-ibuffer-compressed-file-name-regex-face 
-        '((t (:inherit font-lock-doc-face)))
-        "Some Text"
-        :group 'jiha-faces)
-      (defface jiha-ibuffer-dired-mode-face 
-        '((t (:inherit font-lock-function-name-face)))
-        "Some Text"
-        :group 'jiha-faces)
-      (defface jiha-ibuffer-help-modes-face 
-        '((t (:inherit font-lock-comment-face)))
-        "Some Text"
-        :group 'jiha-faces)
-      (defface jiha-ibuffer-some-weird-face 
-        '((t (:slant italic)))
-        "Some Text"
-        :group 'jiha-faces)
-      
-      ; format of the list is priority, condition, face
-      ; highest priority wins
-      ;;(setq 'ibuffer-fontification-alist
-      ;;      '(10 (Form)
-      ;;           (face)))                 
-      
-    #+end_src
-*** Iswitch and uniquify compatibility                              :uniquify:
+		#+begin_src emacs-lisp
+			; coloring
+				
+			; these are the the standard faces used but with new names so we can
+			; change them in a simple way.
+			(defface jiha-ibuffer-readonly-face 
+				'((t (:inherit	(jiha-donotwrite-face font-lock-constant-face))))
+				"Some Text"
+				:group 'jiha-faces)
+			(defface jiha-ibuffer-compressed-file-name-regex-face 
+				'((t (:inherit font-lock-doc-face)))
+				"Some Text"
+				:group 'jiha-faces)
+			(defface jiha-ibuffer-dired-mode-face 
+				'((t (:inherit font-lock-function-name-face)))
+				"Some Text"
+				:group 'jiha-faces)
+			(defface jiha-ibuffer-help-modes-face 
+				'((t (:inherit font-lock-comment-face)))
+				"Some Text"
+				:group 'jiha-faces)
+			(defface jiha-ibuffer-some-weird-face 
+				'((t (:slant italic)))
+				"Some Text"
+				:group 'jiha-faces)
+			
+			; format of the list is priority, condition, face
+			; highest priority wins
+			;;(setq 'ibuffer-fontification-alist
+			;;			'(10 (Form)
+			;;					 (face)))									
+			
+		#+end_src
+*** Iswitch and uniquify compatibility                             :uniquify:
 
-    The library uniquify overrides Emacs default mechanism for making
-    buffer names unique (using suffixes like <2>, <3> etc.) with a
-    more sensible behaviour which use parts of the file names to make
-    the buffer names distinguishable.  Additionally one can configure
-    uniquify to rework the buffer names whenever a buffer is
-    killed. This feature does not play well with IswitchBuffers
-    function iswitchb-kill-buffer, bound to C-k. The following code
-    instructs iswitchb-kill-buffer to update the buffer list after
-    killing a buffer, so that a possible buffer renaming by uniquify
-    is taken in account.
+		The library uniquify overrides Emacs default mechanism for making
+		buffer names unique (using suffixes like <2>, <3> etc.) with a
+		more sensible behaviour which use parts of the file names to make
+		the buffer names distinguishable.	 Additionally one can configure
+		uniquify to rework the buffer names whenever a buffer is
+		killed. This feature does not play well with IswitchBuffers
+		function iswitchb-kill-buffer, bound to C-k. The following code
+		instructs iswitchb-kill-buffer to update the buffer list after
+		killing a buffer, so that a possible buffer renaming by uniquify
+		is taken in account.
 
-    #+begin_src emacs-lisp
-      (defadvice iswitchb-kill-buffer (after rescan-after-kill activate)
-        "*Regenerate the list of matching buffer names after a kill.
-      Nextcessary if using `uniquify' with `uniquify-after-kill-buffer-p'
-      set to non-nil."
-        (setq iswitchb-buflist iswitchb-matches)
-        (iswitchb-rescan))
-      
-      (defun iswitchb-rescan ()
-        "*Regenerate the list of matching buffer names."
-        (interactive)
-        (iswitchb-make-buflist iswitchb-default)
-        (setq iswitchb-rescan t))
-    #+end_src
+		#+begin_src emacs-lisp
+			(defadvice iswitchb-kill-buffer (after rescan-after-kill activate)
+				"*Regenerate the list of matching buffer names after a kill.
+			Nextcessary if using `uniquify' with `uniquify-after-kill-buffer-p'
+			set to non-nil."
+				(setq iswitchb-buflist iswitchb-matches)
+				(iswitchb-rescan))
+			
+			(defun iswitchb-rescan ()
+				"*Regenerate the list of matching buffer names."
+				(interactive)
+				(iswitchb-make-buflist iswitchb-default)
+				(setq iswitchb-rescan t))
+		#+end_src
 
 *** More Iswitch things that I don't use at the moment
-    http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
+		http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
 ***** Keybindings
 
-      Something most IswitchBuffers users aren't aware of is that you
-      can hit C-k to kill the currently selected buffer.
+			Something most IswitchBuffers users aren't aware of is that you
+			can hit C-k to kill the currently selected buffer.
 
 ***** Using Iswitch-Buffer Programmatically
-      
-      From: KinCho
-      Subject: my-icompleting-read
-      Newsgroups: gnu.emacs.sources
-      Date: Tue, 09 Oct 2001 16:28:18 GMT
-      
-      I used iswitchb for a while and really liked it. I began to
-      explore to see if I can borrow iswitchb to make my scripts work
-      like iswitchb as well. Well, it turned out iswitchb is coded in a
-      way that makdes it really easy to borrow it to do regex-style
-      completing-read: 
+			
+			From: KinCho
+			Subject: my-icompleting-read
+			Newsgroups: gnu.emacs.sources
+			Date: Tue, 09 Oct 2001 16:28:18 GMT
+			
+			I used iswitchb for a while and really liked it. I began to
+			explore to see if I can borrow iswitchb to make my scripts work
+			like iswitchb as well. Well, it turned out iswitchb is coded in a
+			way that makdes it really easy to borrow it to do regex-style
+			completing-read: 
 
-      #+begin_example emacs-lisp
-      (defun my-icompleting-read(prompt choices)
-      (let ((iswitchb-make-buflist-hook
-      (lambda ()
-      (setq iswitchb-temp-buflist choices))))
-      (iswitchb-read-buffer prompt)))
-      #+end_example
+			#+begin_example emacs-lisp
+			(defun my-icompleting-read(prompt choices)
+			(let ((iswitchb-make-buflist-hook
+			(lambda ()
+			(setq iswitchb-temp-buflist choices))))
+			(iswitchb-read-buffer prompt)))
+			#+end_example
 
-      Another example. Two things. "nil t" to iswitchb-read-buffer
-      requires a choice from the given list with no default. Using an
-      flet is a way to work when there's no hook variable. There is a
-      hook variable. 
+			Another example. Two things. "nil t" to iswitchb-read-buffer
+			requires a choice from the given list with no default. Using an
+			flet is a way to work when there's no hook variable. There is a
+			hook variable. 
 
-      #+begin_example emacs-lisp
-      (defvar interesting  (regexp-opt '(".c" ".h" "etc.")))
-      (defvar some-directory "/home/somewhere/etc/")
+			#+begin_example emacs-lisp
+			(defvar interesting	 (regexp-opt '(".c" ".h" "etc.")))
+			(defvar some-directory "/home/somewhere/etc/")
 
-      ;; Making this more flexible is an exercise for the reader
-      (defun find-a-file (arg &optional non-selective)
-      "Select files using substrings."
-      (interactive "sFile: ")
-      (let ((dir (expand-file-name some-directory))
-      candidates)
-      (flet ((file-match (file)
-      (if non-selective
-      (string-match arg file)
-      (and
-      (string-match interesting file)
-      (string-match arg file)))))
-      (setq candidates (delq nil (loop for file in (directory-files dir)
-      collect (if (file-match file) file)))))
-      (cond
-      ((eq (length candidates) 1)
-      (find-file (format "%s%s" dir (car candidates))))
-      ((eq (length candidates) 0)
-      (if non-selective
-      (message "No such file!")
-      (find-a-file arg t)))
-        (t
-        (flet ((iswitchb-make-buflist (default)
-        (setq iswitchb-buflist candidates)))
-        (find-file (format 
-        "%s%s" dir
-        (iswitchb-read-buffer "File: " nil t))))))))
-      #+end_example
-        
-      I'm quite new to iswitchb. I've been after eliminating the need to
-      confirm (with TAB or ret) the last left possibility. 
-        
-      I've started with this simple hack, which only displays the
-      desired buffer, but in this way, i don't need to look at the
-      minibuffer (in some cases). 
-      
-      #+begin_example emacs-lisp
-      (defun iswitchb-post-command ()
-      "Run after command in 'iswitchb-buffer'."
-      (iswitchb-exhibit)
-      (if (= (length iswitchb-matches) 1)
-      (display-buffer (car iswitchb-matches))))
-      #+end_example
-      
-      another thing i like, is to have the freedom to decide to open the
-      buffer in other-window/frame after i made the selection: Hence a
-      new minibuffer exiting command: 
-      
-      #+begin_example emacs-lisp
-      (defun iswitchb-select-buffer-other-window ()
-      "Select the buffer named by the prompt. But in another window."
-      (interactive)
-      (setq iswitchb-method 'otherwindow)
-      (exit-minibuffer))
-      #+end_example
-      
-      The functionality of iswitchb can also be used to provide a
-      replacement for the usual behaviour of find-file. Instead of
-      hitting Tab to bring up a buffer listing the possible file
-      completions, a list of file completions is continuously updated in
-      the minibuffer: 
-      
-      #+begin_example emacs-lisp
-      (defun exd-find-file ()
-      "Use functionality from `iswitchb' as a replacement for `find-file'"
-      (interactive)
-      (find-file (exd-iswitchb-find-file "." (directory-files "."))))
-      
-      (defun exd-iswitchb-find-file (dir file-list)
-      "Use functionality from `iswitchb' to select a file for `find-file'.
-      If a directory is selected, enter that directory and generate a new
-      list from which to select a file."
-      ;; sort the file list into directories first
-      (setq file-list
-      (sort file-list
-      (lambda (elt-1 elt-2)
-      (and (file-directory-p (concat dir "/" elt-1))
-      (not (file-directory-p (concat dir "/" elt-2)))))))
-      ;; use iswitchb for minibuffer file list/completion magic
-      (let* (resize-mini-windows
-      (iswitchb-make-buflist-hook
-      (lambda ()
-      (setq iswitchb-temp-buflist file-list)))
-      ;; get the selected file
-      (selected-file (concat dir "/" (iswitchb-read-buffer
-      (concat "Find File: "
-      (expand-file-name dir)
-      "/")))))
-      ;; if the selected file is a directory, recurse, else return file
-      (if (file-directory-p selected-file)
-      (exd-iswitchb-find-file selected-file (directory-files selected-file))
-      selected-file)))
-      #+end_example
-      
-      See Also:
-      
-      Icicles, and command 'icicle-buffer', which is similar to
-      'iswitchb-buffer' but provides some additional features. Also,
-      Icicles treats all types of minibuffer input the same way:
-      filenames, buffer names, commands, variables...everything. And it
-      lets you use a regexp to match completions, if you like. 
-      InteractivelyDoThings (ido), which implements regex selection for
-      files, directory buffers etc...
+			;; Making this more flexible is an exercise for the reader
+			(defun find-a-file (arg &optional non-selective)
+			"Select files using substrings."
+			(interactive "sFile: ")
+			(let ((dir (expand-file-name some-directory))
+			candidates)
+			(flet ((file-match (file)
+			(if non-selective
+			(string-match arg file)
+			(and
+			(string-match interesting file)
+			(string-match arg file)))))
+			(setq candidates (delq nil (loop for file in (directory-files dir)
+			collect (if (file-match file) file)))))
+			(cond
+			((eq (length candidates) 1)
+			(find-file (format "%s%s" dir (car candidates))))
+			((eq (length candidates) 0)
+			(if non-selective
+			(message "No such file!")
+			(find-a-file arg t)))
+				(t
+				(flet ((iswitchb-make-buflist (default)
+				(setq iswitchb-buflist candidates)))
+				(find-file (format 
+				"%s%s" dir
+				(iswitchb-read-buffer "File: " nil t))))))))
+			#+end_example
+				
+			I'm quite new to iswitchb. I've been after eliminating the need to
+			confirm (with TAB or ret) the last left possibility. 
+				
+			I've started with this simple hack, which only displays the
+			desired buffer, but in this way, i don't need to look at the
+			minibuffer (in some cases). 
+			
+			#+begin_example emacs-lisp
+			(defun iswitchb-post-command ()
+			"Run after command in 'iswitchb-buffer'."
+			(iswitchb-exhibit)
+			(if (= (length iswitchb-matches) 1)
+			(display-buffer (car iswitchb-matches))))
+			#+end_example
+			
+			another thing i like, is to have the freedom to decide to open the
+			buffer in other-window/frame after i made the selection: Hence a
+			new minibuffer exiting command: 
+			
+			#+begin_example emacs-lisp
+			(defun iswitchb-select-buffer-other-window ()
+			"Select the buffer named by the prompt. But in another window."
+			(interactive)
+			(setq iswitchb-method 'otherwindow)
+			(exit-minibuffer))
+			#+end_example
+			
+			The functionality of iswitchb can also be used to provide a
+			replacement for the usual behaviour of find-file. Instead of
+			hitting Tab to bring up a buffer listing the possible file
+			completions, a list of file completions is continuously updated in
+			the minibuffer: 
+			
+			#+begin_example emacs-lisp
+			(defun exd-find-file ()
+			"Use functionality from `iswitchb' as a replacement for `find-file'"
+			(interactive)
+			(find-file (exd-iswitchb-find-file "." (directory-files "."))))
+			
+			(defun exd-iswitchb-find-file (dir file-list)
+			"Use functionality from `iswitchb' to select a file for `find-file'.
+			If a directory is selected, enter that directory and generate a new
+			list from which to select a file."
+			;; sort the file list into directories first
+			(setq file-list
+			(sort file-list
+			(lambda (elt-1 elt-2)
+			(and (file-directory-p (concat dir "/" elt-1))
+			(not (file-directory-p (concat dir "/" elt-2)))))))
+			;; use iswitchb for minibuffer file list/completion magic
+			(let* (resize-mini-windows
+			(iswitchb-make-buflist-hook
+			(lambda ()
+			(setq iswitchb-temp-buflist file-list)))
+			;; get the selected file
+			(selected-file (concat dir "/" (iswitchb-read-buffer
+			(concat "Find File: "
+			(expand-file-name dir)
+			"/")))))
+			;; if the selected file is a directory, recurse, else return file
+			(if (file-directory-p selected-file)
+			(exd-iswitchb-find-file selected-file (directory-files selected-file))
+			selected-file)))
+			#+end_example
+			
+			See Also:
+			
+			Icicles, and command 'icicle-buffer', which is similar to
+			'iswitchb-buffer' but provides some additional features. Also,
+			Icicles treats all types of minibuffer input the same way:
+			filenames, buffer names, commands, variables...everything. And it
+			lets you use a regexp to match completions, if you like. 
+			InteractivelyDoThings (ido), which implements regex selection for
+			files, directory buffers etc...
 
 * Buffer Menu
 *** TODO Font lock                                                 :fontlock:
 
-    If you use ElectricBufferList, then simply use this instead for the
-    last line:
-    (add-hook 'electric-buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
-    
-    need to put the right colors on this.
-    #+begin_src emacs-lisp
-      (setq buffer-menu-buffer-font-lock-keywords
-            '(("^....[*]Man .*Man.*"   . font-lock-variable-name-face) ;Man page
-              (".*Dired.*"             . font-lock-comment-face)       ; Dired
-              ("^....[*]shell.*"       . font-lock-preprocessor-face)  ; shell buff
-              (".*[*]scratch[*].*"     . font-lock-function-name-face) ; scratch buffer
-              ("^....[*].*"            . font-lock-string-face)        ; "*" named buffers
-              ("^..[*].*"              . font-lock-constant-face)      ; Modified
-              ("^.[%].*"               . font-lock-keyword-face)))     ; Read only
-      
-      (defun buffer-menu-custom-font-lock  ()
-        (let ((font-lock-unfontify-region-function
-               (lambda (start end)
-                 (remove-text-properties start end '(font-lock-face nil)))))
-          (font-lock-unfontify-buffer)
-          (set (make-local-variable 'font-lock-defaults)
-               '(buffer-menu-buffer-font-lock-keywords t))
-          (font-lock-fontify-buffer)))
-      
-      (add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
-     #+end_src
+		If you use ElectricBufferList, then simply use this instead for the
+		last line:
+		(add-hook 'electric-buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
+		
+		need to put the right colors on this.
+		#+begin_src emacs-lisp
+			(setq buffer-menu-buffer-font-lock-keywords
+						'(("^....[*]Man .*Man.*"	 . font-lock-variable-name-face) ;Man page
+							(".*Dired.*"						 . font-lock-comment-face)			 ; Dired
+							("^....[*]shell.*"			 . font-lock-preprocessor-face)	 ; shell buff
+							(".*[*]scratch[*].*"		 . font-lock-function-name-face) ; scratch buffer
+							("^....[*].*"						 . font-lock-string-face)				 ; "*" named buffers
+							("^..[*].*"							 . font-lock-constant-face)			 ; Modified
+							("^.[%].*"							 . font-lock-keyword-face)))		 ; Read only
+			
+			(defun buffer-menu-custom-font-lock	 ()
+				(let ((font-lock-unfontify-region-function
+							 (lambda (start end)
+								 (remove-text-properties start end '(font-lock-face nil)))))
+					(font-lock-unfontify-buffer)
+					(set (make-local-variable 'font-lock-defaults)
+							 '(buffer-menu-buffer-font-lock-keywords t))
+					(font-lock-fontify-buffer)))
+			
+			(add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
+		 #+end_src
 
-* TODO Coding
-  
+* TODO Coding  
   Here I will place everything that has todo with coding
 
 *** Flymake
@@ -623,405 +1205,422 @@ that I share between work and home
     check out [[wiki:IndentingC#toc2][emacswiki on indenting]]
 ***** Microsoft C & C++ style
 
-      Here is a style that pretty much matches the observed style of
-      Microsoft (R)'s C and C++ code.
+			Here is a style that pretty much matches the observed style of
+			Microsoft (R)'s C and C++ code.
 
-      #+begin_src emacs-lisp
-        (c-add-style "microsoft"
-                     '("stroustrup"
-                       (c-offsets-alist
-                        (innamespace . -)
-                        (inline-open . 0)
-                        (inher-cont . c-lineup-multi-inher)
-                        (arglist-cont-nonempty . +)
-                        (template-args-cont . +))))
-        
-      #+end_src
+			#+begin_src emacs-lisp
+				(c-add-style "microsoft"
+										 '("stroustrup"
+											 (c-offsets-alist
+												(innamespace . -)
+												(inline-open . 0)
+												(inher-cont . c-lineup-multi-inher)
+												(arglist-cont-nonempty . +)
+												(template-args-cont . +))))
+				
+			#+end_src
 
 ***** OpenBSD style
 
-      Style for OpenBSD? source code, also valid for OpenSSH? and other
-      BSD based OSs source.
+			Style for OpenBSD? source code, also valid for OpenSSH? and other
+			BSD based OSs source.
 
-      #+begin_src emacs-lisp
-        (c-add-style "openbsd"
-                     '("bsd"
-                       (indent-tabs-mode . t)
-                       (defun-block-intro . 8)
-                       (statement-block-intro . 8)
-                       (statement-case-intro . 8)
-                       (substatement-open . 4)
-                       (substatement . 8)
-                       (arglist-cont-nonempty . 4)
-                       (inclass . 8)
-                       (knr-argdecl-intro . 8)))
-      #+end_src
+			#+begin_src emacs-lisp
+				(c-add-style "openbsd"
+										 '("bsd"
+											 (indent-tabs-mode . t)
+											 (defun-block-intro . 8)
+											 (statement-block-intro . 8)
+											 (statement-case-intro . 8)
+											 (substatement-open . 4)
+											 (substatement . 8)
+											 (arglist-cont-nonempty . 4)
+											 (inclass . 8)
+											 (knr-argdecl-intro . 8)))
+			#+end_src
 ***** Google C++ Style
 
-      This is the C++ style that I personaly finds to be best.
+			This is the C++ style that I personaly finds to be best.
 
-      #+begin_src emacs-lisp
-        (require 'google-c-style nil 'noerror)
-      #+end_src
+			#+begin_src emacs-lisp
+				(require 'google-c-style nil 'noerror)
+			#+end_src
 
 *** Visual Studio Integration
 
-    Integration with VS, We have aseperate file with commands to tell
-    visual studio to do things. at the moment we only have to commands
-    but it should be simple to extend it with others.
+		Integration with VS, We have aseperate file with commands to tell
+		visual studio to do things. at the moment we only have to commands
+		but it should be simple to extend it with others.
 
-    #+begin_src emacs-lisp
-      ;; only on windows to save startup-time
-      (if (eq system-type 'windows-nt)
-          '((org-babel-load-file (concat local-emacs-org-dir "devenv-tricks.org"))
-           ;; Now in those mode where it might be useful do something like
-           ;; (global-set-key [f9] 'devenv-toggle-breakpoint)
-           ;; (global-set-key [f5] 'devenv-debug)
-          (global-set-key [f3] 'devenv-switch-to-devenv)))
-    #+end_src
+		This only work with VS 2008 and NOT with 2010.
+		#+begin_src emacs-lisp
+			;; only on windows to save startup-time
+			(if (eq system-type 'windows-nt)
+					'((org-babel-load-file (concat local-emacs-org-dir "devenv-tricks.org"))
+					 ;; Now in those mode where it might be useful do something like
+					 ;; (global-set-key [f9] 'devenv-toggle-breakpoint)
+					 ;; (global-set-key [f5] 'devenv-debug)
+					(global-set-key [f3] 'devenv-switch-to-devenv)))
+		#+end_src
 
 *** TODO CEDET
 
-    Use a local installation of CEDET so we have control over what
-    version we use. This means that we should not use any version from
-    ELPA or local package system.
-    
-    If you get some problem with this code it might be that you have
-    not byte-compiled it, I do not check-in byte-compiled files into
-    the repo. You then need to folow the instructions in
-    cedet/cedet-build.el. So on a new checkout this is a common
-    problem.
+		Use a local installation of CEDET so we have control over what
+		version we use. This means that we should not use any version from
+		ELPA or local package system.
+		
+		If you get some problem with this code it might be that you have
+		not byte-compiled it, I do not check-in byte-compiled files into
+		the repo. You then need to folow the instructions in
+		cedet/cedet-build.el. So on a new checkout this is a common
+		problem.
 
-    #+begin_src emacs-lisp
-      ;; using my own
-      (load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
-      (require 'edmacro)
-      (require 'cedet)
-      ;; Enable EDE (Project Management) features
-      (global-ede-mode t)                    
-      (semantic-load-enable-gaudy-code-helpers)
-      (global-semantic-tag-folding-mode 1)
-      ;; Enable prototype help and smart completion 
-      ;; (semantic-load-enable-code-helpers)
-      ;; Enable SRecode (Template management) minor-mode.
-      (global-srecode-minor-mode 1)
-    #+end_src
+		#+begin_src emacs-lisp
+			;; using my own
+			(load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
+			(require 'edmacro)
+			(require 'cedet)
+			;; Enable EDE (Project Management) features
+			(global-ede-mode t)										 
+			(semantic-load-enable-gaudy-code-helpers)
+			(global-semantic-tag-folding-mode 1)
+			;; Enable prototype help and smart completion 
+			;; (semantic-load-enable-code-helpers)
+			;; Enable SRecode (Template management) minor-mode.
+			(global-srecode-minor-mode 1)
+		#+end_src
 
-    #+begin_src emacs-lisp
-      ;;  (require 'semantic)
-    #+end_src
+		#+begin_src emacs-lisp
+			;;	(require 'semantic)
+		#+end_src
 
 ***** EDE
-      #+begin_src emacs-lisp
-      ;;  (global-ede-mode t)
-      #+end_src
+
+			#+begin_src emacs-lisp
+			;;	(global-ede-mode t)
+			#+end_src
 
 ***** Code helpers
 
-      #+begin_src emacs-lisp
-      ;;  (semantic-load-enable-excessive-code-helpers)
-      #+end_src
-***** DONE change this to be a submodule instead
-      :LOGBOOK:
-      - State "DONE"       from "TODO"       [2012-10-11 to 16:04]
-      :END:
+			#+begin_src emacs-lisp
+			;;	(semantic-load-enable-excessive-code-helpers)
+			#+end_src
+
+*** TODO ECB
+
+		#+begin_src emacs-lisp
+		 ;; (add-to-list 'load-path (concat local-emacs-org-dir "ecb"))
+		 ;; (require 'ecb)
+		#+end_src
+
 *** TODO Completion
 ***** Language
 ******* C#
-        
-        #+begin_src emacs-lisp
-          (add-to-list 'load-path (concat local-emacs-org-dir "csharp"))
-        #+end_src
+				
+				#+begin_src emacs-lisp
+					(add-to-list 'load-path (concat local-emacs-org-dir "csharp"))
+				#+end_src
 
-        The `cscomp-assembly-search-paths' should hold a list of
-        directories to search for assemblies that get referenced via using
-        clauses in the modules you edit.  This will try default to
-        something reasonable, including the "typical" .NET 2.0 and 3.5
-        directories, as well as the default locations for reference
-        assemblies.  If you have non-default locations for these things,
-        you should set them here. Also, if you have other libraries (for
-        example, the WCF Rest Starter kit, or the Windows Automation
-        assemblies) that you reference within your code, you can include
-        the appropriate directory in this list.
-       
-        #+begin_example emacs-lisp
-         (eval-after-load "csharp-completion"
-          '(progn
-             (setq cscomp-assembly-search-paths
-               (list "c:\\.net3.5ra"    ;; <<- locations of reference assemblies
-                     "c:\\.net3.0ra"    ;; <<-
-                     "c:\\.net2.0"      ;; <<- location of .NET Framework assemblies
-                     "c:\\.net3.5"      ;; <<- ditto
-             ))))
-        #+end_example
+				The `cscomp-assembly-search-paths' should hold a list of
+				directories to search for assemblies that get referenced via using
+				clauses in the modules you edit.	This will try default to
+				something reasonable, including the "typical" .NET 2.0 and 3.5
+				directories, as well as the default locations for reference
+				assemblies.	 If you have non-default locations for these things,
+				you should set them here. Also, if you have other libraries (for
+				example, the WCF Rest Starter kit, or the Windows Automation
+				assemblies) that you reference within your code, you can include
+				the appropriate directory in this list.
+			 
+				#+begin_example emacs-lisp
+				 (eval-after-load "csharp-completion"
+					'(progn
+						 (setq cscomp-assembly-search-paths
+							 (list "c:\\.net3.5ra"		;; <<- locations of reference assemblies
+										 "c:\\.net3.0ra"		;; <<-
+										 "c:\\.net2.0"			;; <<- location of .NET Framework assemblies
+										 "c:\\.net3.5"			;; <<- ditto
+						 ))))
+				#+end_example
 
-        #+begin_src emacs-lisp
-           ;; only on windows do we use csharp completion.
-          
-          (when (require 'powershell nil 'noerror)
-            (when (require 'csharp-completion nil 'noerror) 
-              (defun jiha-csharp-mode-hook  
-                ;; C# code completion
-                (load-file (concat local-emacs-org-dir "csharp/csharp-completion.el"))
-                ;;(csharp-analysis-mode 1)
-                ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
-                ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
-                )
-            
-              ;;(add-to-list 'csharp-mode-hook
-              ;;             'jiha-csharp-mode-hook)
-            )
-          )
-          
-        #+end_src
+				#+begin_src emacs-lisp
+					 ;; only on windows do we use csharp completion.
+					
+					(when (require 'powershell nil 'noerror)
+						(when (require 'csharp-completion nil 'noerror) 
+							(defun jiha-csharp-mode-hook	
+								;; C# code completion
+								(load-file (concat local-emacs-org-dir "csharp/csharp-completion.el"))
+								;;(csharp-analysis-mode 1)
+								;;(local-set-key "\M-\\"	 'cscomp-complete-at-point)
+								;;(local-set-key "\M-§."	 'cscomp-complete-at-point-menu)
+								)
+						
+							;;(add-to-list 'csharp-mode-hook
+							;;						 'jiha-csharp-mode-hook)
+						)
+					)
+					
+				#+end_src
+******* TODO ASPX
+				this requires multi-mode which I don't have at the moment.
+				#+begin_example emacs-lisp
+					(require 'aspx-mode nil 'noerror)
+				#+end_example
 *** Indentation
 
-    I usually use tabs for indentation and spaces for alignment, Emacs
-    are one of the few eviroment that support that kind of thing. I
-    like a low c-basic-offset 2
+		I usually use tabs for indentation and spaces for alignment, Emacs
+		are one of the few envirement that support that kind of thing. I
+		like a low c-basic-offset 2
 
-    #+begin_src emacs-lisp
-      ;; use tabs for indentation later we setup spaces for alignment.
-      (setq-default indent-tabs-mode t)
-      ;; I want as much as possible on my screens.
-      (setq-default c-basic-offset 2)
-      (setq-default tab-width 2) ; or any other preferred value
-    #+end_src
-    
-    This can be hard for other to replicate in there enviroment, If
-    they are using VisualStudio the need Resharper to replicate this
-    behavior. The could do without resharper and set VS to ident with
-    tabs and manually align things with spaces when needed.
+		#+begin_src emacs-lisp
+			;; use tabs for indentation later we setup spaces for alignment.
+			(setq-default indent-tabs-mode t)
+			;; I want as much as possible on my screens.
+			(setq-default c-basic-offset 2)
+			(setq-default tab-width 2) ; or any other preferred value
+		#+end_src
+		
+		This can be hard for other to replicate in there enviroment, If
+		they are using VisualStudio the need Resharper to replicate this
+		behavior. The could do without resharper and set VS to ident with
+		tabs and manually align things with spaces when needed.
 
-    #+begin_src emacs-lisp
-      ;; smart tabs, tabs for indentation, spaces for alignment
-      (defadvice align (around smart-tabs activate)
-        (let ((indent-tabs-mode nil)) ad-do-it))
-      
-      (defadvice align-regexp (around smart-tabs activate)
-        (let ((indent-tabs-mode nil)) ad-do-it))
-      
-      (defadvice indent-relative (around smart-tabs activate)
-        (let ((indent-tabs-mode nil)) ad-do-it))
-      
-      (defadvice indent-according-to-mode (around smart-tabs activate)
-        (let ((indent-tabs-mode indent-tabs-mode))
-          (if (memq indent-line-function
-                    '(indent-relative
-                      indent-relative-maybe))
-              (setq indent-tabs-mode nil))
-          ad-do-it))
-      
-      (defmacro smart-tabs-advice (function offset)
-        `(progn
-           (defvaralias ',offset 'tab-width)
-           (defadvice ,function (around smart-tabs activate)
-             (cond
-              (indent-tabs-mode
-               (save-excursion
-                 (beginning-of-line)
-                 (while (looking-at "\t*\\( +\\)\t+")
-                   (replace-match "" nil nil nil 1)))
-               (setq tab-width tab-width)
-               (let ((tab-width fill-column)
-                     (,offset fill-column)
-                     (wstart (window-start)))
-                 (unwind-protect
-                     (progn ad-do-it)
-                   (set-window-start (selected-window) wstart))))
-              (t
-               ad-do-it)))))
-      
-      (smart-tabs-advice c-indent-line c-basic-offset)
-      (smart-tabs-advice c-indent-region c-basic-offset)
-      ;; smart tabs - end
-    #+end_src
+		#+begin_src emacs-lisp
+			;; smart tabs, tabs for indentation, spaces for alignment
+			(defadvice align (around smart-tabs activate)
+				(let ((indent-tabs-mode nil)) ad-do-it))
+			
+			(defadvice align-regexp (around smart-tabs activate)
+				(let ((indent-tabs-mode nil)) ad-do-it))
+			
+			(defadvice indent-relative (around smart-tabs activate)
+				(let ((indent-tabs-mode nil)) ad-do-it))
+			
+			(defadvice indent-according-to-mode (around smart-tabs activate)
+				(let ((indent-tabs-mode indent-tabs-mode))
+					(if (memq indent-line-function
+										'(indent-relative
+											indent-relative-maybe))
+							(setq indent-tabs-mode nil))
+					ad-do-it))
+			
+			(defmacro smart-tabs-advice (function offset)
+				`(progn
+					 (defvaralias ',offset 'tab-width)
+					 (defadvice ,function (around smart-tabs activate)
+						 (cond
+							(indent-tabs-mode
+							 (save-excursion
+								 (beginning-of-line)
+								 (while (looking-at "\t*\\( +\\)\t+")
+									 (replace-match "" nil nil nil 1)))
+							 (setq tab-width tab-width)
+							 (let ((tab-width fill-column)
+										 (,offset fill-column)
+										 (wstart (window-start)))
+								 (unwind-protect
+										 (progn ad-do-it)
+									 (set-window-start (selected-window) wstart))))
+							(t
+							 ad-do-it)))))
+			
+			(smart-tabs-advice c-indent-line c-basic-offset)
+			(smart-tabs-advice c-indent-region c-basic-offset)
+			;; smart tabs - end
+		#+end_src
 
 ***** SQL
 
-      #+begin_src emacs-lisp
-       (eval-after-load "sql"
-         '(load-library "sql-indent"))
-      #+end_src
-      
-* Fly-spell
+		  #+begin_src emacs-lisp
+			 (eval-after-load "sql"
+				 '(load-library "sql-indent"))
+			#+end_src
 
-  My spelling is terrible so we use fly-spell as much as possible when
-  it is available. We turn it on for most text-modes and
-  flyspell-prog-mode for programming. 
-
-  I highly suggest setting ‘flyspell-issue-message-flag’ to nil, as
-  printing messages for every word (when checking the entire buffer)
-  causes an enormous slowdown. 
-
-  deactivated on windows at the moment until we have fixed cygwin
-  ispell or Aspell.
-  #+begin_src emacs-lisp
-    (if (eq system-type 'linux)
-        ((when (require 'flyspell nil 'noerror)
-           ;; activate flyspell for text-mode and derivatives
-           ;;(dolist (hook '(text-mode-hook))
-           ;;  (add-hook hook (lambda () (flyspell-mode 1))))
-           ;; this is how we remove it for a sub-mode
-           ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-           ;;  (add-hook hook (lambda () (flyspell-mode -1))))
-           )
-        
-         (setq flyspell-issue-message-flag nil))
-      )
-  #+end_src
-  
-*** Fly-spell for comments when programming                          :coding:
-
-    #+begin_src emacs-lisp
-      ;; Flyspell in C based programming modes
-      (add-hook 'c-mode-hook
-                (lambda ()
-                  (flyspell-prog-mode)))
-      
-      ;; Flyspell in C++ based programming modes
-      (add-hook 'c++-mode-hook
-                (lambda ()
-                  (flyspell-prog-mode)))
-      
-      ;; Flyspell in emacs-lisp mode
-      (add-hook 'lisp-mode-hook
-                (lambda ()
-                  (flyspell-prog-mode)))
-    #+end_src
-
-*** TODO word-list for org-files.
-    
-    org-files contains some reserved words like #+begin_* ... these
-    should be included in some sort of wordlist we use. so we don't get
-    a lot of errors on those files.
-
-*** TODO don't use flyspell in src samples
-    
-    Or switch to flyspell-prog-mode somehow.
-
-*** TODO Avoid false positives
-
-    I recently started using flyspell and am enjoying its features. Is
-    there a way to disable flyspell for certain regexps? For instance,
-    I would like to disable flyspell when typing a url. Otherwise, when
-    entering a url such as
-    http://www.emacswiki.org/cgi-bin/emacs/FlySpell, www, emacswiki,
-    cgi and FlySpell are highlighted as errors. Any advice would be
-    greatly appreciated. – MattLundin 
-
-    There is only one way, using flyspell-generic-check-word-predicate
-    which should be a function. In such a function you can use thing at
-    point. 
-
-    However it is a bit difficult to manage this as this variable may
-    be only one function. I have submitted a patch to Emacs devel to
-    take care of this. 
-
-    Thanks for pointing me to the flyspell-generic-check-word-predicate
-    variable. – MattLundin
-
-*** TODO Windows
-    
-    we need to install cygwin and use aspell.
-    http://curiousprogrammer.wordpress.com/2009/04/25/flyspell-windows/
-
-*** TODO somehow use #+LANGUAGE in org to choose wordlist.
-*** Other flyspell things
-***** Change dictionaries
-
-    As I often need to switch between English and German I use this
-    function:
-
-    #+begin_example emacs-lisp
-      (defun fd-switch-dictionary()
-      (interactive)
-      (let* ((dic ispell-current-dictionary)
-       (change (if (string= dic "deutsch8") "english" "deutsch8")))
-        (ispell-change-dictionary change)
-        (message "Dictionary switched from %s to %s" dic change)
-        ))
-    
-      (global-set-key (kbd "<f8>")   'fd-switch-dictionary)
-    #+end_example
-
-    I too cycle through different languages, but not all that is
-    available in the system. I use the following code inside my
-    .emacs. 
-
-    #+begin_example emacs-lisp
-    (let ((langs '("american" "francais" "brasileiro")))
-      (setq lang-ring (make-ring (length langs)))
-      (dolist (elem langs) (ring-insert lang-ring elem)))
-
-    (defun cycle-ispell-languages ()
-      (interactive)
-      (let ((lang (ring-ref lang-ring -1)))
-        (ring-insert lang-ring lang)
-        (ispell-change-dictionary lang)))
-
-    (global-set-key [f6] 'cycle-ispell-languages)
-    #+end_example
-
-    How can I ignore or add a word without using the popup menu?
-
-    Use flyspell-auto-correct-word.
-
-    This is not working for me. With flyspell-auto-correct-word I can
-    go through all suggestions for correction, but I do not get an
-    option to insert the word into my dictionary. Success in adding
-    new words into the personal dictionary.
-
-    I used “M x ispell-region”, and the words that ispell considered
-    having incorrect spellings were highlighted. The point moved to
-    the first “mis-spelled” word. By typing “i”, I inserted the word
-    into my personal dictionary. Later I found that the personal
-    dictionary was stored in the file $HOME/.aspell.en.pws in pure
-    text format. Although the word was added when I used “ispell”
-    instead of “flyspell”, but once added, flyspell also recognized
-    the word as having a correct spelling. :-) This information came
-    from the web page:
-    http://www.delorie.com/gnu/docs/emacs/emacs_109.html . Thanks! 
-
-    Easy Spell Check: key bindings and function to make
-    FlySpell/ispell/aspell easy to use w/ out a mouse 
-
-    Place the below code in your .emacs
-
-    F8 will call ispell (or aspell, etc) for the word the cursor is on
-    (or near). You can also use the built-in key binding
-    M-$. Ctrl-Shift-F8 enables/disables FlySpell for your current
-    buffer (highlights misspelled words as you type) Crtl-Meta-F8 runs
-    FlySpell on your current buffer (highlights all misspelled words
-    in the buffer) Ctrl-F8 calls ispell for the FlySpell highlighted
-    word prior to the cursor’s position Meta-F8 calls ispell for the
-    FlySpell highlighted word after the cursor’s position.
-
-    #+begin_example emacs-lisp
-      ;; easy spell check
-      (global-set-key (kbd "<f8>") 'ispell-word)
-      (global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
-      (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
-      (global-set-key (kbd "C-<f8>") 'flyspell-check-previous-highlighted-word)
-      (defun flyspell-check-next-highlighted-word ()
-        "Custom function to spell check next highlighted word"
-        (interactive)
-        (flyspell-goto-next-error)
-        (ispell-word)
-        )
-      (global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
-#+end_example
 
 * OrgMode
-*** TODO Rework 
+*** DONE Rework
+		:LOGBOOK:
+		- State "DONE"			 from "NEXT"			 [2013-03-03 sö 21:23] \\
+			yeah!!!
+		CLOCK: [2013-03-03 sö 19:39]--[2013-03-03 sö 21:23] =>	1:44
+		CLOCK: [2013-03-03 sö 15:34]--[2013-03-03 sö 16:38] =>	1:04
+		:END:
 
-    this to support more that 2 different org directories and to not
-    make a difference bewtween them as much as possible.
-
-     (setq org-directory "~/Dokument/orgfiles/")
-     (setq org-default-notes-file "~/.notes")
-
+		this to support more that 2 different org directories and to not
+		make a difference bewtween them as much as possible.
+		
 *** Basic
+		
+		A large part of the configuration has to do with how org should
+		behave. it's a pretty complex mode with lot of things you could
+		change. I have tried to make it as simple a possible with sub-trees
+		for every main function of OrgMode.
+
+		#+begin_src emacs-lisp
+			;; do not have so much in my agenda so two weeks is good
+			(setq org-agenda-ndays 14)
+			(setq org-deadline-warning-days 14)
+			(setq org-timeline-show-empty-dates t)
+			(setq org-agenda-repeating-timestamp-show-all nil)
+			(setq org-agenda-include-diary t)
+			(setq org-feed-alist)
+			(setq org-odd-levels-only t)
+			(setq org-cycle-separator-lines 0)
+			(setq org-enforce-todo-dependencies t)
+			(setq org-use-fast-todo-selection t)
+			(setq org-treat-S-cursor-todo-selection-as-state-change nil)
+			(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+			(setq org-insert-mode-line-in-empty-file t)
+			;; setup automatic expiring of old entries with creation date
+			;; if entries does not have creation date they will never expire.
+			(load-file (concat local-emacs-org-dir "org-modules/org-expiry.el"))
+			(setq org-expiry-wait "+2m")
+			;;(org-expiry-insinuate)
+			(load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
+			(require 'org-crypt)
+			(org-crypt-use-before-save-magic)
+			(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+			(run-at-time "00:59" 3600 'org-save-all-org-buffers)
+			;; because of org-mode modulare structure some variables and other
+			;; things are not knowm before you have used them once, this solves
+			;; that problem at least partially.
+			;;(org-require-autoloaded-modules)
+			(require 'org-protocol)
+		#+end_src
+		
+*** Org Modules
+
+		#+begin_src emacs-lisp
+			;; need to do some cleanup here.
+			;;(setq org-modules '(org-bbdb org-bibtex org-docview org-gnus 
+			;;														 org-info org-jsinfo org-habit 
+			;;														 org-irc org-mew org-mhe org-rmail 
+			;;														 org-vm org-wl org-w3m))		
+		#+end_src
+
+*** Org Protocol                                        :instw:instl:outlook:
+
+		this is an example on how you could setup windows to accept
+		org-protocol: urls and route them to emacsclientw. the path on the
+		last row is the bit you might need to adapt for your installation.
+		
+		#+begin_example
+			Windows Registry Editor Version 5.00
+			
+			[HKEY_CLASSES_ROOT\org-protocol]
+			@="URL:Org Protocol"
+			"URL Protocol"=""
+			[HKEY_CLASSES_ROOT\org-protocol\shell]
+			[HKEY_CLASSES_ROOT\org-protocol\shell\open]
+			[HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
+			@="C:\Users\jiha\emacs-24.1\bin\emacsclientw.exe %1"
+		#+end_example
+
+
+		for linux you could configure gnome like this.
+
+		#+begin_example
+			gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/command '/usr/local/bin/emacsclient %s' --type String
+			gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/enabled --type Boolean true
+		#+end_example
+
+***** adobe acrobat reader                                      :instw:insti:
+
+			Add these scripts to <somewhere>\Adobe\Reader 10.0\Reader\Javascripts makes it easy
+			to takes notes from pdf's and store links to where they are.
+			
+			#+begin_example javascript
+				// from http://article.gmane.org/gmane.emacs.orgmode/6810
+				app.addMenuItem({cName:"org-capture", 
+												cParent:"Tools", 
+												cExec:"app.launchURL('org-protocol://capture://' + 
+																							encodeURIComponent(this.URL) + 
+																							'/' + 
+																							encodeURIComponent(this.info.Title) + 
+																							'/');"});
+			#+end_example
+			
+			#+begin_example javascript
+				// from http://article.gmane.org/gmane.emacs.orgmode/6810
+				app.addMenuItem({cName:"org-store-link", cParent:"Tools",
+												 cExec:"app.launchURL('org-protocol://store-link://' + 
+																							 encodeURIComponent(this.URL) + 
+																							 '/' + 
+																							 encodeURIComponent(this.info.Title));"});
+			#+end_example
+
+***** Web-browser integration
+
+			Add these as bookmarks in webbrowsers
+
+			#+begin_example javascript
+				javascript:location.href='org-protocol://capture://'+ encodeURIComponent(location.href)+'/'+ encodeURIComponent(document.title)+'/'+ encodeURIComponent(window.getSelection())
+			#+end_example
+			
+			#+begin_example javascript
+				javascript:location.href='org-protocol://store-link://' + encodeURIComonent(location.href) + '/' + encodeURIComponent(document.title)
+			#+end_example
+
+*** Org Capture
+		
+		This is needed by both the [[Org-outlook integration]] and by 
+		[[Org Protocol]]. First some basic setup of org-capture.
+
+		#+begin_src emacs-lisp
+			(define-key global-map "\C-cc" 'org-capture)
+		#+end_src
+
+		We need some good capture templates. remember that the template
+		"key" need to be exactly one character long for it to work with
+		org-protocol.
+
+		org-capture-templates is a list with structs the tells how and
+		where things shall be put. first we clear it then we use
+		add-to-list to append template after template.
+
+		#+begin_src emacs-lisp
+			;; clear the templates list
+			(setq org-capture-templates '())
+			
+			;; next we start to add the templates we want.
+			;; This is the default one.
+			(add-to-list 'org-capture-templates
+									 ;; w has special meaning as a default for capture.
+									 '("w"
+										"Default template"
+										entry
+										(file+headline "~/org/capture.org" "Notes")
+										"* %^{Title}\n\n	Source: %u, %c\n\n	%i"
+										:empty-lines 1))
+			
+			;; This one is called from my integration in outlook throu org-protocol
+			;; Only useful on my workmachine but is not in the way on my home machine
+			;; Placeholders Replacement 
+			;; %:link URL of the email
+			;; %:description The title of the message
+			;; %:title The title of the message 
+			;; %:initial Selected text.
+			;; %:sender Sender's name
+			;; %:sender-email Sender's Email
+			(add-to-list 'org-capture-templates
+									 '("o"
+										"Outlook integration - creates items from mails."
+										entry
+										(file+headline "c:/Users/jiha/Documents/org/mdms/mdms.org" "Inbox")
+										"***** TODO %c\n		 %U\n			%?\n		 #+begin_quote\n			 %:initial\n		 #+end_quote\n"
+										:prepend
+										:empty-lines 1
+										:clock-resume))
+			
+			;; more templates here.
+		#+end_src
+
+***** DONE solve the problem with default notes file.
+			:LOGBOOK:
+			- State "DONE"			 from "TODO"			 [2013-03-03 sö 22:15] \\
+				Not a problem when all my templates contain a target.
+			:END:
 
     #+begin_src emacs-lisp
       ;; do not have so much in my agenda so two weeks is good
@@ -1065,189 +1664,382 @@ that I share between work and home
       
 *** RSS feeds
 
-    #+begin_src emacs-lisp
-      (let ((feedfile (format "%s/%s" shared-org-files-dir "feeds.org")))
-        (setq org-feed-alist
-              `(("Slashdot"
-                 "http://rss.slashdot.org/Slashdot/slashdotatom"
-                 ,feedfile
-                 "Slashdot")
-                ("Bruce"
-                 "http://feeds.feedburner.com/schneier/fulltext"
-                 ,feedfile
-                 "Bruce Schneier On Security")
-                ("PiratPartiet"
-                 "http://live.piratpartiet.se/rss20.xml"
-                 ,feedfile
-                 "PiratPartiet SE"))))
-    #+end_src
-*** standard Todo states and transitions
-    :LOGBOOK:
-    - State "DONE"       from "TODO"       [2012-08-20 må 17:19]
-    :END:
+		#+begin_src emacs-lisp
+			(let ((feedfile "~/feeds.org"))
+				(setq org-feed-alist
+							`(("Slashdot"
+								 "http://rss.slashdot.org/Slashdot/slashdotatom"
+								 ,feedfile
+								 "Slashdot")
+								("Bruce"
+								 "http://feeds.feedburner.com/schneier/fulltext"
+								 ,feedfile
+								 "Bruce Schneier On Security")
+								("PiratPartiet"
+								 "http://live.piratpartiet.se/rss20.xml"
+								 ,feedfile
+								 "PiratPartiet SE"))))
+		#+end_src
+*** Standard Todo states and transitions
+		:LOGBOOK:
+		- State "DONE"			 from "TODO"			 [2012-08-20 må 17:19]
+		:END:
 
-    This is from [[norang:TodoKeywords]] it's proberbly more than I need.
-    #+begin_src emacs-lisp
-      (setq org-todo-keywords
-            (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
-                    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
-                    (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)"))))
-      
-      (setq org-todo-keyword-faces
-            (quote (("TODO"      . jiha-org-todo-keywords-face)
-                    ("NEXT" :foreground "light blue" :weight bold)
-                    ("DONE"      . jiha-org-done-keywords-face)
-                    ("WAITING"   . jiha-org-onhold-keywords-face)
-                    ("HOLD"      . jiha-org-onhold-keywords-face)
-                    ("CANCELLED" . jiha-org-not-important-keywords-face)
-                    ("PHONE"     . jiha-org-not-important-keywords-face))))
-       
-    #+end_src
+		This is from [[norang:TodoKeywords]] it's proberbly more than I need.
+		#+begin_src emacs-lisp
+						(setq org-todo-keywords
+									(quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
+													(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
+													(sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)")
+													(sequence "ESTIMATE" "|" "ESTIMATED"))))
+						
+						(setq org-todo-keyword-faces
+									(quote (("TODO"			 . jiha-org-todo-keywords-face)
+													("NEXT" :foreground "light blue" :weight bold)
+													("DONE"			 . jiha-org-done-keywords-face)
+													("WAITING"	 . jiha-org-onhold-keywords-face)
+													("HOLD"			 . jiha-org-onhold-keywords-face)
+													("ESTIMATE"	 . jiha-org-onhold-keywords-face)
+													("CANCELLED" . jiha-org-not-important-keywords-face)
+													("PHONE"		 . jiha-org-not-important-keywords-face))))
+						 
+		#+end_src
 
 *** Org todo keyword faces                                            :faces:
-    All kewords are should be bold, that tells me they are keywords
-    #+begin_src emacs-lisp
-      ;; All keywords should be in bold so it's easy to se them as keywords
-      (defface jiha-org-keywords-face 
-        '((t (:inherit default :weight extra-bold)))
-        "some String"
-        :group 'jiha-faces)
-      
-      (defface jiha-org-todo-keywords-face
-        '((t (:inherit (jiha-need-attention-face
-                        jiha-org-keywords-face))))
-        "Some Text"
-        :group 'jiha-faces)
-      (defface jiha-org-done-keywords-face
-        '((t (:inherit (jiha-good-thing-face 
-                        jiha-org-keywords-face))))
-        "Some Text"
-        :group 'jiha-faces)
-      
-      (defface jiha-org-onhold-keywords-face
-        '((t (:inherit (jiha-notice-me-face
-                        jiha-org-keywords-face))))
-        "Some Text"
-        :group 'jiha-faces)
-      
-      (defface jiha-org-not-important-keywords-face
-        '((t (:inherit (jiha-not-real-face
-                        jiha-good-thing-face
-                        jiha-org-keywords-face))))
-        "Some Text"
-        :group 'jiha-faces)
-    #+end_src
+		All kewords are should be bold, that tells me they are keywords
+		#+begin_src emacs-lisp
+			;; All keywords should be in bold so it's easy to se them as keywords
+			(defface jiha-org-keywords-face 
+				'((t (:inherit default :weight extra-bold)))
+				"some String"
+				:group 'jiha-faces)
+			
+			(defface jiha-org-todo-keywords-face
+				'((t (:inherit (jiha-need-attention-face
+												jiha-org-keywords-face))))
+				"Some Text"
+				:group 'jiha-faces)
+			(defface jiha-org-done-keywords-face
+				'((t (:inherit (jiha-good-thing-face 
+												jiha-org-keywords-face))))
+				"Some Text"
+				:group 'jiha-faces)
+			
+			(defface jiha-org-onhold-keywords-face
+				'((t (:inherit (jiha-notice-me-face
+												jiha-org-keywords-face))))
+				"Some Text"
+				:group 'jiha-faces)
+			
+			(defface jiha-org-not-important-keywords-face
+				'((t (:inherit (jiha-not-real-face
+												jiha-good-thing-face
+												jiha-org-keywords-face))))
+				"Some Text"
+				:group 'jiha-faces)
+		#+end_src
 *** Init
 
-    because I have more than one computer and also a work computer, I
-    have split my org agenda files into two parts. One that I share
-    between computers and one that is local to that machine(or
-    filesystem I am working in). To Make configuration of org-agenda
-    work with this I have files that I call in my shared org directory
-    and in my local directory. So here is the first call.
+		because I have more than one computer and also a work computer, I have split my org
+		agenda files into X number of parts. One that I share between computers and one that
+		is local to that machine(or filesystem I am working in). To make configuration of
+		org-agenda work with this I have a list of directories called my-org-directories and
+		will call special files in those directories at specific times
 
-    #+begin_src emacs-lisp
-      (org-babel-load-file (concat local-org-files-dir "init.org"))
-      (org-babel-load-file (concat shared-org-files-dir "init.org"))
-    #+end_src
-    
+		#+begin_src emacs-lisp
+			;; for every directory in my-org-directories call init.org
+			;; every init.org file may setup local-org-agenda-files with files that should form a part
+			;; of the org agenda this is added to org-agenda-files here with directory concated
+			;; before. 
+			(dolist (directory my-org-directories) 
+				(setq local-org-agenda-files '())
+				(org-babel-load-file (concat directory "init.org"))
+				(dolist (file local-org-agenda-files)
+					(add-to-list 'org-agenda-files (concat directory file))))
+		#+end_src
+		
+*** Org-outlook integration                                   :instw:outlook:
+
+		http://www.emacswiki.org/emacs/org-outlook.el
+		
+		integrating org-mode with outlook, until i get GNUS to behave as I
+		want. first of, you need this registry hack(for outlook 2007).
+ 
+		#+begin_example 
+			Windows Registry Editor Version 5.00
+			Windows Registry Editor Version 5.00
+			
+			[HKEY_CLASSES_ROOT\outlook]
+			"URL Protocol"=""
+			@="URL:Outlook Folders"
+			
+			[HKEY_CLASSES_ROOT\outlook\DefaultIcon]
+			@="C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLLIB.DLL,-9403"
+			
+			[HKEY_CLASSES_ROOT\outlook\shell]
+			@="open"
+			
+			[HKEY_CLASSES_ROOT\outlook\shell\open]
+			@=""
+			
+			[HKEY_CLASSES_ROOT\outlook\shell\open\command]
+			@="\"C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLOOK.EXE\" /select \"%1\""
+			
+		#+end_example
+
+		here is one for 2010, still need to make sure paths are right.
+
+		#+begin_example
+			Windows Registry Editor Version 5.00
+			
+			[HKEY_CLASSES_ROOT\outlook]
+			URL Protocol=
+			@="URL:Outlook Folders"
+			
+			[HKEY_CLASSES_ROOT\outlook\DefaultIcon]
+			@="C:\\Program Files\\Microsoft Office\\Office14\\1033\\OUTLLIBR.DLL,-7511"
+			
+			[HKEY_CLASSES_ROOT\outlook\shell]
+			@="open"
+			
+			[HKEY_CLASSES_ROOT\outlook\shell\open]
+			@=""
+			
+			[HKEY_CLASSES_ROOT\outlook\shell\open\command]
+			@="C:\\Program Files\\Microsoft Office\\Office14\\OUTLOOK.EXE /select %1"
+		#+end_example
+
+		You also need this macro in outlook, this has been adapted for
+		outlook 2010 but you still need to adapt it when it comes to what
+		folders it should do it work in.
+
+		you should also add a button for this macro in the ribbon
+		interface of outlook.
+
+		have som example scripts in these files [[file:guid.vbs]] and
+		[[file:task.vbs]] don't really now what they do, use with care. We
+		also has a whole module that I am using today on my workcomputer
+		to create items in org from mails in outlook
+		[[file:workmachine/integration.bas]]
+
+		#+begin_example vb
+			Public Declare PtrSafe Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ( _
+					ByVal hWnd As Long, _
+					ByVal lpOperation As String, _
+					ByVal lpFile As String, _
+					ByVal lpParameters As String, _
+					ByVal lpDirectory As String, _
+					ByVal nShowCmd As Long) As Long
+						
+			'Slightly Modified http://www.freevbcode.com/ShowCode.Asp?ID=5137
+			Function URLEncode(EncodeStr As String) As String
+					Dim i As Integer
+					Dim erg As String
+					
+					erg = EncodeStr
+			
+					' *** First replace '%' chr
+					erg = Replace(erg, "%", Chr(1))
+			
+					' *** then '+' chr
+					erg = Replace(erg, "+", Chr(2))
+					
+					For i = 0 To 255
+							Select Case i
+									' *** Allowed 'regular' characters
+									Case 37, 43, 48 To 57, 65 To 90, 97 To 122
+									
+									Case 1	' *** Replace original %
+											erg = Replace(erg, Chr(i), "%25")
+							
+									Case 2	' *** Replace original +
+											erg = Replace(erg, Chr(i), "%2B")
+											
+									Case 32
+											erg = Replace(erg, Chr(i), "%20") 'org-protocol likes %20 instead of +
+							
+									Case 3 To 15
+											erg = Replace(erg, Chr(i), "%0" & Hex(i))
+							
+									Case Else
+											erg = Replace(erg, Chr(i), "%" & Hex(i))
+											
+							End Select
+					Next
+					
+					URLEncode = erg
+					
+			End Function
+						
+			Sub CreateTaskFromItem()
+					Dim T As Variant
+					Dim Outlook As New Outlook.Application
+					Dim ie As Object
+					Set ie = CreateObject("InternetExplorer.Application")
+			
+					
+					Dim orgfile As Variant
+					Dim Pos As Integer
+					Dim taskf As Object
+					
+					Set myNamespace = Outlook.GetNamespace("MAPI")
+			
+					' Change this to be your personal folder item.	If it remains
+					' on the server it keeps the Outlook ID originally given.	 If
+					' you move it to another folder, it will assign it to another
+					' ID, but keep that ID as long as you don't move it back to the
+					' server. (*sigh*	 I wish it kept the same ID.)
+			
+					' Technically this is unnecessary, but with my limited exchange
+					' account size,	 I move my emails to \"Personal Folders\\@ActionTasks\" and
+					' then (possibly) refile from there.
+					
+			
+					' we take things from this head folder in outlook
+					Set myPersonalFolder = myNamespace.Folders.Item("Jim.Hansson@powel.se")
+					Set allPersonalFolders = myPersonalFolder.Folders
+					
+					T = ""
+					For Each Folder In allPersonalFolders
+							' and move them to this folder
+							If Folder.Name = "Actions" Then
+									Set taskf = Folder
+									Exit For
+							End If
+					Next
+			
+					' End moving message.
+					
+					If Outlook.Application.ActiveExplorer.Selection.Count > 0 Then
+							For i = 1 To Outlook.Application.ActiveExplorer.Selection.Count
+											Set objMail = Outlook.ActiveExplorer.Selection.Item(i)
+											Set objMail = objMail.Move(taskf)
+											objMail.Save 'Maybe this will update EntryID
+											' Note that o is the Outlook capture template.
+											T = "org-protocol:/outlook:/o/" + URLEncode(objMail.EntryID) _
+													+ "/" + URLEncode(objMail.Subject) _
+													+ "/" + URLEncode(objMail.SenderName) _
+													+ "/" + URLEncode(objMail.SenderEmailAddress) _
+													+ "/" + URLEncode(objMail.Body)
+											ShellExecute 0, "open", T, vbNullString, vbNullString, vbNormalFocus
+							Next
+					End If
+			End Sub
+		#+end_example
+
+		then we need to load the org-module and setup some basic things,
+		like where to find outlook binary to call. how to capture things
+		from outlook
+		
+		#+begin_src emacs-lisp
+			;; Setup outlook integration with org-mode.
+			(add-to-list 'load-path "~/.emacs.d/elpa/org-outlook-0.3/")
+			(when (require 'org-outlook nil 'noerror)
+				;; Location of outlook exe so we can call it.
+				(setq-default org-outlook-location 
+											"C:/Program Files/Microsoft Office/Office14/OUTLOOK.EXE")
+				;; Capturing system for org-protocol outlook: subprotocol. 
+				;; Supports org-capture
+				(setq-default org-outlook-capture 'org-capture)
+
+				;; Default template for org-capture or remember.
+				;;(setq-default org-protocol-outlook-default-template-key o)
+				)
+		#+end_src
+
+***** TODO fix line-endings and indentation of imported mail.
+			
+			this is one way, but we need something better, we need to convert it to the format
+			of the buffer that it is supposed to go to. this is only a display hack.
+			#+begin_example elisp
+				(defun dos-remove-eol ()
+					"Do not show ^M in files containing mixed UNIX and DOS line endings."
+					(interactive)
+					(setq buffer-display-table (make-display-table))
+					(aset buffer-display-table ?\^M []))
+			#+end_example
 *** Auto Archiving of done entries
 
-    Would be nice if we could auto archive things that have been done
-    for 1 month or something similier. does not work at the moment need
-    to find out why it hangs.
+		Would be nice if we could auto archive things that have been done
+		for 1 month or something similier. does not work at the moment need
+		to find out why it hangs.
 
-    #+begin_example emacs-lisp
-      ; found on the emacs-orgmode mailing list.
-      ; helping aboudreault with finding errors in it.
-      (defvar org-my-archive-expiry-days 2
-        "The number of days after which a completed task should be auto-archived.
-      This can be 0 for immediate, or a floating point value.")
-      
-      (defun org-my-archive-done-tasks ()
-        (interactive)
-        (save-excursion
-          (goto-char (point-min))
-          (let ((done-regexp
-                 (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
-                (state-regexp
-                 (concat "- State \"\\(" (regexp-opt org-done-keywords)
-                         "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
-            (while (re-search-forward done-regexp nil t)
-              (let ((end (save-excursion
-                           (outline-next-heading)
-                           (point)))
-                    begin)
-                (goto-char (line-beginning-position))
-                (setq begin (point))
-                (when (re-search-forward state-regexp end t)
-                  (let* ((time-string (match-string 2))
-                         (when-closed (org-parse-time-string time-string)))
-                    (if (>= (time-to-number-of-days
-                             (time-subtract (current-time)
-                                            (apply #'encode-time when-closed)))
-                            org-my-archive-expiry-days)
-                        (org-archive-subtree)))))))))
-      
-      (defalias 'archive-done-tasks 'asdflökg)
-    #+end_example
+		#+begin_example emacs-lisp
+			; found on the emacs-orgmode mailing list.
+			; helping aboudreault with finding errors in it.
+			(defvar org-my-archive-expiry-days 2
+				"The number of days after which a completed task should be auto-archived.
+			This can be 0 for immediate, or a floating point value.")
+			
+			(defun org-my-archive-done-tasks ()
+				(interactive)
+				(save-excursion
+					(goto-char (point-min))
+					(let ((done-regexp
+								 (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
+								(state-regexp
+								 (concat "- State \"\\(" (regexp-opt org-done-keywords)
+												 "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
+						(while (re-search-forward done-regexp nil t)
+							(let ((end (save-excursion
+													 (outline-next-heading)
+													 (point)))
+										begin)
+								(goto-char (line-beginning-position))
+								(setq begin (point))
+								(when (re-search-forward state-regexp end t)
+									(let* ((time-string (match-string 2))
+												 (when-closed (org-parse-time-string time-string)))
+										(if (>= (time-to-number-of-days
+														 (time-subtract (current-time)
+																						(apply #'encode-time when-closed)))
+														org-my-archive-expiry-days)
+												(org-archive-subtree)))))))))
+			
+			(defalias 'archive-done-tasks 'asdflökg)
+		#+end_example
 *** Smarter headlines
 
-    from: http://lists.gnu.org/archive/html/emacs-orgmode/2007-10/msg00551.html
-    Hi,
-    
-    Here's a small piece of elisp code that might be useful to some of
-    you.  Pressing '*' now inserts '*' as before, but if there are only
-    spaces between the beginning of the current line and the point,
-    then all of them are converted to stars.  Useful for inserting new
-    headlines.
-    
-    Longer explanaition: assume you have the following structure:
-    
-    * first level headline
-    _* second level headline
-    __* third level headline
+		from: http://lists.gnu.org/archive/html/emacs-orgmode/2007-10/msg00551.html
+		Hi,
+		
+		Here's a small piece of elisp code that might be useful to some of
+		you.	Pressing '*' now inserts '*' as before, but if there are only
+		spaces between the beginning of the current line and the point,
+		then all of them are converted to stars.	Useful for inserting new
+		headlines.
+		
+		Longer explanaition: assume you have the following structure:
+		
+		* first level headline
+		_* second level headline
+		__* third level headline
 
-    (_ denotes an invisible star) Since stars are invisible, I often
-    find myself trying to create a new subheadline by just inserting a
-    single star
+		(_ denotes an invisible star) Since stars are invisible, I often
+		find myself trying to create a new subheadline by just inserting a
+		single star
 
-    * first level headline
-    _* second level headline
-    __* third level headline
-       *
+		* first level headline
+		_* second level headline
+		__* third level headline
+			 *
 
-    which of course doesn't normally work, hence this elisp code.
+		which of course doesn't normally work, hence this elisp code.
 
-    #+begin_src emacs-lisp
-      (defun local-org-insert-stars ()
-        (interactive)
-        (when (looking-back "^ *" (point-at-bol))
-          (replace-string " " "*" nil (point-at-bol) (point)))
-        (insert "*"))
-      
-      (define-key org-mode-map "*" 'local-org-insert-stars)
-    #+end_src
-    Haven't thoroughly tested it, but it seems to work ok.
+		#+begin_src emacs-lisp
+			(defun local-org-insert-stars ()
+				(interactive)
+				(when (looking-back "^ *" (point-at-bol))
+					(replace-string " " "*" nil (point-at-bol) (point)))
+				(insert "*"))
+			
+			(define-key org-mode-map "*" 'local-org-insert-stars)
+		#+end_src
+		Haven't thoroughly tested it, but it seems to work ok.
 
-    Piotr
+		Piotr
 
 *** Filesets for OrgFiles                                          :filesets:
-    
-    A Nice fileset definition for my local org files and one for my shared org files.
-    #+begin_src emacs-lisp
-      ;; for some reason I don't understand this does not work, must have
-      ;; something todo evaluation of variables.
-      ;;(add-to-list 'filesets-data (quote ("OrgFiles" 
-      ;;                                    (:tree local-org-files-dir 
-      ;;                                           "^.+\\.org$")
-      ;;                                    (:tree-max-level 2))))
-      ;;(add-to-list 'filesets-data (quote ("OrgFiles" 
-      ;;                                    (:tree shared-org-files-dir 
-      ;;                                           "^.+\\.org$")
-      ;;                                    (:tree-max-level 2))))
-      
-    #+end_src
 
 *** Logging and clocking
     
@@ -1282,104 +2074,95 @@ that I share between work and home
       ;;(org-clock-persistence-insinuate)
     #+end_src
     
+		Creates filesets for all org files.
     #+begin_src emacs-lisp
+						(dolist (directory my-org-directories)
+							(let ((directory-part (concat "Org: " (car (last (split-string directory "/") 2)))))
+								(add-to-list 'filesets-data 
+														 (list directory-part
+																	 (list ':tree
+																				 directory
+																				 "^.+\\.org$")))))
+		#+end_src
 
-    #+end_src
 *** Agenda                                                           :habits:
-    #+begin_example emacs-lisp
-      ;; does not work at the moment
-      (setq org-agenda-custom-commands
-            '(("d" "Upcoming deadlines" agenda "" 
-               ((org-agenda-time-grid nil)
-                (org-deadline-warning-days 365)        ;; [1]
-                (org-agenda-entry-types '(:deadline))  ;; [2]
-                ))
-              ;; other commands go here
-              ("W" "Weekly" 
-               ((agenda "" 
-                        ((org-agenda-ndays 7)
-                         (org-agenda-log-mode t)
-                         )
-                        )
-                ))
-              ))
-    #+end_example
-    #+begin_src emacs-lisp
-      (setq org-habit-graph-column 50)
-      (setq org-agenda-tags-column 75)
-      (setq org-habit-show-habits-only-for-today nil)
-      (setq org-habit-preceding-days 15)
-      (setq org-habit-following-days 10)      
-    #+end_src
 
-    From Julien Danjou we borrow a function to be able to get our own
-    Holidays and Vaction days marked in the right face.  for this to
-    kick in you need to set the category on items to "Holidays" or
-    "Vacation".
+		#+begin_src emacs-lisp
+			(setq org-habit-graph-column 50)
+			(setq org-agenda-tags-column 75)
+			(setq org-habit-show-habits-only-for-today nil)
+			(setq org-habit-preceding-days 15)
+			(setq org-habit-following-days 10)			
+		#+end_src
 
-    #+begin_src emacs-lisp
-    (setq org-agenda-day-face-function
-       (defun jd:org-agenda-day-face-holidays-function (date)
-         "Compute DATE face for holidays."
-         (unless (org-agenda-todayp date)
-           (dolist (file (org-agenda-files nil 'ifmode))
-             (let ((face
-                    (dolist (entry (org-agenda-get-day-entries file date))
-                      (let ((category (with-temp-buffer
-                                        (insert entry)
-                                        (org-get-category (point-min)))))
-                        (when (or (string= "Holidays" category)
-                                  (string= "Vacation" category))
-                          (return 'org-agenda-date-weekend))))))
-               (when face (return face)))))))
-    #+end_src
+		From Julien Danjou we borrow a function to be able to get our own
+		Holidays and Vaction days marked in the right face.	 for this to
+		kick in you need to set the category on items to "Holidays" or
+		"Vacation".
 
+		#+begin_src emacs-lisp
+		(setq org-agenda-day-face-function
+			 (defun jd:org-agenda-day-face-holidays-function (date)
+				 "Compute DATE face for holidays."
+				 (unless (org-agenda-todayp date)
+					 (dolist (file (org-agenda-files nil 'ifmode))
+						 (let ((face
+										(dolist (entry (org-agenda-get-day-entries file date))
+											(let ((category (with-temp-buffer
+																				(insert entry)
+																				(org-get-category (point-min)))))
+												(when (or (string= "Holidays" category)
+																	(string= "Vacation" category))
+													(return 'org-agenda-date-weekend))))))
+							 (when face (return face)))))))
+		#+end_src
+		
 ***** Diary integration
 
-      functions to use in the agenda view, include calles to these
-      functions in one of your agenda files like this %%(diary-sun*) and
-      it will be called.
-      #+begin_src emacs-lisp
-        ;; functions to use in the dairy to get seperated sunrise and sunset times.
-        ;; if we use %%(dairy-sunrise-sunset) we get it on one line, this gives us
-        ;; two lines or only one if we want to.
-        (defun diary-sunrise ()
-          (let ((dss (diary-sunrise-sunset)))
-            (with-temp-buffer
-              (insert dss)
-              (goto-char (point-min))
-              (while (re-search-forward " ([^)]*)" nil t)
-                (replace-match "" nil nil))
-              (goto-char (point-min))
-              (search-forward ",")
-              (buffer-substring (point-min) (match-beginning 0)))))
-        
-        (defun diary-sunset ()
-          (let ((dss (diary-sunrise-sunset))
-                start end)
-            (with-temp-buffer
-              (insert dss)
-              (goto-char (point-min))
-              (while (re-search-forward " ([^)]*)" nil t)
-                (replace-match "" nil nil))
-              (goto-char (point-min))
-              (search-forward ", ")
-              (setq start (match-end 0))
-              (search-forward " at")
-              (setq end (match-beginning 0))
-              (goto-char start)
-              (capitalize-word 1)
-              (buffer-substring start end))))
-      #+end_src
-      
-      We also need to set where on earth we are because without that
-      information the dairy-sun* functions can not do it's job and
-      will ask every time we start where on earht we are.
-      #+begin_src emacs-lisp
-        (setq calendar-latitude 63.1766)
-        (setq calendar-longitude 14.636068)
-        (setq calendar-location-name "Östersund, Sweden")
-      #+end_src
+			functions to use in the agenda view, include calles to these
+			functions in one of your agenda files like this %%(diary-sun*) and
+			it will be called.
+			#+begin_src emacs-lisp
+				;; functions to use in the dairy to get seperated sunrise and sunset times.
+				;; if we use %%(dairy-sunrise-sunset) we get it on one line, this gives us
+				;; two lines or only one if we want to.
+				(defun diary-sunrise ()
+					(let ((dss (diary-sunrise-sunset)))
+						(with-temp-buffer
+							(insert dss)
+							(goto-char (point-min))
+							(while (re-search-forward " ([^)]*)" nil t)
+								(replace-match "" nil nil))
+							(goto-char (point-min))
+							(search-forward ",")
+							(buffer-substring (point-min) (match-beginning 0)))))
+				
+				(defun diary-sunset ()
+					(let ((dss (diary-sunrise-sunset))
+								start end)
+						(with-temp-buffer
+							(insert dss)
+							(goto-char (point-min))
+							(while (re-search-forward " ([^)]*)" nil t)
+								(replace-match "" nil nil))
+							(goto-char (point-min))
+							(search-forward ", ")
+							(setq start (match-end 0))
+							(search-forward " at")
+							(setq end (match-beginning 0))
+							(goto-char start)
+							(capitalize-word 1)
+							(buffer-substring start end))))
+			#+end_src
+			
+			We also need to set where on earth we are because without that
+			information the dairy-sun* functions can not do it's job and
+			will ask every time we start where on earht we are.
+			#+begin_src emacs-lisp
+				(setq calendar-latitude 63.1766)
+				(setq calendar-longitude 14.636068)
+				(setq calendar-location-name "Östersund, Sweden")
+			#+end_src
 *** TODO Exports
 *** Babel
 ***** SQL
@@ -1406,19 +2189,31 @@ that I share between work and home
 
 *** Post
 
-    Read [[Init]]. here is the last call and it gives the local a chance to
-    overide everything from the shared org-directory.
+		Read [[Init]]. here is the last call and it gives the local a chance to overide everything
+		from the shared org-directory. This calls post.org in reverse order compared to init.
+		
+		#+begin_src emacs-lisp
+			(dolist (directory (reverse my-org-directories)) 
+				(org-babel-load-file (concat directory "init.org")))
+		#+end_src
 
-    #+begin_src emacs-lisp
-      (org-babel-load-file (concat shared-org-files-dir "post.org"))
-      (org-babel-load-file (concat local-org-files-dir "post.org"))
-    #+end_src
+*** DONE tabs in org-mode
+    :LOGBOOK:
+    - State "DONE"       from "TODO"       [2013-03-04 må 00:10] \\
+      decided to use tabs instead.
+    :END:
+		should not use tabs for indentation in org-mode.
 
-*** TODO tabs in org-mode
-    should not use tabs for indentation in org-mode.
+
+*** TODO work jornal
+		
+		once maybe twice a week I would like to log what I have done that week it would be
+		nice with a capture template for that, a personal jornal would also be nice but may be
+		harder to fix because of that I could not hardcode the path to the file. maybe using
+		local config could fix that.
 
 * Google Integration
-  most of these things comes from http://julien.danjou.info/
+	most of these things comes from http://julien.danjou.info/
 *** Google maps                                                         :org:
     #+begin_src emacs-lisp
       ;;(add-to-list 'load-path (concat local-emacs-org-dir
@@ -1501,50 +2296,44 @@ that I share between work and home
 
 * TODO Other Setup
 
-  #+begin_src emacs-lisp
-    (setq-default indent-tabs-mode t)
-    
-    (define-key global-map "\C-cl" 'org-store-link)
-    (define-key global-map "\C-ca" 'org-agenda)
-    
-    (define-key global-map "\C-cr" 'org-remember)
-        
-    (define-key global-map [f8] 'remember)
-    (define-key global-map [f9] 'remember-region)
-        
-    (global-set-key "\C-x\C-r" 'prefix-region)
-    (global-set-key "\C-x\C-l" 'goto-line)
-    ;;(global-set-key "\C-x\C-y" 'copy-region-as-kill)
-  #+end_src
+	#+begin_src emacs-lisp
+		(setq-default indent-tabs-mode t)
+		
+		(define-key global-map "\C-cl" 'org-store-link)
+		(define-key global-map "\C-ca" 'org-agenda)
+						
+		(global-set-key "\C-x\C-r" 'prefix-region)
+		(global-set-key "\C-x\C-l" 'goto-line)
+	#+end_src
 
 * Load Local settings
 
-  Last but not least we need to load the part of the .emacs that is
-  local to this machine. That is also a org-babel emacs file.
+	Last but not least we need to load the part of the .emacs that is
+	local to this machine. That is also a org-babel emacs file.
 
-  #+begin_src emacs-lisp
-    (add-to-list 'load-path (concat local-emacs-org-dir "local"))
-    (org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
-  #+end_src
+	#+begin_src emacs-lisp
+		(add-to-list 'load-path (concat local-emacs-org-dir "local"))
+		(org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
+	#+end_src
 
-* Filesets                                                          :filesets:
+* Filesets                                                         :filesets:
 
 The commands that can operate on file sets are specified in the global
 custom variable "filesets-commands". You can add your own commands to
 that list. The default value for this variable is: 
 
 ("Isearch" multi-isearch-files
-  (filesets-cmd-isearch-getargs))
+	(filesets-cmd-isearch-getargs))
  ("Isearch (regexp)" multi-isearch-files-regexp
-  (filesets-cmd-isearch-getargs))
+	(filesets-cmd-isearch-getargs))
  ("Query Replace" perform-replace
-  (filesets-cmd-query-replace-getargs))
+	(filesets-cmd-query-replace-getargs))
  ("Query Replace (regexp)" perform-replace
-  (filesets-cmd-query-replace-regexp-getargs))
+	(filesets-cmd-query-replace-regexp-getargs))
  ("Grep <<selection>>" "grep"
-  ("-n " filesets-get-quoted-selection " " "<<file-name>>"))
+	("-n " filesets-get-quoted-selection " " "<<file-name>>"))
  ("Run Shell Command" filesets-cmd-shell-command
-  (filesets-cmd-shell-command-getargs)))
+	(filesets-cmd-shell-command-getargs)))
 
 The values consist of an association list of names, functions, and an
 argument list (or a function that returns one) to be run on a
@@ -1554,7 +2343,7 @@ an example to create your own new entry (that you would add to the
 "filesets-commands" global variable) that would look something like: 
 
  ("Occur (regexp)" multi-occur-files-regexp
-  (filesets-cmd-occur-getargs))
+	(filesets-cmd-occur-getargs))
 
 You would need to write the "multi-occur-files-regexp" and
 "filesets-cmd-occur-getargs" functions (you could use the existing
@@ -1563,15 +2352,15 @@ functions as a basis since they would be similar). The same would
 apply for any additional Emacs command that you wanted to add to work
 on file sets. 
 
-  #+begin_src emacs-lisp
-    ;; now when both shared and local config has been parsed we should be
-    ;; able to init the filesets menu.
-    (filesets-init)
-  #+end_src
-  
+	#+begin_src emacs-lisp
+		;; now when all org-directories has been parsed we should be
+		;; able to init the filesets menu.
+		(filesets-init)
+	#+end_src
+	
 * TODO ERC
 
-  #+begin_src emacs-lisp
+	#+begin_src emacs-lisp
     (require 'erc-join)    
     (require 'erc-match)
     (setq erc-keywords '("darion" "kurohin"))
@@ -1633,26 +2422,57 @@ on file sets.
     (global-set-key (kbd "C-c I") 'reset-erc-track-mode)
     (setq erc-auto-query 'buffer)
     
-  #+end_src
+	#+end_src
 
-* BBDB
+* TODO BBDB
 
-#+begin_src emacs-lisp
-  (add-to-list 'load-path (concat local-emacs-org-dir "bbdb2/lisp"))
-  ;;(require 'bbdb)
-  ;;(bbdb-initialize 'gnus 'message)
-  ;;(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
-#+end_src
-  
-  other stuff i might need
-  (provide 'bbdb-autoloads)
-  (if
-  (and load-file-name
-  (file-name-directory load-file-name))
-  (add-to-list 'load-path (file-name-directory load-file-name)))
+* DONE windows context menu integration																:instw:
+	:LOGBOOK:
+	- State "DONE"       from "TODO"  [2013-03-15 fr 10:38]
+		works fine
+	:END:
+	Starting Emacs From Global Context Menu
+	
+	Here is a simple but useful way to access Emacs. It adds the option to open a file in
+	Emacs to your global context menu (i.e., right clicking on a file). This runs a new
+	Emacs instance for each file. (Note: not the “Open With” submenu, but the top level
+	context menu.) 
+
+	This has been tested under WinXP.
+
+	Create a file of the code below, change paths to were you have emacs installed and run
+	it.
+
+	#+begin_src conf-windows
+    REGEDIT4      
+    [HKEY_CLASSES_ROOT\*\shell]
+      
+    [HKEY_CLASSES_ROOT\*\shell\openwemacs]
+    @="&GNU Emacs (client)"
+    # The above value appears in the global context menu, 
+    # i.e., when you right click on a file.
+    # (The '&' makes the next character a shortcut.)
+    "Icon"="C:\\users\\jiha\\Emacs-24.1\\bin\\emacs.exe,0"
+    # The above uses the icon of the Emacs exe for the context
+    # and should match the path used for the command below.
+    # The ,0 selects the main icon.
+    
+    [HKEY_CLASSES_ROOT\*\shell\openwemacs\command]
+    @="C:\\users\\jiha\\Emacs-24.1\\bin\\emacsclientw \"%1\""
+    # The above has to point to where you install Emacs 
+	#+end_src
+
+	If it does not work, check the paths one more time.
 
 * List of others configurations that you can look at and steal ideas from
 
-  - http://git.naquadah.org/git/~jd/emacs.d.git :: http://julien.danjou.info/
+	- Julien Danjou :: http://git.naquadah.org/git/~jd/emacs.d.git
+	- Thomas Krennwallner's :: http://www.postsubmeta.net/MyConfig/Emacs 
 
-#  LocalWords:  Uniquify Iswitch emacs src Whitespace
+#	 LocalWords:	Uniquify Iswitch emacs src Whitespace
+
+
+
+
+toma
+patroN

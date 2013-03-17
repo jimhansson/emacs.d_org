@@ -1,0 +1,5 @@
+
+#+begin_src emacs-lisp
+; we must have something here
+(add-to-list 'local-org-agenda-files "emacs.org")
+#+end_src

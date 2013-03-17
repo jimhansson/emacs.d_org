@@ -1,0 +1,13 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schemas.xmlsoap.org/wsdl/"
+           elementFormDefault="qualified">
+
+   <xs:include schemaLocation="./wsdl11.xsd"/>
+   <xs:import schemaLocation="./wsdl11-http.xsd"
+              namespace="http://schemas.xmlsoap.org/wsdl/http/"/>
+   <xs:import schemaLocation="./wsdl11-mime.xsd"
+              namespace="http://schemas.xmlsoap.org/wsdl/mime/"/>
+   <xs:import schemaLocation="./wsdl11-soap.xsd"
+              namespace="http://schemas.xmlsoap.org/wsdl/soap/"/>
+
+</xs:schema>
