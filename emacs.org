@@ -805,19 +805,42 @@ that I share between work and home
 			#+end_src
 ***** TODO need to test all this to see if it works.
 *** nXML
-		:LOGBOOK:
-		CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 13:23] =>  1:15
-		:END:
+    :LOGBOOK:
+    CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 13:23] =>  1:15
+    :END:
 
-		#+begin_src emacs-lisp      
-      ;;(add-to-list 'rng-schema-locating-files
-      ;;             (concat local-emacs-org-dir "xml-schemas/schemas.xml"))
-		#+end_src
+    First we need a local place to store all relax ng files used to validate and provide
+    completion, that is synced between machines.
+    
+    #+begin_src emacs-lisp
+      ;; nxml is a part of the emacs distrobution so we don't need to have (when (require
+      ;; .... 'noerror) around it, but we need to eval-after-load so the variable are
+      ;; defined. 
+      
+      (eval-after-load "nxml-mode" 
+        '(add-to-list 'rng-schema-locating-files
+                      (concat local-emacs-org-dir "xml-schemas/schemas.xml")))
+    #+end_src
+
+    We want completion and other fun stuff
+
+    #+begin_src emacs-lisp
+      ;; just writing </ should be enaough to close last tag
+      ;; ctrl tab to complete, this will do until we fixes w32 special keys things.
+      (eval-after-load "nxml-mode"
+        '(progn (setq nxml-slash-auto-complete-flag t)
+                (define-key nxml-mode-map (kbd "C-<tab>") 'nxml-complete)))
+    #+end_src
+
 ***** DONE add local directory for storing extra schemsa
 			:LOGBOOK:
 			- State "DONE"       from "TODO"       [2013-03-17 sö 13:23]
 			:END:
-***** TODO Schema for soap and wsdl
+***** DONE Schema for soap and wsdl
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-17 sö 21:12] \\
+				Somewhat done wsdl/wsdl1.rnc funkar någolunda.
+			:END:
 ***** TODO support validation
 			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
 ***** Tools used for convertering to RelaxNG
