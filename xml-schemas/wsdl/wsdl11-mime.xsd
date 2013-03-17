@@ -1,0 +1,26 @@
+<xs:schema targetNamespace="http://schemas.xmlsoap.org/wsdl/mime/"
+           xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="content" type="mime:contentType"/>
+  <xs:complexType name="contentType">
+    <xs:attribute name="type" type="xs:string" use="optional"/>
+    <xs:attribute name="part" type="xs:NMTOKEN" use="optional"/>
+  </xs:complexType>
+  <xs:element name="multipartRelated" type="mime:multipartRelatedType"/>
+  <xs:complexType name="multipartRelatedType">
+    <xs:sequence>
+      <xs:element ref="mime:part" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="part" type="mime:partType"/>
+  <xs:complexType name="partType">
+    <xs:sequence>
+      <xs:any namespace="targetNamespace" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:NMTOKEN" use="required"/>
+  </xs:complexType>
+  <xs:element name="mimeXml" type="mime:mimeXmlType"/>
+  <xs:complexType name="mimeXmlType">
+    <xs:attribute name="part" type="xs:NMTOKEN" use="optional"/>
+  </xs:complexType>
+</xs:schema>

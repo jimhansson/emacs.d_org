@@ -805,7 +805,18 @@ that I share between work and home
 			#+end_src
 ***** TODO need to test all this to see if it works.
 *** nXML
-***** TODO add local directory for storing extra schemsa
+		:LOGBOOK:
+		CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 13:23] =>  1:15
+		:END:
+
+		#+begin_src emacs-lisp      
+      (add-to-list 'rng-schema-locating-files
+                   (concat local-emacs-org-dir "xml-schemas/schemas.xml"))
+		#+end_src
+***** DONE add local directory for storing extra schemsa
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-17 sö 13:23]
+			:END:
 ***** TODO Schema for soap and wsdl
 ***** TODO support validation
 			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
@@ -820,6 +831,9 @@ that I share between work and home
              I rng|rnc|dtd|xml] [-O rng|rnc|dtd|xsd] [-i input-param] [-o output-param] input
              FileOrUri ... outputFile
 					 #+end_example
+***** links
+			- howto specify things in schemas.xml ::
+           http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
 
 * Iswitch Buffers                                                   :buffers:
 

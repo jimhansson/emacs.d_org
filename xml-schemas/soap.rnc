@@ -1,0 +1,64 @@
+namespace xs = "http://www.w3.org/2001/XMLSchema"
+
+start =
+  element xs:schema {
+    attribute targetNamespace { xsd:anyURI },
+    element xs:import {
+      attribute namespace { xsd:anyURI }
+    },
+    (attributeGroup
+     | \element
+     | element xs:complexType {
+         attribute abstract { xsd:boolean }?,
+         attribute name { xsd:NCName },
+         (attributeGroup
+          | element xs:complexContent {
+              restriction
+              | element xs:extension {
+                  attribute base { xsd:NMTOKEN },
+                  (element xs:sequence { \element }
+                   | \attribute+),
+                  attributeGroup?
+                }
+            })
+       }
+     | element xs:simpleType {
+         attribute name { xsd:NCName },
+         (restriction
+          | (element xs:annotation {
+               element xs:documentation { text }
+             },
+             element xs:list {
+               attribute itemType { xsd:NMTOKEN }
+             }))
+       })+
+  }
+restriction =
+  element xs:restriction {
+    attribute base { xsd:NMTOKEN },
+    ((\attribute+, attributeGroup)
+     | element xs:enumeration {
+         attribute value { xsd:NCName }
+       }+)
+  }
+\element =
+  element xs:element {
+    attribute maxOccurs { xsd:NCName }?,
+    attribute minOccurs { xsd:integer }?,
+    attribute name { xsd:NCName }?,
+    attribute ref { xsd:NMTOKEN }?,
+    attribute type { xsd:NMTOKEN }?
+  }
+attributeGroup =
+  element xs:attributeGroup {
+    attribute name { xsd:NCName }?,
+    attribute ref { xsd:NMTOKEN }?,
+    \attribute*
+  }
+\attribute =
+  element xs:attribute {
+    attribute name { xsd:NCName }?,
+    attribute ref { xsd:NMTOKEN }?,
+    attribute type { xsd:NMTOKEN }?,
+    attribute use { xsd:NCName }
+  }
