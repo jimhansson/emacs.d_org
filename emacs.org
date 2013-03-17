@@ -14,7 +14,7 @@ that I share between work and home
 #+STARTUP: hidestars hideblocks
 #+COLUMNS: %50ITEM %4TODO %20TAGS
 #+LINK: norang http://doc.norang.ca/org-mode.html#
-  
+#+LINK: wiki http://emacswiki.org/emacs/  
 * Bugs
 * Introduction
   Basic things that could have been down throu custom-set-variable but
@@ -597,7 +597,7 @@ that I share between work and home
      #+end_src
 
 * TODO Coding
-
+  
   Here I will place everything that has todo with coding
 
 *** Flymake
@@ -620,7 +620,7 @@ that I share between work and home
     :LOGBOOK:
     - State "DONE"       from "TODO"       [2012-10-11 Thu 22:35]
     :END:
-    check out [[http://emacswiki.org/emacs/IndentingC#toc2][emacswiki on indenting]]
+    check out [[wiki:IndentingC#toc2][emacswiki on indenting]]
 ***** Microsoft C & C++ style
 
       Here is a style that pretty much matches the observed style of
@@ -1039,18 +1039,18 @@ that I share between work and home
       (setq org-insert-mode-line-in-empty-file t)
       ;; setup automatic expiring of old entries with creation date
       ;; if entries does not have creation date they will never expire.
-      (load-file (concat local-emacs-org-dir "org-modules/org-expiry.el"))
+      ;;(load-file (concat local-emacs-org-dir "org-modules/org-expiry.el"))
       (setq org-expiry-wait "+2m")
       ;;(org-expiry-insinuate)
-      (load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
-      (require 'org-crypt)
-      (org-crypt-use-before-save-magic)
+      ;;(load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
+      ;;(require 'org-crypt)
+      ;;(org-crypt-use-before-save-magic)
       (setq org-tags-exclude-from-inheritance (quote ("crypt")))
       (run-at-time "00:59" 3600 'org-save-all-org-buffers)
       ;; because of org-mode modulare structure some variables and other
-      ;; things are not knowm before you have used them once, this solves
+      ;; things are not known before you have used them once, this solves
       ;; that problem at least partially.
-      (org-require-autoloaded-modules)
+      ;;(org-require-autoloaded-modules)
     #+end_src
     
     A large part of the configuration has to do with how org should
@@ -1279,7 +1279,7 @@ that I share between work and home
       ;; resurrect clock and clocking history
       ;; this need to be placed after Local and Shared init of org-files so
       ;; we have all files where we should look for clocked in tasks.
-      (org-clock-persistence-insinuate)
+      ;;(org-clock-persistence-insinuate)
     #+end_src
     
     #+begin_src emacs-lisp
@@ -1398,9 +1398,9 @@ that I share between work and home
 
 *** Org-sync
     #+begin_example emacs-lisp
-      (load-file "org-modules/org-element.el")
-      (load-file "org-sync2/os.el") ;; org-sync
-      (load-file "org-sync2/os-github.el") ;; github
+      ;;(load-file "org-modules/org-element.el")
+      ;;(load-file "org-sync2/os.el") ;; org-sync
+      ;;(load-file "org-sync2/os-github.el") ;; github
       ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
     #+end_example
 
@@ -1421,10 +1421,10 @@ that I share between work and home
   most of these things comes from http://julien.danjou.info/
 *** Google maps                                                         :org:
     #+begin_src emacs-lisp
-      (add-to-list 'load-path (concat local-emacs-org-dir
-                                      "google-maps"))
-      (when (require 'google-maps nil 'noerror)
-        (when (require 'org-location-google-maps nil 'noerror)))
+      ;;(add-to-list 'load-path (concat local-emacs-org-dir
+      ;;                                "google-maps"))
+      ;;(when (require 'google-maps nil 'noerror)
+      ;;  (when (require 'org-location-google-maps nil 'noerror)))
     #+end_src
     You can then use M-x google-maps and type a location.
     
@@ -1452,8 +1452,8 @@ that I share between work and home
 
     The easiest way to use it is to load it from your .emacs:
     #+begin_src emacs-lisp
-      (add-to-list 'load-path (concat local-emacs-org-dir "google-contacts"))
-      (when (require 'google-contacts nil 'noerror))
+      ;;(add-to-list 'load-path (concat local-emacs-org-dir "google-contacts"))
+      ;;(when (require 'google-contacts nil 'noerror))
     #+end_src
     You can then use M-x google-contacts and type a query string.
     
