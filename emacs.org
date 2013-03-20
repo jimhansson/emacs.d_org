@@ -45,7 +45,7 @@ that I share between work and home
 
 *** Requirements from elpa
 
-		First setup package archives
+		First we need to setup the package system in emacs
 		#+begin_src emacs-lisp
 			; Setup package archives
 			(setq package-archives ())
@@ -832,6 +832,19 @@ that I share between work and home
                 (define-key nxml-mode-map (kbd "C-<tab>") 'nxml-complete)))
     #+end_src
 
+		#+begin_src emacs-lisp
+      (add-to-list 'auto-mode-alist '("\\.html$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.rng$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.rss$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.sch$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.svg$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.wsdl$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.xsd$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.xslt$" . nxml-mode))
+		#+end_src
+
 ***** DONE add local directory for storing extra schemsa
 			:LOGBOOK:
 			- State "DONE"       from "TODO"       [2013-03-17 sö 13:23]
@@ -1300,17 +1313,17 @@ that I share between work and home
 
 		#+begin_src emacs-lisp
 			;; using my own
-			(load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
-			(require 'edmacro)
-			(require 'cedet)
+			;;(load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
+			;;(require 'edmacro)
+			;;(require 'cedet)
 			;; Enable EDE (Project Management) features
-			(global-ede-mode t)										 
-			(semantic-load-enable-gaudy-code-helpers)
-			(global-semantic-tag-folding-mode 1)
+			;;(global-ede-mode t)										 
+			;;(semantic-load-enable-gaudy-code-helpers)
+			;;(global-semantic-tag-folding-mode 1)
 			;; Enable prototype help and smart completion 
 			;; (semantic-load-enable-code-helpers)
 			;; Enable SRecode (Template management) minor-mode.
-			(global-srecode-minor-mode 1)
+			;;(global-srecode-minor-mode 1)
 		#+end_src
 
 		#+begin_src emacs-lisp
@@ -1328,7 +1341,7 @@ that I share between work and home
 			#+begin_src emacs-lisp
 			;;	(semantic-load-enable-excessive-code-helpers)
 			#+end_src
-
+      
 *** TODO ECB
 
 		#+begin_src emacs-lisp
