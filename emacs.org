@@ -94,11 +94,6 @@ that I share between work and home
 		#+begin_example
 			;; this is what is needed in the real .emacs file.
 			;; remember to change the paths at the bottom of this file
-			; found on EmacsWiki
-			(setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
-															 ("gnu" . "http://elpa.gnu.org/packages/")))
-			; http://marmalade-repo.org/
-			(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 			
 			(add-to-list 'load-path "~/.emacs.d/")
 			(require 'cl)
@@ -130,48 +125,6 @@ that I share between work and home
 			#+begin_example
 				(when (require 'deft nil 'noerror)) 
 			#+end_example
-* Some Basic faces                                                    :faces:
-
-	I use the possiblity that a face can inherit from one, or more faces
-	to setup faces along a few different axis.
-	#+begin_src emacs-lisp
-
-		(defgroup jiha-faces nil "Configuration for faces")
-		; expirment
-		; defines the basic faces used to for indicating how important thing is
-		(defface jiha-need-attention-face 
-			'((t (:foreground "Red")))
-			"Some text"
-			:group 'jiha-faces)
-		
-		(defface jiha-notice-me-face			
-			'((t (:foreground "salmon")))
-			"Some text"
-			:group 'jiha-faces)
-		
-		(defface jiha-warning-face 
-			'((t (:foreground "Orange")))
-			"Some text"
-			:group 'jiha-faces)
-		
-		(defface jiha-good-thing-face
-			'((t (:foreground "Green")))
-			"Some Text"
-			:group 'jiha-faces)
-		
-		; Face to tell that it should not be changed or can not be changed
-		(defface jiha-donotwrite-face
-			'((t (:foreground "Red")))
-			"Some Text"
-			:group 'jiha-faces)
-		
-		; Things that dont really exist, or not a file
-		(defface jiha-not-real-face 
-			'((t (:slant italic :group jiha-faces)))
-			"Some Text"
-			:group 'jiha-faces)
-		
-	#+end_src
 
 * Global Things
 *** Setup
@@ -998,29 +951,6 @@ that I share between work and home
 
 		#+begin_src emacs-lisp
 			; coloring
-				
-			; these are the the standard faces used but with new names so we can
-			; change them in a simple way.
-			(defface jiha-ibuffer-readonly-face 
-				'((t (:inherit	(jiha-donotwrite-face font-lock-constant-face))))
-				"Some Text"
-				:group 'jiha-faces)
-			(defface jiha-ibuffer-compressed-file-name-regex-face 
-				'((t (:inherit font-lock-doc-face)))
-				"Some Text"
-				:group 'jiha-faces)
-			(defface jiha-ibuffer-dired-mode-face 
-				'((t (:inherit font-lock-function-name-face)))
-				"Some Text"
-				:group 'jiha-faces)
-			(defface jiha-ibuffer-help-modes-face 
-				'((t (:inherit font-lock-comment-face)))
-				"Some Text"
-				:group 'jiha-faces)
-			(defface jiha-ibuffer-some-weird-face 
-				'((t (:slant italic)))
-				"Some Text"
-				:group 'jiha-faces)
 			
 			; format of the list is priority, condition, face
 			; highest priority wins
@@ -1742,50 +1672,12 @@ that I share between work and home
 													(sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)")
 													(sequence "ESTIMATE" "|" "ESTIMATED"))))
 						
-						(setq org-todo-keyword-faces
-									(quote (("TODO"			 . jiha-org-todo-keywords-face)
-													("NEXT" :foreground "light blue" :weight bold)
-													("DONE"			 . jiha-org-done-keywords-face)
-													("WAITING"	 . jiha-org-onhold-keywords-face)
-													("HOLD"			 . jiha-org-onhold-keywords-face)
-													("ESTIMATE"	 . jiha-org-onhold-keywords-face)
-													("CANCELLED" . jiha-org-not-important-keywords-face)
-													("PHONE"		 . jiha-org-not-important-keywords-face))))
-						 
 		#+end_src
 
 *** Org todo keyword faces                                            :faces:
 		All kewords are should be bold, that tells me they are keywords
 		#+begin_src emacs-lisp
-			;; All keywords should be in bold so it's easy to se them as keywords
-			(defface jiha-org-keywords-face 
-				'((t (:inherit default :weight extra-bold)))
-				"some String"
-				:group 'jiha-faces)
-			
-			(defface jiha-org-todo-keywords-face
-				'((t (:inherit (jiha-need-attention-face
-												jiha-org-keywords-face))))
-				"Some Text"
-				:group 'jiha-faces)
-			(defface jiha-org-done-keywords-face
-				'((t (:inherit (jiha-good-thing-face 
-												jiha-org-keywords-face))))
-				"Some Text"
-				:group 'jiha-faces)
-			
-			(defface jiha-org-onhold-keywords-face
-				'((t (:inherit (jiha-notice-me-face
-												jiha-org-keywords-face))))
-				"Some Text"
-				:group 'jiha-faces)
-			
-			(defface jiha-org-not-important-keywords-face
-				'((t (:inherit (jiha-not-real-face
-												jiha-good-thing-face
-												jiha-org-keywords-face))))
-				"Some Text"
-				:group 'jiha-faces)
+
 		#+end_src
 *** Init
 
