@@ -47,12 +47,25 @@ that I share between work and home
 
 		First we need to setup the package system in emacs
 		#+begin_src emacs-lisp
-			; Setup package archives
-			(setq package-archives ())
-			(add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
-			(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-			(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-			(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+      (if (require 'package)
+          (let ((archives  '(("ELPA" . "http://tromey.com/elpa/")
+                             ("gnu" . "http://elpa.gnu.org/packages/")
+                             ("marmalade" . "http://marmalade-repo.org/packages/")
+                             ("melpa" . "http://melpa.milkbox.net/packages/"))))
+            (progn
+              (dolist (archive archives)
+                (progn 
+                  (add-to-list 'package-archives archive)))
+             
+             (package-initialize)
+      
+             ;;(unless (and (file-exists-p "~/.emacs.d/elpa/archives/marmalade")
+             ;;      (file-exists-p "~/.emacs.d/elpa/archives/gnu")
+             ;;      (file-exists-p "~/.emacs.d/elpa/archives/melpa"))
+             ;; (package-refresh-contents))
+             ))
+        ;; If something goes wrong when requiring package
+        (error "%s" "Error in config: initalizing packages"))
 		#+end_src
 
 		Then use M-x list-packages to find and install these packages.
