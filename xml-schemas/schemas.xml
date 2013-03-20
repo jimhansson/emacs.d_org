@@ -1,16 +1,21 @@
 <!-- local schemas used by me -->
 <locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+	<transformURI fromPattern="*.xml" toPattern="*.rnc"/>
 
-	<uri pattern="*.wsdl" typeId="WSDL"/>
-	<namespace ns="http://schemas.xmlsoap.org/wsdl/" typeId="WSDL"/>
-	<documentElement prefix="wsdl" typeId="WSDL"/>
-
+	<!-- XML Schema -->
   <uri pattern="*.xsd" typeId="XML Schema"/>
   <namespace ns="http://www.w3.org/2001/XMLSchema" typeId="XML Schema"/>
   <documentElement localName="schema" typeId="XML Schema"/>
+  <documentElement prefix="xsd"  localName="schema" typeId="XML Schema"/>
 
+	<!-- SOAP -->
 	<namespace ns="http://schemas.xmlsoap.org/wsdl/soap/" typeId="SOAP"/>
 	<documentElement prefix="soap" typeId="SOAP"/>
+
+	<!-- WSDL -->
+	<uri pattern="*.wsdl" typeId="WSDL"/>
+	<namespace ns="http://schemas.xmlsoap.org/wsdl/" typeId="WSDL"/>
+	<documentElement prefix="wsdl" typeId="WSDL"/>
 
   <typeId id="XML Schema" uri="xmlschema.rnc"/>
   <typeId id="WSDL" uri="wsdl/wsdl11.rnc"/>
