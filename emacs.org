@@ -1226,20 +1226,9 @@ that I share between work and home
 
 *** Visual Studio Integration
 
-		Integration with VS, We have aseperate file with commands to tell
-		visual studio to do things. at the moment we only have to commands
-		but it should be simple to extend it with others.
-
-		This only work with VS 2008 and NOT with 2010.
-		#+begin_src emacs-lisp
-			;; only on windows to save startup-time
-			(if (eq system-type 'windows-nt)
-					'((org-babel-load-file (concat local-emacs-org-dir "devenv-tricks.org"))
-					 ;; Now in those mode where it might be useful do something like
-					 ;; (global-set-key [f9] 'devenv-toggle-breakpoint)
-					 ;; (global-set-key [f5] 'devenv-debug)
-					(global-set-key [f3] 'devenv-switch-to-devenv)))
-		#+end_src
+		The only integration I have with visual studio at the moment is that I configure
+		visual studio to have a shortcut for opening a file in emacs by using calls to
+		emacsclientw.
 
 *** TODO CEDET
 
@@ -1416,7 +1405,7 @@ that I share between work and home
 			#+end_src
 
 
-* OrgMode		
+* OrgMode
 *** Basic
 		
 		A large part of the configuration has to do with how org should
