@@ -509,21 +509,6 @@ that I share between work and home
 				)
 			(global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
 #+end_example
-*** Fly-make
-***** Flymake Cursor
-
-			The normal operation of flymake allows the user to see the error
-			message for a particular line by “hovering” the mouse over the
-			line. This is inconvenient for people who try to use the keyboard
-			for all input. FlymakeCursor was designed to address that: it
-			displays the flymake error in the minibuffer region, when the
-			cursor is placed on a line containing a flymake error. 
-
-			This works in any language that flymake supports
-
-			#+begin_src emacs-lisp
-				(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
-			#+end_src
 		
 *** Whitespace
 
@@ -1157,7 +1142,7 @@ that I share between work and home
 			(add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
 		 #+end_src
 
-* TODO Coding  
+* TODO Coding
   Here I will place everything that has todo with coding
 
 *** Flymake
@@ -1173,7 +1158,8 @@ that I share between work and home
       This works in any language that flymake supports
 
       #+begin_src emacs-lisp
-        (load-file (concat local-emacs-org-dir "flymake-cursor.el"))
+        ;; we will active this when I have a configuration that will work on both windows and linux.
+        ;;(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
       #+end_src
 *** Compile  
 *** Coding styles
