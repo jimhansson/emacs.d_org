@@ -194,6 +194,65 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	:END:
 	Introduction should only be about requirements and about this
 	config, not really do any configuration.
+* DONE Rework
+	:LOGBOOK:
+	- State "DONE"			 from "NEXT"			 [2013-03-03 sö 21:23] \\
+		yeah!!!
+	CLOCK: [2013-03-03 sö 19:39]--[2013-03-03 sö 21:23] =>	1:44
+	CLOCK: [2013-03-03 sö 15:34]--[2013-03-03 sö 16:38] =>	1:04
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-20 on 23:39
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: OrgMode
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+	this to support more that 2 different org directories and to not
+	make a difference bewtween them as much as possible.
+
+* DONE tabs in org-mode
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-04 må 00:10] \\
+		decided to use tabs instead.
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-20 on 23:39
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: OrgMode
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	should not use tabs for indentation in org-mode.
+
+* DONE add local directory for storing extra schemsa
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-17 sö 13:23]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-20 on 23:40
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Major Modes/nXML
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+* DONE Schema for soap and wsdl
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-17 sö 21:12] \\
+		Somewhat done wsdl/wsdl1.rnc funkar någolunda.
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-20 on 23:40
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Major Modes/nXML
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+
+
+
 
 
 
