@@ -146,10 +146,9 @@ that I share between work and home
 			(setq user-mail-address "jim.hansson@powel.se")		
 		#+end_src
 
-		Here we setup some basic things, I dont like the toolbar so that we
-		turn off, I use OrgMode to almost everything(even my .emacs) so
-		that will be my default mode. Almost all computers I use are
-		laptops and who in there right mind uses 12h clocks.
+		Here we setup some basic things, I dont like the toolbar so that we turn off, I use
+		OrgMode to almost everything(even my .emacs) so that will be my default mode. Almost
+		all computers I use are laptops and who in there right mind uses 12h clocks. 
 
 		#+begin_src emacs-lisp
 			(setq default-major-mode 'org-mode)
@@ -176,12 +175,11 @@ that I share between work and home
 
 *** Disable warnings for first time users
 		
-		For some reason some questions in emacs are yes/no and some are y/n
-		this trips me sometimes so we turn that off, and the same goes for
-		killing emacs. We also removes some questions that are asked to
-		make sure that the users really wants what is going to happen, I
-		know how to use undo and	I usually have some version control
-		system running so I can go back.
+		For some reason some questions in emacs are yes/no and some are y/n this trips me
+		sometimes so we turn that off, and the same goes for killing emacs. We also removes
+		some questions that are asked to make sure that the users really wants what is going
+		to happen, I know how to use undo and I usually have some version control system
+		running so I can go back.
 
 		#+begin_src emacs-lisp
 			;; Changes all yes/no questions to y/n type
