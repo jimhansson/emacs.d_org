@@ -2171,26 +2171,6 @@ that I share between work and home
     #+end_src
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
-* Remember
-  
-  I don't use remember as much at the moment but some day or some
-  other function once I have found out which I shall use. Most of this
-  has been copied from someones GTD.org setup.
-
-  #+begin_src emacs-lisp
-    (autoload 'remember "remember" nil t)
-    (autoload 'remember-region "remember" nil t)
-    (setq remember-annotation-functions '(org-remember-annotation))
-    (setq remember-handler-functions '(org-remember-handler))
-    (add-hook 'remember-mode-hook 'org-remember-apply-template)
-    (setq org-remember-templates
-         '(
-          ("Todo" ?t "** TODO %^{Brief Description} %^g\n%?\nAdded: %U" "~/Dokument/GTD/gtd.org" "Tasks")
-          ("Private" ?p "\n* %^{topic} %T \n%i%?\n" "~/Dokument/GTD/gtd.org" "Private")
-          ("WordofDay" ?w "\n* %^{topic} \n%i%?\n" "~/Dokument/GTD/wotd.org")
-          ))
-  #+end_src
-
 * TODO Other Setup
 
 	#+begin_src emacs-lisp
