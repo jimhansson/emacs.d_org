@@ -662,7 +662,7 @@ that I share between work and home
 			autmatically, after every connection, use the following in your ~/.emacs file: 
 
 			#+begin_src emacs-lisp
-        (add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
+        ;;(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
 			#+end_src
 
 			Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
@@ -677,7 +677,7 @@ that I share between work and home
 			the buffer: 
 			
 			
-			#+begin_src emacs-lisp
+			#+begin_example emacs-lisp
         (defun my-sql-connect-watch (line)
           "Watch for connect statements and set variables accordingly.
         Add this to `comint-input-filter-functions'."
@@ -689,13 +689,13 @@ that I share between work and home
                   sql-alternate-buffer-name (sql-make-alternate-buffer-name))
             (sql-rename-buffer)))
         (add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
-			#+end_src
+			#+end_example
 
 ***** SQLPlus support
 
-			#+begin_src 
+			#+begin_example emacs-lisp
 			 (require 'sqlplus)
-			#+end_src
+			#+end_example
 ***** Remove linenumbers from sqlplus output
 
 			SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
@@ -721,7 +721,7 @@ that I share between work and home
 			The following elisp function must be added to comint-preoutput-filter-functions in
 			order to strip the line numbers junk from the output: 
 
-			#+begin_src emacs-lisp
+			#+begin_example emacs-lisp
         (defun eat-sqlplus-junk (str)
           "Eat the line numbers SQL*Plus returns.
         Put this on `comint-preoutput-filter-functions' if you are
@@ -737,7 +737,7 @@ that I share between work and home
           (while (string-match " [ 1-9][0-9]  " str)
             (setq str (replace-match "" nil nil str)))
           str)
-			#+end_src
+			#+end_example
 			Test it by evaluating the following expression:
 
 			#+begin_example
@@ -748,7 +748,7 @@ that I share between work and home
 			the iSQL mode you have just started is indeed running SQL*Plus, and if it is, it
 			will add eat-sqlplus-junk to comint-preoutput-filter-functions. 
 
-			#+begin_src emacs-lisp
+			#+begin_example emacs-lisp
         (defun install-eat-sqlplus-junk ()
           "Install `comint-preoutput-filter-functions' if appropriate.
             Add this function to `sql-interactive-mode-hook' in your .emacs:
@@ -759,14 +759,14 @@ that I share between work and home
                            'eat-sqlplus-junk)))
 
         (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
-			#+end_src
-***** DONE Placeholder support in sql querys
+			#+end_example
+***** Placeholder support in sql querys
 			:LOGBOOK:
 			- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
 			CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
 			:END:
 
-			#+begin_src emacs-lisp
+			#+begin_example emacs-lisp
         (eval-after-load "sql"
           '(load-library "sql-with-placeholders"))
         (add-hook 'sql-mode-hook (lambda nil
@@ -777,7 +777,7 @@ that I share between work and home
                                    (local-set-key [(control c) (control r)] 
                                                   'sql-send-region-with-placeholders)))
         
-			#+end_src
+			#+end_example
 ***** TODO need to test all this to see if it works.
 *** nXML
     :LOGBOOK:
