@@ -632,195 +632,7 @@ that I share between work and home
 ***** TODO Activate it in those major modes we want it in.
 			- all programing-modes
 			- org-mode
-* Major Modes
-*** PLSQL
-		
-		#+begin_src emacs-lisp
-      (when (require 'plsql nil 'noerror) )
-		#+end_src
-*** SQL-mode
-***** Support Multiple connections
-
-			If you work with multiple connections, you need to rename them such that the next
-			sql-foo command creates a new SQL buffer instead of popping you to the existing
-			one. Use M-x sql-rename-buffer for that, or the SQL menu entry. To do it
-			autmatically, after every connection, use the following in your ~/.emacs file: 
-
-			#+begin_src emacs-lisp
-        ;;(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
-			#+end_src
-
-			Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
-			
-    	#+begin_example
-        connect vdb/vdb@vdbdev;     
-    	#+end_example
-
-			This does not set ‘sql-alternate-buffer-name’, so a subsequent renaming will not
-			produce a new name. Subsequent connections will also not provide the correct default
-			parameters. Here is an Oracle-specific solution, including an automatic renaming of
-			the buffer: 
-			
-			
-			#+begin_example emacs-lisp
-        (defun my-sql-connect-watch (line)
-          "Watch for connect statements and set variables accordingly.
-        Add this to `comint-input-filter-functions'."
-          (set-text-properties 0 (length line) nil line)
-          (when (string-match "connect \\([a-z_]+\\)/\\([a-z_]+\\)@\\([a-z_]+\\)" line)
-            (setq sql-user (match-string 1 line)
-                  sql-password (match-string 2 line)
-                  sql-database (match-string 3 line)
-                  sql-alternate-buffer-name (sql-make-alternate-buffer-name))
-            (sql-rename-buffer)))
-        (add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
-			#+end_example
-
-***** SQLPlus support
-
-			#+begin_example emacs-lisp
-			 (require 'sqlplus)
-			#+end_example
-***** Remove linenumbers from sqlplus output
-
-			SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
-			adds a line number to the beginning of the next line. This line number is not part
-			of the SQL command; it just allows you to refer to and edit specific lines in your
-			SQL command. SQL*Plus acts like the standard text editor. SQL*Plus is on the
-			TheTruePath. 
-
-			This may make SQL*Plus error reporting less comprehensible when using SqlMode. Here
-			is an example of the line number junk: 
-
-			#+begin_example
-        ...
-          2    3    4       from v$parameter p, all_tables u
-                  *
-        ERROR at line 2:
-        ORA-00942: table or view does not exist     
-			#+end_example
-			This only happens if you enter multi-line SQL statements by using C-j instead of RET
-			between lines (ie. using sql-accumulate-and-indent instead of comint-send-input). If
-			you enter SQL statements one at a time, you’ll be fine. 
-
-			The following elisp function must be added to comint-preoutput-filter-functions in
-			order to strip the line numbers junk from the output: 
-
-			#+begin_example emacs-lisp
-        (defun eat-sqlplus-junk (str)
-          "Eat the line numbers SQL*Plus returns.
-        Put this on `comint-preoutput-filter-functions' if you are
-        running SQL*Plus.
-        If the line numbers are not eaten, you get stuff like this:
-        ...
-          2    3    4       from v$parameter p, all_tables u
-                  *
-        ERROR at line 2:
-        ORA-00942: table or view does not exist
-        The mismatch is very annoying."
-          (interactive "s")
-          (while (string-match " [ 1-9][0-9]  " str)
-            (setq str (replace-match "" nil nil str)))
-          str)
-			#+end_example
-			Test it by evaluating the following expression:
-
-			#+begin_example
-        (string= "     from" (eat-sqlplus-junk "  2    3    4       from"))
-			#+end_example
-
-			Install it by adding the following expression to your .emacs; it will check wether
-			the iSQL mode you have just started is indeed running SQL*Plus, and if it is, it
-			will add eat-sqlplus-junk to comint-preoutput-filter-functions. 
-
-			#+begin_example emacs-lisp
-        (defun install-eat-sqlplus-junk ()
-          "Install `comint-preoutput-filter-functions' if appropriate.
-            Add this function to `sql-interactive-mode-hook' in your .emacs:
-            \(add-hook 'sql-mode-hook 'install-eat-sqlplus-junk)"
-          (if (string= (car (process-command (get-buffer-process sql-buffer)))
-                       sql-oracle-program)
-              (add-to-list 'comint-preoutput-filter-functions
-                           'eat-sqlplus-junk)))
-
-        (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
-			#+end_example
-***** Placeholder support in sql querys
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
-			CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
-			:END:
-
-			#+begin_example emacs-lisp
-        (eval-after-load "sql"
-          '(load-library "sql-with-placeholders"))
-        (add-hook 'sql-mode-hook (lambda nil
-                                   (local-set-key [(control c) (control b)] 
-                                                  'sql-send-buffer-with-placeholders)
-                                   (local-set-key [(control c) (control c)] 
-                                                  'sql-send-paragraph-with-placeholders)
-                                   (local-set-key [(control c) (control r)] 
-                                                  'sql-send-region-with-placeholders)))
-        
-			#+end_example
-***** TODO need to test all this to see if it works.
-*** nXML
-    :LOGBOOK:
-    CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 13:23] =>  1:15
-    :END:
-
-    First we need a local place to store all relax ng files used to validate and provide
-    completion, that is synced between machines.
-    
-    #+begin_src emacs-lisp
-      ;; nxml is a part of the emacs distrobution so we don't need to have (when (require
-      ;; .... 'noerror) around it, but we need to eval-after-load so the variable are
-      ;; defined. 
-      
-      (eval-after-load "nxml-mode" 
-        '(add-to-list 'rng-schema-locating-files
-                      (concat local-emacs-org-dir "xml-schemas/schemas.xml")))
-    #+end_src
-
-    We want completion and other fun stuff
-
-    #+begin_src emacs-lisp
-      ;; just writing </ should be enaough to close last tag
-      ;; ctrl tab to complete, this will do until we fixes w32 special keys things.
-      (eval-after-load "nxml-mode"
-        '(progn (setq nxml-slash-auto-complete-flag t)
-                (define-key nxml-mode-map (kbd "C-<tab>") 'nxml-complete)))
-    #+end_src
-
-		#+begin_src emacs-lisp
-      (add-to-list 'auto-mode-alist '("\\.html$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.rng$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.rss$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.sch$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.svg$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.wsdl$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xsd$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xslt$" . nxml-mode))
-		#+end_src
-***** TODO support validation
-			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
-***** Tools used for convertering to RelaxNG
-			- http://debeissat.nicolas.free.fr/XSDtoRNG.php :: can be used to convert from XSD
-           to RelaxNG that nXML uses, web-based
-			- https://code.google.com/p/jing-trang/ :: also a tool for converting between
-					 RelaxNG and other formats, you need java installed, commandline.
-					 #+begin_example
-             #>java -jar tranq.jar
-             usage: java com.thaiopensource.relaxng.translate.Driver [-C catalogFileOrUri] [-
-             I rng|rnc|dtd|xml] [-O rng|rnc|dtd|xsd] [-i input-param] [-o output-param] input
-             FileOrUri ... outputFile
-					 #+end_example
-***** links
-			- howto specify things in schemas.xml ::
-           http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
-
+* Other Major Modes
 * Iswitch Buffers                                                   :buffers:
 
 	To prevent certain buffers from showing up in the completion list,
@@ -1142,7 +954,7 @@ that I share between work and home
 			(add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
 		 #+end_src
 
-* TODO Coding
+* Coding
   Here I will place everything that has todo with coding
 
 *** Flymake
@@ -1390,6 +1202,194 @@ that I share between work and home
 				 '(load-library "sql-indent"))
 			#+end_src
 
+
+*** PLSQL
+		
+		#+begin_src emacs-lisp
+      (when (require 'plsql nil 'noerror) )
+		#+end_src
+*** SQL-mode
+***** Support Multiple connections
+
+			If you work with multiple connections, you need to rename them such that the next
+			sql-foo command creates a new SQL buffer instead of popping you to the existing
+			one. Use M-x sql-rename-buffer for that, or the SQL menu entry. To do it
+			autmatically, after every connection, use the following in your ~/.emacs file: 
+
+			#+begin_src emacs-lisp
+        ;;(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
+			#+end_src
+
+			Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
+			
+    	#+begin_example
+        connect vdb/vdb@vdbdev;     
+    	#+end_example
+
+			This does not set ‘sql-alternate-buffer-name’, so a subsequent renaming will not
+			produce a new name. Subsequent connections will also not provide the correct default
+			parameters. Here is an Oracle-specific solution, including an automatic renaming of
+			the buffer: 
+			
+			
+			#+begin_example emacs-lisp
+        (defun my-sql-connect-watch (line)
+          "Watch for connect statements and set variables accordingly.
+        Add this to `comint-input-filter-functions'."
+          (set-text-properties 0 (length line) nil line)
+          (when (string-match "connect \\([a-z_]+\\)/\\([a-z_]+\\)@\\([a-z_]+\\)" line)
+            (setq sql-user (match-string 1 line)
+                  sql-password (match-string 2 line)
+                  sql-database (match-string 3 line)
+                  sql-alternate-buffer-name (sql-make-alternate-buffer-name))
+            (sql-rename-buffer)))
+        (add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
+			#+end_example
+
+***** SQLPlus support
+
+			#+begin_example emacs-lisp
+			 (require 'sqlplus)
+			#+end_example
+***** Remove linenumbers from sqlplus output
+
+			SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
+			adds a line number to the beginning of the next line. This line number is not part
+			of the SQL command; it just allows you to refer to and edit specific lines in your
+			SQL command. SQL*Plus acts like the standard text editor. SQL*Plus is on the
+			TheTruePath. 
+
+			This may make SQL*Plus error reporting less comprehensible when using SqlMode. Here
+			is an example of the line number junk: 
+
+			#+begin_example
+        ...
+          2    3    4       from v$parameter p, all_tables u
+                  *
+        ERROR at line 2:
+        ORA-00942: table or view does not exist     
+			#+end_example
+			This only happens if you enter multi-line SQL statements by using C-j instead of RET
+			between lines (ie. using sql-accumulate-and-indent instead of comint-send-input). If
+			you enter SQL statements one at a time, you’ll be fine. 
+
+			The following elisp function must be added to comint-preoutput-filter-functions in
+			order to strip the line numbers junk from the output: 
+
+			#+begin_example emacs-lisp
+        (defun eat-sqlplus-junk (str)
+          "Eat the line numbers SQL*Plus returns.
+        Put this on `comint-preoutput-filter-functions' if you are
+        running SQL*Plus.
+        If the line numbers are not eaten, you get stuff like this:
+        ...
+          2    3    4       from v$parameter p, all_tables u
+                  *
+        ERROR at line 2:
+        ORA-00942: table or view does not exist
+        The mismatch is very annoying."
+          (interactive "s")
+          (while (string-match " [ 1-9][0-9]  " str)
+            (setq str (replace-match "" nil nil str)))
+          str)
+			#+end_example
+			Test it by evaluating the following expression:
+
+			#+begin_example
+        (string= "     from" (eat-sqlplus-junk "  2    3    4       from"))
+			#+end_example
+
+			Install it by adding the following expression to your .emacs; it will check wether
+			the iSQL mode you have just started is indeed running SQL*Plus, and if it is, it
+			will add eat-sqlplus-junk to comint-preoutput-filter-functions. 
+
+			#+begin_example emacs-lisp
+        (defun install-eat-sqlplus-junk ()
+          "Install `comint-preoutput-filter-functions' if appropriate.
+            Add this function to `sql-interactive-mode-hook' in your .emacs:
+            \(add-hook 'sql-mode-hook 'install-eat-sqlplus-junk)"
+          (if (string= (car (process-command (get-buffer-process sql-buffer)))
+                       sql-oracle-program)
+              (add-to-list 'comint-preoutput-filter-functions
+                           'eat-sqlplus-junk)))
+
+        (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
+			#+end_example
+***** Placeholder support in sql querys
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
+			CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
+			:END:
+
+			#+begin_example emacs-lisp
+        (eval-after-load "sql"
+          '(load-library "sql-with-placeholders"))
+        (add-hook 'sql-mode-hook (lambda nil
+                                   (local-set-key [(control c) (control b)] 
+                                                  'sql-send-buffer-with-placeholders)
+                                   (local-set-key [(control c) (control c)] 
+                                                  'sql-send-paragraph-with-placeholders)
+                                   (local-set-key [(control c) (control r)] 
+                                                  'sql-send-region-with-placeholders)))
+        
+			#+end_example
+***** TODO need to test all this to see if it works.
+*** nXML
+    :LOGBOOK:
+    CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 13:23] =>  1:15
+    :END:
+
+    First we need a local place to store all relax ng files used to validate and provide
+    completion, that is synced between machines.
+    
+    #+begin_src emacs-lisp
+      ;; nxml is a part of the emacs distrobution so we don't need to have (when (require
+      ;; .... 'noerror) around it, but we need to eval-after-load so the variable are
+      ;; defined. 
+      
+      (eval-after-load "nxml-mode" 
+        '(add-to-list 'rng-schema-locating-files
+                      (concat local-emacs-org-dir "xml-schemas/schemas.xml")))
+    #+end_src
+
+    We want completion and other fun stuff
+
+    #+begin_src emacs-lisp
+      ;; just writing </ should be enaough to close last tag
+      ;; ctrl tab to complete, this will do until we fixes w32 special keys things.
+      (eval-after-load "nxml-mode"
+        '(progn (setq nxml-slash-auto-complete-flag t)
+                (define-key nxml-mode-map (kbd "C-<tab>") 'nxml-complete)))
+    #+end_src
+
+		#+begin_src emacs-lisp
+      (add-to-list 'auto-mode-alist '("\\.html$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.rng$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.rss$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.sch$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.svg$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.wsdl$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.xsd$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
+      (add-to-list 'auto-mode-alist '("\\.xslt$" . nxml-mode))
+		#+end_src
+***** TODO support validation
+			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
+***** Tools used for convertering to RelaxNG
+			- http://debeissat.nicolas.free.fr/XSDtoRNG.php :: can be used to convert from XSD
+           to RelaxNG that nXML uses, web-based
+			- https://code.google.com/p/jing-trang/ :: also a tool for converting between
+					 RelaxNG and other formats, you need java installed, commandline.
+					 #+begin_example
+             #>java -jar tranq.jar
+             usage: java com.thaiopensource.relaxng.translate.Driver [-C catalogFileOrUri] [-
+             I rng|rnc|dtd|xml] [-O rng|rnc|dtd|xsd] [-i input-param] [-o output-param] input
+             FileOrUri ... outputFile
+					 #+end_example
+***** links
+			- howto specify things in schemas.xml ::
+           http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
 
 * OrgMode
 *** Basic
