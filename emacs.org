@@ -38,44 +38,55 @@ that I share between work and home
 	- instl :: for linux specific things.
 
 *** Requirements
+		:PROPERTIES:
+		:ID:       17307662-9183-417f-a32e-7f2d7030f477
+		:END:
 
 		- Emacs 24
 		- a basic .emacs file that calls this after it inits org-babel 
 		- a lot of extra packages. most configuration will check for it
 
-*** Requirements from elpa
-
 		First we need to setup the package system in emacs
+
 		#+begin_src emacs-lisp
       (if (require 'package)
-          (let ((archives  '(("ELPA" . "http://tromey.com/elpa/")
+          (let ((archives  '(("ELPA" . "http://tromey.com/elpa/")           ;;(ref:let)
                              ("gnu" . "http://elpa.gnu.org/packages/")
                              ("marmalade" . "http://marmalade-repo.org/packages/")
                              ("melpa" . "http://melpa.milkbox.net/packages/"))))
             (progn
-              (dolist (archive archives)
+              (dolist (archive archives)                                    ;;(ref:add)
                 (progn 
                   (add-to-list 'package-archives archive)))
              
-             (package-initialize)
-      
-             ;;(unless (and (file-exists-p "~/.emacs.d/elpa/archives/marmalade")
-             ;;      (file-exists-p "~/.emacs.d/elpa/archives/gnu")
-             ;;      (file-exists-p "~/.emacs.d/elpa/archives/melpa"))
-             ;; (package-refresh-contents))
+             (package-initialize)                                          ;;(ref:load)
              ))
-        ;; If something goes wrong when requiring package
+             ;;(unless (and (file-exists-p "~/.emacs.d/elpa/archives/marmalade")
+             ;;      (file-exists-p "~/.emacs.d/elpa/archives/gnu") ;;(ref:refresh)
+             ;;      (file-exists-p "~/.emacs.d/elpa/archives/melpa"))
+             ;;      (package-refresh-contents)) )) 
+             ;; If something goes wrong when requiring package
         (error "%s" "Error in config: initalizing packages"))
 		#+end_src
 
+		In [[let][LET expression]] we set up a local variable for all the package repository we would
+		like to use, in this way that variable is not usable outside the part of the code that
+		should be using it. [[add][DOLIST...ADD-TO-LIST expression]] we add all repositories to a the
+		list used by the package-system, and finally in the [[load][PACKAGE-INITIALIZE]] we setup the
+		packages for actual usage.
+
+		the commented code with [[refresh][UNLESS...PACKAGE-REFRESH-CONTENT]] is something that could be
+		used to do automatic updates from package repo:s, i should turn into something that
+		loops over the archives variable.
+
 		Then use M-x list-packages to find and install these packages.
-		- oauth2 :: for google integration
-								for some reason I need to add oauth directory to
-								load-path, should not elpa take care of that.
-		- bookmark+ :: can do so much more than the normal bookmark
-									 package.
-		- magit :: good mode to handle git repos from within emacs, the
-							 normal VC functions in emacs are not so good at that.
+
+*** Things you should install from package-system								:instw:instl:
+		- oauth2 :: for google integration for some reason I need to add oauth directory to
+		load-path, should not elpa take care of that. 
+		- bookmark+ :: can do so much more than the normal bookmark package. 
+		- magit :: good mode to handle git repos from within emacs, the normal VC functions in
+		emacs are not so good at that.
 		- org-magit :: Allows for links from org into magit buffers.
 		- guess-style :: for coding
 		- guess-offset :: for coding
@@ -85,7 +96,7 @@ that I share between work and home
 		- org-outlook :: integration with outlook
 		- powershell :: for coding
 		- tfs :: for Team Foundation Server.
-
+						 
 		Not so important, but nice to have.
 		- pretty-lambdada :: Show the word `lambda' as the Greek letter.
 
@@ -810,16 +821,6 @@ that I share between work and home
       (add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
       (add-to-list 'auto-mode-alist '("\\.xslt$" . nxml-mode))
 		#+end_src
-
-***** DONE add local directory for storing extra schemsa
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-03-17 sö 13:23]
-			:END:
-***** DONE Schema for soap and wsdl
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-03-17 sö 21:12] \\
-				Somewhat done wsdl/wsdl1.rnc funkar någolunda.
-			:END:
 ***** TODO support validation
 			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
 ***** Tools used for convertering to RelaxNG
@@ -1177,7 +1178,7 @@ that I share between work and home
         (load-file (concat local-emacs-org-dir "flymake-cursor.el"))
       #+end_src
 *** Compile  
-*** DONE Coding styles
+*** Coding styles
     :LOGBOOK:
     - State "DONE"       from "TODO"       [2012-10-11 Thu 22:35]
     :END:
@@ -1417,18 +1418,7 @@ that I share between work and home
 			#+end_src
 
 
-* OrgMode
-*** DONE Rework
-		:LOGBOOK:
-		- State "DONE"			 from "NEXT"			 [2013-03-03 sö 21:23] \\
-			yeah!!!
-		CLOCK: [2013-03-03 sö 19:39]--[2013-03-03 sö 21:23] =>	1:44
-		CLOCK: [2013-03-03 sö 15:34]--[2013-03-03 sö 16:38] =>	1:04
-		:END:
-
-		this to support more that 2 different org directories and to not
-		make a difference bewtween them as much as possible.
-		
+* OrgMode		
 *** Basic
 		
 		A large part of the configuration has to do with how org should
@@ -2137,13 +2127,6 @@ that I share between work and home
 			(dolist (directory (reverse my-org-directories)) 
 				(org-babel-load-file (concat directory "init.org")))
 		#+end_src
-
-*** DONE tabs in org-mode
-    :LOGBOOK:
-    - State "DONE"       from "TODO"       [2013-03-04 må 00:10] \\
-      decided to use tabs instead.
-    :END:
-		should not use tabs for indentation in org-mode.
 
 
 *** TODO work jornal
