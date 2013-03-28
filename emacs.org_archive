@@ -249,6 +249,36 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	:ARCHIVE_CATEGORY: emacs
 	:ARCHIVE_TODO: DONE
 	:END:
+    
+* DONE setup what org-modules we should have
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-28 to 22:41]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-28 to 22:41
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: OrgMode/Org Capture
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+	at the moment this is done on by customize and that means we need
+	to do it on every machine.
+
+* DONE solve the problem with default notes file.
+	:LOGBOOK:
+	- State "DONE"			 from "TODO"			 [2013-03-03 sö 22:15] \\
+		Not a problem when all my templates contain a target.
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-28 to 22:42
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: OrgMode/Org Capture
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+
 
 
 

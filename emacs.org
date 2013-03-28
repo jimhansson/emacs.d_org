@@ -306,6 +306,7 @@ that I share between work and home
 		Desktop sessions are considered “new” by CleanBufferList, even
 		though they may be considered “old”. 
 
+
 * Minor Modes
 
 	We configure the basics of minor modes first, before the majors
@@ -1431,6 +1432,31 @@ that I share between work and home
 			(require 'org-protocol)
 		#+end_src
 		
+*** Global Keys for OrgMode																			:keybindings:
+
+		#+begin_src emacs-lisp
+      ;; org-mode Links
+      ;; insert links should not really be global but what the hell.
+      (global-set-key (kbd "S-<f5>") 'org-insert-link)
+      (global-set-key (kbd "<f5>")   'org-store-link)
+      
+      ;; Agenda
+      (global-set-key (kbd "<f6>") 'org-agenda)
+      (global-set-key (kbd "S-<f6>") 'org-agenda-list)
+      
+      ;; capture
+      ;; ask me what type of item to capture
+      (global-set-key (kbd "<f7>") 'org-capture)
+      ;; currently clocked item
+      (global-set-key (kbd "C-<f7>") (lambda () (interactive) (org-capture nil "c")))
+      ;; default
+      (global-set-key (kbd "S-<f7>") (lambda () (interactive) (org-capture nil "w")))
+      
+		#+end_src
+
+  #+RESULTS:
+	: org-capture
+
 *** Org Modules
 
 		#+begin_src emacs-lisp
@@ -1438,7 +1464,8 @@ that I share between work and home
 			;;(setq org-modules '(org-bbdb org-bibtex org-docview org-gnus 
 			;;														 org-info org-jsinfo org-habit 
 			;;														 org-irc org-mew org-mhe org-rmail 
-			;;														 org-vm org-wl org-w3m))		
+			;;														 org-vm org-wl org-w3m))
+
 		#+end_src
 
 *** Org Protocol                                        :instw:instl:outlook:
@@ -1458,7 +1485,6 @@ that I share between work and home
 			[HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
 			@="C:\Users\jiha\emacs-24.1\bin\emacsclientw.exe %1"
 		#+end_example
-
 
 		for linux you could configure gnome like this.
 
@@ -1505,13 +1531,12 @@ that I share between work and home
 			#+end_example
 
 *** Org Capture
+		:LOGBOOK:
+		CLOCK: [2013-03-28 to 22:48]--[2013-03-28 to 23:26] =>  0:38
+		:END:
 		
 		This is needed by both the [[Org-outlook integration]] and by 
 		[[Org Protocol]]. First some basic setup of org-capture.
-
-		#+begin_src emacs-lisp
-			(define-key global-map "\C-cc" 'org-capture)
-		#+end_src
 
 		We need some good capture templates. remember that the template
 		"key" need to be exactly one character long for it to work with
@@ -1522,88 +1547,69 @@ that I share between work and home
 		add-to-list to append template after template.
 
 		#+begin_src emacs-lisp
-			;; clear the templates list
-			(setq org-capture-templates '())
-			
-			;; next we start to add the templates we want.
-			;; This is the default one.
-			(add-to-list 'org-capture-templates
-									 ;; w has special meaning as a default for capture.
-									 '("w"
-										"Default template"
-										entry
-										(file+headline "~/org/capture.org" "Notes")
-										"* %^{Title}\n\n	Source: %u, %c\n\n	%i"
-										:empty-lines 1))
-			
-			;; This one is called from my integration in outlook throu org-protocol
-			;; Only useful on my workmachine but is not in the way on my home machine
-			;; Placeholders Replacement 
-			;; %:link URL of the email
-			;; %:description The title of the message
-			;; %:title The title of the message 
-			;; %:initial Selected text.
-			;; %:sender Sender's name
-			;; %:sender-email Sender's Email
-			(add-to-list 'org-capture-templates
-									 '("o"
-										"Outlook integration - creates items from mails."
-										entry
-										(file+headline "c:/Users/jiha/Documents/org/mdms/mdms.org" "Inbox")
-										"***** TODO %c\n		 %U\n			%?\n		 #+begin_quote\n			 %:initial\n		 #+end_quote\n"
-										:prepend
-										:empty-lines 1
-										:clock-resume))
-			
-			;; more templates here.
+      ;; clear the templates list
+      (setq org-capture-templates '())
+      
+      ;; next we start to add the templates we want.
+      ;; This is the default one.
+      (add-to-list 'org-capture-templates
+                   ;; w has special meaning as a default for capture.
+                   '("w"
+                     "Default template"
+                     entry
+                     (file+headline "~/org/capture.org" "Notes")
+                     "** %^{Title}
+         Added: %U
+         Source: %c
+         %i
+      "
+                     :empty-lines 1))
+      
+      ;; This one is called from my integration in outlook throu org-protocol
+      ;; Only useful on my workmachine but is not in the way on my home machine
+      ;; Placeholders Replacement 
+      ;; %:link URL of the email
+      ;; %:description The title of the message
+      ;; %:title The title of the message 
+      ;; %:initial Selected text.
+      ;; %:sender Sender's name
+      ;; %:sender-email Sender's Email
+      (add-to-list 'org-capture-templates
+                   '("o"
+                     "Outlook integration - creates items from mails."
+                     entry
+                     (file+headline "c:/Users/jiha/Documents/org/mdms/mdms.org" 
+                                    "Inbox")
+                     "** TODO %c
+         Added: %U
+         %?
+      ,   #+begin_quote
+           %:initial
+      ,   #+end_quote
+      "
+                     :clock-resume
+                     :empty-lines 1
+                     :prepend))
+      
+      ;; This template is used to add notes to currently clocked-in work item.
+      (add-to-list 'org-capture-templates
+                   '("c"
+                     "Add note to currently clocked-in item."
+                     entry
+                     (clock)
+                     "** %^{Title}
+         Added: %U
+         %?"
+                     :clock-keep
+                     :empty-lines 1
+                     :unnarrowed))
+      
 		#+end_src
 
-***** DONE solve the problem with default notes file.
-			:LOGBOOK:
-			- State "DONE"			 from "TODO"			 [2013-03-03 sö 22:15] \\
-				Not a problem when all my templates contain a target.
-			:END:
-
-    #+begin_src emacs-lisp
-      ;; do not have so much in my agenda so two weeks is good
-      (setq org-agenda-ndays 14)
-      (setq org-deadline-warning-days 14)
-      (setq org-timeline-show-empty-dates t)
-      (setq org-agenda-repeating-timestamp-show-all nil)
-      (setq org-agenda-include-diary t)
-      (setq org-feed-alist)
-      (setq org-odd-levels-only t)
-      (setq org-cycle-separator-lines 0)
-      (setq org-use-fast-todo-selection t)
-      (setq org-treat-S-cursor-todo-selection-as-state-change nil)
-      (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-      (setq org-insert-mode-line-in-empty-file t)
-      ;; setup automatic expiring of old entries with creation date
-      ;; if entries does not have creation date they will never expire.
-      ;;(load-file (concat local-emacs-org-dir "org-modules/org-expiry.el"))
-      (setq org-expiry-wait "+2m")
-      ;;(org-expiry-insinuate)
-      ;;(load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
-      ;;(require 'org-crypt)
-      ;;(org-crypt-use-before-save-magic)
-      (setq org-tags-exclude-from-inheritance (quote ("crypt")))
-      (run-at-time "00:59" 3600 'org-save-all-org-buffers)
-      ;; because of org-mode modulare structure some variables and other
-      ;; things are not known before you have used them once, this solves
-      ;; that problem at least partially.
-      ;;(org-require-autoloaded-modules)
-    #+end_src
-    
-    A large part of the configuration has to do with how org should
-    behave. it's a pretty complex mode with lot of things you could
-    change. I have tried to make it as simple a possible with sub-trees
-    for every main function of OrgMode.
-    
-***** TODO setup what org-modules we should have
-
-      at the moment this is done on by customize and that means we need
-      to do it on every machine.
-      
+  #+RESULTS:
+	| c | Add note to currently clocked-in item.          | entry | (clock)                                                         | ** %^{Title}\n   Added: %U\n   %?                                                     | :clock-keep   | :empty-lines | 1 | :unnarrowed |
+	| o | Outlook integration - creates items from mails. | entry | (file+headline c:/Users/jiha/Documents/org/mdms/mdms.org Inbox) | ** TODO %c\n   Added: %U\n   %?\n,   #+begin_quote\n     %:initial\n,   #+end_quote\n | :clock-resume | :empty-lines | 1 | :prepend    |
+	| w | Default template                                | entry | (file+headline ~/org/capture.org Notes)                         | ** %^{Title}\n   Added: %U\n   Source: %c\n   %i\n                                    | :empty-lines  | 1            |   |             |
 *** RSS feeds
 
 		#+begin_src emacs-lisp
@@ -1651,17 +1657,19 @@ that I share between work and home
 		will call special files in those directories at specific times
 
 		#+begin_src emacs-lisp
-			;; for every directory in my-org-directories call init.org
-			;; every init.org file may setup local-org-agenda-files with files that should form a part
-			;; of the org agenda this is added to org-agenda-files here with directory concated
-			;; before. 
-			(dolist (directory my-org-directories) 
-				(setq local-org-agenda-files '())
-				(org-babel-load-file (concat directory "init.org"))
-				(dolist (file local-org-agenda-files)
-					(add-to-list 'org-agenda-files (concat directory file))))
+      ;; for every directory in my-org-directories call init.org
+      ;; every init.org file may setup local-org-agenda-files with files that should form a part
+      ;; of the org agenda this is added to org-agenda-files here with directory concated
+      ;; before. 
+      (dolist (directory my-org-directories) 
+        (setq local-org-agenda-files '())
+        (setq local-org-directory directory)
+        (org-babel-load-file (concat directory "init.org"))
+        (dolist (file local-org-agenda-files)
+          (add-to-list 'org-agenda-files (concat directory file))))
+
 		#+end_src
-		
+***** TODO instead of using setq for vars use let expression
 *** Org-outlook integration                                   :instw:outlook:
 
 		http://www.emacswiki.org/emacs/org-outlook.el
@@ -2097,10 +2105,12 @@ that I share between work and home
 		from the shared org-directory. This calls post.org in reverse order compared to init.
 		
 		#+begin_src emacs-lisp
-			(dolist (directory (reverse my-org-directories)) 
-				(org-babel-load-file (concat directory "init.org")))
+      (dolist (directory (reverse my-org-directories)) 
+        (setq local-org-directory directory)
+        (org-babel-load-file (concat directory "post.org")))
 		#+end_src
 
+***** TODO instead of using setq for vars use let expression
 
 *** TODO work jornal
 		
@@ -2171,15 +2181,11 @@ that I share between work and home
     #+end_src
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
-* TODO Other Setup
+* TODO Other Setup																							:keybindings:
 
 	#+begin_src emacs-lisp
 		(setq-default indent-tabs-mode t)
-		
-		(define-key global-map "\C-cl" 'org-store-link)
-		(define-key global-map "\C-ca" 'org-agenda)
-						
-		(global-set-key "\C-x\C-r" 'prefix-region)
+								
 		(global-set-key "\C-x\C-l" 'goto-line)
 	#+end_src
 
