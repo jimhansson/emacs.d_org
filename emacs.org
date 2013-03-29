@@ -24,8 +24,6 @@ that I share between work and home
 		CLOCK: [2013-03-11 må 22:13]--[2013-03-11 må 22:52] =>  0:39
 		:END:
 
-*** TODO start using dsvn not psvn, psvn is to slow.
-
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -926,7 +924,7 @@ that I share between work and home
 			files, directory buffers etc...
 
 * Buffer Menu
-*** TODO Font lock                                                 :fontlock:
+*** Font lock 																										 :fontlock:
 
 		If you use ElectricBufferList, then simply use this instead for the
 		last line:
@@ -1644,10 +1642,12 @@ that I share between work and home
 		#+end_src
 
 *** Org todo keyword faces                                            :faces:
+
 		All kewords are should be bold, that tells me they are keywords
 		#+begin_src emacs-lisp
 
 		#+end_src
+
 *** Init
 
 		because I have more than one computer and also a work computer, I have split my org
@@ -1662,14 +1662,20 @@ that I share between work and home
       ;; of the org agenda this is added to org-agenda-files here with directory concated
       ;; before. 
       (dolist (directory my-org-directories) 
-        (setq local-org-agenda-files '())
-        (setq local-org-directory directory)
-        (org-babel-load-file (concat directory "init.org"))
-        (dolist (file local-org-agenda-files)
-          (add-to-list 'org-agenda-files (concat directory file))))
-
+        (let ((local-org-agenda-files '())
+              (local-org-directory directory))
+          (org-babel-load-file (concat directory "init.org"))
+          (dolist (file local-org-agenda-files)
+            (add-to-list 'org-agenda-files (concat directory file)))))
+          
 		#+end_src
-***** TODO instead of using setq for vars use let expression
+
+  #+RESULTS:
+
+***** DONE instead of using setq for vars use let expression
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-29 fr 08:57]
+			:END:
 *** Org-outlook integration                                   :instw:outlook:
 
 		http://www.emacswiki.org/emacs/org-outlook.el
@@ -2075,7 +2081,7 @@ that I share between work and home
 				(setq calendar-longitude 14.636068)
 				(setq calendar-location-name "Östersund, Sweden")
 			#+end_src
-*** TODO Exports
+*** Exports
 *** Babel
 ***** SQL
       Sometimes I use sql in org-babel, for that I have modified version
@@ -2105,14 +2111,26 @@ that I share between work and home
 		from the shared org-directory. This calls post.org in reverse order compared to init.
 		
 		#+begin_src emacs-lisp
-      (dolist (directory (reverse my-org-directories)) 
-        (setq local-org-directory directory)
-        (org-babel-load-file (concat directory "post.org")))
+      ;; calling post in all org-directories
+      (dolist (directory (reverse my-org-directories))
+        (let ((local-org-directory directory))
+          (org-babel-load-file (concat directory "post.org"))))
+      
 		#+end_src
 
-***** TODO instead of using setq for vars use let expression
+  #+RESULTS:
 
-*** TODO work jornal
+***** DONE instead of using setq for vars use let expression
+			:LOGBOOK:
+			- State "DONE"       from "NEXT"       [2013-03-29 fr 08:55]
+			:END:
+
+*** DONE work jornal
+		:LOGBOOK:
+		- State "DONE"       from "TODO"       [2013-03-29 fr 08:58] \\
+			Have been implemented with org-capture and a datetree, the shortcuts are sj
+			and wj for shared and for work journal.
+		:END:
 		
 		once maybe twice a week I would like to log what I have done that week it would be
 		nice with a capture template for that, a personal jornal would also be nice but may be
@@ -2181,12 +2199,12 @@ that I share between work and home
     #+end_src
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
-* TODO Other Setup																							:keybindings:
+* Other Setup 																									:keybindings:
 
 	#+begin_src emacs-lisp
-		(setq-default indent-tabs-mode t)
-								
+		(setq-default indent-tabs-mode t)							
 		(global-set-key "\C-x\C-l" 'goto-line)
+
 	#+end_src
 
 * Load Local settings
@@ -2241,7 +2259,7 @@ on file sets.
 		(filesets-init)
 	#+end_src
 	
-* TODO ERC
+* ERC
 
 	#+begin_src emacs-lisp
     (require 'erc-join)    
@@ -2308,7 +2326,6 @@ on file sets.
 	#+end_src
 
 * TODO BBDB
-
 * DONE windows context menu integration																:instw:
 	:LOGBOOK:
 	- State "DONE"       from "TODO"  [2013-03-15 fr 10:38]
