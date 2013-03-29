@@ -369,25 +369,30 @@ that I share between work and home
 		#+end_src
 		
 ***** Fly-spell for comments when programming                        :coding:
-
+			
 			#+begin_src emacs-lisp
-				;; Flyspell in C based programming modes
-				(add-hook 'c-mode-hook
-									(lambda ()
-										(flyspell-prog-mode)))
-				
-				;; Flyspell in C++ based programming modes
-				(add-hook 'c++-mode-hook
-									(lambda ()
-										(flyspell-prog-mode)))
-				
-				;; Flyspell in emacs-lisp mode
-				(add-hook 'lisp-mode-hook
-									(lambda ()
-										(flyspell-prog-mode)))
+        ;; Fly-spell in C based programming modes
+        (add-hook 'c-mode-hook
+                  (lambda ()
+                    (flyspell-prog-mode)))
+        
+        ;; Fly-spell in C++ based programming modes
+        (add-hook 'c++-mode-hook
+                  (lambda ()
+                    (flyspell-prog-mode)))
+        
+        ;; Fly-spell in emacs-lisp mode
+        (add-hook 'lisp-mode-hook
+                  (lambda ()
+                    (flyspell-prog-mode)))
+        
 			#+end_src
 
-***** TODO word-list for org-files.
+***** DONE word-list for org-files.
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-29 fr 16:13] \\
+				not needed, works somewhat fine now.
+			:END:
 			
 			org-files contains some reserved words like #+begin_* ... these
 			should be included in some sort of wordlist we use. so we don't get
@@ -397,7 +402,11 @@ that I share between work and home
 			
 			Or switch to flyspell-prog-mode somehow.
 
-***** TODO Avoid false positives
+***** DONE Avoid false positives
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-29 fr 16:18] \\
+				looks like it work now with later versions of org-mode
+			:END:
 
 			I recently started using flyspell and am enjoying its features. Is
 			there a way to disable flyspell for certain regexps? For instance,
@@ -418,13 +427,17 @@ that I share between work and home
 			Thanks for pointing me to the flyspell-generic-check-word-predicate
 			variable. – MattLundin
 
-***** TODO Windows
+***** DONE Windows
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-03-29 fr 16:16] \\
+				Solved it another way, using aspell.
+			:END:
 			
 			we need to install cygwin and use aspell.
 			http://curiousprogrammer.wordpress.com/2009/04/25/flyspell-windows/
 
 ***** TODO somehow use #+LANGUAGE in org to choose wordlist.
-***** Other flyspell things
+***** Other fly-spell things
 ******* Change dictionaries
 
 		As I often need to switch between English and German I use this
@@ -509,6 +522,13 @@ that I share between work and home
 			(global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
 #+end_example
 		
+***** Installing ispell on windows																		:instw:
+
+			look here and download everthing you need.
+			http://aspell.net/win32/
+
+			add aspell directory to path
+
 *** Whitespace
 
 		I use whitespace mode a lot, maybe because I dont have configured
@@ -1439,8 +1459,8 @@ that I share between work and home
       (global-set-key (kbd "<f5>")   'org-store-link)
       
       ;; Agenda
-      (global-set-key (kbd "<f6>") 'org-agenda)
-      (global-set-key (kbd "S-<f6>") 'org-agenda-list)
+      (global-set-key (kbd "S-<f6>") 'org-agenda)
+      (global-set-key (kbd "<f6>") 'org-agenda-list)
       
       ;; capture
       ;; ask me what type of item to capture
