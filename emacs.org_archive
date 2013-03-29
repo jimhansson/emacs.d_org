@@ -127,11 +127,11 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 		CLOCK: [2012-08-21 ti 11:11]--[2012-08-21 ti 11:13] =>  0:02
 		- I does not work with svg, need png's on windows. emacs on
 			windows does not support svg.
-		CLOCK: [2012-08-20 må 10:35]--[2012-08-20 må 11:46] =>  1:11
+		CLOCK: [2012-08-20 mÃ¥ 10:35]--[2012-08-20 mÃ¥ 11:46] =>  1:11
 		:END:
 * Remember
 	:PROPERTIES:
-	:ARCHIVE_TIME: 2012-10-13 lö 10:36
+	:ARCHIVE_TIME: 2012-10-13 lÃ¶ 10:36
 	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	:ARCHIVE_CATEGORY: emacs
 	:END:
@@ -159,7 +159,7 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	- State "DONE"       from "TODO"       [2012-10-12 fr 11:02]
 	:END:
 	:PROPERTIES:
-	:ARCHIVE_TIME: 2012-10-15 må 10:56
+	:ARCHIVE_TIME: 2012-10-15 mÃ¥ 10:56
 	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	:ARCHIVE_OLPATH: Minor Modes/Auto-complete
 	:ARCHIVE_CATEGORY: emacs
@@ -182,7 +182,7 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 
 * DONE move everthing out of Introduction that does not belong there
 	:LOGBOOK:
-	- State "DONE"			 from "TODO"			 [2013-03-03 sö 22:19] \\
+	- State "DONE"			 from "TODO"			 [2013-03-03 sÃ¶ 22:19] \\
 		done
 	:END:
 	:PROPERTIES:
@@ -196,10 +196,10 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	config, not really do any configuration.
 * DONE Rework
 	:LOGBOOK:
-	- State "DONE"			 from "NEXT"			 [2013-03-03 sö 21:23] \\
+	- State "DONE"			 from "NEXT"			 [2013-03-03 sÃ¶ 21:23] \\
 		yeah!!!
-	CLOCK: [2013-03-03 sö 19:39]--[2013-03-03 sö 21:23] =>	1:44
-	CLOCK: [2013-03-03 sö 15:34]--[2013-03-03 sö 16:38] =>	1:04
+	CLOCK: [2013-03-03 sÃ¶ 19:39]--[2013-03-03 sÃ¶ 21:23] =>	1:44
+	CLOCK: [2013-03-03 sÃ¶ 15:34]--[2013-03-03 sÃ¶ 16:38] =>	1:04
 	:END:
 	:PROPERTIES:
 	:ARCHIVE_TIME: 2013-03-20 on 23:39
@@ -214,7 +214,7 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 
 * DONE tabs in org-mode
 	:LOGBOOK:
-	- State "DONE"       from "TODO"       [2013-03-04 må 00:10] \\
+	- State "DONE"       from "TODO"       [2013-03-04 mÃ¥ 00:10] \\
 		decided to use tabs instead.
 	:END:
 	:PROPERTIES:
@@ -228,7 +228,7 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 
 * DONE add local directory for storing extra schemsa
 	:LOGBOOK:
-	- State "DONE"       from "TODO"       [2013-03-17 sö 13:23]
+	- State "DONE"       from "TODO"       [2013-03-17 sÃ¶ 13:23]
 	:END:
 	:PROPERTIES:
 	:ARCHIVE_TIME: 2013-03-20 on 23:40
@@ -239,8 +239,8 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	:END:
 * DONE Schema for soap and wsdl
 	:LOGBOOK:
-	- State "DONE"       from "TODO"       [2013-03-17 sö 21:12] \\
-		Somewhat done wsdl/wsdl1.rnc funkar någolunda.
+	- State "DONE"       from "TODO"       [2013-03-17 sÃ¶ 21:12] \\
+		Somewhat done wsdl/wsdl1.rnc funkar nÃ¥golunda.
 	:END:
 	:PROPERTIES:
 	:ARCHIVE_TIME: 2013-03-20 on 23:40
@@ -267,7 +267,7 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 
 * DONE solve the problem with default notes file.
 	:LOGBOOK:
-	- State "DONE"			 from "TODO"			 [2013-03-03 sö 22:15] \\
+	- State "DONE"			 from "TODO"			 [2013-03-03 sÃ¶ 22:15] \\
 		Not a problem when all my templates contain a target.
 	:END:
 	:PROPERTIES:
@@ -289,4 +289,132 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 
 
 
+
+
+* DONE word-list for org-files.
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-29 fr 16:13] \\
+		not needed, works somewhat fine now.
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-29 fr 16:19
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Minor Modes/Fly-spell
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	
+	org-files contains some reserved words like #+begin_* ... these
+	should be included in some sort of wordlist we use. so we don't get
+	a lot of errors on those files.
+
+
+* DONE Avoid false positives
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-29 fr 16:18] \\
+		looks like it work now with later versions of org-mode
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-29 fr 16:19
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Minor Modes/Fly-spell
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+	I recently started using flyspell and am enjoying its features. Is
+	there a way to disable flyspell for certain regexps? For instance,
+	I would like to disable flyspell when typing a url. Otherwise, when
+	entering a url such as
+	http://www.emacswiki.org/cgi-bin/emacs/FlySpell, www, emacswiki,
+	cgi and FlySpell are highlighted as errors. Any advice would be
+	greatly appreciated. â€“ MattLundin 
+
+	There is only one way, using flyspell-generic-check-word-predicate
+	which should be a function. In such a function you can use thing at
+	point. 
+
+	However it is a bit difficult to manage this as this variable may
+	be only one function. I have submitted a patch to Emacs devel to
+	take care of this. 
+
+	Thanks for pointing me to the flyspell-generic-check-word-predicate
+	variable. â€“ MattLundin
+
+
+* DONE Windows
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-29 fr 16:16] \\
+		Solved it another way, using aspell.
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-29 fr 16:19
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Minor Modes/Fly-spell
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	
+	we need to install cygwin and use aspell.
+	http://curiousprogrammer.wordpress.com/2009/04/25/flyspell-windows/
+
+
+* DONE instead of using setq for vars use let expression
+	:LOGBOOK:
+	- State "DONE"       from "NEXT"       [2013-03-29 fr 08:55]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-29 fr 16:19
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: OrgMode/Post
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+
+* DONE work jornal
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-29 fr 08:58] \\
+		Have been implemented with org-capture and a datetree, the shortcuts are sj
+		and wj for shared and for work journal.
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-29 fr 16:19
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: OrgMode
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	
+	once maybe twice a week I would like to log what I have done that week it would be
+	nice with a capture template for that, a personal jornal would also be nice but may be
+	harder to fix because of that I could not hardcode the path to the file. maybe using
+	local config could fix that.
+
+
+* DONE instead of using setq for vars use let expression
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-29 fr 08:57]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-29 fr 16:19
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: OrgMode/Init
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+* DONE Elpa does not add things to load path
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-03-29 fr 16:25]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-03-29 fr 16:25
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Bugs
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	this need to be taken care of by elpa so I don't need to hardcode
+	paths with versions in them.
 

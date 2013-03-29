@@ -15,10 +15,6 @@ that I share between work and home
 #+LINK: norang http://doc.norang.ca/org-mode.html#
 #+LINK: wiki http://emacswiki.org/emacs/  
 * Bugs
-*** TODO Elpa does not add things to load path
-		this need to be taken care of by elpa so I don't need to hardcode
-		paths with versions in them.
-
 *** TODO I don't want submodules to show up in git status
 		:LOGBOOK:
 		CLOCK: [2013-03-11 må 22:13]--[2013-03-11 må 22:52] =>  0:39
@@ -354,18 +350,16 @@ that I share between work and home
 		deactivated on windows at the moment until we have fixed cygwin
 		ispell or Aspell.
 		#+begin_src emacs-lisp
-			(if (eq system-type 'linux)
-					((when (require 'flyspell nil 'noerror)
-						 ;; activate flyspell for text-mode and derivatives
-						 ;;(dolist (hook '(text-mode-hook))
-						 ;;	 (add-hook hook (lambda () (flyspell-mode 1))))
-						 ;; this is how we remove it for a sub-mode
-						 ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-						 ;;	 (add-hook hook (lambda () (flyspell-mode -1))))
-						 )
-					
-					 (setq flyspell-issue-message-flag nil))
-				)
+      (when (require 'flyspell nil 'noerror)
+        ;; activate flyspell for text-mode and derivatives
+        (dolist (hook '(text-mode-hook))
+          (add-hook hook (lambda () (flyspell-mode 1))))
+        ;; this is how we remove it for a sub-mode
+        ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+        ;;  (add-hook hook (lambda () (flyspell-mode -1))))
+      
+        (setq flyspell-issue-message-flag nil))
+      
 		#+end_src
 		
 ***** Fly-spell for comments when programming                        :coding:
@@ -388,55 +382,11 @@ that I share between work and home
         
 			#+end_src
 
-***** DONE word-list for org-files.
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-03-29 fr 16:13] \\
-				not needed, works somewhat fine now.
-			:END:
-			
-			org-files contains some reserved words like #+begin_* ... these
-			should be included in some sort of wordlist we use. so we don't get
-			a lot of errors on those files.
-
-***** TODO don't use flyspell in src samples
+***** TODO don't use fly-spell in src samples
 			
 			Or switch to flyspell-prog-mode somehow.
 
-***** DONE Avoid false positives
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-03-29 fr 16:18] \\
-				looks like it work now with later versions of org-mode
-			:END:
-
-			I recently started using flyspell and am enjoying its features. Is
-			there a way to disable flyspell for certain regexps? For instance,
-			I would like to disable flyspell when typing a url. Otherwise, when
-			entering a url such as
-			http://www.emacswiki.org/cgi-bin/emacs/FlySpell, www, emacswiki,
-			cgi and FlySpell are highlighted as errors. Any advice would be
-			greatly appreciated. – MattLundin 
-
-			There is only one way, using flyspell-generic-check-word-predicate
-			which should be a function. In such a function you can use thing at
-			point. 
-
-			However it is a bit difficult to manage this as this variable may
-			be only one function. I have submitted a patch to Emacs devel to
-			take care of this. 
-
-			Thanks for pointing me to the flyspell-generic-check-word-predicate
-			variable. – MattLundin
-
-***** DONE Windows
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-03-29 fr 16:16] \\
-				Solved it another way, using aspell.
-			:END:
-			
-			we need to install cygwin and use aspell.
-			http://curiousprogrammer.wordpress.com/2009/04/25/flyspell-windows/
-
-***** TODO somehow use #+LANGUAGE in org to choose wordlist.
+***** TODO somehow use #+LANGUAGE in org to choose word-list.
 ***** Other fly-spell things
 ******* Change dictionaries
 
@@ -615,7 +565,7 @@ that I share between work and home
 
 *** Electric pair, indent.... mode
 
-*** Show Paren
+*** Show-Paren
 		
 		It is a global mode but I want it buffer local so first we make it buffer local then
 		we setup a default that is off, then we will activate it in those major modes we want
@@ -1692,10 +1642,6 @@ that I share between work and home
 
   #+RESULTS:
 
-***** DONE instead of using setq for vars use let expression
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-03-29 fr 08:57]
-			:END:
 *** Org-outlook integration                                   :instw:outlook:
 
 		http://www.emacswiki.org/emacs/org-outlook.el
@@ -2140,23 +2086,6 @@ that I share between work and home
 
   #+RESULTS:
 
-***** DONE instead of using setq for vars use let expression
-			:LOGBOOK:
-			- State "DONE"       from "NEXT"       [2013-03-29 fr 08:55]
-			:END:
-
-*** DONE work jornal
-		:LOGBOOK:
-		- State "DONE"       from "TODO"       [2013-03-29 fr 08:58] \\
-			Have been implemented with org-capture and a datetree, the shortcuts are sj
-			and wj for shared and for work journal.
-		:END:
-		
-		once maybe twice a week I would like to log what I have done that week it would be
-		nice with a capture template for that, a personal jornal would also be nice but may be
-		harder to fix because of that I could not hardcode the path to the file. maybe using
-		local config could fix that.
-
 * Google Integration
 	most of these things comes from http://julien.danjou.info/
 *** Google maps                                                         :org:
@@ -2383,6 +2312,8 @@ on file sets.
 	#+end_src
 
 	If it does not work, check the paths one more time.
+
+*** TODO need to move this into somewhere.
 
 * List of others configurations that you can look at and steal ideas from
 
