@@ -43,25 +43,29 @@ that I share between work and home
 		First we need to setup the package system in emacs
 
 		#+begin_src emacs-lisp
-      (if (require 'package)
-          (let ((archives  '(("ELPA" . "http://tromey.com/elpa/")           ;;(ref:let)
-                             ("gnu" . "http://elpa.gnu.org/packages/")
-                             ("marmalade" . "http://marmalade-repo.org/packages/")
-                             ("melpa" . "http://melpa.milkbox.net/packages/"))))
-            (progn
-              (dolist (archive archives)                                    ;;(ref:add)
-                (progn 
-                  (add-to-list 'package-archives archive)))
-             
-             (package-initialize)                                          ;;(ref:load)
-             ))
-             ;;(unless (and (file-exists-p "~/.emacs.d/elpa/archives/marmalade")
-             ;;      (file-exists-p "~/.emacs.d/elpa/archives/gnu") ;;(ref:refresh)
-             ;;      (file-exists-p "~/.emacs.d/elpa/archives/melpa"))
-             ;;      (package-refresh-contents)) )) 
-             ;; If something goes wrong when requiring package
-        (error "%s" "Error in config: initalizing packages"))
+            (if (require 'package)
+                (let ((archives  '(("ELPA" . "http://tromey.com/elpa/")           ;;(ref:let)
+                                   ("gnu" . "http://elpa.gnu.org/packages/")
+                                   ("marmalade" . "http://marmalade-repo.org/packages/")
+                                   ("melpa" . "http://melpa.milkbox.net/packages/")
+                                   ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))
+                  (progn
+                    (dolist (archive archives)                                    ;;(ref:add)
+                      (progn 
+                        (add-to-list 'package-archives archive)))
+                   
+                   (package-initialize)                                          ;;(ref:load)
+                   ))
+                   ;;(unless (and (file-exists-p "~/.emacs.d/elpa/archives/marmalade")
+                   ;;      (file-exists-p "~/.emacs.d/elpa/archives/gnu") ;;(ref:refresh)
+                   ;;      (file-exists-p "~/.emacs.d/elpa/archives/melpa"))
+                   ;;      (package-refresh-contents)) )) 
+                   ;; If something goes wrong when requiring package
+              (error "%s" "Error in config: initalizing packages"))
 		#+end_src
+
+  #+RESULTS:
+	: t
 
 		In [[let][LET expression]] we set up a local variable for all the package repository we would
 		like to use, in this way that variable is not usable outside the part of the code that
@@ -311,14 +315,14 @@ that I share between work and home
 *** Auto-Fill
 		
 		#+begin_src emacs-lisp
-			(setq-default fill-column 90)
-			;; insert double space after colon
-			;;(setq-default colon-double-space t)
-			
-			;; You can control how emacs breaks lines when filling by adding functions to this hook,
-			;; If the function returns non-nil it will not break the line. the function get point as
-			;; argument.
-			;; (add-hook fill-nobreak-predicate fill-single-word-nobreak-p ...)
+      (setq-default fill-column 90)
+      ;; insert double space after colon
+      ;;(setq-default colon-double-space t)
+      
+      ;; You can control how emacs breaks lines when filling by adding functions to this hook,
+      ;; If the function returns non-nil it will not break the line. the function get point as
+      ;; argument.
+      ;; (add-hook fill-nobreak-predicate fill-single-word-nobreak-p ...)
 		#+end_src
 
 *** Auto-Saving
@@ -329,9 +333,9 @@ that I share between work and home
 			
 			;; This means that after 500 chars we will autosave, the normal here is 300 chars
 			(setq auto-save-interval 500)
-			;; after 90 seconds of idle time we will autosave, normal is 30 but I don't want it to run
+			;; after 180 seconds of idle time we will autosave, normal is 30 but I don't want it to run
 			;; just because I had to look something up in a mail.
-			(setq auto-save-timeout 90)
+			(setq auto-save-timeout 180)
 			
 			;; there is also a hook you could use to do things before auto-saving is done.
 			;;(add-hook 'auto-save-hook ...)
@@ -773,11 +777,11 @@ that I share between work and home
 			completing-read: 
 
 			#+begin_example emacs-lisp
-			(defun my-icompleting-read(prompt choices)
-			(let ((iswitchb-make-buflist-hook
-			(lambda ()
-			(setq iswitchb-temp-buflist choices))))
-			(iswitchb-read-buffer prompt)))
+        (defun my-icompleting-read(prompt choices)
+        (let ((iswitchb-make-buflist-hook
+        (lambda ()
+        (setq iswitchb-temp-buflist choices))))
+        (iswitchb-read-buffer prompt)))
 			#+end_example
 
 			Another example. Two things. "nil t" to iswitchb-read-buffer
@@ -786,36 +790,36 @@ that I share between work and home
 			hook variable. 
 
 			#+begin_example emacs-lisp
-			(defvar interesting	 (regexp-opt '(".c" ".h" "etc.")))
-			(defvar some-directory "/home/somewhere/etc/")
-
-			;; Making this more flexible is an exercise for the reader
-			(defun find-a-file (arg &optional non-selective)
-			"Select files using substrings."
-			(interactive "sFile: ")
-			(let ((dir (expand-file-name some-directory))
-			candidates)
-			(flet ((file-match (file)
-			(if non-selective
-			(string-match arg file)
-			(and
-			(string-match interesting file)
-			(string-match arg file)))))
-			(setq candidates (delq nil (loop for file in (directory-files dir)
-			collect (if (file-match file) file)))))
-			(cond
-			((eq (length candidates) 1)
-			(find-file (format "%s%s" dir (car candidates))))
-			((eq (length candidates) 0)
-			(if non-selective
-			(message "No such file!")
-			(find-a-file arg t)))
-				(t
-				(flet ((iswitchb-make-buflist (default)
-				(setq iswitchb-buflist candidates)))
-				(find-file (format 
-				"%s%s" dir
-				(iswitchb-read-buffer "File: " nil t))))))))
+        (defvar interesting  (regexp-opt '(".c" ".h" "etc.")))
+        (defvar some-directory "/home/somewhere/etc/")
+        
+        ;; Ma   king this more flexible is an exercise for the reader
+        (defun find-a-file (arg &optional non-selective)
+        "Select files using substrings."
+        (interactive "sFile: ")
+        (let ((dir (expand-file-name some-directory))
+                   candidates)
+        (flet ((file-match (file)
+        (if non-selective
+        (string-match arg file)
+        (and
+        (string-match interesting file)
+        (string-match arg file)))))
+        (setq candidates (delq nil (loop for file in (directory-files dir)
+        collect (if (file-match file) file)))))
+        (cond
+        ((eq (length candidates) 1)
+        (find-file (format "%s%s" dir (car candidates))))
+        ((eq (length candidates) 0)
+        (if non-selective
+        (message "No such file!")
+        (find-a-file arg t)))
+          (t
+          (flet ((iswitchb-make-buflist (default)
+          (setq iswitchb-buflist candidates)))
+          (find-file (format 
+          "%s%s" dir
+          (iswitchb-read-buffer "File: " nil t))))))))
 			#+end_example
 				
 			I'm quite new to iswitchb. I've been after eliminating the need to
@@ -826,11 +830,11 @@ that I share between work and home
 			minibuffer (in some cases). 
 			
 			#+begin_example emacs-lisp
-			(defun iswitchb-post-command ()
-			"Run after command in 'iswitchb-buffer'."
-			(iswitchb-exhibit)
-			(if (= (length iswitchb-matches) 1)
-			(display-buffer (car iswitchb-matches))))
+        (defun iswitchb-post-command ()
+        "Run after command in 'iswitchb-buffer'."
+        (iswitchb-exhibit)
+        (if (= (length iswitchb-matches) 1)
+        (display-buffer (car iswitchb-matches))))
 			#+end_example
 			
 			another thing i like, is to have the freedom to decide to open the
@@ -838,11 +842,11 @@ that I share between work and home
 			new minibuffer exiting command: 
 			
 			#+begin_example emacs-lisp
-			(defun iswitchb-select-buffer-other-window ()
-			"Select the buffer named by the prompt. But in another window."
-			(interactive)
-			(setq iswitchb-method 'otherwindow)
-			(exit-minibuffer))
+        (defun iswitchb-select-buffer-other-window ()
+        "Select the buffer named by the prompt. But in another window."
+        (interactive)
+        (setq iswitchb-method 'otherwindow)
+        (exit-minibuffer))
 			#+end_example
 			
 			The functionality of iswitchb can also be used to provide a
@@ -852,35 +856,35 @@ that I share between work and home
 			the minibuffer: 
 			
 			#+begin_example emacs-lisp
-			(defun exd-find-file ()
-			"Use functionality from `iswitchb' as a replacement for `find-file'"
-			(interactive)
-			(find-file (exd-iswitchb-find-file "." (directory-files "."))))
-			
-			(defun exd-iswitchb-find-file (dir file-list)
-			"Use functionality from `iswitchb' to select a file for `find-file'.
-			If a directory is selected, enter that directory and generate a new
-			list from which to select a file."
-			;; sort the file list into directories first
-			(setq file-list
-			(sort file-list
-			(lambda (elt-1 elt-2)
-			(and (file-directory-p (concat dir "/" elt-1))
-			(not (file-directory-p (concat dir "/" elt-2)))))))
-			;; use iswitchb for minibuffer file list/completion magic
-			(let* (resize-mini-windows
-			(iswitchb-make-buflist-hook
-			(lambda ()
-			(setq iswitchb-temp-buflist file-list)))
-			;; get the selected file
-			(selected-file (concat dir "/" (iswitchb-read-buffer
-			(concat "Find File: "
-			(expand-file-name dir)
-			"/")))))
-			;; if the selected file is a directory, recurse, else return file
-			(if (file-directory-p selected-file)
-			(exd-iswitchb-find-file selected-file (directory-files selected-file))
-			selected-file)))
+        (defun exd-find-file ()
+        "Use functionality from `iswitchb' as a replacement for `find-file'"
+        (interactive)
+        (find-file (exd-iswitchb-find-file "." (directory-files "."))))
+        
+        (defun exd-iswitchb-find-file (dir file-list)
+        "Use functionality from `iswitchb' to select a file for `find-file'.
+        If a directory is selected, enter that directory and generate a new
+        list from which to select a file."
+        ;; sort the file list into directories first
+        (setq file-list
+        (sort file-list
+        (lambda (elt-1 elt-2)
+        (and (file-directory-p (concat dir "/" elt-1))
+        (not (file-directory-p (concat dir "/" elt-2)))))))
+        ;; use iswitchb for minibuffer file list/completion magic
+        (let* (resize-mini-windows
+        (iswitchb-make-buflist-hook
+        (lambda ()
+        (setq iswitchb-temp-buflist file-list)))
+        ;; get the selected file
+        (selected-file (concat dir "/" (iswitchb-read-buffer
+        (concat "Find File: "
+        (expand-file-name dir)
+        "/")))))
+        ;; if the selected file is a directory, recurse, else return file
+        (if (file-directory-p selected-file)
+        (exd-iswitchb-find-file selected-file (directory-files selected-file))
+        selected-file)))
 			#+end_example
 			
 			See Also:
@@ -1215,7 +1219,7 @@ that I share between work and home
         (add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
 			#+end_example
 
-***** SQLPlus support
+***** SQL-Plus support
 
 			#+begin_example emacs-lisp
 			 (require 'sqlplus)
@@ -1360,7 +1364,7 @@ that I share between work and home
 			- howto specify things in schemas.xml ::
            http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
 
-* OrgMode
+* Org-Mode
 *** Basic
 		
 		A large part of the configuration has to do with how org should
@@ -1393,11 +1397,12 @@ that I share between work and home
 			(org-crypt-use-before-save-magic)
 			(setq org-tags-exclude-from-inheritance (quote ("crypt")))
 			(run-at-time "00:59" 3600 'org-save-all-org-buffers)
-			;; because of org-mode modulare structure some variables and other
-			;; things are not knowm before you have used them once, this solves
+			;; because of org-mode modular structure some variables and other
+			;; things are not known before you have used them once, this solves
 			;; that problem at least partially.
 			;;(org-require-autoloaded-modules)
 			(require 'org-protocol)
+
 		#+end_src
 		
 *** Global Keys for OrgMode																			:keybindings:
@@ -1578,6 +1583,65 @@ that I share between work and home
 	| c | Add note to currently clocked-in item.          | entry | (clock)                                                         | ** %^{Title}\n   Added: %U\n   %?                                                     | :clock-keep   | :empty-lines | 1 | :unnarrowed |
 	| o | Outlook integration - creates items from mails. | entry | (file+headline c:/Users/jiha/Documents/org/mdms/mdms.org Inbox) | ** TODO %c\n   Added: %U\n   %?\n,   #+begin_quote\n     %:initial\n,   #+end_quote\n | :clock-resume | :empty-lines | 1 | :prepend    |
 	| w | Default template                                | entry | (file+headline ~/org/capture.org Notes)                         | ** %^{Title}\n   Added: %U\n   Source: %c\n   %i\n                                    | :empty-lines  | 1            |   |             |
+
+***** Things that could be used in templates
+
+			- %[file] :: Insert the contents of the file given by file.
+			- %(sexp) :: Evaluate Elisp sexp and replace with the result.
+									 The sexp must return a string.
+			- %<...>  ::  The result of format-time-string on the ... format specification.
+			- %t :: Timestamp, date only.
+      - %T :: Timestamp, with date and time.
+			- %u, %U :: Like the above, but inactive timestamps.
+      - %i :: Initial content, the region when capture is called while the region is
+              active. The entire text will be indented like %i itself. 
+      - %a :: Annotation, normally the link created with org-store-link.
+			- %A :: Like %a, but prompt for the description part.
+      - %l :: Like %a, but only insert the literal link.
+      - %c :: Current kill ring head.
+      - %x :: Content of the X clipboard.
+      - %k :: Title of the currently clocked task.
+      - %K :: Link to the currently clocked task.
+      - %n :: User name (taken from user-full-name).
+      - %f :: File visited by current buffer when org-capture was called.
+      - %F :: Full path of the file or directory visited by current buffer.
+      - %:keyword :: Specific information for certain link types, see below.
+      - %^g :: Prompt for tags, with completion on tags in target file.
+      - %^G :: Prompt for tags, with completion all tags in all agenda files.
+      - %^t :: Like %t, but prompt for date.  Similarly %^T, %^u, %^U. You may define a
+               prompt like %^{Birthday}t. 
+      - %^C :: Interactive selection of which kill or clip to use.
+      - %^L :: Like %^C, but insert as link.
+      - %^{prop}p :: Prompt the user for a value for property prop.
+      - %^{prompt} :: prompt the user for a string and replace this sequence with it.  You
+                      may specify a default value and a completion table with
+                      %^{prompt|default|completion2|completion3...}.  The arrow keys
+                      access a prompt-specific history.
+      - %\n :: Insert the text entered at the nth %^{prompt}, where n is a number,
+               starting from 1.
+      - %? :: After completing the template, position cursor here.
+
+
+			For specific link types, the following keywords will be defined2:
+
+
+      | Link type                       | Available keywords                                     |
+      |---------------------------------+--------------------------------------------------------|
+      | bbdb                            | %:name %:company                                       |
+      | irc                             | %:server %:port %:nick                                 |
+      | vm, vm-imap, wl, mh, mew, rmail | %:type %:subject %:message-id                          |
+      |                                 | %:from %:fromname %:fromaddress                        |
+      |                                 | %:to   %:toname   %:toaddress                          |
+      |                                 | %:date (message date header field)                     |
+      |                                 | %:date-timestamp (date as active timestamp)            |
+      |                                 | %:date-timestamp-inactive (date as inactive timestamp) |
+      |                                 | %:fromto (either "to NAME" or "from NAME")3            |
+      |---------------------------------+--------------------------------------------------------|
+      | gnus                            | %:group, for messages also all email fields            |
+      | w3, w3m                         | %:url                                                  |
+      | info                            | %:file %:node                                          |
+      | calendar                        | %:date                                                 |
+
 *** RSS feeds
 
 		#+begin_src emacs-lisp
@@ -1936,7 +2000,7 @@ that I share between work and home
       (setq org-clock-into-drawer t)
       (setq org-log-into-drawer t)
       (setq org-log-redeadline (quote note))
-      ;; Show lot sof clocking history so it's easy to pick items off the list
+      ;; Show lot of clocking history so it's easy to pick items off the list
       (setq org-clock-history-length 72)
       ;; Resume clocking task on clock-in if the clock is open
       (setq org-clock-in-resume t)
@@ -1944,18 +2008,12 @@ that I share between work and home
       (setq org-clock-out-remove-zero-time-clocks t)
       ;; Clock out when moving task to a done state
       (setq org-clock-out-when-done t)
-      ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-      (setq org-clock-persist t)
       ;; Do not prompt to resume an active clock
       (setq org-clock-persist-query-resume nil)
       ;; Enable auto clock resolution for finding open clocks
       (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
       ;; Include current clocking task in clock reports
       (setq org-clock-report-include-clocking-task t) 
-      ;; resurrect clock and clocking history
-      ;; this need to be placed after Local and Shared init of org-files so
-      ;; we have all files where we should look for clocked in tasks.
-      ;;(org-clock-persistence-insinuate)
     #+end_src
     
 		Creates filesets for all org files.
@@ -2058,7 +2116,7 @@ that I share between work and home
       #+begin_src emacs-lisp
         ;; we use a safe way of loading it, it should alawys exist but if it
         ;; does not, we don't want an error.
-        (when (require 'ob-sql nil 'noerror) 
+        (when (require 'ob-sql nil 'noerror)
           (message "loaded ob-sql, you can now use sql in org-babel snippets")
           )
       #+end_src
@@ -2086,6 +2144,17 @@ that I share between work and home
 
   #+RESULTS:
 
+*** Clock
+
+		#+BEGIN_SRC emacs-lisp
+      ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+      (setq org-clock-persist t)
+      ;; resurrect clock and clocking history
+      ;; this need to be placed after Local and Shared init of org-files so
+      ;; we have all files where we should look for clocked in tasks.
+      (org-clock-persistence-insinuate)
+      
+		#+END_SRC
 * Google Integration
 	most of these things comes from http://julien.danjou.info/
 *** Google maps                                                         :org:
@@ -2166,7 +2235,7 @@ that I share between work and home
 		(org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
 	#+end_src
 
-* Filesets                                                         :filesets:
+* File-sets 																											 :filesets:
 
 The commands that can operate on file sets are specified in the global
 custom variable "filesets-commands". You can add your own commands to
@@ -2320,10 +2389,4 @@ on file sets.
 	- Julien Danjou :: http://git.naquadah.org/git/~jd/emacs.d.git
 	- Thomas Krennwallner's :: http://www.postsubmeta.net/MyConfig/Emacs 
 
-#	 LocalWords:	Uniquify Iswitch emacs src Whitespace
-
-
-
-
-toma
-patroN
+#	 LocalWords:	Uniquify Iswitch emacs src Whitespace Google LocalWords BBDB SQL PLSQL nXML Krennwallner's
