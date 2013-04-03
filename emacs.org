@@ -20,6 +20,10 @@ that I share between work and home
 		CLOCK: [2013-03-11 må 22:13]--[2013-03-11 må 22:52] =>  0:39
 		:END:
 
+*** TODO Fix font
+		i want deja vu or something else that works good.
+*** TODO fix line spacing
+		some extra linespacing would be nice
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -307,10 +311,9 @@ that I share between work and home
 
 * Minor Modes
 
-	We configure the basics of minor modes first, before the majors
-	modes. in the major modes configuration we may adapt th minor modes
-	for that specific major mode, but here we have the general
-	configuration of the minor mode.
+	We configure the basics of minor modes first, before the majors modes. in the major
+	modes configuration we may adapt th minor modes for that specific major mode, but here
+	we have the general configuration of the minor mode.
 	
 *** Auto-Fill
 		
@@ -605,6 +608,16 @@ that I share between work and home
 ***** TODO Activate it in those major modes we want it in.
 			- all programing-modes
 			- org-mode
+
+*** Pretty
+
+		Its a mode for displaying lambda signs and other things in a nice way.
+
+		#+BEGIN_SRC emacs-lisp
+      (require 'pretty-mode)
+      (global-pretty-mode 1)
+		#+END_SRC
+
 * Other Major Modes
 * Iswitch Buffers                                                   :buffers:
 
