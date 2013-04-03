@@ -198,7 +198,7 @@ expected by `pretty-patterns'"
            ("^n" octave haskell)
 					 ("^n" ,@c-like))
 			 (?ⁱ ("^i" , @c-like))
-
+			 
 			 (?₀  ("[0]" ,@c-like)
 					 ("(0)" octave)
 					 (".(0)" tuareg))
