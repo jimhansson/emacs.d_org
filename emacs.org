@@ -618,6 +618,7 @@ that I share between work and home
       (global-pretty-mode 1)
 		#+END_SRC
 
+***** TODO move my changes from pretty-mode.el to this file
 * Other Major Modes
 * Iswitch Buffers                                                   :buffers:
 
