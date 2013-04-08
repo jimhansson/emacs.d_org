@@ -2047,11 +2047,16 @@ that I share between work and home
 *** Agenda                                                           :habits:
 
 		#+begin_src emacs-lisp
-			(setq org-habit-graph-column 50)
-			(setq org-agenda-tags-column 75)
-			(setq org-habit-show-habits-only-for-today nil)
-			(setq org-habit-preceding-days 15)
-			(setq org-habit-following-days 10)			
+      ;; popup new frame for org-agenda, so we get full width
+      ;; it will reuse allready open frame and only pop it front.
+      (setq org-agenda-window-setup 'other-frame)
+      
+      (setq org-habit-graph-column 80)
+      (setq org-agenda-tags-column 130)
+      (setq org-habit-show-habits-only-for-today nil)
+      (setq org-habit-preceding-days 20)
+      (setq org-habit-following-days 15)
+      
 		#+end_src
 
 		From Julien Danjou we borrow a function to be able to get our own
@@ -2060,20 +2065,20 @@ that I share between work and home
 		"Vacation".
 
 		#+begin_src emacs-lisp
-		(setq org-agenda-day-face-function
-			 (defun jd:org-agenda-day-face-holidays-function (date)
-				 "Compute DATE face for holidays."
-				 (unless (org-agenda-todayp date)
-					 (dolist (file (org-agenda-files nil 'ifmode))
-						 (let ((face
-										(dolist (entry (org-agenda-get-day-entries file date))
-											(let ((category (with-temp-buffer
-																				(insert entry)
-																				(org-get-category (point-min)))))
-												(when (or (string= "Holidays" category)
-																	(string= "Vacation" category))
-													(return 'org-agenda-date-weekend))))))
-							 (when face (return face)))))))
+      (setq org-agenda-day-face-function
+            (defun jd:org-agenda-day-face-holidays-function (date)
+              "Compute DATE face for holidays."
+              (unless (org-agenda-todayp date)
+                (dolist (file (org-agenda-files nil 'ifmode))
+                  (let ((face
+                         (dolist (entry (org-agenda-get-day-entries file date))
+                           (let ((category (with-temp-buffer
+                                             (insert entry)
+                                             (org-get-category (point-min)))))
+                             (when (or (string= "Holidays" category)
+                                       (string= "Vacation" category))
+                               (return 'org-agenda-date-weekend))))))
+                    (when face (return face)))))))
 		#+end_src
 		
 ***** Diary integration
