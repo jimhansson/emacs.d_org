@@ -24,6 +24,9 @@ that I share between work and home
 		i want deja vu or something else that works good.
 *** TODO fix line spacing
 		some extra linespacing would be nice
+*** TODO add some classes for directories that are not by default writeable
+		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
+
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -1323,7 +1326,7 @@ that I share between work and home
 ***** TODO need to test all this to see if it works.
 *** nXML
     :LOGBOOK:
-    CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 13:23] =>  1:15
+    CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 12:23] =>  0:15
     :END:
 
     First we need a local place to store all relax ng files used to validate and provide
@@ -1414,7 +1417,7 @@ that I share between work and home
 			;; because of org-mode modular structure some variables and other
 			;; things are not known before you have used them once, this solves
 			;; that problem at least partially.
-			;;(org-require-autoloaded-modules)
+			(org-require-autoloaded-modules)
 			(require 'org-protocol)
 
 		#+end_src
@@ -1448,10 +1451,10 @@ that I share between work and home
 
 		#+begin_src emacs-lisp
 			;; need to do some cleanup here.
-			;;(setq org-modules '(org-bbdb org-bibtex org-docview org-gnus 
-			;;														 org-info org-jsinfo org-habit 
-			;;														 org-irc org-mew org-mhe org-rmail 
-			;;														 org-vm org-wl org-w3m))
+			(setq org-modules '(org-bbdb org-bibtex org-docview org-gnus 
+																	 org-info org-jsinfo org-habit 
+																	 org-irc org-mew org-mhe org-rmail 
+																	 org-vm org-wl org-w3m))
 
 		#+end_src
 
@@ -2360,8 +2363,9 @@ on file sets.
 * TODO BBDB
 * DONE windows context menu integration																:instw:
 	:LOGBOOK:
-	- State "DONE"       from "TODO"  [2013-03-15 fr 10:38]
+	- State "DONE"       from "TODO"  [2013-03-15 fr 10:35]
 		works fine
+	CLOCK: [2013-03-15 fr 08:11]--[2013-03-15 fr 10:35] =>  2:24
 	:END:
 	Starting Emacs From Global Context Menu
 	
