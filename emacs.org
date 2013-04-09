@@ -49,7 +49,7 @@ that I share between work and home
 
 		First we need to setup the package system in emacs
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
             (if (require 'package)
                 (let ((archives  '(("ELPA" . "http://tromey.com/elpa/")           ;;(ref:let)
                                    ("gnu" . "http://elpa.gnu.org/packages/")
@@ -69,7 +69,7 @@ that I share between work and home
                    ;;      (package-refresh-contents)) )) 
                    ;; If something goes wrong when requiring package
               (error "%s" "Error in config: initalizing packages"))
-		#+end_src
+		#+END_SRC
 
   #+RESULTS:
 	: t
@@ -88,7 +88,7 @@ that I share between work and home
 
 *** What you need to have in your normal .emacs
 
-		#+begin_example
+		#+BEGIN_EXAMPLE
       ;; this is what is needed in the real .emacs file.
       ;; remember to change the paths at the bottom of this file
       
@@ -118,7 +118,7 @@ that I share between work and home
       ;; load neatly organized org file!
       (add-to-list 'load-path local-emacs-org-dir)
       (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
-		#+end_example
+		#+END_EXAMPLE
 
 *** Things you should install from package-system								:instw:instl:
 		- oauth2 :: for google integration for some reason I need to add oauth directory to
@@ -144,24 +144,24 @@ that I share between work and home
 			that can be done this way, use this to avoid errors on machine
 			which don't have every package installed.
 
-			#+begin_example
+			#+BEGIN_EXAMPLE
 				(when (require 'deft nil 'noerror)) 
-			#+end_example
+			#+END_EXAMPLE
 
 * Global Things
 *** Setup
 		
 		Some user information
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(setq user-full-name "Jim Hansson")
 			(setq user-mail-address "jim.hansson@powel.se")		
-		#+end_src
+		#+END_SRC
 
 		Here we setup some basic things, I dont like the toolbar so that we turn off, I use
 		OrgMode to almost everything(even my .emacs) so that will be my default mode. Almost
 		all computers I use are laptops and who in there right mind uses 12h clocks. 
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(setq default-major-mode 'org-mode)
 			(add-hook 'text-mode-hook 'turn-on-auto-fill)
 			;; show matching paren
@@ -182,7 +182,7 @@ that I share between work and home
 			;; have SSD so that does not affect me so much. Setting might make it easier to loss data
 			;; also.
 			;;(write-region-inhibit-fsync t)
-		#+end_src
+		#+END_SRC
 
 *** Disable warnings for first time users
 		
@@ -192,7 +192,7 @@ that I share between work and home
 		to happen, I know how to use undo and I usually have some version control system
 		running so I can go back.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; Changes all yes/no questions to y/n type
 			(fset 'yes-or-no-p 'y-or-n-p)
 			(set-variable 'confirm-kill-emacs 'yes-or-no-p)
@@ -200,23 +200,23 @@ that I share between work and home
 			(put 'narrow-to-region 'disabled nil)
 			(setq safe-local-variable-values 
 						(quote ((auto-fill-mode . t) (indent-tab-mode))))
-		#+end_src
+		#+END_SRC
 
 *** Uniquify                                               :uniquify:buffers:
 
 		Better naming of buffers so we can easly tell the differens between
 		buffers. Have some problem together with Iswitch
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(require 'uniquify)
 			(setq uniquify-buffer-name-style (quote post-forward))
-		#+end_src
+		#+END_SRC
 
 *** Tool-Bar
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(tool-bar-mode -1)
-		#+end_src
+		#+END_SRC
 
 *** Menu-Bar
 		
@@ -224,18 +224,18 @@ that I share between work and home
 
 *** Mode-line                                                      :modeline:
 		
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; Things that modifies the modeline
 			(setq display-battery-mode t)
 			(setq display-time-24hr-format t)
 			;; I work width some really big files and then it is good to have this
 			;; so i know how far down I am.
 			(setq size-indication-mode t)
-		#+end_src
+		#+END_SRC
 
 *** Scrolling
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; This removes most of the jumping, but it might still jump.
 			
 			;; Allways want scroll-bars on right side.
@@ -260,7 +260,7 @@ that I share between work and home
 			(setq mouse-wheel-progressive-speed t)
 			;; scroll window under mouse
 			(setq mouse-wheel-follow-mouse 't)
-		#+end_src
+		#+END_SRC
 *** Midnight
 
 		Midnight mode is a package by SamSteingold? that comes with Emacs
@@ -277,24 +277,24 @@ that I share between work and home
 
 		To use Midnight mode, it needs to be included with ‘require’.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(require 'midnight)		 
-		#+end_src
+		#+END_SRC
 
 		It also needs to be enabled with the function ‘midnight-delay-set’
 		which also defines “midnight”.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;;(midnight-delay-set 'midnight-delay "4:30am")
 			;;Some people use the number of seconds after midnight:
 			(midnight-delay-set 'midnight-delay 16200) ;; (eq (* 4.5 60 60) "4:30am")
 
-		#+end_src
+		#+END_SRC
 
 		To add other actions to be run at midnight, add to the hook
 		‘midnight-hook’. 
 		
-		#+begin_example emacs-lisp
+		#+BEGIN_EXAMPLE emacs-lisp
 			(add-hook 'midnight-hook (lambda
 													(with-current-buffer "*cvs*"
 					 (call-interactively 'cvs-update))))
@@ -303,14 +303,14 @@ that I share between work and home
 			;;You can disable midnight mode with ‘cancel-timer’.
 
 			(cancel-timer 'midnight-timer)
-		#+end_example
+		#+END_EXAMPLE
 
 		If you want to have “midnight” occur multiple times a day, you can
 		change the ‘midnight-period’ from 24 hours to something else. 
 
-		#+begin_example emacs-lisp
+		#+BEGIN_EXAMPLE emacs-lisp
 			(setq midnight-period 7200) ;; (eq (* 2 60 60) "2 hours")		 
-		#+end_example
+		#+END_EXAMPLE
 		
 		As of 2009-10-02, DeskTop mode does not preserve the value of
 		‘buffer-display-time’ for buffers, so the buffer’s “age” is
@@ -327,7 +327,7 @@ that I share between work and home
 	
 *** Auto-Fill
 		
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       (setq-default fill-column 90)
       ;; insert double space after colon
       ;;(setq-default colon-double-space t)
@@ -336,11 +336,11 @@ that I share between work and home
       ;; If the function returns non-nil it will not break the line. the function get point as
       ;; argument.
       ;; (add-hook fill-nobreak-predicate fill-single-word-nobreak-p ...)
-		#+end_src
+		#+END_SRC
 
 *** Auto-Saving
 		
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; auto-save is a buffer-local minor mode, that means you can turn it on/off for the
 			;; specific file your are editing.
 			
@@ -352,7 +352,7 @@ that I share between work and home
 			
 			;; there is also a hook you could use to do things before auto-saving is done.
 			;;(add-hook 'auto-save-hook ...)
-		#+end_src
+		#+END_SRC
 
 *** Fly-spell
 
@@ -366,7 +366,7 @@ that I share between work and home
 
 		deactivated on windows at the moment until we have fixed cygwin
 		ispell or Aspell.
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       (when (require 'flyspell nil 'noerror)
         ;; activate flyspell for text-mode and derivatives
         (dolist (hook '(text-mode-hook))
@@ -377,11 +377,11 @@ that I share between work and home
       
         (setq flyspell-issue-message-flag nil))
       
-		#+end_src
+		#+END_SRC
 		
 ***** Fly-spell for comments when programming                        :coding:
 			
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
         ;; Fly-spell in C based programming modes
         (add-hook 'c-mode-hook
                   (lambda ()
@@ -397,7 +397,7 @@ that I share between work and home
                   (lambda ()
                     (flyspell-prog-mode)))
         
-			#+end_src
+			#+END_SRC
 
 ***** TODO don't use fly-spell in src samples
 			
@@ -410,7 +410,7 @@ that I share between work and home
 		As I often need to switch between English and German I use this
 		function:
 
-		#+begin_example emacs-lisp
+		#+BEGIN_EXAMPLE emacs-lisp
 			(defun fd-switch-dictionary()
 			(interactive)
 			(let* ((dic ispell-current-dictionary)
@@ -420,13 +420,13 @@ that I share between work and home
 				))
 		
 			(global-set-key (kbd "<f8>")	 'fd-switch-dictionary)
-		#+end_example
+		#+END_EXAMPLE
 
 		I too cycle through different languages, but not all that is
 		available in the system. I use the following code inside my
 		.emacs. 
 
-		#+begin_example emacs-lisp
+		#+BEGIN_EXAMPLE emacs-lisp
 		(let ((langs '("american" "francais" "brasileiro")))
 			(setq lang-ring (make-ring (length langs)))
 			(dolist (elem langs) (ring-insert lang-ring elem)))
@@ -438,7 +438,7 @@ that I share between work and home
 				(ispell-change-dictionary lang)))
 
 		(global-set-key [f6] 'cycle-ispell-languages)
-		#+end_example
+		#+END_EXAMPLE
 
 		How can I ignore or add a word without using the popup menu?
 
@@ -474,7 +474,7 @@ that I share between work and home
 		word prior to the cursor’s position Meta-F8 calls ispell for the
 		FlySpell highlighted word after the cursor’s position.
 
-		#+begin_example emacs-lisp
+		#+BEGIN_EXAMPLE emacs-lisp
 			;; easy spell check
 			(global-set-key (kbd "<f8>") 'ispell-word)
 			(global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
@@ -487,7 +487,7 @@ that I share between work and home
 				(ispell-word)
 				)
 			(global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
-#+end_example
+#+END_EXAMPLE
 		
 ***** Installing ispell on windows																		:instw:
 
@@ -506,7 +506,7 @@ that I share between work and home
 		method and uses indent depth of 4 or 8, I wonder how wide their
 		screens are.</rant>
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; whitespace-mode things
 			
 			;; less color in whitespace mode, The yellow and red is to distracting
@@ -535,11 +535,11 @@ that I share between work and home
 																space-before-tab::tab
 																trailing))
 					(whitespace-cleanup-region)))
-		#+end_src
+		#+END_SRC
 
 *** Auto-complete
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; I should not need to add this to load path that should be
 			;; done by elpa magic.
 			(add-to-list 'load-path "~/.emacs.d/elpa/popup-0.5")
@@ -551,7 +551,7 @@ that I share between work and home
 			;;(ac-config-default)
 			;;(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
 			;;(ac-flyspell-workaround)
-		#+end_src
+		#+END_SRC
 
 *** Font-lock
 *** Hl-Line
@@ -559,7 +559,7 @@ that I share between work and home
 		Makes it easier to find current line i am on, it will highlight the current line if I
 		am inactive for 5 seconds and turn it of as soon as I start typing.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; normal hl-line is not good enough, we need some more functions, this add that.
 			(when (require 'hl-line+ nil 'noerror)
 				(message "loaded hl-line+")
@@ -577,7 +577,7 @@ that I share between work and home
 				(set-face-background hl-line-face "gray13")
 				(set-face-foreground hl-line-face "white")
 				)
-		#+end_src
+		#+END_SRC
 ***** TODO fix face of hl-line so it does not interfer with other things.
 
 *** Electric pair, indent.... mode
@@ -594,7 +594,7 @@ that I share between work and home
 		(require 'rainbow-delimiters) is another
 
 		advice it so it tells me what row matching paren is when it is off-screen.
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; Only works sometime
 			(defadvice show-paren-function
 				(after show-matching-paren-offscreen activate)
@@ -613,7 +613,7 @@ that I share between work and home
 							(if (not (null matching-text))
 									(message matching-text)))))
 
-		#+end_src
+		#+END_SRC
 
 ***** TODO Activate it in those major modes we want it in.
 			- all programing-modes
@@ -642,7 +642,7 @@ that I share between work and home
 	frame, you can add the following to your configuration: (setq
 	iswitchb-default-method 'samewindow)
 
-	#+begin_src emacs-lisp
+	#+BEGIN_SRC emacs-lisp
 		(iswitchb-mode 1)
 		;; rebind the normal key for buffer list to ibuffer
 		(global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -664,9 +664,9 @@ that I share between work and home
 							("<up>"		 . ignore							)
 							("<down>"	 . ignore							))))
 		(add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
-	#+end_src
+	#+END_SRC
 	
-	#+begin_src emacs-lisp
+	#+BEGIN_SRC emacs-lisp
 		(setq ibuffer-saved-filter-groups
 					'(("home"
 						 ("Emacs" (or (filename . ".emacs.d")
@@ -702,9 +702,9 @@ that I share between work and home
 						 ("Help" (or (name . "\*Help\*")
 												 (name . "\*Apropos\*")
 												 (name . "\*info\*"))))))
-	 #+end_src
+	 #+END_SRC
 	
-	#+begin_src emacs-lisp
+	#+BEGIN_SRC emacs-lisp
 		(add-hook 'ibuffer-mode-hook 
 							'(lambda ()
 								 (ibuffer-auto-mode 1)
@@ -738,11 +738,11 @@ that I share between work and home
 				(switch-to-buffer this-frame-buffer)
 				(other-frame 1)
 				(switch-to-buffer other-frame-buffer))) 
-	#+end_src
+	#+END_SRC
 
 *** Colours in buffer list                                            :faces:
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			; coloring
 			
 			; format of the list is priority, condition, face
@@ -751,7 +751,7 @@ that I share between work and home
 			;;			'(10 (Form)
 			;;					 (face)))									
 			
-		#+end_src
+		#+END_SRC
 *** Iswitch and uniquify compatibility                             :uniquify:
 
 		The library uniquify overrides Emacs default mechanism for making
@@ -765,7 +765,7 @@ that I share between work and home
 		killing a buffer, so that a possible buffer renaming by uniquify
 		is taken in account.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(defadvice iswitchb-kill-buffer (after rescan-after-kill activate)
 				"*Regenerate the list of matching buffer names after a kill.
 			Nextcessary if using `uniquify' with `uniquify-after-kill-buffer-p'
@@ -778,7 +778,7 @@ that I share between work and home
 				(interactive)
 				(iswitchb-make-buflist iswitchb-default)
 				(setq iswitchb-rescan t))
-		#+end_src
+		#+END_SRC
 
 *** More Iswitch things that I don't use at the moment
 		http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
@@ -800,20 +800,20 @@ that I share between work and home
 			way that makdes it really easy to borrow it to do regex-style
 			completing-read: 
 
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (defun my-icompleting-read(prompt choices)
         (let ((iswitchb-make-buflist-hook
         (lambda ()
         (setq iswitchb-temp-buflist choices))))
         (iswitchb-read-buffer prompt)))
-			#+end_example
+			#+END_EXAMPLE
 
 			Another example. Two things. "nil t" to iswitchb-read-buffer
 			requires a choice from the given list with no default. Using an
 			flet is a way to work when there's no hook variable. There is a
 			hook variable. 
 
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (defvar interesting  (regexp-opt '(".c" ".h" "etc.")))
         (defvar some-directory "/home/somewhere/etc/")
         
@@ -844,7 +844,7 @@ that I share between work and home
           (find-file (format 
           "%s%s" dir
           (iswitchb-read-buffer "File: " nil t))))))))
-			#+end_example
+			#+END_EXAMPLE
 				
 			I'm quite new to iswitchb. I've been after eliminating the need to
 			confirm (with TAB or ret) the last left possibility. 
@@ -853,25 +853,25 @@ that I share between work and home
 			desired buffer, but in this way, i don't need to look at the
 			minibuffer (in some cases). 
 			
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (defun iswitchb-post-command ()
         "Run after command in 'iswitchb-buffer'."
         (iswitchb-exhibit)
         (if (= (length iswitchb-matches) 1)
         (display-buffer (car iswitchb-matches))))
-			#+end_example
+			#+END_EXAMPLE
 			
 			another thing i like, is to have the freedom to decide to open the
 			buffer in other-window/frame after i made the selection: Hence a
 			new minibuffer exiting command: 
 			
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (defun iswitchb-select-buffer-other-window ()
         "Select the buffer named by the prompt. But in another window."
         (interactive)
         (setq iswitchb-method 'otherwindow)
         (exit-minibuffer))
-			#+end_example
+			#+END_EXAMPLE
 			
 			The functionality of iswitchb can also be used to provide a
 			replacement for the usual behaviour of find-file. Instead of
@@ -879,7 +879,7 @@ that I share between work and home
 			completions, a list of file completions is continuously updated in
 			the minibuffer: 
 			
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (defun exd-find-file ()
         "Use functionality from `iswitchb' as a replacement for `find-file'"
         (interactive)
@@ -909,7 +909,7 @@ that I share between work and home
         (if (file-directory-p selected-file)
         (exd-iswitchb-find-file selected-file (directory-files selected-file))
         selected-file)))
-			#+end_example
+			#+END_EXAMPLE
 			
 			See Also:
 			
@@ -929,7 +929,7 @@ that I share between work and home
 		(add-hook 'electric-buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
 		
 		need to put the right colors on this.
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(setq buffer-menu-buffer-font-lock-keywords
 						'(("^....[*]Man .*Man.*"	 . font-lock-variable-name-face) ;Man page
 							(".*Dired.*"						 . font-lock-comment-face)			 ; Dired
@@ -949,7 +949,7 @@ that I share between work and home
 					(font-lock-fontify-buffer)))
 			
 			(add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
-		 #+end_src
+		 #+END_SRC
 
 * Coding
   Here I will place everything that has todo with coding
@@ -966,10 +966,10 @@ that I share between work and home
 
       This works in any language that flymake supports
 
-      #+begin_src emacs-lisp
+      #+BEGIN_SRC emacs-lisp
         ;; we will active this when I have a configuration that will work on both windows and linux.
         ;;(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
-      #+end_src
+      #+END_SRC
 *** Compile  
 *** Coding styles
     :LOGBOOK:
@@ -981,7 +981,7 @@ that I share between work and home
 			Here is a style that pretty much matches the observed style of
 			Microsoft (R)'s C and C++ code.
 
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
 				(c-add-style "microsoft"
 										 '("stroustrup"
 											 (c-offsets-alist
@@ -991,14 +991,14 @@ that I share between work and home
 												(arglist-cont-nonempty . +)
 												(template-args-cont . +))))
 				
-			#+end_src
+			#+END_SRC
 
 ***** OpenBSD style
 
 			Style for OpenBSD? source code, also valid for OpenSSH? and other
 			BSD based OSs source.
 
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
 				(c-add-style "openbsd"
 										 '("bsd"
 											 (indent-tabs-mode . t)
@@ -1010,14 +1010,14 @@ that I share between work and home
 											 (arglist-cont-nonempty . 4)
 											 (inclass . 8)
 											 (knr-argdecl-intro . 8)))
-			#+end_src
+			#+END_SRC
 ***** Google C++ Style
 
 			This is the C++ style that I personaly finds to be best.
 
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
 				(require 'google-c-style nil 'noerror)
-			#+end_src
+			#+END_SRC
 
 *** Visual Studio Integration
 
@@ -1037,7 +1037,7 @@ that I share between work and home
 		cedet/cedet-build.el. So on a new checkout this is a common
 		problem.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; using my own
 			;;(load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
 			;;(require 'edmacro)
@@ -1050,38 +1050,38 @@ that I share between work and home
 			;; (semantic-load-enable-code-helpers)
 			;; Enable SRecode (Template management) minor-mode.
 			;;(global-srecode-minor-mode 1)
-		#+end_src
+		#+END_SRC
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;;	(require 'semantic)
-		#+end_src
+		#+END_SRC
 
 ***** EDE
 
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
 			;;	(global-ede-mode t)
-			#+end_src
+			#+END_SRC
 
 ***** Code helpers
 
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
 			;;	(semantic-load-enable-excessive-code-helpers)
-			#+end_src
+			#+END_SRC
       
 *** TODO ECB
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 		 ;; (add-to-list 'load-path (concat local-emacs-org-dir "ecb"))
 		 ;; (require 'ecb)
-		#+end_src
+		#+END_SRC
 
 *** TODO Completion
 ***** Language
 ******* C#
 				
-				#+begin_src emacs-lisp
+				#+BEGIN_SRC emacs-lisp
 					(add-to-list 'load-path (concat local-emacs-org-dir "csharp"))
-				#+end_src
+				#+END_SRC
 
 				The `cscomp-assembly-search-paths' should hold a list of
 				directories to search for assemblies that get referenced via using
@@ -1094,7 +1094,7 @@ that I share between work and home
 				assemblies) that you reference within your code, you can include
 				the appropriate directory in this list.
 			 
-				#+begin_example emacs-lisp
+				#+BEGIN_EXAMPLE emacs-lisp
 				 (eval-after-load "csharp-completion"
 					'(progn
 						 (setq cscomp-assembly-search-paths
@@ -1103,9 +1103,9 @@ that I share between work and home
 										 "c:\\.net2.0"			;; <<- location of .NET Framework assemblies
 										 "c:\\.net3.5"			;; <<- ditto
 						 ))))
-				#+end_example
+				#+END_EXAMPLE
 
-				#+begin_src emacs-lisp
+				#+BEGIN_SRC emacs-lisp
 					 ;; only on windows do we use csharp completion.
 					
 					(when (require 'powershell nil 'noerror)
@@ -1123,32 +1123,32 @@ that I share between work and home
 						)
 					)
 					
-				#+end_src
+				#+END_SRC
 ******* TODO ASPX
 				this requires multi-mode which I don't have at the moment.
-				#+begin_example emacs-lisp
+				#+BEGIN_EXAMPLE emacs-lisp
 					(require 'aspx-mode nil 'noerror)
-				#+end_example
+				#+END_EXAMPLE
 *** Indentation
 
 		I usually use tabs for indentation and spaces for alignment, Emacs
 		are one of the few envirement that support that kind of thing. I
 		like a low c-basic-offset 2
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; use tabs for indentation later we setup spaces for alignment.
 			(setq-default indent-tabs-mode t)
 			;; I want as much as possible on my screens.
 			(setq-default c-basic-offset 2)
 			(setq-default tab-width 2) ; or any other preferred value
-		#+end_src
+		#+END_SRC
 		
 		This can be hard for other to replicate in there enviroment, If
 		they are using VisualStudio the need Resharper to replicate this
 		behavior. The could do without resharper and set VS to ident with
 		tabs and manually align things with spaces when needed.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; smart tabs, tabs for indentation, spaces for alignment
 			(defadvice align (around smart-tabs activate)
 				(let ((indent-tabs-mode nil)) ad-do-it))
@@ -1190,21 +1190,21 @@ that I share between work and home
 			(smart-tabs-advice c-indent-line c-basic-offset)
 			(smart-tabs-advice c-indent-region c-basic-offset)
 			;; smart tabs - end
-		#+end_src
+		#+END_SRC
 
 ***** SQL
 
-		  #+begin_src emacs-lisp
+		  #+BEGIN_SRC emacs-lisp
 			 (eval-after-load "sql"
 				 '(load-library "sql-indent"))
-			#+end_src
+			#+END_SRC
 
 
 *** PLSQL
 		
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       (when (require 'plsql nil 'noerror) )
-		#+end_src
+		#+END_SRC
 *** SQL-mode
 ***** Support Multiple connections
 
@@ -1213,15 +1213,15 @@ that I share between work and home
 			one. Use M-x sql-rename-buffer for that, or the SQL menu entry. To do it
 			autmatically, after every connection, use the following in your ~/.emacs file: 
 
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
         ;;(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
-			#+end_src
+			#+END_SRC
 
 			Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
 			
-    	#+begin_example
+    	#+BEGIN_EXAMPLE
         connect vdb/vdb@vdbdev;     
-    	#+end_example
+    	#+END_EXAMPLE
 
 			This does not set ‘sql-alternate-buffer-name’, so a subsequent renaming will not
 			produce a new name. Subsequent connections will also not provide the correct default
@@ -1229,7 +1229,7 @@ that I share between work and home
 			the buffer: 
 			
 			
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (defun my-sql-connect-watch (line)
           "Watch for connect statements and set variables accordingly.
         Add this to `comint-input-filter-functions'."
@@ -1241,13 +1241,13 @@ that I share between work and home
                   sql-alternate-buffer-name (sql-make-alternate-buffer-name))
             (sql-rename-buffer)))
         (add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
-			#+end_example
+			#+END_EXAMPLE
 
 ***** SQL-Plus support
 
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
 			 (require 'sqlplus)
-			#+end_example
+			#+END_EXAMPLE
 ***** Remove linenumbers from sqlplus output
 
 			SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
@@ -1259,13 +1259,13 @@ that I share between work and home
 			This may make SQL*Plus error reporting less comprehensible when using SqlMode. Here
 			is an example of the line number junk: 
 
-			#+begin_example
+			#+BEGIN_EXAMPLE
         ...
           2    3    4       from v$parameter p, all_tables u
                   *
         ERROR at line 2:
         ORA-00942: table or view does not exist     
-			#+end_example
+			#+END_EXAMPLE
 			This only happens if you enter multi-line SQL statements by using C-j instead of RET
 			between lines (ie. using sql-accumulate-and-indent instead of comint-send-input). If
 			you enter SQL statements one at a time, you’ll be fine. 
@@ -1273,7 +1273,7 @@ that I share between work and home
 			The following elisp function must be added to comint-preoutput-filter-functions in
 			order to strip the line numbers junk from the output: 
 
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (defun eat-sqlplus-junk (str)
           "Eat the line numbers SQL*Plus returns.
         Put this on `comint-preoutput-filter-functions' if you are
@@ -1289,18 +1289,18 @@ that I share between work and home
           (while (string-match " [ 1-9][0-9]  " str)
             (setq str (replace-match "" nil nil str)))
           str)
-			#+end_example
+			#+END_EXAMPLE
 			Test it by evaluating the following expression:
 
-			#+begin_example
+			#+BEGIN_EXAMPLE
         (string= "     from" (eat-sqlplus-junk "  2    3    4       from"))
-			#+end_example
+			#+END_EXAMPLE
 
 			Install it by adding the following expression to your .emacs; it will check wether
 			the iSQL mode you have just started is indeed running SQL*Plus, and if it is, it
 			will add eat-sqlplus-junk to comint-preoutput-filter-functions. 
 
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (defun install-eat-sqlplus-junk ()
           "Install `comint-preoutput-filter-functions' if appropriate.
             Add this function to `sql-interactive-mode-hook' in your .emacs:
@@ -1311,14 +1311,14 @@ that I share between work and home
                            'eat-sqlplus-junk)))
 
         (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
-			#+end_example
+			#+END_EXAMPLE
 ***** Placeholder support in sql querys
 			:LOGBOOK:
 			- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
 			CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
 			:END:
 
-			#+begin_example emacs-lisp
+			#+BEGIN_EXAMPLE emacs-lisp
         (eval-after-load "sql"
           '(load-library "sql-with-placeholders"))
         (add-hook 'sql-mode-hook (lambda nil
@@ -1329,7 +1329,7 @@ that I share between work and home
                                    (local-set-key [(control c) (control r)] 
                                                   'sql-send-region-with-placeholders)))
         
-			#+end_example
+			#+END_EXAMPLE
 ***** TODO need to test all this to see if it works.
 *** nXML
     :LOGBOOK:
@@ -1339,7 +1339,7 @@ that I share between work and home
     First we need a local place to store all relax ng files used to validate and provide
     completion, that is synced between machines.
     
-    #+begin_src emacs-lisp
+    #+BEGIN_SRC emacs-lisp
       ;; nxml is a part of the emacs distrobution so we don't need to have (when (require
       ;; .... 'noerror) around it, but we need to eval-after-load so the variable are
       ;; defined. 
@@ -1347,19 +1347,19 @@ that I share between work and home
       (eval-after-load "nxml-mode" 
         '(add-to-list 'rng-schema-locating-files
                       (concat local-emacs-org-dir "xml-schemas/schemas.xml")))
-    #+end_src
+    #+END_SRC
 
     We want completion and other fun stuff
 
-    #+begin_src emacs-lisp
+    #+BEGIN_SRC emacs-lisp
       ;; just writing </ should be enaough to close last tag
       ;; ctrl tab to complete, this will do until we fixes w32 special keys things.
       (eval-after-load "nxml-mode"
         '(progn (setq nxml-slash-auto-complete-flag t)
                 (define-key nxml-mode-map (kbd "C-<tab>") 'nxml-complete)))
-    #+end_src
+    #+END_SRC
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       (add-to-list 'auto-mode-alist '("\\.html$" . nxml-mode))
       (add-to-list 'auto-mode-alist '("\\.rng$" . nxml-mode))
       (add-to-list 'auto-mode-alist '("\\.rss$" . nxml-mode))
@@ -1370,7 +1370,7 @@ that I share between work and home
       (add-to-list 'auto-mode-alist '("\\.xsd$" . nxml-mode))
       (add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
       (add-to-list 'auto-mode-alist '("\\.xslt$" . nxml-mode))
-		#+end_src
+		#+END_SRC
 ***** TODO support validation
 			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
 ***** Tools used for convertering to RelaxNG
@@ -1378,12 +1378,12 @@ that I share between work and home
            to RelaxNG that nXML uses, web-based
 			- https://code.google.com/p/jing-trang/ :: also a tool for converting between
 					 RelaxNG and other formats, you need java installed, commandline.
-					 #+begin_example
+					 #+BEGIN_EXAMPLE
              #>java -jar tranq.jar
              usage: java com.thaiopensource.relaxng.translate.Driver [-C catalogFileOrUri] [-
              I rng|rnc|dtd|xml] [-O rng|rnc|dtd|xsd] [-i input-param] [-o output-param] input
              FileOrUri ... outputFile
-					 #+end_example
+					 #+END_EXAMPLE
 ***** links
 			- howto specify things in schemas.xml ::
            http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
@@ -1396,7 +1396,7 @@ that I share between work and home
 		change. I have tried to make it as simple a possible with sub-trees
 		for every main function of OrgMode.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       (setq org-deadline-warning-days 14)
       (setq org-timeline-show-empty-dates t)
       ;; do not have so much in my agenda so two weeks is good
@@ -1433,11 +1433,11 @@ that I share between work and home
       (setq org-hide-leading-stars t)
       (setq org-toc-default-depth 3)
       (setq org-toc-follow-mode t)
-		#+end_src
+		#+END_SRC
 
 *** Global Keys for OrgMode																			:keybindings:
 		
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       ;; org-mode Links
       ;; insert links should not really be global but what the hell.
       (global-set-key (kbd "S-<f5>") 'org-insert-link)
@@ -1455,18 +1455,18 @@ that I share between work and home
       ;; default
       (global-set-key (kbd "S-<f7>") (lambda () (interactive) (org-capture nil "w")))
       
-		#+end_src
+		#+END_SRC
 
 *** Org Modules
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; need to do some cleanup here.
 			(setq org-modules '(org-bbdb org-bibtex org-docview org-gnus 
 																	 org-info org-jsinfo org-habit 
 																	 org-irc org-mew org-mhe org-rmail 
 																	 org-vm org-wl org-w3m))
 
-		#+end_src
+		#+END_SRC
 
 *** Org Protocol                                        :instw:instl:outlook:
 
@@ -1474,7 +1474,7 @@ that I share between work and home
 		org-protocol: urls and route them to emacsclientw. the path on the
 		last row is the bit you might need to adapt for your installation.
 		
-		#+begin_example
+		#+BEGIN_EXAMPLE
 			Windows Registry Editor Version 5.00
 			
 			[HKEY_CLASSES_ROOT\org-protocol]
@@ -1484,21 +1484,21 @@ that I share between work and home
 			[HKEY_CLASSES_ROOT\org-protocol\shell\open]
 			[HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
 			@="C:\Users\jiha\emacs-24.1\bin\emacsclientw.exe %1"
-		#+end_example
+		#+END_EXAMPLE
 
 		for linux you could configure gnome like this.
 
-		#+begin_example
+		#+BEGIN_EXAMPLE
 			gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/command '/usr/local/bin/emacsclient %s' --type String
 			gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/enabled --type Boolean true
-		#+end_example
+		#+END_EXAMPLE
 
 ***** adobe acrobat reader                                      :instw:insti:
 
 			Add these scripts to <somewhere>\Adobe\Reader 10.0\Reader\Javascripts makes it easy
 			to takes notes from pdf's and store links to where they are.
 			
-			#+begin_example javascript
+			#+BEGIN_EXAMPLE javascript
 				// from http://article.gmane.org/gmane.emacs.orgmode/6810
 				app.addMenuItem({cName:"org-capture", 
 												cParent:"Tools", 
@@ -1507,28 +1507,28 @@ that I share between work and home
 																							'/' + 
 																							encodeURIComponent(this.info.Title) + 
 																							'/');"});
-			#+end_example
+			#+END_EXAMPLE
 			
-			#+begin_example javascript
+			#+BEGIN_EXAMPLE javascript
 				// from http://article.gmane.org/gmane.emacs.orgmode/6810
 				app.addMenuItem({cName:"org-store-link", cParent:"Tools",
 												 cExec:"app.launchURL('org-protocol://store-link://' + 
 																							 encodeURIComponent(this.URL) + 
 																							 '/' + 
 																							 encodeURIComponent(this.info.Title));"});
-			#+end_example
+			#+END_EXAMPLE
 
 ***** Web-browser integration
 
 			Add these as bookmarks in webbrowsers
 
-			#+begin_example javascript
+			#+BEGIN_EXAMPLE javascript
 				javascript:location.href='org-protocol://capture://'+ encodeURIComponent(location.href)+'/'+ encodeURIComponent(document.title)+'/'+ encodeURIComponent(window.getSelection())
-			#+end_example
+			#+END_EXAMPLE
 			
-			#+begin_example javascript
+			#+BEGIN_EXAMPLE javascript
 				javascript:location.href='org-protocol://store-link://' + encodeURIComonent(location.href) + '/' + encodeURIComponent(document.title)
-			#+end_example
+			#+END_EXAMPLE
 
 *** Org Capture
 		:LOGBOOK:
@@ -1546,7 +1546,7 @@ that I share between work and home
 		where things shall be put. first we clear it then we use
 		add-to-list to append template after template.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       ;; clear the templates list
       (setq org-capture-templates '())
       
@@ -1604,7 +1604,7 @@ that I share between work and home
                      :empty-lines 1
                      :unnarrowed))
       
-		#+end_src
+		#+END_SRC
 
   #+RESULTS:
 	| c | Add note to currently clocked-in item.          | entry | (clock)                                                         | ** %^{Title}\n   Added: %U\n   %?                                                     | :clock-keep   | :empty-lines | 1 | :unnarrowed |
@@ -1671,7 +1671,7 @@ that I share between work and home
 
 *** RSS feeds
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(let ((feedfile "~/feeds.org"))
 				(setq org-feed-alist
 							`(("Slashdot"
@@ -1686,28 +1686,28 @@ that I share between work and home
 								 "http://live.piratpartiet.se/rss20.xml"
 								 ,feedfile
 								 "PiratPartiet SE"))))
-		#+end_src
+		#+END_SRC
 *** Standard Todo states and transitions
 		:LOGBOOK:
 		- State "DONE"			 from "TODO"			 [2012-08-20 må 17:19]
 		:END:
 
 		This is from [[norang:TodoKeywords]] it's proberbly more than I need.
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 						(setq org-todo-keywords
 									(quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
 													(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
 													(sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)")
 													(sequence "ESTIMATE" "|" "ESTIMATED"))))
 						
-		#+end_src
+		#+END_SRC
 
 *** Org todo keyword faces                                            :faces:
 
 		All kewords are should be bold, that tells me they are keywords
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 
-		#+end_src
+		#+END_SRC
 
 *** Init
 
@@ -1717,7 +1717,7 @@ that I share between work and home
 		org-agenda work with this I have a list of directories called my-org-directories and
 		will call special files in those directories at specific times
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       ;; for every directory in my-org-directories call init.org
       ;; every init.org file may setup local-org-agenda-files with files that should form a part
       ;; of the org agenda this is added to org-agenda-files here with directory concated
@@ -1729,7 +1729,7 @@ that I share between work and home
           (dolist (file local-org-agenda-files)
             (add-to-list 'org-agenda-files (concat directory file)))))
           
-		#+end_src
+		#+END_SRC
 
   #+RESULTS:
 
@@ -1740,7 +1740,7 @@ that I share between work and home
 		integrating org-mode with outlook, until i get GNUS to behave as I
 		want. first of, you need this registry hack(for outlook 2007).
  
-		#+begin_example 
+		#+BEGIN_EXAMPLE 
 			Windows Registry Editor Version 5.00
 			Windows Registry Editor Version 5.00
 			
@@ -1760,11 +1760,11 @@ that I share between work and home
 			[HKEY_CLASSES_ROOT\outlook\shell\open\command]
 			@="\"C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLOOK.EXE\" /select \"%1\""
 			
-		#+end_example
+		#+END_EXAMPLE
 
 		here is one for 2010, still need to make sure paths are right.
 
-		#+begin_example
+		#+BEGIN_EXAMPLE
 			Windows Registry Editor Version 5.00
 			
 			[HKEY_CLASSES_ROOT\outlook]
@@ -1782,7 +1782,7 @@ that I share between work and home
 			
 			[HKEY_CLASSES_ROOT\outlook\shell\open\command]
 			@="C:\\Program Files\\Microsoft Office\\Office14\\OUTLOOK.EXE /select %1"
-		#+end_example
+		#+END_EXAMPLE
 
 		You also need this macro in outlook, this has been adapted for
 		outlook 2010 but you still need to adapt it when it comes to what
@@ -1797,7 +1797,7 @@ that I share between work and home
 		to create items in org from mails in outlook
 		[[file:workmachine/integration.bas]]
 
-		#+begin_example vb
+		#+BEGIN_EXAMPLE vb
 			Public Declare PtrSafe Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ( _
 					ByVal hWnd As Long, _
 					ByVal lpOperation As String, _
@@ -1900,13 +1900,13 @@ that I share between work and home
 							Next
 					End If
 			End Sub
-		#+end_example
+		#+END_EXAMPLE
 
 		then we need to load the org-module and setup some basic things,
 		like where to find outlook binary to call. how to capture things
 		from outlook
 		
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			;; Setup outlook integration with org-mode.
 			(add-to-list 'load-path "~/.emacs.d/elpa/org-outlook-0.3/")
 			(when (require 'org-outlook nil 'noerror)
@@ -1920,26 +1920,26 @@ that I share between work and home
 				;; Default template for org-capture or remember.
 				;;(setq-default org-protocol-outlook-default-template-key o)
 				)
-		#+end_src
+		#+END_SRC
 
 ***** TODO fix line-endings and indentation of imported mail.
 			
 			this is one way, but we need something better, we need to convert it to the format
 			of the buffer that it is supposed to go to. this is only a display hack.
-			#+begin_example elisp
+			#+BEGIN_EXAMPLE elisp
 				(defun dos-remove-eol ()
 					"Do not show ^M in files containing mixed UNIX and DOS line endings."
 					(interactive)
 					(setq buffer-display-table (make-display-table))
 					(aset buffer-display-table ?\^M []))
-			#+end_example
+			#+END_EXAMPLE
 *** Auto Archiving of done entries
 
 		Would be nice if we could auto archive things that have been done
 		for 1 month or something similier. does not work at the moment need
 		to find out why it hangs.
 
-		#+begin_example emacs-lisp
+		#+BEGIN_EXAMPLE emacs-lisp
 			; found on the emacs-orgmode mailing list.
 			; helping aboudreault with finding errors in it.
 			(defvar org-my-archive-expiry-days 2
@@ -1972,7 +1972,7 @@ that I share between work and home
 												(org-archive-subtree)))))))))
 			
 			(defalias 'archive-done-tasks 'asdflökg)
-		#+end_example
+		#+END_EXAMPLE
 *** Refile
 
 		#+BEGIN_SRC emacs-lisp
@@ -2013,7 +2013,7 @@ that I share between work and home
 
 		which of course doesn't normally work, hence this elisp code.
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
 			(defun local-org-insert-stars ()
 				(interactive)
 				(when (looking-back "^ *" (point-at-bol))
@@ -2021,7 +2021,7 @@ that I share between work and home
 				(insert "*"))
 			
 			(define-key org-mode-map "*" 'local-org-insert-stars)
-		#+end_src
+		#+END_SRC
 		Haven't thoroughly tested it, but it seems to work ok.
 
 		Piotr
@@ -2034,7 +2034,7 @@ that I share between work and home
     time. It's easy to ignore if not needed I just pres C-c C-c, and no
     message will be saved.
 
-    #+begin_src emacs-lisp
+    #+BEGIN_SRC emacs-lisp
       (setq org-clock-into-drawer t)
       (setq org-log-into-drawer t)
       (setq org-log-redeadline (quote note))
@@ -2052,10 +2052,10 @@ that I share between work and home
       (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
       ;; Include current clocking task in clock reports
       (setq org-clock-report-include-clocking-task t) 
-    #+end_src
+    #+END_SRC
     
 		Creates filesets for all org files.
-    #+begin_src emacs-lisp
+    #+BEGIN_SRC emacs-lisp
 						(dolist (directory my-org-directories)
 							(let ((directory-part (concat "Org: " (car (last (split-string directory "/") 2)))))
 								(add-to-list 'filesets-data 
@@ -2063,11 +2063,11 @@ that I share between work and home
 																	 (list ':tree
 																				 directory
 																				 "^.+\\.org$")))))
-		#+end_src
+		#+END_SRC
 
 *** Agenda                                                           :habits:
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       ;; popup new frame for org-agenda, so we get full width
       ;; it will reuse allready open frame and only pop it front.
       (setq org-agenda-window-setup 'other-frame)
@@ -2103,14 +2103,14 @@ that I share between work and home
       (setq org-habit-preceding-days 20)
       (setq org-habit-following-days 15)
       
-		#+end_src
+		#+END_SRC
 
 		From Julien Danjou we borrow a function to be able to get our own
 		Holidays and Vaction days marked in the right face.	 for this to
 		kick in you need to set the category on items to "Holidays" or
 		"Vacation".
 
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       (setq org-agenda-day-face-function
             (defun jd:org-agenda-day-face-holidays-function (date)
               "Compute DATE face for holidays."
@@ -2125,7 +2125,7 @@ that I share between work and home
                                        (string= "Vacation" category))
                                (return 'org-agenda-date-weekend))))))
                     (when face (return face)))))))
-		#+end_src
+		#+END_SRC
 		
 ***** Agenda templates
 			
@@ -2135,7 +2135,7 @@ that I share between work and home
 			functions to use in the agenda view, include calles to these
 			functions in one of your agenda files like this %%(diary-sun*) and
 			it will be called.
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
         ;; functions to use in the dairy to get seperated sunrise and sunset times.
         ;; if we use %%(dairy-sunrise-sunset) we get it on one line, this gives us
         ;; two lines or only one if we want to.
@@ -2167,17 +2167,17 @@ that I share between work and home
               (capitalize-word 1)
               (buffer-substring start end))))
         
-			#+end_src
+			#+END_SRC
 			
 			We also need to set where on earth we are because without that
 			information the dairy-sun* functions can not do it's job and
 			will ask every time we start where on earht we are.
-			#+begin_src emacs-lisp
+			#+BEGIN_SRC emacs-lisp
         (setq calendar-latitude 63.1766)
         (setq calendar-longitude 14.636068)
         (setq calendar-location-name "Östersund, Sweden")
         
-			#+end_src
+			#+END_SRC
 *** Exports
 *** Babel
 		
@@ -2199,34 +2199,34 @@ that I share between work and home
       oracle. It still need some more fixing before a send a patch for it
       to the maintainers.
 
-      #+begin_src emacs-lisp
+      #+BEGIN_SRC emacs-lisp
         ;; we use a safe way of loading it, it should alawys exist but if it
         ;; does not, we don't want an error.
         (when (require 'ob-sql nil 'noerror)
           (message "loaded ob-sql, you can now use sql in org-babel snippets")
           )
-      #+end_src
+      #+END_SRC
 
-*** Org-sync
-    #+begin_example emacs-lisp
+*** Org-syncy
+    #+BEGIN_EXAMPLE emacs-lisp
       ;;(load-file "org-modules/org-element.el")
       ;;(load-file "org-sync2/os.el") ;; org-sync
       ;;(load-file "org-sync2/os-github.el") ;; github
       ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
-    #+end_example
+    #+END_EXAMPLE
 
 *** Post
 
 		Read [[Init]]. here is the last call and it gives the local a chance to overide everything
 		from the shared org-directory. This calls post.org in reverse order compared to init.
 		
-		#+begin_src emacs-lisp
+		#+BEGIN_SRC emacs-lisp
       ;; calling post in all org-directories
       (dolist (directory (reverse my-org-directories))
         (let ((local-org-directory directory))
           (org-babel-load-file (concat directory "post.org"))))
       
-		#+end_src
+		#+END_SRC
 
   #+RESULTS:
 
@@ -2245,12 +2245,12 @@ that I share between work and home
 	most of these things comes from http://julien.danjou.info/
 *** Google maps                                                         :org:
 
-    #+begin_src emacs-lisp
+    #+BEGIN_SRC emacs-lisp
        (add-to-list 'load-path (concat local-emacs-org-dir
                                       "google-maps"))
       (when (require 'google-maps nil 'noerror)
         (when (require 'org-location-google-maps nil 'noerror)))
-    #+end_src
+    #+END_SRC
 
     You can then use M-x google-maps and type a location.
     
@@ -2278,10 +2278,10 @@ that I share between work and home
     http://julien.danjou.info/projects/emacs-packages#google-contacts
 
     The easiest way to use it is to load it from your .emacs:
-    #+begin_src emacs-lisp
+    #+BEGIN_SRC emacs-lisp
       ;;(add-to-list 'load-path (concat local-emacs-org-dir "google-contacts"))
       ;;(when (require 'google-contacts nil 'noerror))
-    #+end_src
+    #+END_SRC
     You can then use M-x google-contacts and type a query string.
     
     Various key bindings are available. Here's a few:
@@ -2293,36 +2293,36 @@ that I share between work and home
     q to quit.
     You can integrate directly Google Contacts into Gnus:
 
-    #+begin_src emacs-lisp
+    #+BEGIN_SRC emacs-lisp
       (when (require 'google-contacts-gnus nil 'noerror))
-    #+end_src
+    #+END_SRC
     Then you can use ; to go to a contact information while reading an
     e-mail.
     
     You can integrate directly Google Contacts into message-mode;
 
-    #+begin_src emacs-lisp
+    #+BEGIN_SRC emacs-lisp
       (when (require 'google-contacts-message nil 'noerror))
-    #+end_src
+    #+END_SRC
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
 * Other Setup 																									:keybindings:
 
-	#+begin_src emacs-lisp
+	#+BEGIN_SRC emacs-lisp
 		(setq-default indent-tabs-mode t)							
 		(global-set-key "\C-x\C-l" 'goto-line)
 
-	#+end_src
+	#+END_SRC
 
 * Load Local settings
 
 	Last but not least we need to load the part of the .emacs that is
 	local to this machine. That is also a org-babel emacs file.
 
-	#+begin_src emacs-lisp
+	#+BEGIN_SRC emacs-lisp
 		(add-to-list 'load-path (concat local-emacs-org-dir "local"))
 		(org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
-	#+end_src
+	#+END_SRC
 
 * File-sets 																											 :filesets:
 
@@ -2360,15 +2360,15 @@ functions as a basis since they would be similar). The same would
 apply for any additional Emacs command that you wanted to add to work
 on file sets. 
 
-	#+begin_src emacs-lisp
+	#+BEGIN_SRC emacs-lisp
 		;; now when all org-directories has been parsed we should be
 		;; able to init the filesets menu.
 		(filesets-init)
-	#+end_src
+	#+END_SRC
 	
 * ERC
 
-	#+begin_src emacs-lisp
+	#+BEGIN_SRC emacs-lisp
     (require 'erc-join)    
     (require 'erc-match)
     (setq erc-keywords '("darion" "kurohin"))
@@ -2430,7 +2430,7 @@ on file sets.
     (global-set-key (kbd "C-c I") 'reset-erc-track-mode)
     (setq erc-auto-query 'buffer)
     
-	#+end_src
+	#+END_SRC
 
 * TODO BBDB
 * DONE windows context menu integration																:instw:
@@ -2451,7 +2451,7 @@ on file sets.
 	Create a file of the code below, change paths to were you have emacs installed and run
 	it.
 
-	#+begin_src conf-windows
+	#+BEGIN_SRC conf-windows
     REGEDIT4      
     [HKEY_CLASSES_ROOT\*\shell]
       
@@ -2468,7 +2468,7 @@ on file sets.
     [HKEY_CLASSES_ROOT\*\shell\openwemacs\command]
     @="C:\\users\\jiha\\Emacs-24.1\\bin\\emacsclientw \"%1\""
     # The above has to point to where you install Emacs 
-	#+end_src
+	#+END_SRC
 
 	If it does not work, check the paths one more time.
 
