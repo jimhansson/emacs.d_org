@@ -27,7 +27,10 @@ that I share between work and home
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 
-*** TODO turn Flyspell into a mode that is not on as default
+*** DONE turn Flyspell into a mode that is not on as default
+		:LOGBOOK:
+		- State "DONE"       from "NEXT"       [2013-04-09 ti 23:15]
+		:END:
 		because it slows down cursor movement.
 		it should be easy to turn on, and change dictionaries
 *** TODO turn whitespace mode in to a mode that easy to turn on and off
@@ -360,137 +363,76 @@ that I share between work and home
 
 *** Fly-spell
 
-		My spelling is terrible so we use fly-spell as much as possible when
-		it is available. We turn it on for most text-modes and
-		flyspell-prog-mode for programming. 
+		My spelling is terrible so we use fly-spell as much as possible when it is
+		available. It needs to be easy to activate and deactivate, we also need an easy way to
+		spell-check only one word, the one at point and last it needs to be easy to change
+		dictionaries.
 
-		I highly suggest setting ‘flyspell-issue-message-flag’ to nil, as
-		printing messages for every word (when checking the entire buffer)
-		causes an enormous slowdown. 
-
-		#+BEGIN_SRC emacs-lisp
-      (when (require 'flyspell nil 'noerror)
-        ;; activate flyspell for text-mode and derivatives
-        (dolist (hook '(text-mode-hook))
-          (add-hook hook (lambda () (flyspell-mode 1))))
-        ;; this is how we remove it for a sub-mode
-        ;;(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-        ;;  (add-hook hook (lambda () (flyspell-mode -1))))
-      
-        (setq flyspell-issue-message-flag nil))
-      
-		#+END_SRC
+		I highly suggest setting ‘flyspell-issue-message-flag’ to nil, as printing messages
+		for every word (when checking the entire buffer) causes an enormous slowdown.
 		
-***** Fly-spell for comments when programming                        :coding:
-			
-			#+BEGIN_SRC emacs-lisp
+		#+BEGIN_SRC emacs-lisp -n -r
+      (when (require 'flyspell nil 'noerror)
+        ;; Create a ring of languages I would like to use
+        (let ((langs '("american" "svenska" "norsk")))   (ref:dict_lang)
+          (setq jiha-lang-ring (make-ring (length langs)))
+          (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
+        
+        ;; A function to easy switch between dictionaries using ring from above
+        (defun jiha-cycle-ispell-languages ()  (ref:dict_func)
+          (interactive)
+          (let ((lang (ring-ref jiha-lang-ring -1)))
+            (ring-insert jiha-lang-ring lang)
+            (ispell-change-dictionary lang)))      
+      
         ;; Fly-spell in C based programming modes
         (add-hook 'c-mode-hook
-                  (lambda ()
-                    (flyspell-prog-mode)))
+                  (lambda () (flyspell-prog-mode)))
         
         ;; Fly-spell in C++ based programming modes
         (add-hook 'c++-mode-hook
-                  (lambda ()
-                    (flyspell-prog-mode)))
+                  (lambda () (flyspell-prog-mode)))
         
         ;; Fly-spell in emacs-lisp mode
         (add-hook 'lisp-mode-hook
-                  (lambda ()
-                    (flyspell-prog-mode)))
+                  (lambda () (flyspell-prog-mode)))
         
-			#+END_SRC
+        ;; eays access to flyspell/ispell functionality.
+        (global-set-key (kbd "<f8>")     'ispell-word)
+        (global-set-key (kbd "C-<f8>")   'flyspell-mode)
+        (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages)  (ref:dict_cycle)
+        (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+        (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
+        
+        (setq flyspell-issue-message-flag nil))
+      
+		#+END_SRC        
+		
+		To solve the problem with multiple languages we first need to define what languages
+		we are interesting in switching between, if we don't do that the result will be that
+		on systems with many dictionaries it will be to much of a problem switching. So first
+		we create a ring of languages at [[(dict_lang)][let langs]], that ring is used by a function that will move
+		from one language after another and that function is defined at [[(dict_func)][defun]], and at last
+		we bind that function to a key-combo for easy access at [[(dict_cycle)][global-set...]]
 
-***** TODO don't use fly-spell in src samples
+***** TODO we maybe should remove flyspell-prog-mode from languages hooks
+			and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
+			the major mode is a programming mode and "vanilla" flyspell-mode when it is
+			not. and bind that to *S-<F8>*.
+
+***** DONE don't use fly-spell in src samples
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-04-09 ti 22:55] \\
+				not an issue any more when I can easily turn it on and off.
+			:END:
 			
 			Or switch to flyspell-prog-mode somehow.
 
-***** TODO somehow use #+LANGUAGE in org to choose word-list.
-***** Other fly-spell things
-******* Change dictionaries
-
-		As I often need to switch between English and German I use this
-		function:
-
-		#+BEGIN_EXAMPLE emacs-lisp
-      (defun fd-switch-dictionary()
-      (interactive)
-      (let* ((dic ispell-current-dictionary)
-       (change (if (string= dic "deutsch8") "english" "deutsch8")))
-        (ispell-change-dictionary change)
-        (message "Dictionary switched from %s to %s" dic change)
-        ))
-          
-      (global-set-key (kbd "<f8>")   'fd-switch-dictionary)
-		#+END_EXAMPLE
-
-		I too cycle through different languages, but not all that is
-		available in the system. I use the following code inside my
-		.emacs. 
-
-		#+BEGIN_EXAMPLE emacs-lisp
-      (let ((langs '("american" "francais" "brasileiro")))
-        (setq lang-ring (make-ring (length langs)))
-        (dolist (elem langs) (ring-insert lang-ring elem)))
-      
-      (defun cycle-ispell-languages ()
-        (interactive)
-        (let ((lang (ring-ref lang-ring -1)))
-          (ring-insert lang-ring lang)
-          (ispell-change-dictionary lang)))
-      
-      (global-set-key [f6] 'cycle-ispell-languages)
-		#+END_EXAMPLE
-
-		How can I ignore or add a word without using the popup menu?
-
-		Use flyspell-auto-correct-word.
-
-		This is not working for me. With flyspell-auto-correct-word I can
-		go through all suggestions for correction, but I do not get an
-		option to insert the word into my dictionary. Success in adding
-		new words into the personal dictionary.
-
-		I used “M x ispell-region”, and the words that ispell considered
-		having incorrect spellings were highlighted. The point moved to
-		the first “mis-spelled” word. By typing “i”, I inserted the word
-		into my personal dictionary. Later I found that the personal
-		dictionary was stored in the file $HOME/.aspell.en.pws in pure
-		text format. Although the word was added when I used “ispell”
-		instead of “flyspell”, but once added, flyspell also recognized
-		the word as having a correct spelling. :-) This information came
-		from the web page:
-		http://www.delorie.com/gnu/docs/emacs/emacs_109.html . Thanks! 
-
-		Easy Spell Check: key bindings and function to make
-		FlySpell/ispell/aspell easy to use w/ out a mouse 
-
-		Place the below code in your .emacs
-
-		F8 will call ispell (or aspell, etc) for the word the cursor is on
-		(or near). You can also use the built-in key binding
-		M-$. Ctrl-Shift-F8 enables/disables FlySpell for your current
-		buffer (highlights misspelled words as you type) Crtl-Meta-F8 runs
-		FlySpell on your current buffer (highlights all misspelled words
-		in the buffer) Ctrl-F8 calls ispell for the FlySpell highlighted
-		word prior to the cursor’s position Meta-F8 calls ispell for the
-		FlySpell highlighted word after the cursor’s position.
-
-		#+BEGIN_EXAMPLE emacs-lisp
-      ;; easy spell check
-      (global-set-key (kbd "<f8>") 'ispell-word)
-      (global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
-      (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
-      (global-set-key (kbd "C-<f8>") 'flyspell-check-previous-highlighted-word)
-      (defun flyspell-check-next-highlighted-word ()
-        "Custom function to spell check next highlighted word"
-        (interactive)
-        (flyspell-goto-next-error)
-        (ispell-word)
-        )
-      (global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
-#+END_EXAMPLE
-		
+***** FIXED somehow use #+LANGUAGE in org to choose word-list.
+			:LOGBOOK:
+			- State "FIXED"      from "TODO"       [2013-04-09 ti 22:56] \\
+				not a problem any more when I have an easy way to change dictionaries.
+			:END:
 ***** Installing ispell on windows																		:instw:
 
 			look here and download everthing you need.
@@ -2492,7 +2434,6 @@ that I share between work and home
 
 	#+BEGIN_SRC emacs-lisp
     ;; Local Variables:
-    ;; coding: utf-8-unix;
     ;; tab-width: 2;
     ;; End:
 	#+END_SRC
