@@ -33,7 +33,10 @@ that I share between work and home
 		:END:
 		because it slows down cursor movement.
 		it should be easy to turn on, and change dictionaries
-*** TODO turn whitespace mode in to a mode that easy to turn on and off
+*** DONE turn whitespace mode in to a mode that easy to turn on and off
+		:LOGBOOK:
+		- State "DONE"       from "TODO"       [2013-04-09 ti 23:37]
+		:END:
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -361,7 +364,7 @@ that I share between work and home
       ;;(add-hook 'auto-save-hook ...)
 		#+END_SRC
 
-*** Fly-spell
+*** Fly-spell																										:keybindings:
 
 		My spelling is terrible so we use fly-spell as much as possible when it is
 		available. It needs to be easy to activate and deactivate, we also need an easy way to
@@ -440,7 +443,7 @@ that I share between work and home
 
 			add aspell directory to path
 
-*** Whitespace
+*** Whitespace																									:keybindings:
 
 		I use whitespace mode a lot, maybe because I dont have configured
 		the programming modes to "do the right thing" yet and some other
@@ -475,10 +478,14 @@ that I share between work and home
       ;; or used in some save-hook don't know how this work together with smart-tabs
       (defun jiha-whitespace-cleanup ()
         (interactive)
-        (let (whitespace-style (indentation::tab 
-                                space-before-tab::tab
-                                trailing))
+        (let (whitespace-style '(indentation::tab 
+                                 space-before-tab::tab
+                                 trailing))
           (whitespace-cleanup-region)))
+      
+      (global-set-key (kbd "<f9>") 'whitespace-mode)
+      (global-set-key (kbd "C-<f9>") 'jiha-whitespace-cleanup)
+      (global-set-key (kbd "C-S-<f9>") 'whitespace-cleanup-region)
 		#+END_SRC
 
 *** Auto-complete
@@ -525,7 +532,7 @@ that I share between work and home
 ***** TODO fix face of hl-line so it does not interfer with other things.
 
 *** Electric pair, indent.... mode
-
+		
 *** Show-Paren
 		
 		It is a global mode but I want it buffer local so first we make it buffer local then
@@ -2383,7 +2390,7 @@ that I share between work and home
 	#+END_SRC
 
 * TODO BBDB
-* DONE windows context menu integration																:instw:
+* Windows context menu integration 																		:instw:
 	:LOGBOOK:
 	- State "DONE"       from "TODO"  [2013-03-15 fr 10:35]
 		works fine
@@ -2422,7 +2429,11 @@ that I share between work and home
 
 	If it does not work, check the paths one more time.
 
-*** TODO need to move this into somewhere.
+*** DONE need to move this into somewhere.
+		:LOGBOOK:
+		- State "DONE"       from "TODO"       [2013-04-09 ti 23:45] \\
+			it can stay where it is.
+		:END:
 
 * List of others configurations that you can look at and steal ideas from
 
