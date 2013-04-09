@@ -162,26 +162,26 @@ that I share between work and home
 		all computers I use are laptops and who in there right mind uses 12h clocks. 
 
 		#+BEGIN_SRC emacs-lisp
-			(setq default-major-mode 'org-mode)
-			(add-hook 'text-mode-hook 'turn-on-auto-fill)
-			;; show matching paren
-			(show-paren-mode t)
-			(iswitchb-mode 1)
-			(setq filesets-data nil)
-			(display-battery-mode)
-			(global-font-lock-mode t)
-			;; binds ctrl + § to dabbrev as good enough completion 
-			(global-set-key (kbd "C-\§") 'dabbrev-expand)
-			(setq-default indent-tabs-mode t)
-			(setq column-number-mode t)
-			(setq global-auto-revert-mode t)
-			(setq inhibit-startup-screen t)
-			(setq inhibit-splash-screen t)
-			(setq initial-buffer-choice t)
-			;; This stops calls to sync when saving files, this might save battery on laptops, I only
-			;; have SSD so that does not affect me so much. Setting might make it easier to loss data
-			;; also.
-			;;(write-region-inhibit-fsync t)
+      (setq default-major-mode 'org-mode)
+      (add-hook 'text-mode-hook 'turn-on-auto-fill)
+      ;; show matching paren
+      (show-paren-mode t)
+      (iswitchb-mode 1)
+      (setq filesets-data nil)
+      (display-battery-mode)
+      (global-font-lock-mode t)
+      ;; binds ctrl + § to dabbrev as good enough completion 
+      (global-set-key (kbd "C-\§") 'dabbrev-expand)
+      (setq-default indent-tabs-mode t)
+      (setq column-number-mode t)
+      (setq global-auto-revert-mode t)
+      (setq inhibit-startup-screen t)
+      (setq inhibit-splash-screen t)
+      (setq initial-buffer-choice t)
+      ;; This stops calls to sync when saving files, this might save battery on laptops, I only
+      ;; have SSD so that does not affect me so much. Setting might make it easier to loss data
+      ;; also.
+      ;;(write-region-inhibit-fsync t)
 		#+END_SRC
 
 *** Disable warnings for first time users
@@ -193,13 +193,13 @@ that I share between work and home
 		running so I can go back.
 
 		#+BEGIN_SRC emacs-lisp
-			;; Changes all yes/no questions to y/n type
-			(fset 'yes-or-no-p 'y-or-n-p)
-			(set-variable 'confirm-kill-emacs 'yes-or-no-p)
-			;; more of these as I find them
-			(put 'narrow-to-region 'disabled nil)
-			(setq safe-local-variable-values 
-						(quote ((auto-fill-mode . t) (indent-tab-mode))))
+      ;; Changes all yes/no questions to y/n type
+      (fset 'yes-or-no-p 'y-or-n-p)
+      (set-variable 'confirm-kill-emacs 'yes-or-no-p)
+      ;; more of these as I find them
+      (put 'narrow-to-region 'disabled nil)
+      (setq safe-local-variable-values 
+            (quote ((auto-fill-mode . t) (indent-tab-mode))))
 		#+END_SRC
 
 *** Uniquify                                               :uniquify:buffers:
@@ -215,7 +215,7 @@ that I share between work and home
 *** Tool-Bar
 
 		#+BEGIN_SRC emacs-lisp
-			(tool-bar-mode -1)
+      (tool-bar-mode -1)
 		#+END_SRC
 
 *** Menu-Bar
@@ -225,41 +225,41 @@ that I share between work and home
 *** Mode-line                                                      :modeline:
 		
 		#+BEGIN_SRC emacs-lisp
-			;; Things that modifies the modeline
-			(setq display-battery-mode t)
-			(setq display-time-24hr-format t)
-			;; I work width some really big files and then it is good to have this
-			;; so i know how far down I am.
-			(setq size-indication-mode t)
+      ;; Things that modifies the modeline
+      (setq display-battery-mode t)
+      (setq display-time-24hr-format t)
+      ;; I work width some really big files and then it is good to have this
+      ;; so i know how far down I am.
+      (setq size-indication-mode t)
 		#+END_SRC
 
 *** Scrolling
 
 		#+BEGIN_SRC emacs-lisp
-			;; This removes most of the jumping, but it might still jump.
-			
-			;; Allways want scroll-bars on right side.
-			(setq scroll-bar-mod 'right)
-			;;(setq scroll-bar-width ??)
-			
-			;; we don't want scroll margin when scrolling horizontal, because when we are editing
-			;; thing far out to the right, it should not jump until it needs to.
-			(setq vscroll-margin 7)
-			
-			;; Smoother scrolling, less jumping.
-			(setq scroll-step 1)
-			
-			;; This I don't know what it does.
-			(setq auto-window-vscroll nil)
-			
-			;; Mouse scroll
-			;; scroll one line at a time (less "jumpy" than defaults)
-			;; one line at a time
-			(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-			;; don't accelerate scrolling
-			(setq mouse-wheel-progressive-speed t)
-			;; scroll window under mouse
-			(setq mouse-wheel-follow-mouse 't)
+      ;; This removes most of the jumping, but it might still jump.
+      
+      ;; Allways want scroll-bars on right side.
+      (setq scroll-bar-mod 'right)
+      ;;(setq scroll-bar-width ??)
+      
+      ;; we don't want scroll margin when scrolling horizontal, because when we are editing
+      ;; thing far out to the right, it should not jump until it needs to.
+      (setq vscroll-margin 7)
+      
+      ;; Smoother scrolling, less jumping.
+      (setq scroll-step 1)
+      
+      ;; This I don't know what it does.
+      (setq auto-window-vscroll nil)
+      
+      ;; Mouse scroll
+      ;; scroll one line at a time (less "jumpy" than defaults)
+      ;; one line at a time
+      (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+      ;; don't accelerate scrolling
+      (setq mouse-wheel-progressive-speed t)
+      ;; scroll window under mouse
+      (setq mouse-wheel-follow-mouse 't)
 		#+END_SRC
 *** Midnight
 
@@ -278,31 +278,31 @@ that I share between work and home
 		To use Midnight mode, it needs to be included with ‘require’.
 
 		#+BEGIN_SRC emacs-lisp
-			(require 'midnight)		 
+      (require 'midnight)
 		#+END_SRC
 
 		It also needs to be enabled with the function ‘midnight-delay-set’
 		which also defines “midnight”.
 
 		#+BEGIN_SRC emacs-lisp
-			;;(midnight-delay-set 'midnight-delay "4:30am")
-			;;Some people use the number of seconds after midnight:
-			(midnight-delay-set 'midnight-delay 16200) ;; (eq (* 4.5 60 60) "4:30am")
-
+      ;;(midnight-delay-set 'midnight-delay "4:30am")
+      ;;Some people use the number of seconds after midnight:
+      (midnight-delay-set 'midnight-delay 16200) ;; (eq (* 4.5 60 60) "4:30am")
+      
 		#+END_SRC
 
 		To add other actions to be run at midnight, add to the hook
 		‘midnight-hook’. 
 		
 		#+BEGIN_EXAMPLE emacs-lisp
-			(add-hook 'midnight-hook (lambda
-													(with-current-buffer "*cvs*"
-					 (call-interactively 'cvs-update))))
-			(add-hook 'midnight-hook 'calendar)
-
-			;;You can disable midnight mode with ‘cancel-timer’.
-
-			(cancel-timer 'midnight-timer)
+      (add-hook 'midnight-hook(lambda
+                               (with-current-buffer "*cvs*"
+           (call-interactively 'cvs-update))))
+      (add-hook 'midnight-hook 'calendar)
+      
+      ;;You can disable midnight mode with ‘cancel-timer’.
+      
+      (cancel-timer 'midnight-timer)
 		#+END_EXAMPLE
 
 		If you want to have “midnight” occur multiple times a day, you can
@@ -341,17 +341,17 @@ that I share between work and home
 *** Auto-Saving
 		
 		#+BEGIN_SRC emacs-lisp
-			;; auto-save is a buffer-local minor mode, that means you can turn it on/off for the
-			;; specific file your are editing.
-			
-			;; This means that after 500 chars we will autosave, the normal here is 300 chars
-			(setq auto-save-interval 500)
-			;; after 180 seconds of idle time we will autosave, normal is 30 but I don't want it to run
-			;; just because I had to look something up in a mail.
-			(setq auto-save-timeout 180)
-			
-			;; there is also a hook you could use to do things before auto-saving is done.
-			;;(add-hook 'auto-save-hook ...)
+      ;; auto-save is a buffer-local minor mode, that means you can turn it on/off for the
+      ;; specific file your are editing.
+      
+      ;; This means that after 500 chars we will autosave, the normal here is 300 chars
+      (setq auto-save-interval 500)
+      ;; after 180 seconds of idle time we will autosave, normal is 30 but I don't want it to run
+      ;; just because I had to look something up in a mail.
+      (setq auto-save-timeout 180)
+      
+      ;; there is also a hook you could use to do things before auto-saving is done.
+      ;;(add-hook 'auto-save-hook ...)
 		#+END_SRC
 
 *** Fly-spell
@@ -411,15 +411,15 @@ that I share between work and home
 		function:
 
 		#+BEGIN_EXAMPLE emacs-lisp
-			(defun fd-switch-dictionary()
-			(interactive)
-			(let* ((dic ispell-current-dictionary)
-			 (change (if (string= dic "deutsch8") "english" "deutsch8")))
-				(ispell-change-dictionary change)
-				(message "Dictionary switched from %s to %s" dic change)
-				))
-		
-			(global-set-key (kbd "<f8>")	 'fd-switch-dictionary)
+      (defun fd-switch-dictionary()
+      (interactive)
+      (let* ((dic ispell-current-dictionary)
+       (change (if (string= dic "deutsch8") "english" "deutsch8")))
+        (ispell-change-dictionary change)
+        (message "Dictionary switched from %s to %s" dic change)
+        ))
+          
+      (global-set-key (kbd "<f8>")   'fd-switch-dictionary)
 		#+END_EXAMPLE
 
 		I too cycle through different languages, but not all that is
@@ -427,17 +427,17 @@ that I share between work and home
 		.emacs. 
 
 		#+BEGIN_EXAMPLE emacs-lisp
-		(let ((langs '("american" "francais" "brasileiro")))
-			(setq lang-ring (make-ring (length langs)))
-			(dolist (elem langs) (ring-insert lang-ring elem)))
-
-		(defun cycle-ispell-languages ()
-			(interactive)
-			(let ((lang (ring-ref lang-ring -1)))
-				(ring-insert lang-ring lang)
-				(ispell-change-dictionary lang)))
-
-		(global-set-key [f6] 'cycle-ispell-languages)
+      (let ((langs '("american" "francais" "brasileiro")))
+        (setq lang-ring (make-ring (length langs)))
+        (dolist (elem langs) (ring-insert lang-ring elem)))
+      
+      (defun cycle-ispell-languages ()
+        (interactive)
+        (let ((lang (ring-ref lang-ring -1)))
+          (ring-insert lang-ring lang)
+          (ispell-change-dictionary lang)))
+      
+      (global-set-key [f6] 'cycle-ispell-languages)
 		#+END_EXAMPLE
 
 		How can I ignore or add a word without using the popup menu?
@@ -475,18 +475,18 @@ that I share between work and home
 		FlySpell highlighted word after the cursor’s position.
 
 		#+BEGIN_EXAMPLE emacs-lisp
-			;; easy spell check
-			(global-set-key (kbd "<f8>") 'ispell-word)
-			(global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
-			(global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
-			(global-set-key (kbd "C-<f8>") 'flyspell-check-previous-highlighted-word)
-			(defun flyspell-check-next-highlighted-word ()
-				"Custom function to spell check next highlighted word"
-				(interactive)
-				(flyspell-goto-next-error)
-				(ispell-word)
-				)
-			(global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
+      ;; easy spell check
+      (global-set-key (kbd "<f8>") 'ispell-word)
+      (global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
+      (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+      (global-set-key (kbd "C-<f8>") 'flyspell-check-previous-highlighted-word)
+      (defun flyspell-check-next-highlighted-word ()
+        "Custom function to spell check next highlighted word"
+        (interactive)
+        (flyspell-goto-next-error)
+        (ispell-word)
+        )
+      (global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
 #+END_EXAMPLE
 		
 ***** Installing ispell on windows																		:instw:
@@ -507,50 +507,50 @@ that I share between work and home
 		screens are.</rant>
 
 		#+BEGIN_SRC emacs-lisp
-			;; whitespace-mode things
-			
-			;; less color in whitespace mode, The yellow and red is to distracting
-			(setq whitespace-style (quote (spaces tabs newline space-mark 
-																						tab-mark newline-mark)))
-			
-			;; make whitespace-mode use "" for newline and -> for tab.
-			;; together with the rest of its defaults
-			(setq whitespace-display-mappings
-						'(
-							(space-mark 32 [183] [46]) ; normal space, ·
-							(space-mark 160 [164] [95])
-							(space-mark 2208 [2212] [95])
-							(space-mark 2336 [2340] [95])
-							(space-mark 3616 [3620] [95])
-							(space-mark 3872 [3876] [95])
-							(newline-mark 10 [8629 10]) ; newlne
-							(tab-mark 9 [8677 9] [92 9]) ; tab
-							))
-			
-			;; My own whitespace cleanup function should be bound to something.
-			;; or used in some save-hook don't know how this work together with smart-tabs
-			(defun jiha-whitespace-cleanup ()
-				(interactive)
-				(let (whitespace-style (indentation::tab 
-																space-before-tab::tab
-																trailing))
-					(whitespace-cleanup-region)))
+      ;; whitespace-mode things
+      
+      ;; less color in whitespace mode, The yellow and red is to distracting
+      (setq whitespace-style (quote (spaces tabs newline space-mark 
+                                            tab-mark newline-mark)))
+      
+      ;; make whitespace-mode use "" for newline and -> for tab.
+      ;; together with the rest of its defaults
+      (setq whitespace-display-mappings
+            '(
+              (space-mark 32 [183] [46]) ; normal space, ·
+              (space-mark 160 [164] [95])
+              (space-mark 2208 [2212] [95])
+              (space-mark 2336 [2340] [95])
+              (space-mark 3616 [3620] [95])
+              (space-mark 3872 [3876] [95])
+              (newline-mark 10 [8629 10]) ; newlne
+              (tab-mark 9 [8677 9] [92 9]) ; tab
+              ))
+      
+      ;; My own whitespace cleanup function should be bound to something.
+      ;; or used in some save-hook don't know how this work together with smart-tabs
+      (defun jiha-whitespace-cleanup ()
+        (interactive)
+        (let (whitespace-style (indentation::tab 
+                                space-before-tab::tab
+                                trailing))
+          (whitespace-cleanup-region)))
 		#+END_SRC
 
 *** Auto-complete
 
 		#+BEGIN_SRC emacs-lisp
-			;; I should not need to add this to load path that should be
-			;; done by elpa magic.
-			(add-to-list 'load-path "~/.emacs.d/elpa/popup-0.5")
-			(add-to-list 'load-path "~/.emacs.d/elpa/auto-complete-1.4")
-			;;(require 'auto-complete)
-			;;(require 'auto-complete-config)
-			;;(add-to-list 'ac-dictionary-directories (concat local-emacs-org-dir 
-			;;																								"ac-dicts"))
-			;;(ac-config-default)
-			;;(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-			;;(ac-flyspell-workaround)
+      ;; I should not need to add this to load path that should be
+      ;; done by elpa magic.
+      (add-to-list 'load-path "~/.emacs.d/elpa/popup-0.5")
+      (add-to-list 'load-path "~/.emacs.d/elpa/auto-complete-1.4")
+      ;;(require 'auto-complete)
+      ;;(require 'auto-complete-config)
+      ;;(add-to-list 'ac-dictionary-directories (concat local-emacs-org-dir 
+      ;;                                                "ac-dicts"))
+      ;;(ac-config-default)
+      ;;(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+      ;;(ac-flyspell-workaround)
 		#+END_SRC
 
 *** Font-lock
@@ -560,23 +560,23 @@ that I share between work and home
 		am inactive for 5 seconds and turn it of as soon as I start typing.
 
 		#+BEGIN_SRC emacs-lisp
-			;; normal hl-line is not good enough, we need some more functions, this add that.
-			(when (require 'hl-line+ nil 'noerror)
-				(message "loaded hl-line+")
-				;; Only use hl-line when we are idle, as soon as I start typing it is removed and does
-				;; then not interfere with my other faces.
-				(toggle-hl-line-when-idle 1)
-			
-				;; we also needs to set an interval that tells us how long we need to idle before hl-line
-				;; turns on
-				(hl-line-when-idle-interval 5)
-			
-				;; I we need to remove hl-line for a specific mode, list them here.
-				;; (setq hl-line-inhibit-highlighting-for-modes)			
-			
-				(set-face-background hl-line-face "gray13")
-				(set-face-foreground hl-line-face "white")
-				)
+      ;; normal hl-line is not good enough, we need some more functions, this add that.
+      (when (require 'hl-line+ nil 'noerror)
+        (message "loaded hl-line+")
+        ;; Only use hl-line when we are idle, as soon as I start typing it is removed and does
+        ;; then not interfere with my other faces.
+        (toggle-hl-line-when-idle 1)
+      
+        ;; we also needs to set an interval that tells us how long we need to idle before hl-line
+        ;; turns on
+        (hl-line-when-idle-interval 5)
+      
+        ;; I we need to remove hl-line for a specific mode, list them here.
+        ;; (setq hl-line-inhibit-highlighting-for-modes)      
+      
+        (set-face-background hl-line-face "gray13")
+        (set-face-foreground hl-line-face "white")
+        )
 		#+END_SRC
 ***** TODO fix face of hl-line so it does not interfer with other things.
 
@@ -595,24 +595,24 @@ that I share between work and home
 
 		advice it so it tells me what row matching paren is when it is off-screen.
 		#+BEGIN_SRC emacs-lisp
-			;; Only works sometime
-			(defadvice show-paren-function
-				(after show-matching-paren-offscreen activate)
-				"If the matching paren is offscreen, show the matching line in the
-				echo area. Has no effect if the character before point is not of
-				the syntax class ')'."
-				(interactive)
-				(if (not (minibuffer-prompt))
-						(let ((matching-text nil))
-							;; Only call `blink-matching-open' if the character before point
-							;; is a close parentheses type character. Otherwise, there's not
-							;; really any point, and `blink-matching-open' would just echo
-							;; "Mismatched parentheses", which gets really annoying.
-							(if (char-equal (char-syntax (char-before (point))) ?\))
-									(setq matching-text (blink-matching-open)))
-							(if (not (null matching-text))
-									(message matching-text)))))
-
+      ;; Only works sometime
+      (defadvice show-paren-function
+        (after show-matching-paren-offscreen activate)
+        "If the matching paren is offscreen, show the matching line in the
+        echo area. Has no effect if the character before point is not of
+        the syntax class ')'."
+        (interactive)
+        (if (not (minibuffer-prompt))
+            (let ((matching-text nil))
+              ;; Only call `blink-matching-open' if the character before point
+              ;; is a close parentheses type character. Otherwise, there's not
+              ;; really any point, and `blink-matching-open' would just echo
+              ;; "Mismatched parentheses", which gets really annoying.
+              (if (char-equal (char-syntax (char-before (point))) ?\))
+                  (setq matching-text (blink-matching-open)))
+              (if (not (null matching-text))
+                  (message matching-text)))))
+      
 		#+END_SRC
 
 ***** TODO Activate it in those major modes we want it in.
@@ -643,101 +643,101 @@ that I share between work and home
 	iswitchb-default-method 'samewindow)
 
 	#+BEGIN_SRC emacs-lisp
-		(iswitchb-mode 1)
-		;; rebind the normal key for buffer list to ibuffer
-		(global-set-key (kbd "C-x C-b") 'ibuffer)
-		(setq ibuffer-expert t)
-		(setq ibuffer-show-empty-filter-groups nil)
-		(setq iswitchb-default-method 'samewindow)
-		;; in your .emacs will allow left/right artist--arrow key navigation of the
-		;; buffer list, and deactivate up/down in iswitchb. Note that you
-		;; can by default use C-s and C-r to do this.	 If the
-		;; below fails with "define-key: Symbol's function definition is
-		;; void: edmacro-parse-keys" you need to load the package defining
-		;; edmacro with (require 'edmacro).
-		(defun iswitchb-local-keys ()
-			(mapc (lambda (K) 
-							(let* ((key (car K)) (fun (cdr K)))
-								(define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
-						'(("<right>" . iswitchb-next-match)
-							("<left>"	 . iswitchb-prev-match)
-							("<up>"		 . ignore							)
-							("<down>"	 . ignore							))))
-		(add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
+    (iswitchb-mode 1)
+    ;; rebind the normal key for buffer list to ibuffer
+    (global-set-key (kbd "C-x C-b") 'ibuffer)
+    (setq ibuffer-expert t)
+    (setq ibuffer-show-empty-filter-groups nil)
+    (setq iswitchb-default-method 'samewindow)
+    ;; in your .emacs will allow left/right artist--arrow key navigation of the
+    ;; buffer list, and deactivate up/down in iswitchb. Note that you
+    ;; can by default use C-s and C-r to do this.  If the
+    ;; below fails with "define-key: Symbol's function definition is
+    ;; void: edmacro-parse-keys" you need to load the package defining
+    ;; edmacro with (require 'edmacro).
+    (defun iswitchb-local-keys ()
+      (mapc (lambda (K) 
+              (let* ((key (car K)) (fun (cdr K)))
+                (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
+            '(("<right>" . iswitchb-next-match)
+              ("<left>"  . iswitchb-prev-match)
+              ("<up>"    . ignore             )
+              ("<down>"  . ignore             ))))
+    (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 	#+END_SRC
 	
 	#+BEGIN_SRC emacs-lisp
-		(setq ibuffer-saved-filter-groups
-					'(("home"
-						 ("Emacs" (or (filename . ".emacs.d")
-													(filename . "emacs.org")
-													(filename . ".emacs")))
-						 ("Org" (or (filename . ".org")
-												(filename . "OrgMode")
-												(name . "*Org Agenda*")
-												(name . "diary")))
-						 ("code" (or (mode . csharp-mode)
-												 (mode . c++-mode)
-												 (mode . lisp-mode)
-												 (mode . c-mode)))
-						 ("Web Dev" (or (mode . html-mode)
-														(mode . css-mode)))
-						 ("SQL" (or (filename . ".plb")
-												(filename . ".sql")
-												(mode . sqli-mode)
-												(name . "*SQL*")))
-						 ("VC" (or (name . "\*svn")
-											 (name . "\*magit")))
-						 ("ERC" (or (mode . erc-mode)
-												(mode . erc-list-mode)))
-						 ("gnus" (or
-											(mode . message-mode)
-											(mode . bbdb-mode)
-											(mode . mail-mode)
-											(mode . gnus-group-mode)
-											(mode . gnus-summary-mode)
-											(mode . gnus-article-mode)
-											(name . "^\\.bbdb$")
-											(name . "^\\.newsrc-dribble")))
-						 ("Help" (or (name . "\*Help\*")
-												 (name . "\*Apropos\*")
-												 (name . "\*info\*"))))))
+    (setq ibuffer-saved-filter-groups
+          '(("home"
+             ("Emacs" (or (filename . ".emacs.d")
+                          (filename . "emacs.org")
+                          (filename . ".emacs")))
+             ("Org" (or (filename . ".org")
+                        (filename . "OrgMode")
+                        (name . "*Org Agenda*")
+                        (name . "diary")))
+             ("code" (or (mode . csharp-mode)
+                         (mode . c++-mode)
+                         (mode . lisp-mode)
+                         (mode . c-mode)))
+             ("Web Dev" (or (mode . html-mode)
+                            (mode . css-mode)))
+             ("SQL" (or (filename . ".plb")
+                        (filename . ".sql")
+                        (mode . sqli-mode)
+                        (name . "*SQL*")))
+             ("VC" (or (name . "\*svn")
+                       (name . "\*magit")))
+             ("ERC" (or (mode . erc-mode)
+                        (mode . erc-list-mode)))
+             ("gnus" (or
+                      (mode . message-mode)
+                      (mode . bbdb-mode)
+                      (mode . mail-mode)
+                      (mode . gnus-group-mode)
+                      (mode . gnus-summary-mode)
+                      (mode . gnus-article-mode)
+                      (name . "^\\.bbdb$")
+                      (name . "^\\.newsrc-dribble")))
+             ("Help" (or (name . "\*Help\*")
+                         (name . "\*Apropos\*")
+                         (name . "\*info\*"))))))
 	 #+END_SRC
 	
 	#+BEGIN_SRC emacs-lisp
-		(add-hook 'ibuffer-mode-hook 
-							'(lambda ()
-								 (ibuffer-auto-mode 1)
-								 (ibuffer-switch-to-saved-filter-groups "home")))
-		
-		;; Switching to ibuffer puts the cursor on the most recent buffer
-		(defadvice ibuffer (around ibuffer-point-to-most-recent) ()
-			"Open ibuffer with cursor pointed to most recent buffer name"
-			(let ((recent-buffer-name (buffer-name)))
-				ad-do-it
-				(ibuffer-jump-to-buffer recent-buffer-name)))
-		(ad-activate 'ibuffer)
-		
-		
-		(setq ibuffer-formats
-					'((mark modified read-only " "
-									(name 25 25 :left :elide) " "
-									(size 9 -1 :right) " "
-									(mode 16 16 :left :elide) " " filename-and-process)
-						(mark " " (name 16 -1) " " filename)))
-		
-		
-		(defun switch-buffers-between-frames ()
-			"switch-buffers-between-frames switches the buffers between the two last frames"
-			(interactive)
-			(let ((this-frame-buffer nil)
-						(other-frame-buffer nil))
-				(setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
-				(other-frame 1)
-				(setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
-				(switch-to-buffer this-frame-buffer)
-				(other-frame 1)
-				(switch-to-buffer other-frame-buffer))) 
+    (add-hook 'ibuffer-mode-hook 
+              '(lambda ()
+                 (ibuffer-auto-mode 1)
+                 (ibuffer-switch-to-saved-filter-groups "home")))
+    
+    ;; Switching to ibuffer puts the cursor on the most recent buffer
+    (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+      "Open ibuffer with cursor pointed to most recent buffer name"
+      (let ((recent-buffer-name (buffer-name)))
+        ad-do-it
+        (ibuffer-jump-to-buffer recent-buffer-name)))
+    (ad-activate 'ibuffer)
+    
+    
+    (setq ibuffer-formats
+          '((mark modified read-only " "
+                  (name 25 25 :left :elide) " "
+                  (size 9 -1 :right) " "
+                  (mode 16 16 :left :elide) " " filename-and-process)
+            (mark " " (name 16 -1) " " filename)))
+    
+    
+    (defun switch-buffers-between-frames ()
+      "switch-buffers-between-frames switches the buffers between the two last frames"
+      (interactive)
+      (let ((this-frame-buffer nil)
+            (other-frame-buffer nil))
+        (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
+        (other-frame 1)
+        (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
+        (switch-to-buffer this-frame-buffer)
+        (other-frame 1)
+        (switch-to-buffer other-frame-buffer))) 
 	#+END_SRC
 
 *** Colours in buffer list                                            :faces:
@@ -766,18 +766,18 @@ that I share between work and home
 		is taken in account.
 
 		#+BEGIN_SRC emacs-lisp
-			(defadvice iswitchb-kill-buffer (after rescan-after-kill activate)
-				"*Regenerate the list of matching buffer names after a kill.
-			Nextcessary if using `uniquify' with `uniquify-after-kill-buffer-p'
-			set to non-nil."
-				(setq iswitchb-buflist iswitchb-matches)
-				(iswitchb-rescan))
-			
-			(defun iswitchb-rescan ()
-				"*Regenerate the list of matching buffer names."
-				(interactive)
-				(iswitchb-make-buflist iswitchb-default)
-				(setq iswitchb-rescan t))
+      (defadvice iswitchb-kill-buffer (after rescan-after-kill activate)
+        "*Regenerate the list of matching buffer names after a kill.
+      Nextcessary if using `uniquify' with `uniquify-after-kill-buffer-p'
+      set to non-nil."
+        (setq iswitchb-buflist iswitchb-matches)
+        (iswitchb-rescan))
+      
+      (defun iswitchb-rescan ()
+        "*Regenerate the list of matching buffer names."
+        (interactive)
+        (iswitchb-make-buflist iswitchb-default)
+        (setq iswitchb-rescan t))
 		#+END_SRC
 
 *** More Iswitch things that I don't use at the moment
@@ -930,25 +930,25 @@ that I share between work and home
 		
 		need to put the right colors on this.
 		#+BEGIN_SRC emacs-lisp
-			(setq buffer-menu-buffer-font-lock-keywords
-						'(("^....[*]Man .*Man.*"	 . font-lock-variable-name-face) ;Man page
-							(".*Dired.*"						 . font-lock-comment-face)			 ; Dired
-							("^....[*]shell.*"			 . font-lock-preprocessor-face)	 ; shell buff
-							(".*[*]scratch[*].*"		 . font-lock-function-name-face) ; scratch buffer
-							("^....[*].*"						 . font-lock-string-face)				 ; "*" named buffers
-							("^..[*].*"							 . font-lock-constant-face)			 ; Modified
-							("^.[%].*"							 . font-lock-keyword-face)))		 ; Read only
-			
-			(defun buffer-menu-custom-font-lock	 ()
-				(let ((font-lock-unfontify-region-function
-							 (lambda (start end)
-								 (remove-text-properties start end '(font-lock-face nil)))))
-					(font-lock-unfontify-buffer)
-					(set (make-local-variable 'font-lock-defaults)
-							 '(buffer-menu-buffer-font-lock-keywords t))
-					(font-lock-fontify-buffer)))
-			
-			(add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
+      (setq buffer-menu-buffer-font-lock-keywords
+            '(("^....[*]Man .*Man.*"   . font-lock-variable-name-face) ;Man page
+              (".*Dired.*"             . font-lock-comment-face)       ; Dired
+              ("^....[*]shell.*"       . font-lock-preprocessor-face)  ; shell buff
+              (".*[*]scratch[*].*"     . font-lock-function-name-face) ; scratch buffer
+              ("^....[*].*"            . font-lock-string-face)        ; "*" named buffers
+              ("^..[*].*"              . font-lock-constant-face)      ; Modified
+              ("^.[%].*"               . font-lock-keyword-face)))     ; Read only
+      
+      (defun buffer-menu-custom-font-lock  ()
+        (let ((font-lock-unfontify-region-function
+               (lambda (start end)
+                 (remove-text-properties start end '(font-lock-face nil)))))
+          (font-lock-unfontify-buffer)
+          (set (make-local-variable 'font-lock-defaults)
+               '(buffer-menu-buffer-font-lock-keywords t))
+          (font-lock-fontify-buffer)))
+      
+      (add-hook 'buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
 		 #+END_SRC
 
 * Coding
@@ -982,15 +982,15 @@ that I share between work and home
 			Microsoft (R)'s C and C++ code.
 
 			#+BEGIN_SRC emacs-lisp
-				(c-add-style "microsoft"
-										 '("stroustrup"
-											 (c-offsets-alist
-												(innamespace . -)
-												(inline-open . 0)
-												(inher-cont . c-lineup-multi-inher)
-												(arglist-cont-nonempty . +)
-												(template-args-cont . +))))
-				
+        (c-add-style "microsoft"
+                     '("stroustrup"
+                       (c-offsets-alist
+                        (innamespace . -)
+                        (inline-open . 0)
+                        (inher-cont . c-lineup-multi-inher)
+                        (arglist-cont-nonempty . +)
+                        (template-args-cont . +))))
+        
 			#+END_SRC
 
 ***** OpenBSD style
@@ -999,24 +999,24 @@ that I share between work and home
 			BSD based OSs source.
 
 			#+BEGIN_SRC emacs-lisp
-				(c-add-style "openbsd"
-										 '("bsd"
-											 (indent-tabs-mode . t)
-											 (defun-block-intro . 8)
-											 (statement-block-intro . 8)
-											 (statement-case-intro . 8)
-											 (substatement-open . 4)
-											 (substatement . 8)
-											 (arglist-cont-nonempty . 4)
-											 (inclass . 8)
-											 (knr-argdecl-intro . 8)))
+        (c-add-style "openbsd"
+                     '("bsd"
+                       (indent-tabs-mode . t)
+                       (defun-block-intro . 8)
+                       (statement-block-intro . 8)
+                       (statement-case-intro . 8)
+                       (substatement-open . 4)
+                       (substatement . 8)
+                       (arglist-cont-nonempty . 4)
+                       (inclass . 8)
+                       (knr-argdecl-intro . 8)))
 			#+END_SRC
 ***** Google C++ Style
 
 			This is the C++ style that I personaly finds to be best.
 
 			#+BEGIN_SRC emacs-lisp
-				(require 'google-c-style nil 'noerror)
+        (require 'google-c-style nil 'noerror)
 			#+END_SRC
 
 *** Visual Studio Integration
@@ -1038,41 +1038,41 @@ that I share between work and home
 		problem.
 
 		#+BEGIN_SRC emacs-lisp
-			;; using my own
-			;;(load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
-			;;(require 'edmacro)
-			;;(require 'cedet)
-			;; Enable EDE (Project Management) features
-			;;(global-ede-mode t)										 
-			;;(semantic-load-enable-gaudy-code-helpers)
-			;;(global-semantic-tag-folding-mode 1)
-			;; Enable prototype help and smart completion 
-			;; (semantic-load-enable-code-helpers)
-			;; Enable SRecode (Template management) minor-mode.
-			;;(global-srecode-minor-mode 1)
+      ;; using my own
+      ;;(load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
+      ;;(require 'edmacro)
+      ;;(require 'cedet)
+      ;; Enable EDE (Project Management) features
+      ;;(global-ede-mode t)                    
+      ;;(semantic-load-enable-gaudy-code-helpers)
+      ;;(global-semantic-tag-folding-mode 1)
+      ;; Enable prototype help and smart completion 
+      ;; (semantic-load-enable-code-helpers)
+      ;; Enable SRecode (Template management) minor-mode.
+      ;;(global-srecode-minor-mode 1)
 		#+END_SRC
 
 		#+BEGIN_SRC emacs-lisp
-			;;	(require 'semantic)
+      ;;  (require 'semantic)
 		#+END_SRC
 
 ***** EDE
 
 			#+BEGIN_SRC emacs-lisp
-			;;	(global-ede-mode t)
+        ;;  (global-ede-mode t)
 			#+END_SRC
 
 ***** Code helpers
 
 			#+BEGIN_SRC emacs-lisp
-			;;	(semantic-load-enable-excessive-code-helpers)
+        ;;  (semantic-load-enable-excessive-code-helpers)
 			#+END_SRC
       
 *** TODO ECB
 
 		#+BEGIN_SRC emacs-lisp
-		 ;; (add-to-list 'load-path (concat local-emacs-org-dir "ecb"))
-		 ;; (require 'ecb)
+      ;; (add-to-list 'load-path (concat local-emacs-org-dir "ecb"))
+      ;; (require 'ecb)
 		#+END_SRC
 
 *** TODO Completion
@@ -1080,7 +1080,7 @@ that I share between work and home
 ******* C#
 				
 				#+BEGIN_SRC emacs-lisp
-					(add-to-list 'load-path (concat local-emacs-org-dir "csharp"))
+          (add-to-list 'load-path (concat local-emacs-org-dir "csharp"))
 				#+END_SRC
 
 				The `cscomp-assembly-search-paths' should hold a list of
@@ -1095,39 +1095,39 @@ that I share between work and home
 				the appropriate directory in this list.
 			 
 				#+BEGIN_EXAMPLE emacs-lisp
-				 (eval-after-load "csharp-completion"
-					'(progn
-						 (setq cscomp-assembly-search-paths
-							 (list "c:\\.net3.5ra"		;; <<- locations of reference assemblies
-										 "c:\\.net3.0ra"		;; <<-
-										 "c:\\.net2.0"			;; <<- location of .NET Framework assemblies
-										 "c:\\.net3.5"			;; <<- ditto
-						 ))))
+          (eval-after-load "csharp-completion"
+           '(progn
+              (setq cscomp-assembly-search-paths
+                (list "c:\\.net3.5ra"    ;; <<- locations of reference assemblies
+                      "c:\\.net3.0ra"    ;; <<-
+                      "c:\\.net2.0"      ;; <<- location of .NET Framework assemblies
+                      "c:\\.net3.5"      ;; <<- ditto
+              ))))
 				#+END_EXAMPLE
 
 				#+BEGIN_SRC emacs-lisp
-					 ;; only on windows do we use csharp completion.
-					
-					(when (require 'powershell nil 'noerror)
-						(when (require 'csharp-completion nil 'noerror) 
-							(defun jiha-csharp-mode-hook	
-								;; C# code completion
-								(load-file (concat local-emacs-org-dir "csharp/csharp-completion.el"))
-								;;(csharp-analysis-mode 1)
-								;;(local-set-key "\M-\\"	 'cscomp-complete-at-point)
-								;;(local-set-key "\M-§."	 'cscomp-complete-at-point-menu)
-								)
-						
-							;;(add-to-list 'csharp-mode-hook
-							;;						 'jiha-csharp-mode-hook)
-						)
-					)
-					
+           ;; only on windows do we use csharp completion.
+          
+          (when (require 'powershell nil 'noerror)
+            (when (require 'csharp-completion nil 'noerror) 
+              (defun jiha-csharp-mode-hook  
+                ;; C# code completion
+                (load-file (concat local-emacs-org-dir "csharp/csharp-completion.el"))
+                ;;(csharp-analysis-mode 1)
+                ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
+                ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
+                )
+            
+              ;;(add-to-list 'csharp-mode-hook
+              ;;             'jiha-csharp-mode-hook)
+            )
+          )
+          
 				#+END_SRC
 ******* TODO ASPX
 				this requires multi-mode which I don't have at the moment.
 				#+BEGIN_EXAMPLE emacs-lisp
-					(require 'aspx-mode nil 'noerror)
+          (require 'aspx-mode nil 'noerror)
 				#+END_EXAMPLE
 *** Indentation
 
@@ -1136,11 +1136,11 @@ that I share between work and home
 		like a low c-basic-offset 2
 
 		#+BEGIN_SRC emacs-lisp
-			;; use tabs for indentation later we setup spaces for alignment.
-			(setq-default indent-tabs-mode t)
-			;; I want as much as possible on my screens.
-			(setq-default c-basic-offset 2)
-			(setq-default tab-width 2) ; or any other preferred value
+      ;; use tabs for indentation later we setup spaces for alignment.
+      (setq-default indent-tabs-mode t)
+      ;; I want as much as possible on my screens.
+      (setq-default c-basic-offset 2)
+      (setq-default tab-width 2) ; or any other preferred value
 		#+END_SRC
 		
 		This can be hard for other to replicate in there enviroment, If
@@ -1149,54 +1149,54 @@ that I share between work and home
 		tabs and manually align things with spaces when needed.
 
 		#+BEGIN_SRC emacs-lisp
-			;; smart tabs, tabs for indentation, spaces for alignment
-			(defadvice align (around smart-tabs activate)
-				(let ((indent-tabs-mode nil)) ad-do-it))
-			
-			(defadvice align-regexp (around smart-tabs activate)
-				(let ((indent-tabs-mode nil)) ad-do-it))
-			
-			(defadvice indent-relative (around smart-tabs activate)
-				(let ((indent-tabs-mode nil)) ad-do-it))
-			
-			(defadvice indent-according-to-mode (around smart-tabs activate)
-				(let ((indent-tabs-mode indent-tabs-mode))
-					(if (memq indent-line-function
-										'(indent-relative
-											indent-relative-maybe))
-							(setq indent-tabs-mode nil))
-					ad-do-it))
-			
-			(defmacro smart-tabs-advice (function offset)
-				`(progn
-					 (defvaralias ',offset 'tab-width)
-					 (defadvice ,function (around smart-tabs activate)
-						 (cond
-							(indent-tabs-mode
-							 (save-excursion
-								 (beginning-of-line)
-								 (while (looking-at "\t*\\( +\\)\t+")
-									 (replace-match "" nil nil nil 1)))
-							 (setq tab-width tab-width)
-							 (let ((tab-width fill-column)
-										 (,offset fill-column)
-										 (wstart (window-start)))
-								 (unwind-protect
-										 (progn ad-do-it)
-									 (set-window-start (selected-window) wstart))))
-							(t
-							 ad-do-it)))))
-			
-			(smart-tabs-advice c-indent-line c-basic-offset)
-			(smart-tabs-advice c-indent-region c-basic-offset)
-			;; smart tabs - end
+      ;; smart tabs, tabs for indentation, spaces for alignment
+      (defadvice align (around smart-tabs activate)
+        (let ((indent-tabs-mode nil)) ad-do-it))
+      
+      (defadvice align-regexp (around smart-tabs activate)
+        (let ((indent-tabs-mode nil)) ad-do-it))
+      
+      (defadvice indent-relative (around smart-tabs activate)
+        (let ((indent-tabs-mode nil)) ad-do-it))
+      
+      (defadvice indent-according-to-mode (around smart-tabs activate)
+        (let ((indent-tabs-mode indent-tabs-mode))
+          (if (memq indent-line-function
+                    '(indent-relative
+                      indent-relative-maybe))
+              (setq indent-tabs-mode nil))
+          ad-do-it))
+      
+      (defmacro smart-tabs-advice (function offset)
+        `(progn
+           (defvaralias ',offset 'tab-width)
+           (defadvice ,function (around smart-tabs activate)
+             (cond
+              (indent-tabs-mode
+               (save-excursion
+                 (beginning-of-line)
+                 (while (looking-at "\t*\\( +\\)\t+")
+                   (replace-match "" nil nil nil 1)))
+               (setq tab-width tab-width)
+               (let ((tab-width fill-column)
+                     (,offset fill-column)
+                     (wstart (window-start)))
+                 (unwind-protect
+                     (progn ad-do-it)
+                   (set-window-start (selected-window) wstart))))
+              (t
+               ad-do-it)))))
+      
+      (smart-tabs-advice c-indent-line c-basic-offset)
+      (smart-tabs-advice c-indent-region c-basic-offset)
+      ;; smart tabs - end
 		#+END_SRC
 
 ***** SQL
 
 		  #+BEGIN_SRC emacs-lisp
-			 (eval-after-load "sql"
-				 '(load-library "sql-indent"))
+        (eval-after-load "sql"
+          '(load-library "sql-indent"))
 			#+END_SRC
 
 
@@ -1475,22 +1475,22 @@ that I share between work and home
 		last row is the bit you might need to adapt for your installation.
 		
 		#+BEGIN_EXAMPLE
-			Windows Registry Editor Version 5.00
-			
-			[HKEY_CLASSES_ROOT\org-protocol]
-			@="URL:Org Protocol"
-			"URL Protocol"=""
-			[HKEY_CLASSES_ROOT\org-protocol\shell]
-			[HKEY_CLASSES_ROOT\org-protocol\shell\open]
-			[HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
-			@="C:\Users\jiha\emacs-24.1\bin\emacsclientw.exe %1"
+      Windows Registry Editor Version 5.00
+      
+      [HKEY_CLASSES_ROOT\org-protocol]
+      @="URL:Org Protocol"
+      "URL Protocol"=""
+      [HKEY_CLASSES_ROOT\org-protocol\shell]
+      [HKEY_CLASSES_ROOT\org-protocol\shell\open]
+      [HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
+      @="C:\Users\jiha\emacs-24.1\bin\emacsclientw.exe %1"
 		#+END_EXAMPLE
 
 		for linux you could configure gnome like this.
 
 		#+BEGIN_EXAMPLE
-			gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/command '/usr/local/bin/emacsclient %s' --type String
-			gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/enabled --type Boolean true
+      gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/command '/usr/local/bin/emacsclient %s' --type String
+      gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/enabled --type Boolean true
 		#+END_EXAMPLE
 
 ***** adobe acrobat reader                                      :instw:insti:
@@ -1499,23 +1499,23 @@ that I share between work and home
 			to takes notes from pdf's and store links to where they are.
 			
 			#+BEGIN_EXAMPLE javascript
-				// from http://article.gmane.org/gmane.emacs.orgmode/6810
-				app.addMenuItem({cName:"org-capture", 
-												cParent:"Tools", 
-												cExec:"app.launchURL('org-protocol://capture://' + 
-																							encodeURIComponent(this.URL) + 
-																							'/' + 
-																							encodeURIComponent(this.info.Title) + 
-																							'/');"});
+        // from http://article.gmane.org/gmane.emacs.orgmode/6810
+        app.addMenuItem({cName:"org-capture", 
+                        cParent:"Tools", 
+                        cExec:"app.launchURL('org-protocol://capture://' + 
+                                              encodeURIComponent(this.URL) + 
+                                              '/' + 
+                                              encodeURIComponent(this.info.Title) + 
+                                              '/');"});
 			#+END_EXAMPLE
 			
 			#+BEGIN_EXAMPLE javascript
-				// from http://article.gmane.org/gmane.emacs.orgmode/6810
-				app.addMenuItem({cName:"org-store-link", cParent:"Tools",
-												 cExec:"app.launchURL('org-protocol://store-link://' + 
-																							 encodeURIComponent(this.URL) + 
-																							 '/' + 
-																							 encodeURIComponent(this.info.Title));"});
+        // from http://article.gmane.org/gmane.emacs.orgmode/6810
+        app.addMenuItem({cName:"org-store-link", cParent:"Tools",
+                         cExec:"app.launchURL('org-protocol://store-link://' + 
+                                               encodeURIComponent(this.URL) + 
+                                               '/' + 
+                                               encodeURIComponent(this.info.Title));"});
 			#+END_EXAMPLE
 
 ***** Web-browser integration
@@ -1523,11 +1523,11 @@ that I share between work and home
 			Add these as bookmarks in webbrowsers
 
 			#+BEGIN_EXAMPLE javascript
-				javascript:location.href='org-protocol://capture://'+ encodeURIComponent(location.href)+'/'+ encodeURIComponent(document.title)+'/'+ encodeURIComponent(window.getSelection())
+        javascript:location.href='org-protocol://capture://'+ encodeURIComponent(location.href)+'/'+ encodeURIComponent(document.title)+'/'+ encodeURIComponent(window.getSelection())
 			#+END_EXAMPLE
 			
 			#+BEGIN_EXAMPLE javascript
-				javascript:location.href='org-protocol://store-link://' + encodeURIComonent(location.href) + '/' + encodeURIComponent(document.title)
+        javascript:location.href='org-protocol://store-link://' + encodeURIComonent(location.href) + '/' + encodeURIComponent(document.title)
 			#+END_EXAMPLE
 
 *** Org Capture
@@ -1616,37 +1616,37 @@ that I share between work and home
 			- %[file] :: Insert the contents of the file given by file.
 			- %(sexp) :: Evaluate Elisp sexp and replace with the result.
 									 The sexp must return a string.
-			- %<...>  ::  The result of format-time-string on the ... format specification.
+			- %<...>	::	The result of format-time-string on the ... format specification.
 			- %t :: Timestamp, date only.
-      - %T :: Timestamp, with date and time.
+			- %T :: Timestamp, with date and time.
 			- %u, %U :: Like the above, but inactive timestamps.
-      - %i :: Initial content, the region when capture is called while the region is
-              active. The entire text will be indented like %i itself. 
-      - %a :: Annotation, normally the link created with org-store-link.
+			- %i :: Initial content, the region when capture is called while the region is
+							active. The entire text will be indented like %i itself. 
+			- %a :: Annotation, normally the link created with org-store-link.
 			- %A :: Like %a, but prompt for the description part.
-      - %l :: Like %a, but only insert the literal link.
-      - %c :: Current kill ring head.
-      - %x :: Content of the X clipboard.
-      - %k :: Title of the currently clocked task.
-      - %K :: Link to the currently clocked task.
-      - %n :: User name (taken from user-full-name).
-      - %f :: File visited by current buffer when org-capture was called.
-      - %F :: Full path of the file or directory visited by current buffer.
-      - %:keyword :: Specific information for certain link types, see below.
-      - %^g :: Prompt for tags, with completion on tags in target file.
-      - %^G :: Prompt for tags, with completion all tags in all agenda files.
-      - %^t :: Like %t, but prompt for date.  Similarly %^T, %^u, %^U. You may define a
-               prompt like %^{Birthday}t. 
-      - %^C :: Interactive selection of which kill or clip to use.
-      - %^L :: Like %^C, but insert as link.
-      - %^{prop}p :: Prompt the user for a value for property prop.
-      - %^{prompt} :: prompt the user for a string and replace this sequence with it.  You
-                      may specify a default value and a completion table with
-                      %^{prompt|default|completion2|completion3...}.  The arrow keys
-                      access a prompt-specific history.
-      - %\n :: Insert the text entered at the nth %^{prompt}, where n is a number,
-               starting from 1.
-      - %? :: After completing the template, position cursor here.
+			- %l :: Like %a, but only insert the literal link.
+			- %c :: Current kill ring head.
+			- %x :: Content of the X clipboard.
+			- %k :: Title of the currently clocked task.
+			- %K :: Link to the currently clocked task.
+			- %n :: User name (taken from user-full-name).
+			- %f :: File visited by current buffer when org-capture was called.
+			- %F :: Full path of the file or directory visited by current buffer.
+			- %:keyword :: Specific information for certain link types, see below.
+			- %^g :: Prompt for tags, with completion on tags in target file.
+			- %^G :: Prompt for tags, with completion all tags in all agenda files.
+			- %^t :: Like %t, but prompt for date.	Similarly %^T, %^u, %^U. You may define a
+							 prompt like %^{Birthday}t. 
+			- %^C :: Interactive selection of which kill or clip to use.
+			- %^L :: Like %^C, but insert as link.
+			- %^{prop}p :: Prompt the user for a value for property prop.
+			- %^{prompt} :: prompt the user for a string and replace this sequence with it.	 You
+											may specify a default value and a completion table with
+											%^{prompt|default|completion2|completion3...}.	The arrow keys
+											access a prompt-specific history.
+			- %\n :: Insert the text entered at the nth %^{prompt}, where n is a number,
+							 starting from 1.
+			- %? :: After completing the template, position cursor here.
 
 
 			For specific link types, the following keywords will be defined2:
@@ -1672,20 +1672,21 @@ that I share between work and home
 *** RSS feeds
 
 		#+BEGIN_SRC emacs-lisp
-			(let ((feedfile "~/feeds.org"))
-				(setq org-feed-alist
-							`(("Slashdot"
-								 "http://rss.slashdot.org/Slashdot/slashdotatom"
-								 ,feedfile
-								 "Slashdot")
-								("Bruce"
-								 "http://feeds.feedburner.com/schneier/fulltext"
-								 ,feedfile
-								 "Bruce Schneier On Security")
-								("PiratPartiet"
-								 "http://live.piratpartiet.se/rss20.xml"
-								 ,feedfile
-								 "PiratPartiet SE"))))
+      (let ((feedfile "~/feeds.org"))
+        (setq org-feed-alist
+              `(("Slashdot"
+                 "http://rss.slashdot.org/Slashdot/slashdotatom"
+                 ,feedfile
+                 "Slashdot")
+                ("Bruce"
+                 "http://feeds.feedburner.com/schneier/fulltext"
+                 ,feedfile
+                 "Bruce Schneier On Security")
+                ("PiratPartiet"
+                 "http://live.piratpartiet.se/rss20.xml"
+                 ,feedfile
+                 "PiratPartiet SE"))))
+
 		#+END_SRC
 *** Standard Todo states and transitions
 		:LOGBOOK:
@@ -1694,12 +1695,12 @@ that I share between work and home
 
 		This is from [[norang:TodoKeywords]] it's proberbly more than I need.
 		#+BEGIN_SRC emacs-lisp
-						(setq org-todo-keywords
-									(quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
-													(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
-													(sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)")
-													(sequence "ESTIMATE" "|" "ESTIMATED"))))
-						
+      (setq org-todo-keywords
+            (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
+                    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
+                    (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)")
+                    (sequence "ESTIMATE" "|" "ESTIMATED"))))
+      
 		#+END_SRC
 
 *** Org todo keyword faces                                            :faces:
@@ -1741,47 +1742,47 @@ that I share between work and home
 		want. first of, you need this registry hack(for outlook 2007).
  
 		#+BEGIN_EXAMPLE 
-			Windows Registry Editor Version 5.00
-			Windows Registry Editor Version 5.00
-			
-			[HKEY_CLASSES_ROOT\outlook]
-			"URL Protocol"=""
-			@="URL:Outlook Folders"
-			
-			[HKEY_CLASSES_ROOT\outlook\DefaultIcon]
-			@="C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLLIB.DLL,-9403"
-			
-			[HKEY_CLASSES_ROOT\outlook\shell]
-			@="open"
-			
-			[HKEY_CLASSES_ROOT\outlook\shell\open]
-			@=""
-			
-			[HKEY_CLASSES_ROOT\outlook\shell\open\command]
-			@="\"C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLOOK.EXE\" /select \"%1\""
-			
+      Windows Registry Editor Version 5.00
+      Windows Registry Editor Version 5.00
+      
+      [HKEY_CLASSES_ROOT\outlook]
+      "URL Protocol"=""
+      @="URL:Outlook Folders"
+      
+      [HKEY_CLASSES_ROOT\outlook\DefaultIcon]
+      @="C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLLIB.DLL,-9403"
+      
+      [HKEY_CLASSES_ROOT\outlook\shell]
+      @="open"
+      
+      [HKEY_CLASSES_ROOT\outlook\shell\open]
+      @=""
+      
+      [HKEY_CLASSES_ROOT\outlook\shell\open\command]
+      @="\"C:\\PROGRA~1\\MICROS~3\\OFFICE12\\OUTLOOK.EXE\" /select \"%1\""
+      
 		#+END_EXAMPLE
 
 		here is one for 2010, still need to make sure paths are right.
 
 		#+BEGIN_EXAMPLE
-			Windows Registry Editor Version 5.00
-			
-			[HKEY_CLASSES_ROOT\outlook]
-			URL Protocol=
-			@="URL:Outlook Folders"
-			
-			[HKEY_CLASSES_ROOT\outlook\DefaultIcon]
-			@="C:\\Program Files\\Microsoft Office\\Office14\\1033\\OUTLLIBR.DLL,-7511"
-			
-			[HKEY_CLASSES_ROOT\outlook\shell]
-			@="open"
-			
-			[HKEY_CLASSES_ROOT\outlook\shell\open]
-			@=""
-			
-			[HKEY_CLASSES_ROOT\outlook\shell\open\command]
-			@="C:\\Program Files\\Microsoft Office\\Office14\\OUTLOOK.EXE /select %1"
+      Windows Registry Editor Version 5.00
+      
+      [HKEY_CLASSES_ROOT\outlook]
+      URL Protocol=
+      @="URL:Outlook Folders"
+      
+      [HKEY_CLASSES_ROOT\outlook\DefaultIcon]
+      @="C:\\Program Files\\Microsoft Office\\Office14\\1033\\OUTLLIBR.DLL,-7511"
+      
+      [HKEY_CLASSES_ROOT\outlook\shell]
+      @="open"
+      
+      [HKEY_CLASSES_ROOT\outlook\shell\open]
+      @=""
+      
+      [HKEY_CLASSES_ROOT\outlook\shell\open\command]
+      @="C:\\Program Files\\Microsoft Office\\Office14\\OUTLOOK.EXE /select %1"
 		#+END_EXAMPLE
 
 		You also need this macro in outlook, this has been adapted for
@@ -1798,108 +1799,108 @@ that I share between work and home
 		[[file:workmachine/integration.bas]]
 
 		#+BEGIN_EXAMPLE vb
-			Public Declare PtrSafe Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ( _
-					ByVal hWnd As Long, _
-					ByVal lpOperation As String, _
-					ByVal lpFile As String, _
-					ByVal lpParameters As String, _
-					ByVal lpDirectory As String, _
-					ByVal nShowCmd As Long) As Long
-						
-			'Slightly Modified http://www.freevbcode.com/ShowCode.Asp?ID=5137
-			Function URLEncode(EncodeStr As String) As String
-					Dim i As Integer
-					Dim erg As String
-					
-					erg = EncodeStr
-			
-					' *** First replace '%' chr
-					erg = Replace(erg, "%", Chr(1))
-			
-					' *** then '+' chr
-					erg = Replace(erg, "+", Chr(2))
-					
-					For i = 0 To 255
-							Select Case i
-									' *** Allowed 'regular' characters
-									Case 37, 43, 48 To 57, 65 To 90, 97 To 122
-									
-									Case 1	' *** Replace original %
-											erg = Replace(erg, Chr(i), "%25")
-							
-									Case 2	' *** Replace original +
-											erg = Replace(erg, Chr(i), "%2B")
-											
-									Case 32
-											erg = Replace(erg, Chr(i), "%20") 'org-protocol likes %20 instead of +
-							
-									Case 3 To 15
-											erg = Replace(erg, Chr(i), "%0" & Hex(i))
-							
-									Case Else
-											erg = Replace(erg, Chr(i), "%" & Hex(i))
-											
-							End Select
-					Next
-					
-					URLEncode = erg
-					
-			End Function
-						
-			Sub CreateTaskFromItem()
-					Dim T As Variant
-					Dim Outlook As New Outlook.Application
-					Dim ie As Object
-					Set ie = CreateObject("InternetExplorer.Application")
-			
-					
-					Dim orgfile As Variant
-					Dim Pos As Integer
-					Dim taskf As Object
-					
-					Set myNamespace = Outlook.GetNamespace("MAPI")
-			
-					' Change this to be your personal folder item.	If it remains
-					' on the server it keeps the Outlook ID originally given.	 If
-					' you move it to another folder, it will assign it to another
-					' ID, but keep that ID as long as you don't move it back to the
-					' server. (*sigh*	 I wish it kept the same ID.)
-			
-					' Technically this is unnecessary, but with my limited exchange
-					' account size,	 I move my emails to \"Personal Folders\\@ActionTasks\" and
-					' then (possibly) refile from there.
-					
-			
-					' we take things from this head folder in outlook
-					Set myPersonalFolder = myNamespace.Folders.Item("Jim.Hansson@powel.se")
-					Set allPersonalFolders = myPersonalFolder.Folders
-					
-					T = ""
-					For Each Folder In allPersonalFolders
-							' and move them to this folder
-							If Folder.Name = "Actions" Then
-									Set taskf = Folder
-									Exit For
-							End If
-					Next
-			
-					' End moving message.
-					
-					If Outlook.Application.ActiveExplorer.Selection.Count > 0 Then
-							For i = 1 To Outlook.Application.ActiveExplorer.Selection.Count
-											Set objMail = Outlook.ActiveExplorer.Selection.Item(i)
-											Set objMail = objMail.Move(taskf)
-											objMail.Save 'Maybe this will update EntryID
-											' Note that o is the Outlook capture template.
-											T = "org-protocol:/outlook:/o/" + URLEncode(objMail.EntryID) _
-													+ "/" + URLEncode(objMail.Subject) _
-													+ "/" + URLEncode(objMail.SenderName) _
-													+ "/" + URLEncode(objMail.SenderEmailAddress) _
-													+ "/" + URLEncode(objMail.Body)
-											ShellExecute 0, "open", T, vbNullString, vbNullString, vbNormalFocus
-							Next
-					End If
-			End Sub
+      Public Declare PtrSafe Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ( _
+          ByVal hWnd As Long, _
+          ByVal lpOperation As String, _
+          ByVal lpFile As String, _
+          ByVal lpParameters As String, _
+          ByVal lpDirectory As String, _
+          ByVal nShowCmd As Long) As Long
+            
+      'Slightly Modified http://www.freevbcode.com/ShowCode.Asp?ID=5137
+      Function URLEncode(EncodeStr As String) As String
+          Dim i As Integer
+          Dim erg As String
+          
+          erg = EncodeStr
+      
+          ' *** First replace '%' chr
+          erg = Replace(erg, "%", Chr(1))
+      
+          ' *** then '+' chr
+          erg = Replace(erg, "+", Chr(2))
+          
+          For i = 0 To 255
+              Select Case i
+                  ' *** Allowed 'regular' characters
+                  Case 37, 43, 48 To 57, 65 To 90, 97 To 122
+                  
+                  Case 1  ' *** Replace original %
+                      erg = Replace(erg, Chr(i), "%25")
+              
+                  Case 2  ' *** Replace original +
+                      erg = Replace(erg, Chr(i), "%2B")
+                      
+                  Case 32
+                      erg = Replace(erg, Chr(i), "%20") 'org-protocol likes %20 instead of +
+              
+                  Case 3 To 15
+                      erg = Replace(erg, Chr(i), "%0" & Hex(i))
+              
+                  Case Else
+                      erg = Replace(erg, Chr(i), "%" & Hex(i))
+                      
+              End Select
+          Next
+          
+          URLEncode = erg
+          
+      End Function
+            
+      Sub CreateTaskFromItem()
+          Dim T As Variant
+          Dim Outlook As New Outlook.Application
+          Dim ie As Object
+          Set ie = CreateObject("InternetExplorer.Application")
+      
+          
+          Dim orgfile As Variant
+          Dim Pos As Integer
+          Dim taskf As Object
+          
+          Set myNamespace = Outlook.GetNamespace("MAPI")
+      
+          ' Change this to be your personal folder item.  If it remains
+          ' on the server it keeps the Outlook ID originally given.  If
+          ' you move it to another folder, it will assign it to another
+          ' ID, but keep that ID as long as you don't move it back to the
+          ' server. (*sigh*  I wish it kept the same ID.)
+      
+          ' Technically this is unnecessary, but with my limited exchange
+          ' account size,  I move my emails to \"Personal Folders\\@ActionTasks\" and
+          ' then (possibly) refile from there.
+          
+      
+          ' we take things from this head folder in outlook
+          Set myPersonalFolder = myNamespace.Folders.Item("Jim.Hansson@powel.se")
+          Set allPersonalFolders = myPersonalFolder.Folders
+          
+          T = ""
+          For Each Folder In allPersonalFolders
+              ' and move them to this folder
+              If Folder.Name = "Actions" Then
+                  Set taskf = Folder
+                  Exit For
+              End If
+          Next
+      
+          ' End moving message.
+          
+          If Outlook.Application.ActiveExplorer.Selection.Count > 0 Then
+              For i = 1 To Outlook.Application.ActiveExplorer.Selection.Count
+                      Set objMail = Outlook.ActiveExplorer.Selection.Item(i)
+                      Set objMail = objMail.Move(taskf)
+                      objMail.Save 'Maybe this will update EntryID
+                      ' Note that o is the Outlook capture template.
+                      T = "org-protocol:/outlook:/o/" + URLEncode(objMail.EntryID) _
+                          + "/" + URLEncode(objMail.Subject) _
+                          + "/" + URLEncode(objMail.SenderName) _
+                          + "/" + URLEncode(objMail.SenderEmailAddress) _
+                          + "/" + URLEncode(objMail.Body)
+                      ShellExecute 0, "open", T, vbNullString, vbNullString, vbNormalFocus
+              Next
+          End If
+      End Sub
 		#+END_EXAMPLE
 
 		then we need to load the org-module and setup some basic things,
@@ -1907,31 +1908,33 @@ that I share between work and home
 		from outlook
 		
 		#+BEGIN_SRC emacs-lisp
-			;; Setup outlook integration with org-mode.
-			(add-to-list 'load-path "~/.emacs.d/elpa/org-outlook-0.3/")
-			(when (require 'org-outlook nil 'noerror)
-				;; Location of outlook exe so we can call it.
-				(setq-default org-outlook-location 
-											"C:/Program Files/Microsoft Office/Office14/OUTLOOK.EXE")
-				;; Capturing system for org-protocol outlook: subprotocol. 
-				;; Supports org-capture
-				(setq-default org-outlook-capture 'org-capture)
-
-				;; Default template for org-capture or remember.
-				;;(setq-default org-protocol-outlook-default-template-key o)
-				)
+      ;; Setup outlook integration with org-mode.
+      (add-to-list 'load-path "~/.emacs.d/elpa/org-outlook-0.3/")
+      (when (require 'org-outlook nil 'noerror)
+        ;; Location of outlook exe so we can call it.
+        (setq-default org-outlook-location 
+                      "C:/Program Files/Microsoft Office/Office14/OUTLOOK.EXE")
+        ;; Capturing system for org-protocol outlook: subprotocol. 
+        ;; Supports org-capture
+        (setq-default org-outlook-capture 'org-capture)
+      
+        ;; Default template for org-capture or remember.
+        ;;(setq-default org-protocol-outlook-default-template-key o)
+        )
 		#+END_SRC
 
 ***** TODO fix line-endings and indentation of imported mail.
 			
 			this is one way, but we need something better, we need to convert it to the format
 			of the buffer that it is supposed to go to. this is only a display hack.
+			
 			#+BEGIN_EXAMPLE elisp
-				(defun dos-remove-eol ()
-					"Do not show ^M in files containing mixed UNIX and DOS line endings."
-					(interactive)
-					(setq buffer-display-table (make-display-table))
-					(aset buffer-display-table ?\^M []))
+        (defun dos-remove-eol ()
+          "Do not show ^M in files containing mixed UNIX and DOS line endings."
+          (interactive)
+          (setq buffer-display-table (make-display-table))
+          (aset buffer-display-table ?\^M []))
+              
 			#+END_EXAMPLE
 *** Auto Archiving of done entries
 
@@ -1940,38 +1943,38 @@ that I share between work and home
 		to find out why it hangs.
 
 		#+BEGIN_EXAMPLE emacs-lisp
-			; found on the emacs-orgmode mailing list.
-			; helping aboudreault with finding errors in it.
-			(defvar org-my-archive-expiry-days 2
-				"The number of days after which a completed task should be auto-archived.
-			This can be 0 for immediate, or a floating point value.")
-			
-			(defun org-my-archive-done-tasks ()
-				(interactive)
-				(save-excursion
-					(goto-char (point-min))
-					(let ((done-regexp
-								 (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
-								(state-regexp
-								 (concat "- State \"\\(" (regexp-opt org-done-keywords)
-												 "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
-						(while (re-search-forward done-regexp nil t)
-							(let ((end (save-excursion
-													 (outline-next-heading)
-													 (point)))
-										begin)
-								(goto-char (line-beginning-position))
-								(setq begin (point))
-								(when (re-search-forward state-regexp end t)
-									(let* ((time-string (match-string 2))
-												 (when-closed (org-parse-time-string time-string)))
-										(if (>= (time-to-number-of-days
-														 (time-subtract (current-time)
-																						(apply #'encode-time when-closed)))
-														org-my-archive-expiry-days)
-												(org-archive-subtree)))))))))
-			
-			(defalias 'archive-done-tasks 'asdflökg)
+      ; found on the emacs-orgmode mailing list.
+      ; helping aboudreault with finding errors in it.
+      (defvar org-my-archive-expiry-days 2
+        "The number of days after which a completed task should be auto-archived.
+      This can be 0 for immediate, or a floating point value.")
+      
+      (defun org-my-archive-done-tasks ()
+        (interactive)
+        (save-excursion
+          (goto-char (point-min))
+          (let ((done-regexp
+                 (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
+                (state-regexp
+                 (concat "- State \"\\(" (regexp-opt org-done-keywords)
+                         "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
+            (while (re-search-forward done-regexp nil t)
+              (let ((end (save-excursion
+                           (outline-next-heading)
+                           (point)))
+                    begin)
+                (goto-char (line-beginning-position))
+                (setq begin (point))
+                (when (re-search-forward state-regexp end t)
+                  (let* ((time-string (match-string 2))
+                         (when-closed (org-parse-time-string time-string)))
+                    (if (>= (time-to-number-of-days
+                             (time-subtract (current-time)
+                                            (apply #'encode-time when-closed)))
+                            org-my-archive-expiry-days)
+                        (org-archive-subtree)))))))))
+      
+      (defalias 'archive-done-tasks 'asdflökg)
 		#+END_EXAMPLE
 *** Refile
 
@@ -2014,13 +2017,13 @@ that I share between work and home
 		which of course doesn't normally work, hence this elisp code.
 
 		#+BEGIN_SRC emacs-lisp
-			(defun local-org-insert-stars ()
-				(interactive)
-				(when (looking-back "^ *" (point-at-bol))
-					(replace-string " " "*" nil (point-at-bol) (point)))
-				(insert "*"))
-			
-			(define-key org-mode-map "*" 'local-org-insert-stars)
+      (defun local-org-insert-stars ()
+        (interactive)
+        (when (looking-back "^ *" (point-at-bol))
+          (replace-string " " "*" nil (point-at-bol) (point)))
+        (insert "*"))
+      
+      (define-key org-mode-map "*" 'local-org-insert-stars)
 		#+END_SRC
 		Haven't thoroughly tested it, but it seems to work ok.
 
@@ -2056,13 +2059,13 @@ that I share between work and home
     
 		Creates filesets for all org files.
     #+BEGIN_SRC emacs-lisp
-						(dolist (directory my-org-directories)
-							(let ((directory-part (concat "Org: " (car (last (split-string directory "/") 2)))))
-								(add-to-list 'filesets-data 
-														 (list directory-part
-																	 (list ':tree
-																				 directory
-																				 "^.+\\.org$")))))
+      (dolist (directory my-org-directories)
+        (let ((directory-part (concat "Org: " (car (last (split-string directory "/") 2)))))
+          (add-to-list 'filesets-data 
+                       (list directory-part
+                             (list ':tree
+                                   directory
+                                   "^.+\\.org$")))))
 		#+END_SRC
 
 *** Agenda                                                           :habits:
@@ -2172,6 +2175,7 @@ that I share between work and home
 			We also need to set where on earth we are because without that
 			information the dairy-sun* functions can not do it's job and
 			will ask every time we start where on earht we are.
+
 			#+BEGIN_SRC emacs-lisp
         (setq calendar-latitude 63.1766)
         (setq calendar-longitude 14.636068)
@@ -2309,9 +2313,9 @@ that I share between work and home
 * Other Setup 																									:keybindings:
 
 	#+BEGIN_SRC emacs-lisp
-		(setq-default indent-tabs-mode t)							
-		(global-set-key "\C-x\C-l" 'goto-line)
-
+    (setq-default indent-tabs-mode t)
+    (global-set-key "\C-x\C-l" 'goto-line)
+    
 	#+END_SRC
 
 * Load Local settings
@@ -2320,50 +2324,52 @@ that I share between work and home
 	local to this machine. That is also a org-babel emacs file.
 
 	#+BEGIN_SRC emacs-lisp
-		(add-to-list 'load-path (concat local-emacs-org-dir "local"))
-		(org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
+    (add-to-list 'load-path (concat local-emacs-org-dir "local"))
+    (org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
 	#+END_SRC
 
 * File-sets 																											 :filesets:
-
-The commands that can operate on file sets are specified in the global
-custom variable "filesets-commands". You can add your own commands to
-that list. The default value for this variable is: 
-
-("Isearch" multi-isearch-files
-	(filesets-cmd-isearch-getargs))
- ("Isearch (regexp)" multi-isearch-files-regexp
-	(filesets-cmd-isearch-getargs))
- ("Query Replace" perform-replace
-	(filesets-cmd-query-replace-getargs))
- ("Query Replace (regexp)" perform-replace
-	(filesets-cmd-query-replace-regexp-getargs))
- ("Grep <<selection>>" "grep"
-	("-n " filesets-get-quoted-selection " " "<<file-name>>"))
- ("Run Shell Command" filesets-cmd-shell-command
-	(filesets-cmd-shell-command-getargs)))
-
-The values consist of an association list of names, functions, and an
-argument list (or a function that returns one) to be run on a
-filesets' files. So, if you wanted to add a command that does an
-"occur" command on the file set, you could use the "Isearch" entry as
-an example to create your own new entry (that you would add to the
-"filesets-commands" global variable) that would look something like: 
-
- ("Occur (regexp)" multi-occur-files-regexp
+	
+	The commands that can operate on file sets are specified in the global
+	custom variable "filesets-commands". You can add your own commands to
+	that list. The default value for this variable is: 
+	
+	#+BEGIN_EXAMPLE emacs-lisp
+    ("Isearch" multi-isearch-files
+    (filesets-cmd-isearch-getargs))
+    ("Isearch (regexp)" multi-isearch-files-regexp
+    (filesets-cmd-isearch-getargs))
+    ("Query Replace" perform-replace
+    (filesets-cmd-query-replace-getargs))
+    ("Query Replace (regexp)" perform-replace
+    (filesets-cmd-query-replace-regexp-getargs))
+    ("Grep <<selection>>" "grep"
+    ("-n " filesets-get-quoted-selection " " "<<file-name>>"))
+    ("Run Shell Command" filesets-cmd-shell-command
+    (filesets-cmd-shell-command-getargs)))  
+	#+END_EXAMPLE
+	
+	The values consist of an association list of names, functions, and an
+	argument list (or a function that returns one) to be run on a
+	filesets' files. So, if you wanted to add a command that does an
+	"occur" command on the file set, you could use the "Isearch" entry as
+	an example to create your own new entry (that you would add to the
+	"filesets-commands" global variable) that would look something like: 
+	
+	("Occur (regexp)" multi-occur-files-regexp
 	(filesets-cmd-occur-getargs))
-
-You would need to write the "multi-occur-files-regexp" and
-"filesets-cmd-occur-getargs" functions (you could use the existing
-"multi-isearch-files-regexp" and "filesets-cmd-isearch-getargs"
-functions as a basis since they would be similar). The same would
-apply for any additional Emacs command that you wanted to add to work
-on file sets. 
-
+	
+	You would need to write the "multi-occur-files-regexp" and
+	"filesets-cmd-occur-getargs" functions (you could use the existing
+	"multi-isearch-files-regexp" and "filesets-cmd-isearch-getargs"
+	functions as a basis since they would be similar). The same would
+	apply for any additional Emacs command that you wanted to add to work
+	on file sets. 
+	
 	#+BEGIN_SRC emacs-lisp
-		;; now when all org-directories has been parsed we should be
-		;; able to init the filesets menu.
-		(filesets-init)
+    ;; now when all org-directories has been parsed we should be
+    ;; able to init the filesets menu.
+    (filesets-init)
 	#+END_SRC
 	
 * ERC
