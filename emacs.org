@@ -27,16 +27,6 @@ that I share between work and home
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 
-*** DONE turn Flyspell into a mode that is not on as default
-		:LOGBOOK:
-		- State "DONE"       from "NEXT"       [2013-04-09 ti 23:15]
-		:END:
-		because it slows down cursor movement.
-		it should be easy to turn on, and change dictionaries
-*** DONE turn whitespace mode in to a mode that easy to turn on and off
-		:LOGBOOK:
-		- State "DONE"       from "TODO"       [2013-04-09 ti 23:37]
-		:END:
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -423,19 +413,6 @@ that I share between work and home
 			the major mode is a programming mode and "vanilla" flyspell-mode when it is
 			not. and bind that to *S-<F8>*.
 
-***** DONE don't use fly-spell in src samples
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-04-09 ti 22:55] \\
-				not an issue any more when I can easily turn it on and off.
-			:END:
-			
-			Or switch to flyspell-prog-mode somehow.
-
-***** FIXED somehow use #+LANGUAGE in org to choose word-list.
-			:LOGBOOK:
-			- State "FIXED"      from "TODO"       [2013-04-09 ti 22:56] \\
-				not a problem any more when I have an easy way to change dictionaries.
-			:END:
 ***** Installing ispell on windows																		:instw:
 
 			look here and download everthing you need.
@@ -2428,12 +2405,6 @@ that I share between work and home
 	#+END_SRC
 
 	If it does not work, check the paths one more time.
-
-*** DONE need to move this into somewhere.
-		:LOGBOOK:
-		- State "DONE"       from "TODO"       [2013-04-09 ti 23:45] \\
-			it can stay where it is.
-		:END:
 
 * List of others configurations that you can look at and steal ideas from
 
