@@ -19,3 +19,6 @@
 [submodule "org-outlook"]
 	path = org-outlook
 	url = https://github.com/emacsmirror/org-outlook.git
+[submodule "litable"]
+	path = litable
+	url = https://github.com/Fuco1/litable.git
