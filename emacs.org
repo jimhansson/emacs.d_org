@@ -244,7 +244,7 @@ that I share between work and home
       
       ;; we don't want scroll margin when scrolling horizontal, because when we are editing
       ;; thing far out to the right, it should not jump until it needs to.
-      (setq vscroll-margin 7)
+      (setq scroll-margin 7)
       
       ;; Smoother scrolling, less jumping.
       (setq scroll-step 1)
@@ -367,16 +367,16 @@ that I share between work and home
 		#+BEGIN_SRC emacs-lisp -n -r
       (when (require 'flyspell nil 'noerror)
         ;; Create a ring of languages I would like to use
-        (let ((langs '("american" "svenska" "norsk")))   (ref:dict_lang)
+        (let ((langs '("american" "svenska" "norsk")))                 (ref:dict_lang)
           (setq jiha-lang-ring (make-ring (length langs)))
           (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
         
         ;; A function to easy switch between dictionaries using ring from above
-        (defun jiha-cycle-ispell-languages ()  (ref:dict_func)
+        (defun jiha-cycle-ispell-languages ()                          (ref:dict_func)
           (interactive)
           (let ((lang (ring-ref jiha-lang-ring -1)))
             (ring-insert jiha-lang-ring lang)
-            (ispell-change-dictionary lang)))      
+            (ispell-change-dictionary lang)))
       
         ;; Fly-spell in C based programming modes
         (add-hook 'c-mode-hook
@@ -393,7 +393,7 @@ that I share between work and home
         ;; eays access to flyspell/ispell functionality.
         (global-set-key (kbd "<f8>")     'ispell-word)
         (global-set-key (kbd "C-<f8>")   'flyspell-mode)
-        (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages)  (ref:dict_cycle)
+        (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) (ref:dict_cycle)
         (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
         (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
         
@@ -2139,7 +2139,7 @@ that I share between work and home
           )
       #+END_SRC
 
-*** Org-syncy
+*** Org-sync
     #+BEGIN_EXAMPLE emacs-lisp
       ;;(load-file "org-modules/org-element.el")
       ;;(load-file "org-sync2/os.el") ;; org-sync
