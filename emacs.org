@@ -22,14 +22,25 @@ that I share between work and home
 
 *** TODO Fix font
 		i want deja vu or something else that works good.
+		http://emacswiki.org/emacs/SetFonts
+		http://www.emacswiki.org/emacs/GoodFonts#toc12
+		https://gist.github.com/haxney/3055728
+
+		other fonts are
+		Source Code Pro and bitstream
+
 *** TODO fix line spacing
-		some extra linespacing would be nice
+		some extra linespacing would be nice, I have at the moment set it in my .emacs on my work-machine
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 
 *** TODO check out multiple cursors
 *** TODO check out smex.
-*** TODO check out expand-region
+*** DONE check out expand-region
+		:LOGBOOK:
+		- State "DONE"       from "TODO"       [2013-04-15 må 23:25] \\
+			installed from melpa
+		:END:
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -318,6 +329,13 @@ that I share between work and home
 		Desktop sessions are considered “new” by CleanBufferList, even
 		though they may be considered “old”. 
 
+
+*** Expand-region
+		
+		#+BEGIN_SRC emacs-lisp
+      (require 'expand-region)
+      (global-set-key (kbd "C-+") 'er/expand-region)
+		#+END_SRC
 
 * Minor Modes
 
