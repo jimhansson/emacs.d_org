@@ -27,6 +27,9 @@ that I share between work and home
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 
+*** TODO check out multiple cursors
+*** TODO check out smex.
+*** TODO check out expand-region
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -50,29 +53,26 @@ that I share between work and home
 		First we need to setup the package system in emacs
 
 		#+BEGIN_SRC emacs-lisp
-            (if (require 'package)
-                (let ((archives  '(("ELPA" . "http://tromey.com/elpa/")           ;;(ref:let)
-                                   ("gnu" . "http://elpa.gnu.org/packages/")
-                                   ("marmalade" . "http://marmalade-repo.org/packages/")
-                                   ("melpa" . "http://melpa.milkbox.net/packages/")
-                                   ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))
-                  (progn
-                    (dolist (archive archives)                                    ;;(ref:add)
-                      (progn 
-                        (add-to-list 'package-archives archive)))
-                   
-                   (package-initialize)                                          ;;(ref:load)
-                   ))
-                   ;;(unless (and (file-exists-p "~/.emacs.d/elpa/archives/marmalade")
-                   ;;      (file-exists-p "~/.emacs.d/elpa/archives/gnu") ;;(ref:refresh)
-                   ;;      (file-exists-p "~/.emacs.d/elpa/archives/melpa"))
-                   ;;      (package-refresh-contents)) )) 
-                   ;; If something goes wrong when requiring package
-              (error "%s" "Error in config: initalizing packages"))
+      (if (require 'package)
+          (let ((archives  '(("ELPA" . "http://tromey.com/elpa/") ;;(ref:let)
+                             ("gnu" . "http://elpa.gnu.org/packages/")
+                             ("marmalade" . "http://marmalade-repo.org/packages/")
+                             ("melpa" . "http://melpa.milkbox.net/packages/")
+                             ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))
+            (progn
+              (dolist (archive archives)                          ;;(ref:add)
+                (progn 
+                  (add-to-list 'package-archives archive)))
+             
+              (package-initialize)                                 ;;(ref:load)
+              ))
+             ;;(unless (and (file-exists-p "~/.emacs.d/elpa/archives/marmalade")
+             ;;      (file-exists-p "~/.emacs.d/elpa/archives/gnu") ;;(ref:refresh)
+             ;;      (file-exists-p "~/.emacs.d/elpa/archives/melpa"))
+             ;;      (package-refresh-contents)) )) 
+             ;; If something goes wrong when requiring package
+        (error "%s" "Error in config: initalizing packages"))
 		#+END_SRC
-
-  #+RESULTS:
-	: t
 
 		In [[let][LET expression]] we set up a local variable for all the package repository we would
 		like to use, in this way that variable is not usable outside the part of the code that
