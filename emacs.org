@@ -35,6 +35,9 @@ that I share between work and home
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 *** TODO check out smex.
 *** TODO Make sure not installed packages does not crash startup
+		:LOGBOOK:
+		CLOCK: [2013-04-25 to 17:59]
+		:END:
 		all usage of packages from melpa, marmelade... in this configuration need to be
 		enclosed in constructs that will not crash startup when they do not exists. 
 
@@ -163,11 +166,22 @@ that I share between work and home
 *** Other important stuff
 ***** Only load things that exists.
 
-			that can be done this way, use this to avoid errors on machine
-			which don't have every package installed.
+			that can be done this way, by using this instead of the normal require function. We
+			will get a message that something could not be loaded but still work.
 
+			#+BEGIN_SRC emacs-lisp
+        (defmacro jiha-safe-require (what do)
+          "Will try to require what and if that does succeed eval body, if it could not require what without an error print a message and keep on as nothing happend"
+          `(if (require ,what nil 'noerror)
+               ,do
+             (message (format "Could not load %s" ,what))))
+        
+			#+END_SRC
+
+			use it like this
 			#+BEGIN_EXAMPLE
-				(when (require 'deft nil 'noerror)) 
+        (jiha-safe-require 'org-mode
+         (things I only want to do if org-mode is working))
 			#+END_EXAMPLE
 
 * Global Things
@@ -344,8 +358,9 @@ that I share between work and home
 *** Expand-region
 		
 		#+BEGIN_SRC emacs-lisp
-      (require 'expand-region)
-      (global-set-key (kbd "C-+") 'er/expand-region)
+      (jiha-safe-require 'expand-region
+        (global-set-key (kbd "C-+") 'er/expand-region))
+      
 		#+END_SRC
 
 *** Multiple-cursors
@@ -361,7 +376,8 @@ that I share between work and home
 			Start out with:
 			
 			#+BEGIN_SRC emacs-lisp
-        (require 'multiple-cursors)
+        (jiha-safe-require 'multiple-cursors
+         ())
         
 			#+END_SRC
 			
@@ -582,39 +598,39 @@ that I share between work and home
 		for every word (when checking the entire buffer) causes an enormous slowdown.
 		
 		#+BEGIN_SRC emacs-lisp -n -r
-      (when (require 'flyspell nil 'noerror)
-        ;; Create a ring of languages I would like to use
-        (let ((langs '("american" "svenska" "norsk")))                 (ref:dict_lang)
-          (setq jiha-lang-ring (make-ring (length langs)))
-          (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
-        
-        ;; A function to easy switch between dictionaries using ring from above
-        (defun jiha-cycle-ispell-languages ()                          (ref:dict_func)
-          (interactive)
-          (let ((lang (ring-ref jiha-lang-ring -1)))
-            (ring-insert jiha-lang-ring lang)
-            (ispell-change-dictionary lang)))
-      
-        ;; Fly-spell in C based programming modes
-        (add-hook 'c-mode-hook
-                  (lambda () (flyspell-prog-mode)))
-        
-        ;; Fly-spell in C++ based programming modes
-        (add-hook 'c++-mode-hook
-                  (lambda () (flyspell-prog-mode)))
-        
-        ;; Fly-spell in emacs-lisp mode
-        (add-hook 'lisp-mode-hook
-                  (lambda () (flyspell-prog-mode)))
-        
-        ;; eays access to flyspell/ispell functionality.
-        (global-set-key (kbd "<f8>")     'ispell-word)
-        (global-set-key (kbd "C-<f8>")   'flyspell-mode)
-        (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) (ref:dict_cycle)
-        (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
-        (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
-        
-        (setq flyspell-issue-message-flag nil))
+      (jiha-safe-require 'flyspell
+                        ;; Create a ring of languages I would like to use
+                        (progn (let ((langs '("american" "svenska" "norsk")))                 (ref:dict_lang)
+                                    (setq jiha-lang-ring (make-ring (length langs)))
+                                    (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
+                               
+                               ;; A function to easy switch between dictionaries using ring from above
+                               (defun jiha-cycle-ispell-languages ()                          (ref:dict_func)
+                                 (interactive)
+                                 (let ((lang (ring-ref jiha-lang-ring -1)))
+                                   (ring-insert jiha-lang-ring lang)
+                                   (ispell-change-dictionary lang)))
+                               
+                               ;; Fly-spell in C based programming modes
+                               (add-hook 'c-mode-hook
+                                         (lambda () (flyspell-prog-mode)))
+                               
+                               ;; Fly-spell in C++ based programming modes
+                               (add-hook 'c++-mode-hook
+                                         (lambda () (flyspell-prog-mode)))
+                               
+                               ;; Fly-spell in emacs-lisp mode
+                               (add-hook 'lisp-mode-hook
+                                         (lambda () (flyspell-prog-mode)))
+                               
+                               ;; eays access to flyspell/ispell functionality.
+                               (global-set-key (kbd "<f8>")     'ispell-word)
+                               (global-set-key (kbd "C-<f8>")   'flyspell-mode)
+                               (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) (ref:dict_cycle)
+                               (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+                               (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
+                               
+                               (setq flyspell-issue-message-flag nil)))
       
 		#+END_SRC        
 		
@@ -706,22 +722,20 @@ that I share between work and home
 
 		#+BEGIN_SRC emacs-lisp
       ;; normal hl-line is not good enough, we need some more functions, this add that.
-      (when (require 'hl-line+ nil 'noerror)
-        (message "loaded hl-line+")
-        ;; Only use hl-line when we are idle, as soon as I start typing it is removed and does
-        ;; then not interfere with my other faces.
-        (toggle-hl-line-when-idle 1)
-      
-        ;; we also needs to set an interval that tells us how long we need to idle before hl-line
-        ;; turns on
-        (hl-line-when-idle-interval 5)
-      
-        ;; I we need to remove hl-line for a specific mode, list them here.
-        ;; (setq hl-line-inhibit-highlighting-for-modes)      
-      
-        (set-face-background hl-line-face "gray13")
-        (set-face-foreground hl-line-face "white")
-        )
+      (jiha-safe-require 'hl-line+
+                        (progn
+                          ;; Only use hl-line when we are idle, as soon as I start typing it is removed and does
+                          ;; then not interfere with my other faces.
+                          (toggle-hl-line-when-idle 1)
+                        
+                          ;; we also needs to set an interval that tells us how long we need to idle before hl-line
+                          ;; turns on
+                          (hl-line-when-idle-interval 5)
+                          
+                          ;; If we need to remove hl-line for a specific mode, list them here.
+                          ;; (setq hl-line-inhibit-highlighting-for-modes)      
+                          (set-face-background hl-line-face "gray13")
+                          (set-face-foreground hl-line-face "white")))
 		#+END_SRC
 ***** TODO fix face of hl-line so it does not interfer with other things.
 
@@ -759,7 +773,7 @@ that I share between work and home
                   (message matching-text)))))
       
 		#+END_SRC
-
+		
 ***** TODO Activate it in those major modes we want it in.
 			- all programing-modes
 			- org-mode
@@ -769,8 +783,8 @@ that I share between work and home
 		Its a mode for displaying lambda signs and other things in a nice way.
 
 		#+BEGIN_SRC emacs-lisp
-      (require 'pretty-mode)
-      (global-pretty-mode 1)
+      (jiha-safe-require 'pretty-mode
+                        (global-pretty-mode 1))
 		#+END_SRC
 
 ***** TODO move my changes from pretty-mode.el to this file
@@ -1161,7 +1175,7 @@ that I share between work and home
 			This is the C++ style that I personaly finds to be best.
 
 			#+BEGIN_SRC emacs-lisp
-        (require 'google-c-style nil 'noerror)
+        (jiha-safe-require 'google-c-style ())
 			#+END_SRC
 
 *** Visual Studio Integration
@@ -1251,29 +1265,27 @@ that I share between work and home
 				#+END_EXAMPLE
 
 				#+BEGIN_SRC emacs-lisp
-           ;; only on windows do we use csharp completion.
-          
-          (when (require 'powershell nil 'noerror)
-            (when (require 'csharp-completion nil 'noerror) 
-              (defun jiha-csharp-mode-hook  
-                ;; C# code completion
-                (load-file (concat local-emacs-org-dir "csharp/csharp-completion.el"))
-                ;;(csharp-analysis-mode 1)
-                ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
-                ;;(local-set-key "\M-§."   'cscomp-complete-at-point-menu)
-                )
-            
-              ;;(add-to-list 'csharp-mode-hook
-              ;;             'jiha-csharp-mode-hook)
-            )
-          )
+          ;;(csharp-analysis-mode 1)
+          ;;(local-set-key "\M-\\"   'cscomp-complete-at-point)
+          ;;(local-set-key "\M-§."   'cscomp-complete-at-point- ;; only on windows do we use csharp
+          ;;(add-to-list 'csharp-mode-hook
+          ;;             'jiha-csharp-mode-hook)
+          (jiha-safe-require 'powershell
+                            (jiha-safe-require 'csharp-completion 
+                                              (defun jiha-csharp-mode-hook  
+                                                ;; C# code completion
+                                                (load-file (concat local-emacs-org-dir 
+                                                                   "csharp/csharp-completion.el")))))
           
 				#+END_SRC
+
 ******* TODO ASPX
 				this requires multi-mode which I don't have at the moment.
+
 				#+BEGIN_EXAMPLE emacs-lisp
-          (require 'aspx-mode nil 'noerror)
+          (jiha-safe-require 'aspx-mode nil ())
 				#+END_EXAMPLE
+
 *** Indentation
 
 		I usually use tabs for indentation and spaces for alignment, Emacs
@@ -1348,7 +1360,7 @@ that I share between work and home
 *** PLSQL
 		
 		#+BEGIN_SRC emacs-lisp
-      ;;(when (require 'plsql nil 'noerror) )
+      ;;(jiha-safe-require 'plsql ())
 		#+END_SRC
 *** SQL-mode
 ***** Support Multiple connections
@@ -1391,8 +1403,9 @@ that I share between work and home
 ***** SQL-Plus support
 
 			#+BEGIN_EXAMPLE emacs-lisp
-			 (require 'sqlplus)
+        (jiha-safe-require 'sqlplus ())
 			#+END_EXAMPLE
+
 ***** Remove linenumbers from sqlplus output
 
 			SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
@@ -1559,7 +1572,7 @@ that I share between work and home
       (setq org-expiry-wait "+2m")
       ;;(org-expiry-insinuate)
       (load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
-      (require 'org-crypt)
+      (jiha-safe-require 'org-crypt ())
       (org-crypt-use-before-save-magic)
       (setq org-tags-exclude-from-inheritance '("crypt"))
       (run-at-time "00:59" 3600 'org-save-all-org-buffers)
@@ -1567,7 +1580,7 @@ that I share between work and home
       ;; things are not known before you have used them once, this solves
       ;; that problem at least partially.
       (org-require-autoloaded-modules)
-      (require 'org-protocol)
+      (jiha-safe-require 'org-protocol ())
       
       (setq org-capture-use-agenda-date t)
       (setq org-columns-ellipses "…")
@@ -2055,17 +2068,18 @@ that I share between work and home
 		#+BEGIN_SRC emacs-lisp
       ;; Setup outlook integration with org-mode.
       (add-to-list 'load-path "~/.emacs.d/elpa/org-outlook-0.3/")
-      (when (require 'org-outlook nil 'noerror)
-        ;; Location of outlook exe so we can call it.
-        (setq-default org-outlook-location 
-                      "C:/Program Files/Microsoft Office/Office14/OUTLOOK.EXE")
-        ;; Capturing system for org-protocol outlook: subprotocol. 
-        ;; Supports org-capture
-        (setq-default org-outlook-capture 'org-capture)
+      (jiha-safe-require 'org-outlook
+                        (progn
+                          ;; Location of outlook exe so we can call it.
+                          (setq-default org-outlook-location 
+                                        "C:/Program Files/Microsoft Office/Office14/OUTLOOK.EXE")
+                          ;; Capturing system for org-protocol outlook: subprotocol. 
+                          ;; Supports org-capture
+                          (setq-default org-outlook-capture 'org-capture)
       
-        ;; Default template for org-capture or remember.
-        ;;(setq-default org-protocol-outlook-default-template-key o)
-        )
+                          ;; Default template for org-capture or remember.
+                          ;;(setq-default org-protocol-outlook-default-template-key o)
+                          ))
 		#+END_SRC
 
 ***** TODO fix line-endings and indentation of imported mail.
@@ -2351,9 +2365,9 @@ that I share between work and home
       #+BEGIN_SRC emacs-lisp
         ;; we use a safe way of loading it, it should alawys exist but if it
         ;; does not, we don't want an error.
-        (when (require 'ob-sql nil 'noerror)
-          (message "loaded ob-sql, you can now use sql in org-babel snippets")
-          )
+        (jiha-safe-require 'ob-sql
+                          (message "loaded ob-sql, you can now use sql in org-babel snippets"))
+        
       #+END_SRC
 ******* TODO does not work at the moment
 				
@@ -2400,10 +2414,12 @@ that I share between work and home
 *** Google maps                                                         :org:
 
     #+BEGIN_SRC emacs-lisp
-       (add-to-list 'load-path (concat local-emacs-org-dir
+      (add-to-list 'load-path (concat local-emacs-org-dir
                                       "google-maps"))
-      (when (require 'google-maps nil 'noerror)
-        (when (require 'org-location-google-maps nil 'noerror)))
+      
+      (jiha-safe-require 'google-maps
+                        (jiha-safe-require 'org-location-google-maps ()))
+
     #+END_SRC
 
     You can then use M-x google-maps and type a location.
@@ -2433,8 +2449,8 @@ that I share between work and home
 
     The easiest way to use it is to load it from your .emacs:
     #+BEGIN_SRC emacs-lisp
-      ;;(add-to-list 'load-path (concat local-emacs-org-dir "google-contacts"))
-      ;;(when (require 'google-contacts nil 'noerror))
+      (add-to-list 'load-path (concat local-emacs-org-dir "google-contacts"))
+      (jiha-safe-require 'google-contacts ())
     #+END_SRC
     You can then use M-x google-contacts and type a query string.
     
@@ -2448,16 +2464,18 @@ that I share between work and home
     You can integrate directly Google Contacts into Gnus:
 
     #+BEGIN_SRC emacs-lisp
-      (when (require 'google-contacts-gnus nil 'noerror))
+      (jiha-safe-require 'google-contacts-gnus ())
     #+END_SRC
+
     Then you can use ; to go to a contact information while reading an
     e-mail.
     
     You can integrate directly Google Contacts into message-mode;
 
     #+BEGIN_SRC emacs-lisp
-      (when (require 'google-contacts-message nil 'noerror))
+      (jiha-safe-require 'google-contacts-message ())
     #+END_SRC
+
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
 * Other Setup 																									:keybindings:
@@ -2525,8 +2543,8 @@ that I share between work and home
 * ERC
 
 	#+BEGIN_SRC emacs-lisp
-    (require 'erc-join)    
-    (require 'erc-match)
+    (jiha-safe-require 'erc-join ())    
+    (jiha-safe-require 'erc-match ())
     (setq erc-keywords '("darion" "kurohin"))
     
     ;; Exclude messages sent by the server when you join a channel, such as the nicklist and topic:
