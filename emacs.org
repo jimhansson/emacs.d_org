@@ -34,9 +34,12 @@ that I share between work and home
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 *** TODO check out smex.
-*** TODO Make sure not installed packages does not crash startup
+*** DONE Make sure not installed packages does not crash startup
 		:LOGBOOK:
-		CLOCK: [2013-04-25 to 17:59]
+		- State "DONE"       from "TODO"       [2013-04-25 to 23:07]
+		CLOCK: [2013-04-25 to 17:59]--[2013-04-25 to 23:07] =>  5:08
+		- implemented a jiha-safe-require that will log if something is missing, but will not
+      error out.
 		:END:
 		all usage of packages from melpa, marmelade... in this configuration need to be
 		enclosed in constructs that will not crash startup when they do not exists. 
