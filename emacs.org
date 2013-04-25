@@ -1340,15 +1340,15 @@ that I share between work and home
 ***** SQL
 
 		  #+BEGIN_SRC emacs-lisp
-        (eval-after-load "sql"
-          '(load-library "sql-indent"))
+        ;;(eval-after-load "sql"
+        ;;  '(load-library "sql-indent"))
 			#+END_SRC
 
 
 *** PLSQL
 		
 		#+BEGIN_SRC emacs-lisp
-      (when (require 'plsql nil 'noerror) )
+      ;;(when (require 'plsql nil 'noerror) )
 		#+END_SRC
 *** SQL-mode
 ***** Support Multiple connections
@@ -2355,6 +2355,11 @@ that I share between work and home
           (message "loaded ob-sql, you can now use sql in org-babel snippets")
           )
       #+END_SRC
+******* TODO does not work at the moment
+				
+				we get the standard ob-sql that is included with org-mode instead of my modified
+				version that have support for oracle. we could send it upstream to get it
+				included or find a way to force loading of my version
 
 *** Org-sync
     #+BEGIN_EXAMPLE emacs-lisp
