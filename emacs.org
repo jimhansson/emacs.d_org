@@ -29,34 +29,9 @@ that I share between work and home
 		other fonts are
 		Source Code Pro and bitstream
 
-*** DONE fix line spacing
-		:LOGBOOK:
-		- State "DONE"       from "TODO"       [2013-04-25 to 23:18]
-		:END:
-		some extra linespacing would be nice, I have at the moment set it in my .emacs on my work-machine
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 *** TODO check out smex.
-*** DONE Make sure not installed packages does not crash startup
-		:LOGBOOK:
-		- State "DONE"       from "TODO"       [2013-04-25 to 23:07]
-		CLOCK: [2013-04-25 to 17:59]--[2013-04-25 to 23:07] =>  5:08
-		- implemented a jiha-safe-require that will log if something is missing, but will not
-      error out.
-		:END:
-		all usage of packages from melpa, marmelade... in this configuration need to be
-		enclosed in constructs that will not crash startup when they do not exists. 
-
-*** DONE check out multiple cursors
-		:LOGBOOK:
-		- State "DONE"       from "TODO"       [2013-04-15 må 23:43] \\
-			installed from melpa
-		:END:
-*** DONE check out expand-region
-		:LOGBOOK:
-		- State "DONE"       from "TODO"       [2013-04-15 må 23:25] \\
-			installed from melpa
-		:END:
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -746,11 +721,6 @@ that I share between work and home
                           ;; turns on
                           (hl-line-when-idle-interval 5)))
 		#+END_SRC
-
-***** DONE fix face of hl-line so it does not interfer with other things.
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-04-25 to 23:14]
-			:END:
 
 *** Electric pair, indent.... mode
 		
