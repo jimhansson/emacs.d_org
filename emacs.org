@@ -86,7 +86,7 @@ that I share between work and home
 
 		Then use M-x list-packages to find and install these packages.
 
-*** Things you should install from package-system								:instw:instl:
+*** Things you should install from package-system               :instw:instl:
 		- oauth2 :: for google integration for some reason I need to add oauth directory to
 		load-path, should not elpa take care of that. 
 		- bookmark+ :: can do so much more than the normal bookmark package. 
@@ -104,6 +104,7 @@ that I share between work and home
 						 
 		Not so important, but nice to have.
 		- pretty-lambdada :: Show the word `lambda' as the Greek letter.
+				 less important now when i have pretty-mode
 
 *** What you need to have in your normal .emacs
 
@@ -213,7 +214,7 @@ that I share between work and home
 		#+end_src
 
 *** Menu-Bar
-		
+
 		Good as it is.
 
 *** Mode-line                                                      :modeline:
@@ -373,8 +374,8 @@ that I share between work and home
 		#+end_src
 		
 ***** Fly-spell for comments when programming                        :coding:
-			
-			#+begin_src emacs-lisp
+      
+      #+begin_src emacs-lisp
         ;; Fly-spell in C based programming modes
         (add-hook 'c-mode-hook
                   (lambda ()
@@ -390,7 +391,7 @@ that I share between work and home
                   (lambda ()
                     (flyspell-prog-mode)))
         
-			#+end_src
+      #+end_src
 
 ***** TODO don't use fly-spell in src samples
 			
@@ -482,12 +483,12 @@ that I share between work and home
 			(global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
 #+end_example
 		
-***** Installing ispell on windows																		:instw:
+***** Installing ispell on windows                                    :instw:
 
-			look here and download everthing you need.
-			http://aspell.net/win32/
+      look here and download everthing you need.
+      http://aspell.net/win32/
 
-			add aspell directory to path
+      add aspell directory to path
 
 *** Whitespace
 
@@ -915,7 +916,7 @@ that I share between work and home
 			files, directory buffers etc...
 
 * Buffer Menu
-*** Font lock 																										 :fontlock:
+*** Font lock                                                      :fontlock:
 
 		If you use ElectricBufferList, then simply use this instead for the
 		last line:
@@ -1422,7 +1423,7 @@ that I share between work and home
 
 		#+end_src
 		
-*** Global Keys for OrgMode																			:keybindings:
+*** Global Keys for OrgMode                                     :keybindings:
 
 		#+begin_src emacs-lisp
       ;; org-mode Links
@@ -2234,13 +2235,13 @@ that I share between work and home
     #+end_src
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
-* Other Setup 																									:keybindings:
+* Other Setup                                                   :keybindings:
 
-	#+begin_src emacs-lisp
-		(setq-default indent-tabs-mode t)							
-		(global-set-key "\C-x\C-l" 'goto-line)
+  #+begin_src emacs-lisp
+    (setq-default indent-tabs-mode t)               
+    (global-set-key "\C-x\C-l" 'goto-line)
 
-	#+end_src
+  #+end_src
 
 * Load Local settings
 
@@ -2252,24 +2253,24 @@ that I share between work and home
 		(org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
 	#+end_src
 
-* File-sets 																											 :filesets:
+* File-sets                                                        :filesets:
 
 The commands that can operate on file sets are specified in the global
 custom variable "filesets-commands". You can add your own commands to
 that list. The default value for this variable is: 
 
 ("Isearch" multi-isearch-files
-	(filesets-cmd-isearch-getargs))
+  (filesets-cmd-isearch-getargs))
  ("Isearch (regexp)" multi-isearch-files-regexp
-	(filesets-cmd-isearch-getargs))
+  (filesets-cmd-isearch-getargs))
  ("Query Replace" perform-replace
-	(filesets-cmd-query-replace-getargs))
+  (filesets-cmd-query-replace-getargs))
  ("Query Replace (regexp)" perform-replace
-	(filesets-cmd-query-replace-regexp-getargs))
+  (filesets-cmd-query-replace-regexp-getargs))
  ("Grep <<selection>>" "grep"
-	("-n " filesets-get-quoted-selection " " "<<file-name>>"))
+  ("-n " filesets-get-quoted-selection " " "<<file-name>>"))
  ("Run Shell Command" filesets-cmd-shell-command
-	(filesets-cmd-shell-command-getargs)))
+  (filesets-cmd-shell-command-getargs)))
 
 The values consist of an association list of names, functions, and an
 argument list (or a function that returns one) to be run on a
@@ -2279,7 +2280,7 @@ an example to create your own new entry (that you would add to the
 "filesets-commands" global variable) that would look something like: 
 
  ("Occur (regexp)" multi-occur-files-regexp
-	(filesets-cmd-occur-getargs))
+  (filesets-cmd-occur-getargs))
 
 You would need to write the "multi-occur-files-regexp" and
 "filesets-cmd-occur-getargs" functions (you could use the existing
@@ -2288,12 +2289,12 @@ functions as a basis since they would be similar). The same would
 apply for any additional Emacs command that you wanted to add to work
 on file sets. 
 
-	#+begin_src emacs-lisp
-		;; now when all org-directories has been parsed we should be
-		;; able to init the filesets menu.
-		(filesets-init)
-	#+end_src
-	
+  #+begin_src emacs-lisp
+    ;; now when all org-directories has been parsed we should be
+    ;; able to init the filesets menu.
+    (filesets-init)
+  #+end_src
+  
 * ERC
 
 	#+begin_src emacs-lisp
@@ -2361,7 +2362,7 @@ on file sets.
 	#+end_src
 
 * TODO BBDB
-* DONE windows context menu integration																:instw:
+* DONE windows context menu integration                               :instw:
 	:LOGBOOK:
 	- State "DONE"       from "TODO"  [2013-03-15 fr 10:35]
 		works fine
