@@ -418,3 +418,73 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	this need to be taken care of by elpa so I don't need to hardcode
 	paths with versions in them.
 
+
+* DONE fix line spacing
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-04-25 to 23:18]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-04-25 to 23:25
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Bugs
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	some extra linespacing would be nice, I have at the moment set it in my .emacs on my work-machine
+
+* DONE Make sure not installed packages does not crash startup
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-04-25 to 23:07]
+	CLOCK: [2013-04-25 to 17:59]--[2013-04-25 to 23:07] =>  5:08
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-04-25 to 23:25
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Bugs
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+	- implemented a jiha-safe-require that will log if something is missing, but will not
+		error out.
+	:END:
+	all usage of packages from melpa, marmelade... in this configuration need to be
+	enclosed in constructs that will not crash startup when they do not exists. 
+
+
+* DONE check out multiple cursors
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-04-15 må 23:43] \\
+		installed from melpa
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-04-25 to 23:25
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Bugs
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+* DONE check out expand-region
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-04-15 må 23:25] \\
+		installed from melpa
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-04-25 to 23:25
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Bugs
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
+* DONE fix face of hl-line so it does not interfer with other things.
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-04-25 to 23:14]
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2013-04-25 to 23:25
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Minor Modes/Hl-Line
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+
