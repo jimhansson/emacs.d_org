@@ -246,6 +246,9 @@ that I share between work and home
 
 *** Mode-line                                                      :modeline:
 		
+		this for the normal mode-line, but if we have powerline installed that will may be
+		used instead, configuration for that is below
+
 		#+BEGIN_SRC emacs-lisp
       ;; Things that modifies the modeline
       (setq display-battery-mode t)
@@ -255,6 +258,14 @@ that I share between work and home
       (setq size-indication-mode t)
 		#+END_SRC
 
+***** PowerLine
+
+			#+BEGIN_SRC emacs-lisp
+        (jiha-safe-require 
+         'powerline
+         ())
+
+			#+END_SRC
 *** Scrolling
 
 		#+BEGIN_SRC emacs-lisp
