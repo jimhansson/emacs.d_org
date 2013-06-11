@@ -2188,7 +2188,7 @@ that I share between work and home
 *** Filesets for OrgFiles                                          :filesets:
 *** Logging and clocking
     
-    I want to have the change to enter a message for every change a
+    I want to have the chance to enter a message for every change a
     make to items that are scheduled and for what I make with my
     time. It's easy to ignore if not needed I just pres C-c C-c, and no
     message will be saved.
@@ -2222,6 +2222,23 @@ that I share between work and home
                              (list ':tree
                                    directory
                                    "^.+\\.org$")))))
+		#+END_SRC
+
+		The Commands for clocking in and clocking out are by default only bound in org-mode
+		this means I always have to switch to a org-mode buffer and that annoys me very
+		much. Therefor we bind function that have to do with to F2
+
+		#+BEGIN_SRC emacs-lisp
+      (let ((key "<f2>"))
+        (global-set-key (kbd key) 'org-clock-in)
+        (global-set-key (kbd (concat "M-" key)) 'org-clock-goto)
+        (global-set-key (kbd (concat "S-" key)) 'org-clock-out)
+        ;; This binds C-key to list last X clocked items and let me choose easy between which
+        ;; one of them I should clock into, just like as if I hade called org-clock-in with a
+        ;; prefix (C-u)
+        (global-set-key (kbd (concat "C-" key)) (lambda () (interactive)
+                                      (let ((current-prefix-arg '(4))) 
+                                        (call-interactively 'org-clock-in)))))
 		#+END_SRC
 
 *** Agenda                                                           :habits:
