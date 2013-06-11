@@ -2197,8 +2197,9 @@ that I share between work and home
       (setq org-clock-into-drawer t)
       (setq org-log-into-drawer t)
       (setq org-log-redeadline (quote note))
+      (setq org-clock-clocked-in-display 'frame-title)
       ;; Show lot of clocking history so it's easy to pick items off the list
-      (setq org-clock-history-length 72)
+      (setq org-clock-history-length 25)
       ;; Resume clocking task on clock-in if the clock is open
       (setq org-clock-in-resume t)
       ;; This removes clocked tasks with 0:00 duration
@@ -2241,6 +2242,7 @@ that I share between work and home
                                         (call-interactively 'org-clock-in)))))
 		#+END_SRC
 
+		
 *** Agenda                                                           :habits:
 
 		#+BEGIN_SRC emacs-lisp
