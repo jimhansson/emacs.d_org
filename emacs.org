@@ -32,6 +32,15 @@ that I share between work and home
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 *** TODO check out smex.
+*** TODO we maybe should remove flyspell-prog-mode from languages hooks
+		:LOGBOOK:
+		- Refiled on [2013-06-12 on 01:17] \\
+			should not have issues spread out in the file
+		:END:
+		and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
+		the major mode is a programming mode and "vanilla" flyspell-mode when it is
+		not. and bind that to *S-<F8>*.
+
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -596,52 +605,63 @@ that I share between work and home
 		
 		#+BEGIN_SRC emacs-lisp -n -r
       (jiha-safe-require 'flyspell
-                        ;; Create a ring of languages I would like to use
-                        (progn (let ((langs '("american" "svenska" "norsk")))                 (ref:dict_lang)
-                                    (setq jiha-lang-ring (make-ring (length langs)))
-                                    (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
-                               
-                               ;; A function to easy switch between dictionaries using ring from above
-                               (defun jiha-cycle-ispell-languages ()                          (ref:dict_func)
-                                 (interactive)
-                                 (let ((lang (ring-ref jiha-lang-ring -1)))
-                                   (ring-insert jiha-lang-ring lang)
-                                   (ispell-change-dictionary lang)))
-                               
-                               ;; Fly-spell in C based programming modes
-                               (add-hook 'c-mode-hook
-                                         (lambda () (flyspell-prog-mode)))
-                               
-                               ;; Fly-spell in C++ based programming modes
-                               (add-hook 'c++-mode-hook
-                                         (lambda () (flyspell-prog-mode)))
-                               
-                               ;; Fly-spell in emacs-lisp mode
-                               (add-hook 'lisp-mode-hook
-                                         (lambda () (flyspell-prog-mode)))
-                               
-                               ;; eays access to flyspell/ispell functionality.
-                               (global-set-key (kbd "<f8>")     'ispell-word)
-                               (global-set-key (kbd "C-<f8>")   'flyspell-mode)
-                               (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) (ref:dict_cycle)
-                               (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
-                               (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
-                               
-                               (setq flyspell-issue-message-flag nil)))
+                         ;; Create a ring of languages I would like to use
+                         (progn (let ((langs '("american" "svenska" "norsk")))                 (ref:dict_lang)
+                                     (setq jiha-lang-ring (make-ring (length langs)))
+                                     (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
+                                
+                                ;; A function to easy switch between dictionaries using ring
+                                ;; from above.
+                                (defun jiha-cycle-ispell-languages ()                          (ref:dict_func)
+                                  (interactive)
+                                  (let ((lang (ring-ref jiha-lang-ring -1)))
+                                    (ring-insert jiha-lang-ring lang)
+                                    (ispell-change-dictionary lang)))
+                                
+                                ;; smart function that will activate flyspell-mode or
+                                ;; flyspell-prog-mode depending on mode of buffer. 
+                                (defun jiha-flyspell-mode ()
+                                  (interactive)
+                                  (let ((text-modes '(org-mode))
+                                        (prog-modes '(csharp-mode c++-mode c-mode lisp-mode)))
+                                    (when (member major-mode text-modes)
+                                      (if (and (boundp 'flyspell-mode) flyspell-mode)
+                                          (flyspell-mode 0)
+                                        (flyspell-mode 1)))
+                                    (when (member major-mode prog-modes)
+                                      (if (and (boundp 'flyspell-mode) flyspell-mode)
+                                          (flyspell-mode 0)
+                                        (flyspell-prog-mode)))))
+                                        
+                                ;; Fly-spell in C based programming modes
+                                (add-hook 'c-mode-hook
+                                          (lambda () (flyspell-prog-mode)))
+                                
+                                ;; Fly-spell in C++ based programming modes
+                                (add-hook 'c++-mode-hook
+                                          (lambda () (flyspell-prog-mode)))
+                                
+                                ;; Fly-spell in emacs-lisp mode
+                                (add-hook 'lisp-mode-hook
+                                          (lambda () (flyspell-prog-mode)))
+                                
+                                ;; eays access to flyspell/ispell functionality.
+                                (global-set-key (kbd "<f8>")     'ispell-word)
+                                (global-set-key (kbd "C-<f8>")   'jiha-flyspell-mode)
+                                (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) (ref:dict_cycle)
+                                (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+                                (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
+                                
+                                (setq flyspell-issue-message-flag nil)))
       
 		#+END_SRC        
-		
+
 		To solve the problem with multiple languages we first need to define what languages
 		we are interesting in switching between, if we don't do that the result will be that
 		on systems with many dictionaries it will be to much of a problem switching. So first
 		we create a ring of languages at [[(dict_lang)][let langs]], that ring is used by a function that will move
 		from one language after another and that function is defined at [[(dict_func)][defun]], and at last
 		we bind that function to a key-combo for easy access at [[(dict_cycle)][global-set...]]
-
-***** TODO we maybe should remove flyspell-prog-mode from languages hooks
-			and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
-			the major mode is a programming mode and "vanilla" flyspell-mode when it is
-			not. and bind that to *S-<F8>*.
 
 ***** Installing ispell on windows																		:instw:
 
