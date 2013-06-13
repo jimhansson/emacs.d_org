@@ -32,14 +32,17 @@ that I share between work and home
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 *** TODO check out smex.
-*** TODO we maybe should remove flyspell-prog-mode from languages hooks
+*** FIXED we maybe should remove flyspell-prog-mode from languages hooks
 		:LOGBOOK:
+		CLOCK: [2013-06-13 to 13:44]
+		- State "FIXED"      from "TODO"       [2013-06-13 to 13:43] \\
+			Fixed now, but need to add modes that tells what to use.
 		- Refiled on [2013-06-12 on 01:17] \\
 			should not have issues spread out in the file
 		:END:
 		and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
 		the major mode is a programming mode and "vanilla" flyspell-mode when it is
-		not. and bind that to *S-<F8>*.
+		not. and bind that to *C-<F8>*.
 
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
@@ -624,15 +627,20 @@ that I share between work and home
                                   (interactive)
                                   (let ((text-modes '(org-mode))
                                         (prog-modes '(csharp-mode c++-mode c-mode lisp-mode)))
-                                    (when (member major-mode text-modes)
-                                      (if (and (boundp 'flyspell-mode) flyspell-mode)
-                                          (flyspell-mode 0)
-                                        (flyspell-mode 1)))
-                                    (when (member major-mode prog-modes)
-                                      (if (and (boundp 'flyspell-mode) flyspell-mode)
-                                          (flyspell-mode 0)
-                                        (flyspell-prog-mode)))))
-                                        
+                                    (cond ((member major-mode text-modes)
+                                           (if (and (boundp 'flyspell-mode) flyspell-mode)
+                                               (flyspell-mode 0)
+                                             (flyspell-mode 1)))
+                                          ((member major-mode prog-modes)
+                                           (if (and (boundp 'flyspell-mode) flyspell-mode)
+                                               (flyspell-mode 0)
+                                             (flyspell-prog-mode)))
+                                          ;; default case
+                                          (t 
+                                           (if (and (boundp 'flyspell-mode) flyspell-mode)
+                                               (flyspell-mode 0)
+                                             (flyspell-mode 1))))))
+                                                                  
                                 ;; Fly-spell in C based programming modes
                                 (add-hook 'c-mode-hook
                                           (lambda () (flyspell-prog-mode)))
@@ -645,7 +653,7 @@ that I share between work and home
                                 (add-hook 'lisp-mode-hook
                                           (lambda () (flyspell-prog-mode)))
                                 
-                                ;; eays access to flyspell/ispell functionality.
+                                ;; easy access to flyspell/ispell functionality.
                                 (global-set-key (kbd "<f8>")     'ispell-word)
                                 (global-set-key (kbd "C-<f8>")   'jiha-flyspell-mode)
                                 (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) (ref:dict_cycle)
