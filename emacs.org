@@ -840,22 +840,26 @@ that I share between work and home
       (cond
        ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
        ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
-       (t (format "%8d  " (buffer-size)))))
+       (t (format "%8d b" (buffer-size)))))
     
     ;; Modify the default ibuffer-formats
     (setq ibuffer-formats
           '((mark modified read-only " "
-                  (name 18 18 :left :elide)
+                  (name 20 20 :left :elide)
                   " "
                   (size-h 9 -1 :right)
                   " "
                   (mode 16 16 :left :elide)
                   " "
-                  filename-and-process)))
+                  filename-and-process)
+            (mark " "
+                  (name 20 -1)
+                  " " filename)))
 	#+END_SRC
 
  #+RESULTS:
- | mark | modified | read-only |   | (name 18 18 :left :elide) |   | (size-h 9 -1 :right) |   | (mode 16 16 :left :elide) |   | filename-and-process |
+ | mark | modified | read-only    |   | (name 20 20 :left :elide) |   | (size-h 9 -1 :right) |   | (mode 16 16 :left :elide) |   | filename-and-process |
+ | mark |          | (name 20 -1) |   | filename                  |   |                      |   |                           |   |                      |
 
 	#+BEGIN_SRC emacs-lisp
     (iswitchb-mode 1)
@@ -914,10 +918,15 @@ that I share between work and home
                       (mode . gnus-article-mode)
                       (name . "^\\.bbdb$")
                       (name . "^\\.newsrc-dribble")))
+             ("Custom" (mode . Custom-mode))
              ("Help" (or (name . "\*Help\*")
                          (name . "\*Apropos\*")
                          (name . "\*info\*"))))))
 	 #+END_SRC
+
+ #+RESULTS:
+ | home | (Emacs (or (filename . .emacs.d) (filename . emacs.org) (filename . .emacs))) | (Org (or (filename . .org) (filename . OrgMode) (name . *Org Agenda*) (name . diary))) | (code (or (mode . csharp-mode) (mode . c++-mode) (mode . lisp-mode) (mode . c-mode))) | (Web Dev (or (mode . html-mode) (mode . css-mode))) | (SQL (or (filename . .plb) (filename . .sql) (mode . sqli-mode) (name . *SQL*))) | (VC (or (name . *svn) (name . *magit))) | (ERC (or (mode . erc-mode) (mode . erc-list-mode))) | (gnus (or (mode . message-mode) (mode . bbdb-mode) (mode . mail-mode) (mode . gnus-group-mode) (mode . gnus-summary-mode) (mode . gnus-article-mode) (name . ^\.bbdb$) (name . ^\.newsrc-dribble))) | (Custom (mode . Custom-mode)) | (Help (or (name . *Help*) (name . *Apropos*) (name . *info*))) |
+
 	
 	#+BEGIN_SRC emacs-lisp
     (add-hook 'ibuffer-mode-hook 
@@ -932,15 +941,6 @@ that I share between work and home
         ad-do-it
         (ibuffer-jump-to-buffer recent-buffer-name)))
     (ad-activate 'ibuffer)
-    
-    
-    (setq ibuffer-formats
-          '((mark modified read-only " "
-                  (name 25 25 :left :elide) " "
-                  (size 9 -1 :right) " "
-                  (mode 16 16 :left :elide) " " filename-and-process)
-            (mark " " (name 16 -1) " " filename)))
-    
     
     (defun switch-buffers-between-frames ()
       "switch-buffers-between-frames switches the buffers between the two last frames"
