@@ -34,8 +34,8 @@ that I share between work and home
 *** TODO check out smex.
 *** FIXED we maybe should remove flyspell-prog-mode from languages hooks
 		:LOGBOOK:
-		CLOCK: [2013-06-13 to 13:44]
-		- State "FIXED"      from "TODO"       [2013-06-13 to 13:43] \\
+		CLOCK: [2013-06-13 to 13:44]--[2013-06-13 to 15:01] =>  1:17
+		- State "FIXED"      from "TODO"       [2013-06-13 to 15:01] \\
 			Fixed now, but need to add modes that tells what to use.
 		- Refiled on [2013-06-12 on 01:17] \\
 			should not have issues spread out in the file
@@ -44,6 +44,15 @@ that I share between work and home
 		the major mode is a programming mode and "vanilla" flyspell-mode when it is
 		not. and bind that to *C-<F8>*.
 
+*** TODO %U "macro" in capture tempates does not work in longrunning instances of emacs.
+		:LOGBOOK:
+		CLOCK: [2013-06-16 sö 23:56]--[2013-06-17 må 00:02] =>  0:06
+		- signat upp mig på org-mode mailing lista, borde sätta upp filter på gmail
+		:END:
+		I a let a emacs instance run for a few days the %U macro does not reflect the current
+		date as it should, I am guessing a get the date from the last restart of emacs.
+		I should try to mail this to the org-mode list to see if the can tell me what is
+		wrong.
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -1147,10 +1156,11 @@ that I share between work and home
 
       This works in any language that flymake supports
 
-      #+BEGIN_SRC emacs-lisp
+      #+BEGIN_SRC emacs-lisp 
         ;; we will active this when I have a configuration that will work on both windows and linux.
         ;;(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
       #+END_SRC
+
 *** Compile  
 *** Coding styles
     :LOGBOOK:
@@ -2603,6 +2613,7 @@ that I share between work and home
     (setq erc-autojoin-channels-alist
           ;; localhost should have a ssh tunnel to my server
           '(("localhost" "#emacs" "#org-mode" "#erc")
+            ("irc.freenode.net" "#emacs" "#org-mode" "#erc")
             ("oftc.net" "#BitlBee")))
     
     (defun irc-maybe ()
