@@ -44,7 +44,7 @@ that I share between work and home
 		the major mode is a programming mode and "vanilla" flyspell-mode when it is
 		not. and bind that to *C-<F8>*.
 
-*** TODO %U "macro" in capture tempates does not work in longrunning instances of emacs.
+*** BUG %U "macro" in capture tempates does not work in longrunning instances of emacs.
 		:LOGBOOK:
 		CLOCK: [2013-06-16 sö 23:56]--[2013-06-17 må 00:02] =>  0:06
 		- signat upp mig på org-mode mailing lista, borde sätta upp filter på gmail
@@ -53,6 +53,13 @@ that I share between work and home
 		date as it should, I am guessing a get the date from the last restart of emacs.
 		I should try to mail this to the org-mode list to see if the can tell me what is
 		wrong.
+
+*** TODO add ibuffer "layouts" that are different between work, code, home, otherstuff....
+
+		- I need one for work related stuff that are not code, things like mail, org-files...
+		- I need one for coding.
+		- I need one for private stuff
+
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -857,9 +864,9 @@ that I share between work and home
                   " " filename)))
 	#+END_SRC
 
- #+RESULTS:
- | mark | modified | read-only    |   | (name 20 20 :left :elide) |   | (size-h 9 -1 :right) |   | (mode 16 16 :left :elide) |   | filename-and-process |
- | mark |          | (name 20 -1) |   | filename                  |   |                      |   |                           |   |                      |
+  #+RESULTS:
+	| mark | modified | read-only    |   | (name 20 20 :left :elide) |   | (size-h 9 -1 :right) |   | (mode 16 16 :left :elide) |   | filename-and-process |
+	| mark |          | (name 20 -1) |   | filename                  |   |                      |   |                           |   |                      |
 
 	#+BEGIN_SRC emacs-lisp
     (iswitchb-mode 1)
@@ -958,15 +965,19 @@ that I share between work and home
 *** Colours in buffer list                                            :faces:
 
 		#+BEGIN_SRC emacs-lisp
-			; coloring
-			
-			; format of the list is priority, condition, face
-			; highest priority wins
-			;;(setq 'ibuffer-fontification-alist
-			;;			'(10 (Form)
-			;;					 (face)))									
-			
+      (setq ibuffer-fontification-alist
+            '((1 (eq major-mode 'org-mode) (font-lock-keyword-face))
+              (4 (eq buffer-file-name "~/diary") (font-lock-keywork-face)) ;; does not work??
+              (2 (eq major-mode 'Custom-mode) (font-lock-preprocessor-face))
+              (3 (eq major-mode 'erc-mode) (font-lock-string-face))))
 		#+END_SRC
+
+  #+RESULTS:
+	| 1 | (eq major-mode (quote org-mode))    | (font-lock-keyword-face)      |
+	| 4 | (eq buffer-file-name ~/diary)       | (font-lock-keywork-face)      |
+	| 2 | (eq major-mode (quote Custom-mode)) | (font-lock-preprocessor-face) |
+	| 3 | (eq major-mode (quote erc-mode))    | (font-lock-string-face)       |
+
 *** Iswitch and uniquify compatibility                             :uniquify:
 
 		The library uniquify overrides Emacs default mechanism for making
