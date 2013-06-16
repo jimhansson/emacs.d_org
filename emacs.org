@@ -833,6 +833,31 @@ that I share between work and home
 	iswitchb-default-method 'samewindow)
 
 	#+BEGIN_SRC emacs-lisp
+      
+    ;; Use human readable Size column instead of original one
+    (define-ibuffer-column size-h
+      (:name "Size" :inline t)
+      (cond
+       ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
+       ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
+       (t (format "%8d  " (buffer-size)))))
+    
+    ;; Modify the default ibuffer-formats
+    (setq ibuffer-formats
+          '((mark modified read-only " "
+                  (name 18 18 :left :elide)
+                  " "
+                  (size-h 9 -1 :right)
+                  " "
+                  (mode 16 16 :left :elide)
+                  " "
+                  filename-and-process)))
+	#+END_SRC
+
+ #+RESULTS:
+ | mark | modified | read-only |   | (name 18 18 :left :elide) |   | (size-h 9 -1 :right) |   | (mode 16 16 :left :elide) |   | filename-and-process |
+
+	#+BEGIN_SRC emacs-lisp
     (iswitchb-mode 1)
     ;; rebind the normal key for buffer list to ibuffer
     (global-set-key (kbd "C-x C-b") 'ibuffer)
