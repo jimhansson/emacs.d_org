@@ -14,6 +14,7 @@ that I share between work and home
 #+COLUMNS: %50ITEM %4TODO %20TAGS
 #+LINK: norang http://doc.norang.ca/org-mode.html#
 #+LINK: wiki http://emacswiki.org/emacs/
+	
 * Bugs
 *** TODO I don't want submodules to show up in git status
 		:LOGBOOK:
@@ -172,6 +173,9 @@ that I share between work and home
 						 
 		Not so important, but nice to have.
 		- pretty-lambdada :: Show the word `lambda' as the Greek letter.
+				 less important now when i have pretty-mode
+
+
 *** Other important stuff
 ***** Only load things that exists.
 
@@ -269,7 +273,7 @@ that I share between work and home
 		#+END_SRC
 
 *** Menu-Bar
-		
+
 		Good as it is.
 
 *** Mode-line                                                      :modeline:
@@ -680,6 +684,7 @@ that I share between work and home
       
 		#+END_SRC        
 
+***** Installing ispell on windows                                    :instw:
 		To solve the problem with multiple languages we first need to define what languages
 		we are interesting in switching between, if we don't do that the result will be that
 		on systems with many dictionaries it will be to much of a problem switching. So first
@@ -689,10 +694,10 @@ that I share between work and home
 
 ***** Installing ispell on windows																		:instw:
 
-			look here and download everthing you need.
-			http://aspell.net/win32/
+      look here and download everthing you need.
+      http://aspell.net/win32/
 
-			add aspell directory to path
+      add aspell directory to path
 
 *** Whitespace																									:keybindings:
 
@@ -1148,7 +1153,7 @@ that I share between work and home
 			files, directory buffers etc...
 
 * Buffer Menu
-*** Font lock 																										 :fontlock:
+*** Font lock                                                      :fontlock:
 
 		If you use ElectricBufferList, then simply use this instead for the
 		last line:
@@ -2568,7 +2573,7 @@ that I share between work and home
 
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
-* Other Setup 																									:keybindings:
+* Other Setup                                                   :keybindings:
 
 	#+BEGIN_SRC emacs-lisp
     (setq-default indent-tabs-mode t)
@@ -2585,7 +2590,7 @@ that I share between work and home
     (add-to-list 'load-path (concat local-emacs-org-dir "local"))
     (org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
 	#+END_SRC
-
+  
 * File-sets 																											 :filesets:
 	
 	The commands that can operate on file sets are specified in the global
