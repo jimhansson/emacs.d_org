@@ -826,7 +826,6 @@ that I share between work and home
 		#+END_SRC
 
 ***** TODO move my changes from pretty-mode.el to this file
-			I have made changes to pretty-mode.el, those should be moved here.
 * Other Major Modes
 * Iswitch Buffers                                                   :buffers:
 
