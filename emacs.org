@@ -349,9 +349,14 @@ that I share between work and home
 		
 		#+BEGIN_SRC emacs-lisp
       (jiha-safe-require 'expand-region
-        (global-set-key (kbd "C-+") 'er/expand-region))
+        (progn
+          (global-set-key (kbd "C-+") 'er/expand-region)
+          (global-set-key (kbd "C--") 'er/contract-region)))
       
 		#+END_SRC
+
+  #+RESULTS:
+	: er/contract-region
 
 *** Multiple-cursors
 		
