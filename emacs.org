@@ -832,6 +832,18 @@ that I share between work and home
 		#+END_SRC
 
 ***** TODO move my changes from pretty-mode.el to this file
+*** Interaction log
+
+		#+BEGIN_SRC emacs-lisp
+      (require 'interaction-log)
+      ;;(interaction-log-mode +1)
+      
+      (global-set-key [f1] (lambda () (interactive) (display-buffer ilog-buffer-name)))          
+		#+END_SRC
+
+  #+RESULTS:
+	| lambda | nil | (interactive) | (display-buffer ilog-buffer-name) |
+	
 * Other Major Modes
 * Iswitch Buffers                                                   :buffers:
 
