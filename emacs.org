@@ -61,6 +61,8 @@ that I share between work and home
 		- I need one for coding.
 		- I need one for private stuff
 
+*** BUG [[*Iswitch%20Buffers][Iswitch Buffers]] has problem on windows with defining my own columns
+		have comment out the src section
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -383,7 +385,6 @@ that I share between work and home
 		Desktop sessions are considered “new” by CleanBufferList, even
 		though they may be considered “old”. 
 
-
 *** Expand-region
 		
 		#+BEGIN_SRC emacs-lisp
@@ -626,16 +627,16 @@ that I share between work and home
 		I highly suggest setting ‘flyspell-issue-message-flag’ to nil, as printing messages
 		for every word (when checking the entire buffer) causes an enormous slowdown.
 		
-		#+BEGIN_SRC emacs-lisp -n -r
+		#+BEGIN_SRC emacs-lisp
       (jiha-safe-require 'flyspell
                          ;; Create a ring of languages I would like to use
-                         (progn (let ((langs '("american" "svenska" "norsk")))                 (ref:dict_lang)
+                         (progn (let ((langs '("american" "svenska" "norsk")))                 ;;(ref:dict_lang)
                                      (setq jiha-lang-ring (make-ring (length langs)))
                                      (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
                                 
                                 ;; A function to easy switch between dictionaries using ring
                                 ;; from above.
-                                (defun jiha-cycle-ispell-languages ()                          (ref:dict_func)
+                                (defun jiha-cycle-ispell-languages ()                          ;;(ref:dict_func)
                                   (interactive)
                                   (let ((lang (ring-ref jiha-lang-ring -1)))
                                     (ring-insert jiha-lang-ring lang)
@@ -676,7 +677,7 @@ that I share between work and home
                                 ;; easy access to flyspell/ispell functionality.
                                 (global-set-key (kbd "<f8>")     'ispell-word)
                                 (global-set-key (kbd "C-<f8>")   'jiha-flyspell-mode)
-                                (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) (ref:dict_cycle)
+                                (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) ;;(ref:dict_cycle)
                                 (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
                                 (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
                                 
@@ -845,35 +846,6 @@ that I share between work and home
 	iswitchb-default-method 'samewindow)
 
 	#+BEGIN_SRC emacs-lisp
-      
-    ;; Use human readable Size column instead of original one
-    (define-ibuffer-column size-h
-      (:name "Size" :inline t)
-      (cond
-       ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
-       ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
-       (t (format "%8d b" (buffer-size)))))
-    
-    ;; Modify the default ibuffer-formats
-    (setq ibuffer-formats
-          '((mark modified read-only " "
-                  (name 20 20 :left :elide)
-                  " "
-                  (size-h 9 -1 :right)
-                  " "
-                  (mode 16 16 :left :elide)
-                  " "
-                  filename-and-process)
-            (mark " "
-                  (name 20 -1)
-                  " " filename)))
-	#+END_SRC
-
-  #+RESULTS:
-	| mark | modified | read-only    |   | (name 20 20 :left :elide) |   | (size-h 9 -1 :right) |   | (mode 16 16 :left :elide) |   | filename-and-process |
-	| mark |          | (name 20 -1) |   | filename                  |   |                      |   |                           |   |                      |
-
-	#+BEGIN_SRC emacs-lisp
     (iswitchb-mode 1)
     ;; rebind the normal key for buffer list to ibuffer
     (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -896,6 +868,61 @@ that I share between work and home
               ("<down>"  . ignore             ))))
     (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 	#+END_SRC
+
+	#+BEGIN_SRC emacs-lisp
+    (add-hook 'ibuffer-mode-hook 
+              '(lambda ()
+                 (ibuffer-auto-mode 1)
+                 (ibuffer-switch-to-saved-filter-groups "home")))
+    
+    ;; Switching to ibuffer puts the cursor on the most recent buffer
+    (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+      "Open ibuffer with cursor pointed to most recent buffer name"
+      (let ((recent-buffer-name (buffer-name)))
+        ad-do-it
+        (ibuffer-jump-to-buffer recent-buffer-name)))
+    (ad-activate 'ibuffer)
+    
+    (defun switch-buffers-between-frames ()
+      "switch-buffers-between-frames switches the buffers between the two last frames"
+      (interactive)
+      (let ((this-frame-buffer nil)
+            (other-frame-buffer nil))
+        (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
+        (other-frame 1)
+        (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
+        (switch-to-buffer this-frame-buffer)
+        (other-frame 1)
+        (switch-to-buffer other-frame-buffer))) 
+	#+END_SRC
+
+	#+BEGIN_SRC emacs-lisp
+    ;; Use human readable Size column instead of original one
+    ;; (define-ibuffer-column size-h
+    ;;   (:name "Size" :inline t)
+    ;;   (cond
+    ;;    ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
+    ;;    ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
+    ;;    (t (format "%8d b" (buffer-size)))))
+    
+    ;; Modify the default ibuffer-formats
+    ;; (setq ibuffer-formats
+    ;;       '((mark modified read-only " "
+    ;;               (name 20 20 :left :elide)
+    ;;               " "
+    ;;               (size-h 9 -1 :right)
+    ;;               " "
+    ;;               (mode 16 16 :left :elide)
+    ;;               " "
+    ;;               filename-and-process)
+    ;;         (mark " "
+    ;;               (name 20 -1)
+    ;;               " " filename)))
+	#+END_SRC
+
+  #+RESULTS:
+	| mark | modified | read-only    |   | (name 20 20 :left :elide) |   | (size-h 9 -1 :right) |   | (mode 16 16 :left :elide) |   | filename-and-process |
+	| mark |          | (name 20 -1) |   | filename                  |   |                      |   |                           |   |                      |
 	
 	#+BEGIN_SRC emacs-lisp
     (setq ibuffer-saved-filter-groups
@@ -940,32 +967,6 @@ that I share between work and home
  | home | (Emacs (or (filename . .emacs.d) (filename . emacs.org) (filename . .emacs))) | (Org (or (filename . .org) (filename . OrgMode) (name . *Org Agenda*) (name . diary))) | (code (or (mode . csharp-mode) (mode . c++-mode) (mode . lisp-mode) (mode . c-mode))) | (Web Dev (or (mode . html-mode) (mode . css-mode))) | (SQL (or (filename . .plb) (filename . .sql) (mode . sqli-mode) (name . *SQL*))) | (VC (or (name . *svn) (name . *magit))) | (ERC (or (mode . erc-mode) (mode . erc-list-mode))) | (gnus (or (mode . message-mode) (mode . bbdb-mode) (mode . mail-mode) (mode . gnus-group-mode) (mode . gnus-summary-mode) (mode . gnus-article-mode) (name . ^\.bbdb$) (name . ^\.newsrc-dribble))) | (Custom (mode . Custom-mode)) | (Help (or (name . *Help*) (name . *Apropos*) (name . *info*))) |
 
 	
-	#+BEGIN_SRC emacs-lisp
-    (add-hook 'ibuffer-mode-hook 
-              '(lambda ()
-                 (ibuffer-auto-mode 1)
-                 (ibuffer-switch-to-saved-filter-groups "home")))
-    
-    ;; Switching to ibuffer puts the cursor on the most recent buffer
-    (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
-      "Open ibuffer with cursor pointed to most recent buffer name"
-      (let ((recent-buffer-name (buffer-name)))
-        ad-do-it
-        (ibuffer-jump-to-buffer recent-buffer-name)))
-    (ad-activate 'ibuffer)
-    
-    (defun switch-buffers-between-frames ()
-      "switch-buffers-between-frames switches the buffers between the two last frames"
-      (interactive)
-      (let ((this-frame-buffer nil)
-            (other-frame-buffer nil))
-        (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
-        (other-frame 1)
-        (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
-        (switch-to-buffer this-frame-buffer)
-        (other-frame 1)
-        (switch-to-buffer other-frame-buffer))) 
-	#+END_SRC
 
 *** Colours in buffer list                                            :faces:
 
@@ -2747,8 +2748,6 @@ that I share between work and home
 	- Julien Danjou :: http://git.naquadah.org/git/~jd/emacs.d.git
 	- Thomas Krennwallner's :: http://www.postsubmeta.net/MyConfig/Emacs 
 
-#	 LocalWords:	Uniquify Iswitch emacs src Whitespace Google LocalWords BBDB SQL PLSQL
-nXML Krennwallner's
 * Licensies
 
 	Here I will try to collect the license information for all the parts that make up my
@@ -2761,8 +2760,13 @@ nXML Krennwallner's
 	
 * Variable list @ end of file
 
+	Thanks to local file variables is implemented in a little special way that has to do
+	with how it detects comments it's possible to have this part functional in both
+	emacs.org and in the exported emacs.el
+
 	#+BEGIN_SRC emacs-lisp
     ;; Local Variables:
     ;; tab-width: 2;
+    ;; LocalWords: Uniquify Iswitch emacs src Whitespace Google LocalWords BBDB SQL PLSQL nXML Krennwallner's
     ;; End:
 	#+END_SRC
