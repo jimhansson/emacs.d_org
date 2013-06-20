@@ -54,6 +54,9 @@ that I share between work and home
 		date as it should, I am guessing a get the date from the last restart of emacs.
 		I should try to mail this to the org-mode list to see if the can tell me what is
 		wrong.
+		
+		Also the date+tree capture templates does not work. For some reason it also adds
+		entries under way to old dates. and sometime even in the future. 
 
 *** TODO add ibuffer "layouts" that are different between work, code, home, otherstuff....
 

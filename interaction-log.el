@@ -1,3 +1,5 @@
+;;; -*- fill-column: 65 -*-
+
 ;;; interaction-log.el --- exhaustive log of interactions with Emacs
 
 ;; Copyright (C) 2012-2013 Michael Heerdegen
@@ -112,6 +114,11 @@ If t, don't truncate the buffer when it becomes large"
   :group 'interaction-log :type '(choice (const  :tag "Unlimited" t)
                                          (number :tag "lines")))
 
+(defcustom ilog-sexp-form-log t
+	"tells if we want logging to be in a format that can be easlly
+processed and analized. so we can telle the users what they are
+	doing wrong and should improve on when using emacs." 
+	:group 'interaction-log :type 'boolean)
 
 ;;; Internal Variables
 
@@ -141,6 +148,7 @@ Bound to t  when adding to the log buffer.")
 (defvar ilog-temp-load-hist nil
   "Holding file loads not-yet processed by us.")
 
+(defvar ilog-start-time nil)
 ;;; User commands
 
 (define-minor-mode interaction-log-mode
@@ -151,12 +159,13 @@ Logged stuff goes to the *Emacs Log* buffer."
   :global t
   (if interaction-log-mode
       (progn
+				(setq ilog-start-time (current-time))
         (add-hook 'after-change-functions #'ilog-note-buffer-change)
         (add-hook 'pre-command-hook       #'ilog-record-this-command)
         (add-hook 'post-command-hook      #'ilog-post-command)
         (setq ilog-truncation-timer (run-at-time 30 30 #'ilog-truncate-log-buffer))
         (setq ilog-insertion-timer (run-with-idle-timer .3 .3 #'ilog-update-log-buffer))
-        (message "Interaction Log: started logging in %s" ilog-buffer-name))
+				(ilog-log-start-message ilog-start-time))
     (remove-hook 'after-change-functions #'ilog-note-buffer-change)
     (remove-hook 'pre-command-hook       #'ilog-record-this-command)
     (remove-hook 'post-command-hook      #'ilog-post-command)
@@ -166,6 +175,33 @@ Logged stuff goes to the *Emacs Log* buffer."
     (setq ilog-insertion-timer nil)))
 
 ;;; Helper funs
+
+(defun ilog-log-start-message (time)
+	""
+	(progn 
+		(message "Interaction Log: started logging in %s"
+						 ilog-buffer-name)
+		(if ilog-sexp-form-log 
+				(let* ((ilog-buffer
+								(or (get-buffer ilog-buffer-name)
+										(with-current-buffer (generate-new-buffer	ilog-buffer-name)
+											(setq truncate-lines t)
+											(set (make-local-variable 'scroll-margin)	0)
+											(current-buffer))))
+							 (ilog-buffer-visisble-p nil) (wins-to-scroll ())	atebp)
+					(with-current-buffer ilog-buffer
+						(let ((deactivate-mark nil) 
+									(inhibit-read-only))
+							(save-excursion
+								(goto-char (point-max))
+								(insert "(:buffer-list (")
+								(dolist (buf (buffer-list)) 
+										(insert (buffer-name buf) " "))
+								(insert ")\n")
+								(insert " :start-time " (format-time-string	"%s" time)
+												"   ;" (format-time-string "%H:%M:%S" time) "\n")
+								(insert " :events (")
+								)))))))
 
 (defun ilog-log-file-load (file)
   "Annotate a file load in `ilog-temp-load-hist'."
@@ -277,17 +313,33 @@ Goes to `post-command-hook'."
         (save-excursion
           (goto-char (point-max))
           (dolist (entry (nreverse ilog-recent-commands))
-            (destructuring-bind (key cmd buf pre-mes post-mes chg load-levels) entry
-              (insert (if (looking-back "\\`\\|\n") "" "\n")
-                      (ilog-format-messages pre-mes)
-                      (propertize (key-description key)
-                                  'face (case chg
-                                          ((t)    'ilog-change-face)
-                                          ((echo) 'ilog-echo-face)
-                                          (t      'ilog-non-change-face)))
-                      " " (format "%s" cmd) " " (format "\"%s\"" buf)
-                      (if post-mes "\n")
-                      (ilog-format-messages post-mes load-levels))
+            (destructuring-bind (key cmd buf pre-mes post-mes chg
+																		 load-levels) entry
+							(if ilog-sexp-form-log
+									(insert (if (looking-back "\\`\\|\n") "" "\n")
+													(ilog-format-messages pre-mes)
+													"  (" "(current-time)" " "
+													(propertize (key-description key)
+																			'face (case chg
+																							((t)    'ilog-change-face)
+																							((echo) 'ilog-echo-face)
+																							(t      'ilog-non-change-face)))
+													" " (format "%s" cmd) " " (format "\"%s\"" buf)
+													")"
+													(if post-mes "\n")
+													(ilog-format-messages post-mes load-levels)
+													)
+								(insert (if (looking-back "\\`\\|\n") "" "\n")
+												(format-time-string "%H:%M:%S:%3N") " "
+												(ilog-format-messages pre-mes)
+												(propertize (key-description key)
+																		'face (case chg
+																						((t)    'ilog-change-face)
+																						((echo) 'ilog-echo-face)
+																						(t      'ilog-non-change-face)))
+												" " (format "%s" cmd) " " (format "\"%s\"" buf)
+												(if post-mes "\n")
+												(ilog-format-messages post-mes load-levels)))
               (deactivate-mark t)))
           (setq ilog-recent-commands ())))
       (when ilog-tail-mode
