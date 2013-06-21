@@ -33,6 +33,9 @@ that I share between work and home
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 *** TODO check out smex.
+*** TODO replace setq and other things with custom-set-variables calls
+		might allow for using custom for changing varibles?? also does require on things.
+
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -1106,7 +1109,320 @@ that I share between work and home
 * Coding
   Here I will place everything that has todo with coding
 
+*** Languages modes
+***** Haskell
+			#+BEGIN_SRC emacs-lisp
+        (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+        
+        ;; only one of these 3 below should be used at one time
+        ;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+        (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+        ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
+        
+        ;; support for inferior haskell shell
+        (add-hook 'haskell-mode-hook (lambda (jiha-safe-require 'inf-haskell ())))
+        
+        ;; keep my files looking good
+        (setq haskell-stylish-on-save t)
+
+        ;; alignment rules
+        (add-to-list 'align-rules-list
+                     '(haskell-types
+                       (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+                       (modes quote (haskell-mode literate-haskell-mode))))
+        (add-to-list 'align-rules-list
+                     '(haskell-assignment
+                       (regexp . "\\(\\s-+\\)=\\s-+")
+                       (modes quote (haskell-mode literate-haskell-mode))))
+        (add-to-list 'align-rules-list
+                     '(haskell-arrows
+                       (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+                       (modes quote (haskell-mode literate-haskell-mode))))
+        (add-to-list 'align-rules-list
+                     '(haskell-left-arrows
+                       (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+                       (modes quote (haskell-mode literate-haskell-mode))))
+			#+END_SRC
+
+			#+BEGIN_SRC emacs-lisp
+        ;; this might allready be in haskell mode, else i should move it to pretty-mode
+        
+        (defun unicode-symbol (name)
+          "Translate a symbolic name for a Unicode character -- e.g., LEFT-ARROW or GREATER-THAN into an actual Unicode character code. "
+          (decode-char 'ucs (case name                                             
+                              (left-arrow 8592)
+                              (up-arrow 8593)
+                              (right-arrow 8594)
+                              (down-arrow 8595)                                                
+                              (double-vertical-bar #X2551)                  
+                              (equal #X003d)
+                              (not-equal #X2260)
+                              (identical #X2261)
+                              (not-identical #X2262)
+                              (less-than #X003c)
+                              (greater-than #X003e)
+                              (less-than-or-equal-to #X2264)
+                              (greater-than-or-equal-to #X2265)                        
+                              (logical-and #X2227)
+                              (logical-or #X2228)
+                              (logical-neg #X00AC)                                                  
+                              ('nil #X2205)
+                              (horizontal-ellipsis #X2026)
+                              (double-exclamation #X203C)
+                              (prime #X2032)
+                              (double-prime #X2033)
+                              (for-all #X2200)
+                              (there-exists #X2203)
+                              (element-of #X2208)              
+                              (square-root #X221A)
+                              (squared #X00B2)
+                              (cubed #X00B3)                                            
+                              (lambda #X03BB)
+                              (alpha #X03B1)
+                              (beta #X03B2)
+                              (gamma #X03B3)
+                              (delta #X03B4))))
+        (defun substitute-pattern-with-unicode (pattern symbol)
+          "Add a font lock hook to replace the matched part of PATTERN with the Unicode symbol SYMBOL looked up with UNICODE-SYMBOL."
+          (font-lock-add-keywords
+           nil `((,pattern 
+                (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                          ,(unicode-symbol symbol)
+                                          'decompose-region)
+                          nil))))))
+        (defun substitute-patterns-with-unicode (patterns)
+          "Call SUBSTITUTE-PATTERN-WITH-UNICODE repeatedly."
+          (mapcar #'(lambda (x)
+                      (substitute-pattern-with-unicode (car x)
+                                                       (cdr x)))
+                  patterns))
+        
+        (defun haskell-unicode ()
+          (substitute-patterns-with-unicode
+           (list (cons "\\(<-\\)" 'left-arrow)
+                 (cons "\\(->\\)" 'right-arrow)
+                 (cons "\\(==\\)" 'identical)
+                 (cons "\\(/=\\)" 'not-identical)
+                 (cons "\\(()\\)" 'nil)
+                 (cons "\\<\\(sqrt\\)\\>" 'square-root)
+                 (cons "\\(&&\\)" 'logical-and)
+                 (cons "\\(||\\)" 'logical-or)
+                 (cons "\\<\\(not\\)\\>" 'logical-neg)
+                 (cons "\\(>\\)\\[^=\\]" 'greater-than)
+                 (cons "\\(<\\)\\[^=\\]" 'less-than)
+                 (cons "\\(>=\\)" 'greater-than-or-equal-to)
+                 (cons "\\(<=\\)" 'less-than-or-equal-to)
+                 (cons "\\<\\(alpha\\)\\>" 'alpha)
+                 (cons "\\<\\(beta\\)\\>" 'beta)
+                 (cons "\\<\\(gamma\\)\\>" 'gamma)
+                 (cons "\\<\\(delta\\)\\>" 'delta)
+                 (cons "\\(''\\)" 'double-prime)
+                 (cons "\\('\\)" 'prime)
+                 (cons "\\(!!\\)" 'double-exclamation)
+                 (cons "\\(\\.\\.\\)" 'horizontal-ellipsis))))
+        
+        ;;(add-hook 'haskell-mode-hook 'haskell-unicode)
+        
+        ;; instead we try this
+        ;; at least I have documenation for the variable, that should mean it works.
+        (setq haskell-font-lock-symbols t)
+			#+END_SRC
+***** PLSQL
+			
+			#+BEGIN_SRC emacs-lisp
+      	;;(jiha-safe-require 'plsql ())
+			#+END_SRC
+***** SQL-mode
+******* Support Multiple connections
+
+				If you work with multiple connections, you need to rename them such that the next
+				sql-foo command creates a new SQL buffer instead of popping you to the existing
+				one. Use M-x sql-rename-buffer for that, or the SQL menu entry. To do it
+				autmatically, after every connection, use the following in your ~/.emacs file: 
+
+				#+BEGIN_SRC emacs-lisp
+        	;;(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
+				#+END_SRC
+
+				Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
+				
+    		#+BEGIN_EXAMPLE
+        	connect vdb/vdb@vdbdev;     
+    		#+END_EXAMPLE
+
+				This does not set ‘sql-alternate-buffer-name’, so a subsequent renaming will not
+				produce a new name. Subsequent connections will also not provide the correct default
+				parameters. Here is an Oracle-specific solution, including an automatic renaming of
+				the buffer: 
+				
+				
+				#+BEGIN_EXAMPLE emacs-lisp
+        	(defun my-sql-connect-watch (line)
+          	"Watch for connect statements and set variables accordingly.
+        	Add this to `comint-input-filter-functions'."
+          	(set-text-properties 0 (length line) nil line)
+          	(when (string-match "connect \\([a-z_]+\\)/\\([a-z_]+\\)@\\([a-z_]+\\)" line)
+            	(setq sql-user (match-string 1 line)
+                  	sql-password (match-string 2 line)
+                  	sql-database (match-string 3 line)
+                  	sql-alternate-buffer-name (sql-make-alternate-buffer-name))
+            	(sql-rename-buffer)))
+        	(add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
+				#+END_EXAMPLE
+
+******* SQL-Plus support
+
+				#+BEGIN_EXAMPLE emacs-lisp
+        	(jiha-safe-require 'sqlplus ())
+				#+END_EXAMPLE
+
+******* Remove linenumbers from sqlplus output
+
+				SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
+				adds a line number to the beginning of the next line. This line number is not part
+				of the SQL command; it just allows you to refer to and edit specific lines in your
+				SQL command. SQL*Plus acts like the standard text editor. SQL*Plus is on the
+				TheTruePath. 
+
+				This may make SQL*Plus error reporting less comprehensible when using SqlMode. Here
+				is an example of the line number junk: 
+
+				#+BEGIN_EXAMPLE
+        	...
+          	2    3    4       from v$parameter p, all_tables u
+                  	*
+        	ERROR at line 2:
+        	ORA-00942: table or view does not exist     
+				#+END_EXAMPLE
+				This only happens if you enter multi-line SQL statements by using C-j instead of RET
+				between lines (ie. using sql-accumulate-and-indent instead of comint-send-input). If
+				you enter SQL statements one at a time, you’ll be fine. 
+
+				The following elisp function must be added to comint-preoutput-filter-functions in
+				order to strip the line numbers junk from the output: 
+
+				#+BEGIN_EXAMPLE emacs-lisp
+        	(defun eat-sqlplus-junk (str)
+          	"Eat the line numbers SQL*Plus returns.
+        	Put this on `comint-preoutput-filter-functions' if you are
+        	running SQL*Plus.
+        	If the line numbers are not eaten, you get stuff like this:
+        	...
+          	2    3    4       from v$parameter p, all_tables u
+                  	*
+        	ERROR at line 2:
+        	ORA-00942: table or view does not exist
+        	The mismatch is very annoying."
+          	(interactive "s")
+          	(while (string-match " [ 1-9][0-9]  " str)
+            	(setq str (replace-match "" nil nil str)))
+          	str)
+				#+END_EXAMPLE
+				Test it by evaluating the following expression:
+
+				#+BEGIN_EXAMPLE
+        	(string= "     from" (eat-sqlplus-junk "  2    3    4       from"))
+				#+END_EXAMPLE
+
+				Install it by adding the following expression to your .emacs; it will check wether
+				the iSQL mode you have just started is indeed running SQL*Plus, and if it is, it
+				will add eat-sqlplus-junk to comint-preoutput-filter-functions. 
+
+				#+BEGIN_EXAMPLE emacs-lisp
+        	(defun install-eat-sqlplus-junk ()
+          	"Install `comint-preoutput-filter-functions' if appropriate.
+            	Add this function to `sql-interactive-mode-hook' in your .emacs:
+            	\(add-hook 'sql-mode-hook 'install-eat-sqlplus-junk)"
+          	(if (string= (car (process-command (get-buffer-process sql-buffer)))
+                       	 sql-oracle-program)
+              	(add-to-list 'comint-preoutput-filter-functions
+                           	 'eat-sqlplus-junk)))
+
+        	(add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
+				#+END_EXAMPLE
+******* Placeholder support in sql querys
+				:LOGBOOK:
+				- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
+				CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
+				:END:
+
+				#+BEGIN_EXAMPLE emacs-lisp
+        	(eval-after-load "sql"
+          	'(load-library "sql-with-placeholders"))
+        	(add-hook 'sql-mode-hook (lambda nil
+                                   	 (local-set-key [(control c) (control b)] 
+                                                  	'sql-send-buffer-with-placeholders)
+                                   	 (local-set-key [(control c) (control c)] 
+                                                  	'sql-send-paragraph-with-placeholders)
+                                   	 (local-set-key [(control c) (control r)] 
+                                                  	'sql-send-region-with-placeholders)))
+        	
+				#+END_EXAMPLE
+******* TODO need to test all this to see if it works.
+***** nXML
+    	:LOGBOOK:
+    	CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 12:23] =>  0:15
+    	:END:
+
+    	First we need a local place to store all relax ng files used to validate and provide
+    	completion, that is synced between machines.
+    	
+    	#+BEGIN_SRC emacs-lisp
+      	;; nxml is a part of the emacs distrobution so we don't need to have (when (require
+      	;; .... 'noerror) around it, but we need to eval-after-load so the variable are
+      	;; defined. 
+      	
+      	(eval-after-load "nxml-mode" 
+        	'(add-to-list 'rng-schema-locating-files
+                      	(concat local-emacs-org-dir "xml-schemas/schemas.xml")))
+    	#+END_SRC
+
+    	We want completion and other fun stuff
+
+    	#+BEGIN_SRC emacs-lisp
+      	;; just writing </ should be enaough to close last tag
+      	;; ctrl tab to complete, this will do until we fixes w32 special keys things.
+      	(eval-after-load "nxml-mode"
+        	'(progn (setq nxml-slash-auto-complete-flag t)
+                	(define-key nxml-mode-map (kbd "C-<tab>") 'nxml-complete)))
+    	#+END_SRC
+
+			#+BEGIN_SRC emacs-lisp
+      	(add-to-list 'auto-mode-alist '("\\.html$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.rng$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.rss$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.sch$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.svg$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.wsdl$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.xsd$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
+      	(add-to-list 'auto-mode-alist '("\\.xslt$" . nxml-mode))
+			#+END_SRC
+******* TODO support validation
+				http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
+******* Tools used for convertering to RelaxNG
+				- http://debeissat.nicolas.free.fr/XSDtoRNG.php :: can be used to convert from XSD
+           	 to RelaxNG that nXML uses, web-based
+				- https://code.google.com/p/jing-trang/ :: also a tool for converting between
+					 	 RelaxNG and other formats, you need java installed, commandline.
+					 	 #+BEGIN_EXAMPLE
+             	 #>java -jar tranq.jar
+             	 usage: java com.thaiopensource.relaxng.translate.Driver [-C catalogFileOrUri] [-
+             	 I rng|rnc|dtd|xml] [-O rng|rnc|dtd|xsd] [-i input-param] [-o output-param] input
+             	 FileOrUri ... outputFile
+					 	 #+END_EXAMPLE
+******* links
+				- howto specify things in schemas.xml ::
+           	 http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
+
 *** Flymake
+***** Haskell
+			#+BEGIN_SRC emacs-lisp
+        (jiha-safe-requre 'flymake-haskell-multi
+                          (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load))
+        
+			#+END_SRC
 ***** Flymake Cursor
 
       The normal operation of flymake allows the user to see the error
@@ -1122,7 +1438,70 @@ that I share between work and home
         ;; we will active this when I have a configuration that will work on both windows and linux.
         ;;(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
       #+END_SRC
-*** Compile  
+*** Compile																											:keybindings:
+
+		#+BEGIN_SRC emacs-lisp
+      (jiha-safe-require 'compile 
+                         (progn
+                           ;; this means hitting the compile button always saves the buffer
+                           ;; having to separately hit C-x C-s is a waste of time
+                           (setq mode-compile-always-save-buffer-p t)
+                           ;; make the compile window stick at 12 lines tall
+                           (setq compilation-window-height 12)
+                           
+                           ;; from enberg on #emacs
+                           ;; if the compilation has a zero exit code, 
+                           ;; the windows disappears after two seconds
+                           ;; otherwise it stays
+                           (setq compilation-finish-function
+                                 (lambda (buf str)
+                                   (unless (string-match "exited abnormally" str)
+                                     ;;no errors, make the compilation window go away in a few seconds
+                                     (run-at-time
+                                      "3 sec" nil 'delete-windows-on
+                                      (get-buffer-create "*compilation*"))
+                                     (message "No Compilation Errors!"))))
+                           
+                           ;; one-button testing, tada!
+                           (global-set-key [f12] 'compile)))
+		#+END_SRC
+
+    #+RESULTS:
+		: compile
+
+		here is an example on how to use it together with local variables in a file
+
+		#+BEGIN_SRC haskell
+      -- haskell 2010 version
+      import Test.HUnit
+      import System.Exit
+       
+      myTestList = 
+          TestList [
+                    "add numbers" ~: 5 ~=? (3 + 2)
+                   ,"add numbers" ~: 5 ~=? (3 + 3)
+                   ]
+       
+      h = runTestTT myTestList
+       
+      main = do c <- h
+                putStr $ show c
+                let errs = errors c
+                    fails = failures c
+                exitWith (codeGet errs fails)
+       
+      codeGet errs fails
+       | fails > 0       = ExitFailure 2
+       | errs > 0        = ExitFailure 1
+       | otherwise       = ExitSuccess
+       
+      -- Local Variables:
+      -- compile-command: "ghc --make -o test  test.hs && ./test"
+      -- End:
+		#+END_SRC
+		#+BEGIN_EXAMPLE 
+		
+		#+END_EXAMPLE
 *** Coding styles
     :LOGBOOK:
     - State "DONE"       from "TODO"       [2012-10-11 Thu 22:35]
@@ -1218,8 +1597,7 @@ that I share between work and home
 
 			#+BEGIN_SRC emacs-lisp
         ;;  (semantic-load-enable-excessive-code-helpers)
-			#+END_SRC
-      
+			#+END_SRC      
 *** ECB
 
 		#+BEGIN_SRC emacs-lisp
@@ -1281,7 +1659,6 @@ that I share between work and home
 				#+BEGIN_EXAMPLE emacs-lisp
           (jiha-safe-require 'aspx-mode nil ())
 				#+END_EXAMPLE
-
 *** Indentation
 
 		I usually use tabs for indentation and spaces for alignment, Emacs
@@ -1351,197 +1728,6 @@ that I share between work and home
         ;;(eval-after-load "sql"
         ;;  '(load-library "sql-indent"))
 			#+END_SRC
-
-
-*** PLSQL
-		
-		#+BEGIN_SRC emacs-lisp
-      ;;(jiha-safe-require 'plsql ())
-		#+END_SRC
-*** SQL-mode
-***** Support Multiple connections
-
-			If you work with multiple connections, you need to rename them such that the next
-			sql-foo command creates a new SQL buffer instead of popping you to the existing
-			one. Use M-x sql-rename-buffer for that, or the SQL menu entry. To do it
-			autmatically, after every connection, use the following in your ~/.emacs file: 
-
-			#+BEGIN_SRC emacs-lisp
-        ;;(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
-			#+END_SRC
-
-			Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
-			
-    	#+BEGIN_EXAMPLE
-        connect vdb/vdb@vdbdev;     
-    	#+END_EXAMPLE
-
-			This does not set ‘sql-alternate-buffer-name’, so a subsequent renaming will not
-			produce a new name. Subsequent connections will also not provide the correct default
-			parameters. Here is an Oracle-specific solution, including an automatic renaming of
-			the buffer: 
-			
-			
-			#+BEGIN_EXAMPLE emacs-lisp
-        (defun my-sql-connect-watch (line)
-          "Watch for connect statements and set variables accordingly.
-        Add this to `comint-input-filter-functions'."
-          (set-text-properties 0 (length line) nil line)
-          (when (string-match "connect \\([a-z_]+\\)/\\([a-z_]+\\)@\\([a-z_]+\\)" line)
-            (setq sql-user (match-string 1 line)
-                  sql-password (match-string 2 line)
-                  sql-database (match-string 3 line)
-                  sql-alternate-buffer-name (sql-make-alternate-buffer-name))
-            (sql-rename-buffer)))
-        (add-to-list 'comint-input-filter-functions 'my-sql-connect-watch)
-			#+END_EXAMPLE
-
-***** SQL-Plus support
-
-			#+BEGIN_EXAMPLE emacs-lisp
-        (jiha-safe-require 'sqlplus ())
-			#+END_EXAMPLE
-
-***** Remove linenumbers from sqlplus output
-
-			SQL*Plus has an interesting feature: Whenever you type a line of input, SQL*Plus
-			adds a line number to the beginning of the next line. This line number is not part
-			of the SQL command; it just allows you to refer to and edit specific lines in your
-			SQL command. SQL*Plus acts like the standard text editor. SQL*Plus is on the
-			TheTruePath. 
-
-			This may make SQL*Plus error reporting less comprehensible when using SqlMode. Here
-			is an example of the line number junk: 
-
-			#+BEGIN_EXAMPLE
-        ...
-          2    3    4       from v$parameter p, all_tables u
-                  *
-        ERROR at line 2:
-        ORA-00942: table or view does not exist     
-			#+END_EXAMPLE
-			This only happens if you enter multi-line SQL statements by using C-j instead of RET
-			between lines (ie. using sql-accumulate-and-indent instead of comint-send-input). If
-			you enter SQL statements one at a time, you’ll be fine. 
-
-			The following elisp function must be added to comint-preoutput-filter-functions in
-			order to strip the line numbers junk from the output: 
-
-			#+BEGIN_EXAMPLE emacs-lisp
-        (defun eat-sqlplus-junk (str)
-          "Eat the line numbers SQL*Plus returns.
-        Put this on `comint-preoutput-filter-functions' if you are
-        running SQL*Plus.
-        If the line numbers are not eaten, you get stuff like this:
-        ...
-          2    3    4       from v$parameter p, all_tables u
-                  *
-        ERROR at line 2:
-        ORA-00942: table or view does not exist
-        The mismatch is very annoying."
-          (interactive "s")
-          (while (string-match " [ 1-9][0-9]  " str)
-            (setq str (replace-match "" nil nil str)))
-          str)
-			#+END_EXAMPLE
-			Test it by evaluating the following expression:
-
-			#+BEGIN_EXAMPLE
-        (string= "     from" (eat-sqlplus-junk "  2    3    4       from"))
-			#+END_EXAMPLE
-
-			Install it by adding the following expression to your .emacs; it will check wether
-			the iSQL mode you have just started is indeed running SQL*Plus, and if it is, it
-			will add eat-sqlplus-junk to comint-preoutput-filter-functions. 
-
-			#+BEGIN_EXAMPLE emacs-lisp
-        (defun install-eat-sqlplus-junk ()
-          "Install `comint-preoutput-filter-functions' if appropriate.
-            Add this function to `sql-interactive-mode-hook' in your .emacs:
-            \(add-hook 'sql-mode-hook 'install-eat-sqlplus-junk)"
-          (if (string= (car (process-command (get-buffer-process sql-buffer)))
-                       sql-oracle-program)
-              (add-to-list 'comint-preoutput-filter-functions
-                           'eat-sqlplus-junk)))
-
-        (add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
-			#+END_EXAMPLE
-***** Placeholder support in sql querys
-			:LOGBOOK:
-			- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
-			CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
-			:END:
-
-			#+BEGIN_EXAMPLE emacs-lisp
-        (eval-after-load "sql"
-          '(load-library "sql-with-placeholders"))
-        (add-hook 'sql-mode-hook (lambda nil
-                                   (local-set-key [(control c) (control b)] 
-                                                  'sql-send-buffer-with-placeholders)
-                                   (local-set-key [(control c) (control c)] 
-                                                  'sql-send-paragraph-with-placeholders)
-                                   (local-set-key [(control c) (control r)] 
-                                                  'sql-send-region-with-placeholders)))
-        
-			#+END_EXAMPLE
-***** TODO need to test all this to see if it works.
-*** nXML
-    :LOGBOOK:
-    CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 12:23] =>  0:15
-    :END:
-
-    First we need a local place to store all relax ng files used to validate and provide
-    completion, that is synced between machines.
-    
-    #+BEGIN_SRC emacs-lisp
-      ;; nxml is a part of the emacs distrobution so we don't need to have (when (require
-      ;; .... 'noerror) around it, but we need to eval-after-load so the variable are
-      ;; defined. 
-      
-      (eval-after-load "nxml-mode" 
-        '(add-to-list 'rng-schema-locating-files
-                      (concat local-emacs-org-dir "xml-schemas/schemas.xml")))
-    #+END_SRC
-
-    We want completion and other fun stuff
-
-    #+BEGIN_SRC emacs-lisp
-      ;; just writing </ should be enaough to close last tag
-      ;; ctrl tab to complete, this will do until we fixes w32 special keys things.
-      (eval-after-load "nxml-mode"
-        '(progn (setq nxml-slash-auto-complete-flag t)
-                (define-key nxml-mode-map (kbd "C-<tab>") 'nxml-complete)))
-    #+END_SRC
-
-		#+BEGIN_SRC emacs-lisp
-      (add-to-list 'auto-mode-alist '("\\.html$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.rng$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.rss$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.sch$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.svg$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.wsdl$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xsd$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
-      (add-to-list 'auto-mode-alist '("\\.xslt$" . nxml-mode))
-		#+END_SRC
-***** TODO support validation
-			http://www.emacswiki.org/emacs/XmlSchemaValidationWindows
-***** Tools used for convertering to RelaxNG
-			- http://debeissat.nicolas.free.fr/XSDtoRNG.php :: can be used to convert from XSD
-           to RelaxNG that nXML uses, web-based
-			- https://code.google.com/p/jing-trang/ :: also a tool for converting between
-					 RelaxNG and other formats, you need java installed, commandline.
-					 #+BEGIN_EXAMPLE
-             #>java -jar tranq.jar
-             usage: java com.thaiopensource.relaxng.translate.Driver [-C catalogFileOrUri] [-
-             I rng|rnc|dtd|xml] [-O rng|rnc|dtd|xsd] [-i input-param] [-o output-param] input
-             FileOrUri ... outputFile
-					 #+END_EXAMPLE
-***** links
-			- howto specify things in schemas.xml ::
-           http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
-
 * Org-Mode
 *** Basic
 		
