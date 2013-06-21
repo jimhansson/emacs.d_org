@@ -36,6 +36,39 @@ that I share between work and home
 *** TODO replace setq and other things with custom-set-variables calls
 		might allow for using custom for changing varibles?? also does require on things.
 
+*** FIXED we maybe should remove flyspell-prog-mode from languages hooks
+		:LOGBOOK:
+		CLOCK: [2013-06-13 to 13:44]--[2013-06-13 to 15:01] =>  1:17
+		- State "FIXED"      from "TODO"       [2013-06-13 to 15:01] \\
+			Fixed now, but need to add modes that tells what to use.
+		- Refiled on [2013-06-12 on 01:17] \\
+			should not have issues spread out in the file
+		:END:
+		and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
+		the major mode is a programming mode and "vanilla" flyspell-mode when it is
+		not. and bind that to *C-<F8>*.
+
+*** BUG %U "macro" in capture tempates does not work in longrunning instances of emacs.
+		:LOGBOOK:
+		CLOCK: [2013-06-16 sö 23:56]--[2013-06-17 må 00:02] =>  0:06
+		- signat upp mig på org-mode mailing lista, borde sätta upp filter på gmail
+		:END:
+		I a let a emacs instance run for a few days the %U macro does not reflect the current
+		date as it should, I am guessing a get the date from the last restart of emacs.
+		I should try to mail this to the org-mode list to see if the can tell me what is
+		wrong.
+		
+		Also the date+tree capture templates does not work. For some reason it also adds
+		entries under way to old dates. and sometime even in the future. 
+
+*** TODO add ibuffer "layouts" that are different between work, code, home, otherstuff....
+
+		- I need one for work related stuff that are not code, things like mail, org-files...
+		- I need one for coding.
+		- I need one for private stuff
+
+*** BUG [[*Iswitch%20Buffers][Iswitch Buffers]] has problem on windows with defining my own columns
+		have comment out the src section
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -253,6 +286,9 @@ that I share between work and home
 
 *** Mode-line                                                      :modeline:
 		
+		this for the normal mode-line, but if we have powerline installed that will may be
+		used instead, configuration for that is below
+
 		#+BEGIN_SRC emacs-lisp
       ;; Things that modifies the modeline
       (setq display-battery-mode t)
@@ -262,6 +298,14 @@ that I share between work and home
       (setq size-indication-mode t)
 		#+END_SRC
 
+***** PowerLine
+
+			#+BEGIN_SRC emacs-lisp
+        (jiha-safe-require 
+         'powerline
+         ())
+
+			#+END_SRC
 *** Scrolling
 
 		#+BEGIN_SRC emacs-lisp
@@ -346,7 +390,6 @@ that I share between work and home
 		effectively restarted. This means that buffers restored by a
 		Desktop sessions are considered “new” by CleanBufferList, even
 		though they may be considered “old”. 
-
 
 *** Expand-region
 		
@@ -595,43 +638,64 @@ that I share between work and home
 		I highly suggest setting ‘flyspell-issue-message-flag’ to nil, as printing messages
 		for every word (when checking the entire buffer) causes an enormous slowdown.
 		
-		#+BEGIN_SRC emacs-lisp -n -r
+		#+BEGIN_SRC emacs-lisp
       (jiha-safe-require 'flyspell
-                        ;; Create a ring of languages I would like to use
-                        (progn (let ((langs '("american" "svenska" "norsk")))                 (ref:dict_lang)
-                                    (setq jiha-lang-ring (make-ring (length langs)))
-                                    (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
-                               
-                               ;; A function to easy switch between dictionaries using ring from above
-                               (defun jiha-cycle-ispell-languages ()                          (ref:dict_func)
-                                 (interactive)
-                                 (let ((lang (ring-ref jiha-lang-ring -1)))
-                                   (ring-insert jiha-lang-ring lang)
-                                   (ispell-change-dictionary lang)))
-                               
-                               ;; Fly-spell in C based programming modes
-                               (add-hook 'c-mode-hook
-                                         (lambda () (flyspell-prog-mode)))
-                               
-                               ;; Fly-spell in C++ based programming modes
-                               (add-hook 'c++-mode-hook
-                                         (lambda () (flyspell-prog-mode)))
-                               
-                               ;; Fly-spell in emacs-lisp mode
-                               (add-hook 'lisp-mode-hook
-                                         (lambda () (flyspell-prog-mode)))
-                               
-                               ;; eays access to flyspell/ispell functionality.
-                               (global-set-key (kbd "<f8>")     'ispell-word)
-                               (global-set-key (kbd "C-<f8>")   'flyspell-mode)
-                               (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) (ref:dict_cycle)
-                               (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
-                               (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
-                               
-                               (setq flyspell-issue-message-flag nil)))
+                         ;; Create a ring of languages I would like to use
+                         (progn (let ((langs '("american" "svenska" "norsk")))                 ;;(ref:dict_lang)
+                                     (setq jiha-lang-ring (make-ring (length langs)))
+                                     (dolist (elem langs) (ring-insert jiha-lang-ring elem)))
+                                
+                                ;; A function to easy switch between dictionaries using ring
+                                ;; from above.
+                                (defun jiha-cycle-ispell-languages ()                          ;;(ref:dict_func)
+                                  (interactive)
+                                  (let ((lang (ring-ref jiha-lang-ring -1)))
+                                    (ring-insert jiha-lang-ring lang)
+                                    (ispell-change-dictionary lang)))
+                                
+                                ;; smart function that will activate flyspell-mode or
+                                ;; flyspell-prog-mode depending on mode of buffer. 
+                                (defun jiha-flyspell-mode ()
+                                  (interactive)
+                                  (let ((text-modes '(org-mode))
+                                        (prog-modes '(csharp-mode c++-mode c-mode lisp-mode)))
+                                    (cond ((member major-mode text-modes)
+                                           (if (and (boundp 'flyspell-mode) flyspell-mode)
+                                               (flyspell-mode 0)
+                                             (flyspell-mode 1)))
+                                          ((member major-mode prog-modes)
+                                           (if (and (boundp 'flyspell-mode) flyspell-mode)
+                                               (flyspell-mode 0)
+                                             (flyspell-prog-mode)))
+                                          ;; default case
+                                          (t 
+                                           (if (and (boundp 'flyspell-mode) flyspell-mode)
+                                               (flyspell-mode 0)
+                                             (flyspell-mode 1))))))
+                                                                  
+                                ;; Fly-spell in C based programming modes
+                                (add-hook 'c-mode-hook
+                                          (lambda () (flyspell-prog-mode)))
+                                
+                                ;; Fly-spell in C++ based programming modes
+                                (add-hook 'c++-mode-hook
+                                          (lambda () (flyspell-prog-mode)))
+                                
+                                ;; Fly-spell in emacs-lisp mode
+                                (add-hook 'lisp-mode-hook
+                                          (lambda () (flyspell-prog-mode)))
+                                
+                                ;; easy access to flyspell/ispell functionality.
+                                (global-set-key (kbd "<f8>")     'ispell-word)
+                                (global-set-key (kbd "C-<f8>")   'jiha-flyspell-mode)
+                                (global-set-key (kbd "S-<f8>")   'jiha-cycle-ispell-languages) ;;(ref:dict_cycle)
+                                (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+                                (global-set-key (kbd "C-S-<f8>") 'flyspell-check-previous-highlighted-word)
+                                
+                                (setq flyspell-issue-message-flag nil)))
       
 		#+END_SRC        
-		
+
 ***** Installing ispell on windows                                    :instw:
 		To solve the problem with multiple languages we first need to define what languages
 		we are interesting in switching between, if we don't do that the result will be that
@@ -639,11 +703,6 @@ that I share between work and home
 		we create a ring of languages at [[(dict_lang)][let langs]], that ring is used by a function that will move
 		from one language after another and that function is defined at [[(dict_func)][defun]], and at last
 		we bind that function to a key-combo for easy access at [[(dict_cycle)][global-set...]]
-
-***** TODO we maybe should remove flyspell-prog-mode from languages hooks
-			and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
-			the major mode is a programming mode and "vanilla" flyspell-mode when it is
-			not. and bind that to *S-<F8>*.
 
 ***** Installing ispell on windows																		:instw:
 
@@ -784,6 +843,18 @@ that I share between work and home
 		#+END_SRC
 
 ***** TODO move my changes from pretty-mode.el to this file
+*** Interaction log
+
+		#+BEGIN_SRC emacs-lisp
+      (require 'interaction-log)
+      ;;(interaction-log-mode +1)
+      
+      (global-set-key [f1] (lambda () (interactive) (display-buffer ilog-buffer-name)))          
+		#+END_SRC
+
+  #+RESULTS:
+	| lambda | nil | (interactive) | (display-buffer ilog-buffer-name) |
+	
 * Other Major Modes
 * Iswitch Buffers                                                   :buffers:
 
@@ -820,6 +891,61 @@ that I share between work and home
               ("<down>"  . ignore             ))))
     (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 	#+END_SRC
+
+	#+BEGIN_SRC emacs-lisp
+    (add-hook 'ibuffer-mode-hook 
+              '(lambda ()
+                 (ibuffer-auto-mode 1)
+                 (ibuffer-switch-to-saved-filter-groups "home")))
+    
+    ;; Switching to ibuffer puts the cursor on the most recent buffer
+    (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+      "Open ibuffer with cursor pointed to most recent buffer name"
+      (let ((recent-buffer-name (buffer-name)))
+        ad-do-it
+        (ibuffer-jump-to-buffer recent-buffer-name)))
+    (ad-activate 'ibuffer)
+    
+    (defun switch-buffers-between-frames ()
+      "switch-buffers-between-frames switches the buffers between the two last frames"
+      (interactive)
+      (let ((this-frame-buffer nil)
+            (other-frame-buffer nil))
+        (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
+        (other-frame 1)
+        (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
+        (switch-to-buffer this-frame-buffer)
+        (other-frame 1)
+        (switch-to-buffer other-frame-buffer))) 
+	#+END_SRC
+
+	#+BEGIN_SRC emacs-lisp
+    ;; Use human readable Size column instead of original one
+    ;; (define-ibuffer-column size-h
+    ;;   (:name "Size" :inline t)
+    ;;   (cond
+    ;;    ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
+    ;;    ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
+    ;;    (t (format "%8d b" (buffer-size)))))
+    
+    ;; Modify the default ibuffer-formats
+    ;; (setq ibuffer-formats
+    ;;       '((mark modified read-only " "
+    ;;               (name 20 20 :left :elide)
+    ;;               " "
+    ;;               (size-h 9 -1 :right)
+    ;;               " "
+    ;;               (mode 16 16 :left :elide)
+    ;;               " "
+    ;;               filename-and-process)
+    ;;         (mark " "
+    ;;               (name 20 -1)
+    ;;               " " filename)))
+	#+END_SRC
+
+  #+RESULTS:
+	| mark | modified | read-only    |   | (name 20 20 :left :elide) |   | (size-h 9 -1 :right) |   | (mode 16 16 :left :elide) |   | filename-and-process |
+	| mark |          | (name 20 -1) |   | filename                  |   |                      |   |                           |   |                      |
 	
 	#+BEGIN_SRC emacs-lisp
     (setq ibuffer-saved-filter-groups
@@ -854,59 +980,33 @@ that I share between work and home
                       (mode . gnus-article-mode)
                       (name . "^\\.bbdb$")
                       (name . "^\\.newsrc-dribble")))
+             ("Custom" (mode . Custom-mode))
              ("Help" (or (name . "\*Help\*")
                          (name . "\*Apropos\*")
                          (name . "\*info\*"))))))
 	 #+END_SRC
+
+ #+RESULTS:
+ | home | (Emacs (or (filename . .emacs.d) (filename . emacs.org) (filename . .emacs))) | (Org (or (filename . .org) (filename . OrgMode) (name . *Org Agenda*) (name . diary))) | (code (or (mode . csharp-mode) (mode . c++-mode) (mode . lisp-mode) (mode . c-mode))) | (Web Dev (or (mode . html-mode) (mode . css-mode))) | (SQL (or (filename . .plb) (filename . .sql) (mode . sqli-mode) (name . *SQL*))) | (VC (or (name . *svn) (name . *magit))) | (ERC (or (mode . erc-mode) (mode . erc-list-mode))) | (gnus (or (mode . message-mode) (mode . bbdb-mode) (mode . mail-mode) (mode . gnus-group-mode) (mode . gnus-summary-mode) (mode . gnus-article-mode) (name . ^\.bbdb$) (name . ^\.newsrc-dribble))) | (Custom (mode . Custom-mode)) | (Help (or (name . *Help*) (name . *Apropos*) (name . *info*))) |
+
 	
-	#+BEGIN_SRC emacs-lisp
-    (add-hook 'ibuffer-mode-hook 
-              '(lambda ()
-                 (ibuffer-auto-mode 1)
-                 (ibuffer-switch-to-saved-filter-groups "home")))
-    
-    ;; Switching to ibuffer puts the cursor on the most recent buffer
-    (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
-      "Open ibuffer with cursor pointed to most recent buffer name"
-      (let ((recent-buffer-name (buffer-name)))
-        ad-do-it
-        (ibuffer-jump-to-buffer recent-buffer-name)))
-    (ad-activate 'ibuffer)
-    
-    
-    (setq ibuffer-formats
-          '((mark modified read-only " "
-                  (name 25 25 :left :elide) " "
-                  (size 9 -1 :right) " "
-                  (mode 16 16 :left :elide) " " filename-and-process)
-            (mark " " (name 16 -1) " " filename)))
-    
-    
-    (defun switch-buffers-between-frames ()
-      "switch-buffers-between-frames switches the buffers between the two last frames"
-      (interactive)
-      (let ((this-frame-buffer nil)
-            (other-frame-buffer nil))
-        (setq this-frame-buffer (car (frame-parameter nil 'buffer-list)))
-        (other-frame 1)
-        (setq other-frame-buffer (car (frame-parameter nil 'buffer-list)))
-        (switch-to-buffer this-frame-buffer)
-        (other-frame 1)
-        (switch-to-buffer other-frame-buffer))) 
-	#+END_SRC
 
 *** Colours in buffer list                                            :faces:
 
 		#+BEGIN_SRC emacs-lisp
-			; coloring
-			
-			; format of the list is priority, condition, face
-			; highest priority wins
-			;;(setq 'ibuffer-fontification-alist
-			;;			'(10 (Form)
-			;;					 (face)))									
-			
+      (setq ibuffer-fontification-alist
+            '((1 (eq major-mode 'org-mode) (font-lock-keyword-face))
+              (4 (eq buffer-file-name "~/diary") (font-lock-keywork-face)) ;; does not work??
+              (2 (eq major-mode 'Custom-mode) (font-lock-preprocessor-face))
+              (3 (eq major-mode 'erc-mode) (font-lock-string-face))))
 		#+END_SRC
+
+  #+RESULTS:
+	| 1 | (eq major-mode (quote org-mode))    | (font-lock-keyword-face)      |
+	| 4 | (eq buffer-file-name ~/diary)       | (font-lock-keywork-face)      |
+	| 2 | (eq major-mode (quote Custom-mode)) | (font-lock-preprocessor-face) |
+	| 3 | (eq major-mode (quote erc-mode))    | (font-lock-string-face)       |
+
 *** Iswitch and uniquify compatibility                             :uniquify:
 
 		The library uniquify overrides Emacs default mechanism for making
@@ -1434,7 +1534,7 @@ that I share between work and home
 
       This works in any language that flymake supports
 
-      #+BEGIN_SRC emacs-lisp
+      #+BEGIN_SRC emacs-lisp 
         ;; we will active this when I have a configuration that will work on both windows and linux.
         ;;(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
       #+END_SRC
@@ -1502,6 +1602,7 @@ that I share between work and home
 		#+BEGIN_EXAMPLE 
 		
 		#+END_EXAMPLE
+
 *** Coding styles
     :LOGBOOK:
     - State "DONE"       from "TODO"       [2012-10-11 Thu 22:35]
@@ -2373,7 +2474,7 @@ that I share between work and home
 *** Filesets for OrgFiles                                          :filesets:
 *** Logging and clocking
     
-    I want to have the change to enter a message for every change a
+    I want to have the chance to enter a message for every change a
     make to items that are scheduled and for what I make with my
     time. It's easy to ignore if not needed I just pres C-c C-c, and no
     message will be saved.
@@ -2382,8 +2483,9 @@ that I share between work and home
       (setq org-clock-into-drawer t)
       (setq org-log-into-drawer t)
       (setq org-log-redeadline (quote note))
+      (setq org-clock-clocked-in-display 'frame-title)
       ;; Show lot of clocking history so it's easy to pick items off the list
-      (setq org-clock-history-length 72)
+      (setq org-clock-history-length 25)
       ;; Resume clocking task on clock-in if the clock is open
       (setq org-clock-in-resume t)
       ;; This removes clocked tasks with 0:00 duration
@@ -2409,6 +2511,24 @@ that I share between work and home
                                    "^.+\\.org$")))))
 		#+END_SRC
 
+		The Commands for clocking in and clocking out are by default only bound in org-mode
+		this means I always have to switch to a org-mode buffer and that annoys me very
+		much. Therefor we bind function that have to do with to F2
+
+		#+BEGIN_SRC emacs-lisp
+      (let ((key "<f2>"))
+        (global-set-key (kbd key) 'org-clock-in)
+        (global-set-key (kbd (concat "M-" key)) 'org-clock-goto)
+        (global-set-key (kbd (concat "S-" key)) 'org-clock-out)
+        ;; This binds C-key to list last X clocked items and let me choose easy between which
+        ;; one of them I should clock into, just like as if I hade called org-clock-in with a
+        ;; prefix (C-u)
+        (global-set-key (kbd (concat "C-" key)) (lambda () (interactive)
+                                      (let ((current-prefix-arg '(4))) 
+                                        (call-interactively 'org-clock-in)))))
+		#+END_SRC
+
+		
 *** Agenda                                                           :habits:
 
 		#+BEGIN_SRC emacs-lisp
@@ -2741,6 +2861,7 @@ that I share between work and home
     (setq erc-autojoin-channels-alist
           ;; localhost should have a ssh tunnel to my server
           '(("localhost" "#emacs" "#org-mode" "#erc")
+            ("irc.freenode.net" "#emacs" "#org-mode" "#erc")
             ("oftc.net" "#BitlBee")))
     
     (defun irc-maybe ()
@@ -2833,8 +2954,6 @@ that I share between work and home
 	- Julien Danjou :: http://git.naquadah.org/git/~jd/emacs.d.git
 	- Thomas Krennwallner's :: http://www.postsubmeta.net/MyConfig/Emacs 
 
-#	 LocalWords:	Uniquify Iswitch emacs src Whitespace Google LocalWords BBDB SQL PLSQL
-nXML Krennwallner's
 * Licensies
 
 	Here I will try to collect the license information for all the parts that make up my
@@ -2847,8 +2966,13 @@ nXML Krennwallner's
 	
 * Variable list @ end of file
 
+	Thanks to local file variables is implemented in a little special way that has to do
+	with how it detects comments it's possible to have this part functional in both
+	emacs.org and in the exported emacs.el
+
 	#+BEGIN_SRC emacs-lisp
     ;; Local Variables:
     ;; tab-width: 2;
+    ;; LocalWords: Uniquify Iswitch emacs src Whitespace Google LocalWords BBDB SQL PLSQL nXML Krennwallner's
     ;; End:
 	#+END_SRC
