@@ -1519,10 +1519,14 @@ that I share between work and home
 *** Flymake
 ***** Haskell
 			#+BEGIN_SRC emacs-lisp
-        (jiha-safe-requre 'flymake-haskell-multi
-                          (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load))
+        (jiha-safe-require 'flymake-haskell-multi
+                           (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load))
         
 			#+END_SRC
+
+   #+RESULTS:
+	 | flymake-haskell-multi-load | (lambda (jiha-safe-require (quote inf-haskell) nil)) | turn-on-haskell-indent | turn-on-haskell-doc-mode |
+
 ***** Flymake Cursor
 
       The normal operation of flymake allows the user to see the error
