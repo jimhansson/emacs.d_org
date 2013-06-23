@@ -172,9 +172,19 @@ Logged stuff goes to the *Emacs Log* buffer."
     (when (timerp ilog-truncation-timer) (cancel-timer ilog-truncation-timer))
     (setq ilog-truncation-timer nil)
     (when (timerp ilog-insertion-timer) (cancel-timer ilog-insertion-timer))
-    (setq ilog-insertion-timer nil)))
+    (setq ilog-insertion-timer nil)
+		(ilog-log-end-message ilog-start-time)))
+
 
 ;;; Helper funs
+
+(defun ilog-get-ilog-buffer (buffer-name)
+	""
+	(or (get-buffer buffer-name)
+			(with-current-buffer (generate-new-buffer buffer-name)
+				(setq truncate-lines t)
+				(set (make-local-variable 'scroll-margin) 0)
+				(current-buffer))))
 
 (defun ilog-log-start-message (time)
 	""
@@ -182,13 +192,8 @@ Logged stuff goes to the *Emacs Log* buffer."
 		(message "Interaction Log: started logging in %s"
 						 ilog-buffer-name)
 		(if ilog-sexp-form-log 
-				(let* ((ilog-buffer
-								(or (get-buffer ilog-buffer-name)
-										(with-current-buffer (generate-new-buffer	ilog-buffer-name)
-											(setq truncate-lines t)
-											(set (make-local-variable 'scroll-margin)	0)
-											(current-buffer))))
-							 (ilog-buffer-visisble-p nil) (wins-to-scroll ())	atebp)
+				(let* ((ilog-buffer (ilog-get-ilog-buffer ilog-buffer-name))
+							 (ilog-buffer-visisble-p nil) (wins-to-scroll ()) atebp)
 					(with-current-buffer ilog-buffer
 						(let ((deactivate-mark nil) 
 									(inhibit-read-only))
@@ -200,9 +205,25 @@ Logged stuff goes to the *Emacs Log* buffer."
 								(insert ")\n")
 								(insert " :start-time " (format-time-string	"%s" time)
 												"   ;" (format-time-string "%H:%M:%S" time) "\n")
-								(insert " :events (")
-								)))))))
+								(insert " :events (\n  ;;here we log all events "))))))))
 
+(defun ilog-log-end-message (time)
+	""
+	(progn
+		(message "Interaction Log: Ended at " (format-time-string "%H:%M:%S"))
+		(if ilog-sexp-form-log
+				(let* ((ilog-buffer (ilog-get-ilog-buffer ilog-buffer-name))
+							 (ilog-buffer-visisble-p nil) (wins-to-scroll ()) atebp)
+					(with-current-buffer ilog-buffer
+								(let ((deactiveate-mark nil)
+											(inhibit-read-only))
+									(save-excursion
+										(goto-char (point-max))
+										(insert "  ) ;; end of events\n")
+										(insert ":end-time " (format-time-string "%s") " ;; " (format-time-string "%H:%M:%S") "\n")
+										(insert ":length " (format-time-string "%s" (time-since ilog-start-time)) " ;; " (format-time-string "%H:%M:%S" (time-since ilog-start-time)) "\n")
+										(insert ")\n"))))))))
+																	
 (defun ilog-log-file-load (file)
   "Annotate a file load in `ilog-temp-load-hist'."
   (when ilog-recent-commands
@@ -289,12 +310,7 @@ Goes to `post-command-hook'."
 
 (defun ilog-update-log-buffer ()
   "Transform and insert pending data into the log buffer."
-  (let* ((ilog-buffer
-          (or (get-buffer ilog-buffer-name)
-              (with-current-buffer (generate-new-buffer ilog-buffer-name)
-                (setq truncate-lines t)
-                (set (make-local-variable 'scroll-margin) 0)
-                (current-buffer))))
+  (let* ((ilog-buffer (ilog-get-ilog-buffer ilog-buffer-name))
          (ilog-buffer-visible-p nil) (wins-to-scroll ()) ateobp)
     (with-current-buffer ilog-buffer
       (when ilog-tail-mode
@@ -318,7 +334,7 @@ Goes to `post-command-hook'."
 							(if ilog-sexp-form-log
 									(insert (if (looking-back "\\`\\|\n") "" "\n")
 													(ilog-format-messages pre-mes)
-													"  (" "(current-time)" " "
+													"  (" (format-time-string "%s" (time-since ilog-start-time)) " "
 													(propertize (key-description key)
 																			'face (case chg
 																							((t)    'ilog-change-face)
@@ -361,7 +377,7 @@ Return the result."
   "Format and propertize messages in STRING."
   (if (and (stringp string) (not (equal string "")))
       (let ((messages (ilog-cut-surrounding-newlines string)))
-        (concat
+        (concat ";;"
          (mapconcat
           (lambda (line)
             (let ((load-mesg-p (when (get-text-property 0 'load-message line)
@@ -371,7 +387,7 @@ Return the result."
                (propertize line
                            'face (if load-mesg-p 'ilog-load-face 'ilog-message-face)))))
           (split-string messages "\n")
-          "\n")
+          "\n;;")
          "\n"))
     ""))
 
