@@ -848,7 +848,131 @@ that I share between work and home
                         (global-pretty-mode 1))
 		#+END_SRC
 
-***** TODO move my changes from pretty-mode.el to this file
+		now we need to configure what characters that should be used.
+
+		#+BEGIN_SRC emacs-lisp
+      (setq pretty-patterns
+            (let* ((lispy '(scheme emacs-lisp lisp))
+                   (mley '(tuareg haskell sml))
+                   (c-like '(c c++ perl sh python java ess ruby csharp))
+                   (all (append lispy mley c-like (list 'octave))))
+              (pretty-compile-patterns
+               `(
+                 (?≠ ("!=" ,@c-like scheme octave)
+                     ("<>" tuareg octave)
+                     ("~=" octave)
+                     ("/=" haskell emacs-lisp))
+                 (?≤ ("<=" ,@all))
+                 (?≥ (">=" ,@all))
+                 (?← ("<-" ,@mley ess))
+                 (?➛ ("->" ,@mley ess c c++ perl))
+                 (?↑ ("\\^" tuareg))
+                 (?⟹ ("=>" sml perl ruby haskell))
+                 (?∅ ("nil" emacs-lisp ruby)
+                     ("null" scheme java)
+                     ("NULL" c c++)
+                     ("()" ,@mley))
+                 (?√ ("sqrt" ,@all))
+                 (?∑ ("sum" python))
+                 (?α ("alpha" ,@all)
+                     ("'a" ,@mley))
+                 (?β ("beta" ,@all)
+                     ("'b" ,@mley))
+                 (?γ ("gamma" ,@all)
+                     ("'c" ,@mley))
+                 (?Δ ("delta" ,@all)
+                     ("'d" ,@mley))
+                 (?ε ("epsilon" ,@all))
+                 (?θ ("theta" ,@all))
+                 (?λ ("lambda" ,@all)
+                     ("fn" sml)
+                     ("fun" tuareg)
+                     ("\\" haskell))
+                 (?π ("pi" ,@all)
+                     ("M_PI" c c++))
+                 (?φ ("psi" ,@all))
+                 
+                 (?² ("**2" python tuareg octave)
+                     ("^2" octave haskell))
+                 (?³ ("**3" python tuareg octave)
+                     ("^3" octave haskell))
+                 (?ⁿ ("**n" python tuareg octave)
+                     ("^n" octave haskell)
+                     ("^n" ,@c-like))
+                 (?ⁱ ("^i" ,@c-like))
+                 
+                 (?₀ ("[0]" ,@c-like))
+                 (?₁ ("[1]" ,@c-like))
+                 (?₂ ("[2]" ,@c-like))
+                 (?₃ ("[3]" ,@c-like))
+                 (?₄ ("[4]" ,@c-like))
+                 (?₅ ("[5]" ,@c-like))
+                 (?₆ ("[6]" ,@c-like))
+                 (?₇ ("[7]" ,@c-like))
+                 (?₈ ("[8]" ,@c-like))
+                 (?₉ ("[9]" ,@c-like))
+                 
+                 (?∞ ("HUGE_VAL" c c++))
+                 
+                 (?∧ ("&&"      c c++ perl haskell))
+                 (?∨ ("||"      c c++ perl haskell))
+                 (?¬ ("\\<!\\>" c c++ perl sh))
+                 
+                 (?ₐ ("[a]" ,@c-like))
+                 (?ₑ ("[e]" ,@c-like))
+                 (?ₕ ("[h]" ,@c-like))
+                 (?ᵢ ("[i]" ,@c-like))
+                 (?ⱼ ("[j]" ,@c-like))
+                 (?ₖ ("[k]" ,@c-like))
+                 (?ₗ ("[l]" ,@c-like))
+                 (?ₘ ("[m]" ,@c-like))
+                 (?ₙ ("[n]" ,@c-like))
+                 (?ₒ ("[o]" ,@c-like))
+                 (?ₚ ("[p]" ,@c-like))
+                 (?ᵣ ("[r]" ,@c-like))
+                 (?ₛ ("[s]" ,@c-like))
+                 (?ₜ ("[t]" ,@c-like))
+                 (?ᵤ ("[u]" ,@c-like))
+                 (?ᵥ ("[v]" ,@c-like))
+                 (?ₓ ("[x]" ,@c-like))
+                 
+                 (?∧ ("&&" c c++ csharp perl haskell))
+                 (?∨ ("||" c c++ perl haskell))
+                 (?¬ ("\\<!\\>" c c++ perl sh))
+                 
+      ;;;    (?∙ ())
+      ;;;    (?× ())
+      ;;;    (?⋂ "\\<intersection\\>"   (,@lispen))
+      ;;;    (?⋃ "\\<union\\>"          (,@lispen))
+                 
+      ;;;    this one would be nice for org-mode
+      ;;;    (?… ("\\.\\.\\." scheme))
+      
+      ;;;    (?∀ ("List.for_all" tuareg))
+      ;;;    (?∃ ("List.exists" tuareg))
+      ;;;    (?∈ ("List.mem" tuareg)
+      ;;;        ("member" ,@lispy))
+      ;;;    (?∉ ())
+         
+      ;;;    (?∧ ("\\<And\\>"     emacs-lisp lisp python)
+      ;;;        ("\\<andalso\\>" sml)
+      ;;;        ("&&"            c c++ perl haskell))
+      ;;;    (?∨ ("\\<or\\>"      emacs-lisp lisp)
+      ;;;        ("\\<orelse\\>"  sml)
+      ;;;        ("||"            c c++ perl haskell))
+      ;;;    (?¬ ("\\<!\\>"       c c++ perl sh)
+      ;;;        ("\\<not\\>"     lisp emacs-lisp scheme haskell sml))
+                 
+                 ))))
+      
+		#+END_SRC
+***** DONE move my changes from pretty-mode.el to this file
+			:LOGBOOK:
+			- State "DONE"       from "TODO"       [2013-07-02 ti 23:45]
+			CLOCK: [2013-07-02 ti 23:30]--[2013-07-02 ti 23:44] =>  0:14
+			- moved my changes out from pretty-mode.el into this file, and replaced
+        pretty-mode.el from emacswiki.
+			:END:
 *** Interaction log
 
 		#+BEGIN_SRC emacs-lisp
