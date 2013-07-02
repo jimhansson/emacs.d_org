@@ -68,7 +68,13 @@ that I share between work and home
 		- I need one for private stuff
 
 *** BUG [[*Iswitch%20Buffers][Iswitch Buffers]] has problem on windows with defining my own columns
+		:LOGBOOK:
+		CLOCK: [2013-07-02 ti 23:25]--[2013-07-02 ti 23:27] =>  0:02
+		:END:
 		have comment out the src section
+
+		It seems to work now, will leave the bug for now. might resurface and in that case i
+		will write more about it.
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -921,26 +927,26 @@ that I share between work and home
 
 	#+BEGIN_SRC emacs-lisp
     ;; Use human readable Size column instead of original one
-    ;; (define-ibuffer-column size-h
-    ;;   (:name "Size" :inline t)
-    ;;   (cond
-    ;;    ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
-    ;;    ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
-    ;;    (t (format "%8d b" (buffer-size)))))
+    (define-ibuffer-column size-h
+      (:name "Size" :inline t)
+      (cond
+       ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
+       ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
+       (t (format "%8d b" (buffer-size)))))
     
     ;; Modify the default ibuffer-formats
-    ;; (setq ibuffer-formats
-    ;;       '((mark modified read-only " "
-    ;;               (name 20 20 :left :elide)
-    ;;               " "
-    ;;               (size-h 9 -1 :right)
-    ;;               " "
-    ;;               (mode 16 16 :left :elide)
-    ;;               " "
-    ;;               filename-and-process)
-    ;;         (mark " "
-    ;;               (name 20 -1)
-    ;;               " " filename)))
+    (setq ibuffer-formats
+          '((mark modified read-only " "
+                  (name 20 20 :left :elide)
+                  " "
+                  (size-h 9 -1 :right)
+                  " "
+                  (mode 16 16 :left :elide)
+                  " "
+                  filename-and-process)
+            (mark " "
+                  (name 20 -1)
+                  " " filename)))
 	#+END_SRC
 
   #+RESULTS:
