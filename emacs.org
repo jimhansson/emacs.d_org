@@ -34,7 +34,13 @@ that I share between work and home
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 *** TODO check out smex.
 *** TODO replace setq and other things with custom-set-variables calls
+		:LOGBOOK:
+		CLOCK: [2013-07-03 on 00:00]--[2013-07-03 on 00:39] =>  0:39
+		:END:
+		
 		might allow for using custom for changing varibles?? also does require on things.
+
+		seems that the function that i should use i customize-set-variable instead.
 
 *** FIXED we maybe should remove flyspell-prog-mode from languages hooks
 		:LOGBOOK:
@@ -236,7 +242,6 @@ that I share between work and home
       (show-paren-mode t)
       (iswitchb-mode 1)
       (setq filesets-data nil)
-      (display-battery-mode)
       (global-font-lock-mode t)
       ;; binds ctrl + § to dabbrev as good enough completion 
       (global-set-key (kbd "C-\§") 'dabbrev-expand)
@@ -1647,6 +1652,18 @@ that I share between work and home
 ******* links
 				- howto specify things in schemas.xml ::
            	 http://www.dpawson.co.uk/relaxng/nxml/schemaloc.html
+
+***** C#
+
+			#+BEGIN_SRC emacs-lisp
+        (defun maybe-csharp-style ()
+          (when (and buffer-file-name
+                     (string-match ".cs" buffer-file-name))
+            (c-set-style "c#")))
+        
+        (add-hook 'c-mode-hook 'maybe-chsarp-style)
+
+			#+END_SRC
 
 *** Flymake
 ***** Haskell
