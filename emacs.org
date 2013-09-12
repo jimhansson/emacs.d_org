@@ -876,7 +876,7 @@ that I share between work and home
                  (?↑ ("\\^" tuareg))
                  (?⟹ ("=>" sml perl ruby haskell))
                  (?∅ ("nil" emacs-lisp ruby)
-                     ("null" scheme java)
+                     ("null" scheme java csharp)
                      ("NULL" c c++)
                      ("()" ,@mley))
                  (?√ ("sqrt" ,@all))
