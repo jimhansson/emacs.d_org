@@ -20,6 +20,8 @@ that I share between work and home
 		:LOGBOOK:
 		CLOCK: [2013-03-11 må 22:13]--[2013-03-11 må 22:52] =>  0:39
 		:END:
+*** TODO I want to use tabs for indentation instead of spaces
+		this might not be a good idea with lisp but I should try it out.
 
 *** TODO Fix font
 		i want deja vu or something else that works good.
@@ -1577,6 +1579,48 @@ that I share between work and home
 
         	(add-hook 'sql-interactive-mode-hook 'install-eat-sqlplus-junk)        
 				#+END_EXAMPLE
+******* new sql send buffer that works on windows
+
+				there is some problem with buffering on windows and large buffers, even regions.
+				read more at http://www.emacswiki.org/emacs/OracleOnWindows to solve this we will
+				try to make a function that instead of pasting the content of the buffer into
+				interactive sql session will try to just paste in @<filename>. that could solve
+				the problem, I usually don't use the send region, but in that case i have to keep
+				it under 500 chars to be safe.
+
+				The drawback of this way of doing things is that the buffer need to be saved
+				before sending it, or else we will send old content. this inhibit a workflow
+				where you change some lines, tries if it works, maybe change some more. and when
+				done you save. Or you just stop and bury the buffer to start out fresh but I
+				usually use a VC for all my files and can use that as restore point.
+
+				#+BEGIN_SRC emacs-lisp
+          (defun jiha-send-sql-buffer () 
+            "Easy fix around the problem on windows that comint does deadlock when trying 
+          send big buffers to sqlplus. this instead sends the filename + path as a script 
+          to be read and executed by sqlplus self. as long as path does not exeed ~500 it 
+          should not be a problem."
+            (interactive)
+            (let ((current-buffer (current-buffer))
+                  (dest-buffer sql-buffer))
+              (progn
+                (with-current-buffer dest-buffer
+                  (insert (concat "@" (buffer-file-name current-buffer)))
+                  (comint-send-input nil t)))))
+				#+END_SRC
+				
+				The command to send the buffer to the sql session is bound to a key in sql mode
+				and also exist in the menu, changing both these places are hard and therefor I
+				opted for instead advicing the sql-send-buffer function that is used by both key
+				combo and the menu item.
+
+				#+BEGIN_SRC emacs-lisp
+          (defadvice sql-send-buffer (around around-sql-send-buffer)
+            "With the help of a around advice we trap calls to sql-send-buffer and instead replace
+            them with call to my own function."
+            (jiha-send-sql-buffer))
+				#+END_SRC
+
 ******* Placeholder support in sql querys
 				:LOGBOOK:
 				- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
