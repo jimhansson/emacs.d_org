@@ -75,8 +75,11 @@ that I share between work and home
 		- I need one for coding.
 		- I need one for private stuff
 
-*** BUG [[*Iswitch%20Buffers][Iswitch Buffers]] has problem on windows with defining my own columns
+*** FIXED [[*Iswitch%20Buffers][Iswitch Buffers]] has problem on windows with defining my own columns
 		:LOGBOOK:
+		CLOCK: [2013-09-23 må 16:26]--[2013-09-23 må 16:40] =>  0:14
+		- by defining ibuffer-inline-columns before it is used, I get around the
+      problem. Maybe i should require something instead.
 		CLOCK: [2013-07-02 ti 23:25]--[2013-07-02 ti 23:27] =>  0:02
 		:END:
 		have comment out the src section
@@ -85,6 +88,25 @@ that I share between work and home
 		will write more about it.
 
 		tried starting emacs again, it did not work, commented out the region again.
+
+*** TODO Things that does not work after uppgrade
+
+		these two things gives wierd errors after uppgrade, we need find out if they are still
+		needed or if they can be removed.
+
+		#+BEGIN_EXAMPLE
+      ;; resurrect clock and clocking history
+      ;; this need to be placed after Local and Shared init of org-files so
+      ;; we have all files where we should look for clocked in tasks.
+      ;;(org-clock-persistence-insinuate)
+
+      ;; because of org-mode modular structure some variables and other
+      ;; things are not known before you have used them once, this solves
+      ;; that problem at least partially.
+      ;;(org-require-autoloaded-modules)
+      
+		#+END_EXAMPLE
+
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -1031,6 +1053,10 @@ that I share between work and home
     (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 	#+END_SRC
 
+ #+RESULTS:
+ | iswitchb-local-keys |
+
+	
 	#+BEGIN_SRC emacs-lisp
     (add-hook 'ibuffer-mode-hook 
               '(lambda ()
@@ -1058,28 +1084,32 @@ that I share between work and home
         (switch-to-buffer other-frame-buffer))) 
 	#+END_SRC
 
+ #+RESULTS:
+ : switch-buffers-between-frames
+
 	#+BEGIN_SRC emacs-lisp
-    ;; ;; Use human readable Size column instead of original one
-    ;; (define-ibuffer-column size-h
-    ;;   (:name "Size" :inline t)
-    ;;   (cond
-    ;;    ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
-    ;;    ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
-    ;;    (t (format "%8d b" (buffer-size)))))
+    ;; Use human readable Size column instead of original one
+    (setq ibuffer-inline-columns ())
+    (define-ibuffer-column size-h
+      (:name "Size" :inline t)
+      (cond
+       ((> (buffer-size) 1000) (format "%7.2f Kb" (/ (buffer-size) 1000.0)))
+       ((> (buffer-size) 1000000) (format "%7.2f Mb" (/ (buffer-size) 1000000.0)))
+       (t (format "%8d b" (buffer-size)))))
     
-    ;; ;; Modify the default ibuffer-formats
-    ;; (setq ibuffer-formats
-    ;;       '((mark modified read-only " "
-    ;;               (name 20 20 :left :elide)
-    ;;               " "
-    ;;               (size-h 9 -1 :right)
-    ;;               " "
-    ;;               (mode 16 16 :left :elide)
-    ;;               " "
-    ;;               filename-and-process)
-    ;;         (mark " "
-    ;;               (name 20 -1)
-    ;;               " " filename)))
+    ;; Modify the default ibuffer-formats
+    (setq ibuffer-formats
+          '((mark modified read-only " "
+                  (name 20 20 :left :elide)
+                  " "
+                  (size-h 9 -1 :right)
+                  " "
+                  (mode 16 16 :left :elide)
+                  " "
+                  filename-and-process)
+            (mark " "
+                  (name 20 -1)
+                  " " filename)))
 	#+END_SRC
 
   #+RESULTS:
@@ -2056,10 +2086,6 @@ that I share between work and home
       (org-crypt-use-before-save-magic)
       (setq org-tags-exclude-from-inheritance '("crypt"))
       (run-at-time "00:59" 3600 'org-save-all-org-buffers)
-      ;; because of org-mode modular structure some variables and other
-      ;; things are not known before you have used them once, this solves
-      ;; that problem at least partially.
-      (org-require-autoloaded-modules)
       (jiha-safe-require 'org-protocol ())
       
       (setq org-capture-use-agenda-date t)
@@ -2901,12 +2927,7 @@ that I share between work and home
 
 		#+BEGIN_SRC emacs-lisp
       ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-      (setq org-clock-persist t)
-      ;; resurrect clock and clocking history
-      ;; this need to be placed after Local and Shared init of org-files so
-      ;; we have all files where we should look for clocked in tasks.
-      (org-clock-persistence-insinuate)
-      
+      (setq org-clock-persist t)      
 		#+END_SRC
 * Google Integration
 	most of these things comes from http://julien.danjou.info/
@@ -2918,7 +2939,7 @@ that I share between work and home
       
       (jiha-safe-require 'google-maps
                         (jiha-safe-require 'org-location-google-maps ()))
-
+      
     #+END_SRC
 
     You can then use M-x google-maps and type a location.
