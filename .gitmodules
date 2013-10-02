@@ -22,3 +22,6 @@
 [submodule "litable"]
 	path = litable
 	url = https://github.com/Fuco1/litable.git
+[submodule "omnisharp"]
+	path = omnisharp
+	url = https://github.com/jimhansson/omnisharp-emacs.git
