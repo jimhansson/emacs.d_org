@@ -16,6 +16,7 @@ that I share between work and home
 #+LINK: wiki http://emacswiki.org/emacs/
 	
 * Bugs
+*** TODO check out script in org-outlook, for new ideas.
 *** TODO I don't want submodules to show up in git status
 		:LOGBOOK:
 		CLOCK: [2013-03-11 må 22:13]--[2013-03-11 må 22:52] =>  0:39
@@ -44,18 +45,6 @@ that I share between work and home
 
 		seems that the function that i should use i customize-set-variable instead.
 
-*** FIXED we maybe should remove flyspell-prog-mode from languages hooks
-		:LOGBOOK:
-		CLOCK: [2013-06-13 to 13:44]--[2013-06-13 to 15:01] =>  1:17
-		- State "FIXED"      from "TODO"       [2013-06-13 to 15:01] \\
-			Fixed now, but need to add modes that tells what to use.
-		- Refiled on [2013-06-12 on 01:17] \\
-			should not have issues spread out in the file
-		:END:
-		and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
-		the major mode is a programming mode and "vanilla" flyspell-mode when it is
-		not. and bind that to *C-<F8>*.
-
 *** BUG %U "macro" in capture tempates does not work in longrunning instances of emacs.
 		:LOGBOOK:
 		CLOCK: [2013-06-16 sö 23:56]--[2013-06-17 må 00:02] =>  0:06
@@ -75,20 +64,6 @@ that I share between work and home
 		- I need one for coding.
 		- I need one for private stuff
 
-*** FIXED [[*Iswitch%20Buffers][Iswitch Buffers]] has problem on windows with defining my own columns
-		:LOGBOOK:
-		CLOCK: [2013-09-23 må 16:26]--[2013-09-23 må 16:40] =>  0:14
-		- by defining ibuffer-inline-columns before it is used, I get around the
-      problem. Maybe i should require something instead.
-		CLOCK: [2013-07-02 ti 23:25]--[2013-07-02 ti 23:27] =>  0:02
-		:END:
-		have comment out the src section
-
-		It seems to work now, will leave the bug for now. might resurface and in that case i
-		will write more about it.
-
-		tried starting emacs again, it did not work, commented out the region again.
-
 *** TODO Things that does not work after uppgrade
 
 		these two things gives wierd errors after uppgrade, we need find out if they are still
@@ -106,6 +81,32 @@ that I share between work and home
       ;;(org-require-autoloaded-modules)
       
 		#+END_EXAMPLE
+
+*** FIXED we maybe should remove flyspell-prog-mode from languages hooks
+		:LOGBOOK:
+		CLOCK: [2013-06-13 to 13:44]--[2013-06-13 to 15:01] =>  1:17
+		- State "FIXED"      from "TODO"       [2013-06-13 to 15:01] \\
+			Fixed now, but need to add modes that tells what to use.
+		- Refiled on [2013-06-12 on 01:17] \\
+			should not have issues spread out in the file
+		:END:
+		and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
+		the major mode is a programming mode and "vanilla" flyspell-mode when it is
+		not. and bind that to *C-<F8>*.
+
+*** FIXED [[*Iswitch%20Buffers][Iswitch Buffers]] has problem on windows with defining my own columns
+		:LOGBOOK:
+		CLOCK: [2013-09-23 må 16:26]--[2013-09-23 må 16:40] =>  0:14
+		- by defining ibuffer-inline-columns before it is used, I get around the
+      problem. Maybe i should require something instead.
+		CLOCK: [2013-07-02 ti 23:25]--[2013-07-02 ti 23:27] =>  0:02
+		:END:
+		have comment out the src section
+
+		It seems to work now, will leave the bug for now. might resurface and in that case i
+		will write more about it.
+
+		tried starting emacs again, it did not work, commented out the region again.
 
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
@@ -1739,6 +1740,25 @@ that I share between work and home
 
 			#+END_SRC
 
+			OmniSharp is a new tool to help with C# development it's a little daemon that stays
+			in the background and emacs makes calls to it by using curl, so you also need ot
+			install curl. OmniSharp has good completion at point and other goodies.
+			
+			we should make a csharp-mode-hook that activates it and sets up keybindings.
+			#+BEGIN_SRC emacs-lisp
+        (add-to-list 'load-path (concat local-emacs-org-dir "omnisharp"))
+        (require 'omnisharp)
+			#+END_SRC
+
+      #+RESULTS:
+	    : omnisharp
+
+******* TODO make customization group
+
+******* TODO make it call msbuild in the right way, when building solutions.
+
+******* TODO Make it able to start and control what solution is used.
+
 *** Flymake
 ***** Haskell
 			#+BEGIN_SRC emacs-lisp
@@ -2905,7 +2925,7 @@ that I share between work and home
       ;;(load-file "org-modules/org-element.el")
       ;;(load-file "org-sync2/os.el") ;; org-sync
       ;;(load-file "org-sync2/os-github.el") ;; github
-      ;;(load-file "org-sync2/and os-bb.el") ;; bitbucket  
+      ;;(load-file "org-sync2/os-bb.el") ;; bitbucket  
     #+END_EXAMPLE
 
 *** Post
@@ -2934,11 +2954,11 @@ that I share between work and home
 *** Google maps                                                         :org:
 
     #+BEGIN_SRC emacs-lisp
-      (add-to-list 'load-path (concat local-emacs-org-dir
-                                      "google-maps"))
-      
-      (jiha-safe-require 'google-maps
-                        (jiha-safe-require 'org-location-google-maps ()))
+      ;;(add-to-list 'load-path (concat local-emacs-org-dir
+      ;;                                "google-maps"))
+      ;;
+      ;;(jiha-safe-require 'google-maps
+      ;;                  (jiha-safe-require 'org-location-google-maps ()))
       
     #+END_SRC
 
