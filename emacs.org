@@ -1503,6 +1503,12 @@ that I share between work and home
       	;;(jiha-safe-require 'plsql ())
 			#+END_SRC
 ***** SQL-mode
+
+			First we need to associate oracles sql files with sql-mode
+			#+BEGIN_SRC emacs-lisp
+        (add-to-list 'auto-mode-alist '("\\.plb\\'" . sql-mode))
+			#+END_SRC
+
 ******* Support Multiple connections
 
 				If you work with multiple connections, you need to rename them such that the next
@@ -1747,16 +1753,25 @@ that I share between work and home
 			we should make a csharp-mode-hook that activates it and sets up keybindings.
 			#+BEGIN_SRC emacs-lisp
         (add-to-list 'load-path (concat local-emacs-org-dir "omnisharp"))
-        (require 'omnisharp)
+        ;;(require 'omnisharp)
+        (add-hook 'csharp-mode-hook 'omnisharp-mode)
+        (eval-after-load 'company
+          '(add-to-list 'company-backends 'company-omnisharp))
 			#+END_SRC
 
       #+RESULTS:
 	    : omnisharp
 
-******* TODO make customization group
+******* DONE make customization group
+				:LOGBOOK:
+				- State "DONE"       from "TODO"       [2013-10-02 on 19:54] \\
+					Done it, need to create a pull request for maintainer.
+				:END:
 
 ******* TODO make it call msbuild in the right way, when building solutions.
-
+				:LOGBOOK:
+				CLOCK: [2013-10-02 on 19:55]--[2013-10-03 to 00:20] =>  4:25
+				:END:
 ******* TODO Make it able to start and control what solution is used.
 
 *** Flymake
@@ -2834,9 +2849,7 @@ that I share between work and home
                     (when face (return face)))))))
 		#+END_SRC
 		
-***** Agenda templates
-			
-			
+***** Agenda templates			
 ***** Diary integration
 
 			functions to use in the agenda view, include calles to these
