@@ -229,7 +229,7 @@ that I share between work and home
       (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
 		#+END_EXAMPLE
 
-*** Things you should install from package-system								:instw:instl:
+*** Things you should install from package-system                 :instw:instl:
 		- oauth2 :: for google integration for some reason I need to add oauth directory to
 		load-path, should not elpa take care of that. 
 		- bookmark+ :: can do so much more than the normal bookmark package. 
@@ -701,7 +701,7 @@ that I share between work and home
       ;;(add-hook 'auto-save-hook ...)
 		#+END_SRC
 
-*** Fly-spell																										:keybindings:
+*** Fly-spell                                                     :keybindings:
 
 		My spelling is terrible so we use fly-spell as much as possible when it is
 		available. It needs to be easy to activate and deactivate, we also need an easy way to
@@ -777,14 +777,14 @@ that I share between work and home
 		from one language after another and that function is defined at [[(dict_func)][defun]], and at last
 		we bind that function to a key-combo for easy access at [[(dict_cycle)][global-set...]]
 
-***** Installing ispell on windows																		:instw:
+***** Installing ispell on windows                                    :instw:
 
       look here and download everthing you need.
       http://aspell.net/win32/
 
       add aspell directory to path
 
-*** Whitespace																									:keybindings:
+*** Whitespace                                                  :keybindings:
 
 		I use whitespace mode a lot, maybe because I dont have configured
 		the programming modes to "do the right thing" yet and some other
@@ -1854,7 +1854,7 @@ that I share between work and home
         ;; we will active this when I have a configuration that will work on both windows and linux.
         ;;(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
       #+END_SRC
-*** Compile																											:keybindings:
+*** Compile                                                       :keybindings:
 
 		#+BEGIN_SRC emacs-lisp
       (jiha-safe-require 'compile 
@@ -2188,7 +2188,7 @@ that I share between work and home
       (setq org-toc-follow-mode t)
 		#+END_SRC
 
-*** Global Keys for OrgMode																			:keybindings:
+*** Global Keys for OrgMode                                       :keybindings:
 		
 		#+BEGIN_SRC emacs-lisp
       ;; org-mode Links
@@ -3107,7 +3107,7 @@ that I share between work and home
     (org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
 	#+END_SRC
   
-* File-sets 																											 :filesets:
+* File-sets                                                        :filesets:
 	
 	The commands that can operate on file sets are specified in the global
 	custom variable "filesets-commands". You can add your own commands to
@@ -3219,7 +3219,7 @@ that I share between work and home
 	#+END_SRC
 
 * TODO BBDB
-* Windows context menu integration 																		:instw:
+* Windows context menu integration                                      :instw:
 	:LOGBOOK:
 	- State "DONE"       from "TODO"  [2013-03-15 fr 10:35]
 		works fine
