@@ -35,7 +35,6 @@ that I share between work and home
 
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
-*** TODO check out smex.
 *** TODO replace setq and other things with custom-set-variables calls
 		:LOGBOOK:
 		CLOCK: [2013-07-03 on 00:00]--[2013-07-03 on 00:39] =>  0:39
@@ -82,6 +81,34 @@ that I share between work and home
       
 		#+END_EXAMPLE
 
+*** TODO advice tabify/untabify to use the whole buffer if no region is marked. :noexport:
+		:LOGBOOK:
+		CLOCK: [2014-02-04 ti 12:15]
+		:END:
+
+		does not work at the moment as I would like it to need to fix it somehow.
+		#+BEGIN_SRC elisp
+      (defadvice tabify (around mark-whole-buffer-if-no-region activate)
+        "When using tabify without marking a region, the normal thing in emacs is to do tabify
+      on everthing below point, this feel unatural, this changes that to instead do it on the
+      whole buffer."
+        (save-excursion
+          (if (not (region-active-p)) 
+              (progn
+                (mark-whole-buffer)
+                (ad-do-it)))))
+        
+		#+END_SRC
+
+		#+RESULTS:
+		: tabify
+
+		#+BEGIN_SRC elisp
+		(ad-disable-advice 'tabify 'around 'mark-whole-buffer-if-no-region)
+		#+END_SRC
+
+  #+RESULTS:
+
 *** FIXED we maybe should remove flyspell-prog-mode from languages hooks
 		:LOGBOOK:
 		CLOCK: [2013-06-13 to 13:44]--[2013-06-13 to 15:01] =>  1:17
@@ -107,6 +134,10 @@ that I share between work and home
 		will write more about it.
 
 		tried starting emacs again, it did not work, commented out the region again.
+*** CANCELLED check out smex.
+		:LOGBOOK:
+		- State "CANCELLED"  from "TODO"       [2014-02-04 ti 13:06]
+		:END:
 
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
@@ -284,6 +315,10 @@ that I share between work and home
 
 		#+END_SRC
 
+		#+BEGIN_SRC emacs-lisp
+      (load "server")
+      (unless (server-running-p) (server-start))
+		#+END_SRC
 *** Disable warnings for first time users
 		
 		For some reason some questions in emacs are yes/no and some are y/n this trips me
@@ -899,7 +934,7 @@ that I share between work and home
                  (?← ("<-" ,@mley ess))
                  (?➛ ("->" ,@mley ess c c++ perl))
                  (?↑ ("\\^" tuareg))
-                 (?⟹ ("=>" sml perl ruby haskell))
+                 (?⟹ ("=>" sml perl ruby))
                  (?∅ ("nil" emacs-lisp ruby)
                      ("null" scheme java csharp)
                      ("NULL" c c++)
@@ -998,6 +1033,25 @@ that I share between work and home
                  ))))
       
 		#+END_SRC
+
+  #+RESULTS:
+	| sml-mode        | (psi . 966)   | (pi . 960)   | (fn . 955)     | (lambda . 955) | (theta . 952)   | (epsilon . 949) | ('d . 916)     | (delta . 916) | ('c . 947)      | (gamma . 947) | ('b . 946)      | (beta . 946)  | ('a . 945)    | (alpha . 945) | (sqrt . 8730)  | (() . 8709)   | (=> . 10233)    | (-> . 10139)  | (<- . 8592)   | (>= . 8805)  | (<= . 8804)   |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| lisp-mode       | (psi . 966)   | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)  | (beta . 946)  | (alpha . 945)   | (sqrt . 8730) | (>= . 8805)     | (<= . 8804)   |               |               |                |               |                 |               |               |              |               |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| emacs-lisp-mode | (psi . 966)   | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)  | (beta . 946)  | (alpha . 945)   | (sqrt . 8730) | (nil . 8709)    | (>= . 8805)   | (<= . 8804)   | (/= . 8800)   |                |               |                 |               |               |              |               |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| haskell-mode    | (             |              | . 8744)        | (&& . 8743)    | (               |                 | . 8744)        | (&& . 8743)   | (^n . 8319)     | (^3 . 179)    | (^2 . 178)      | (psi . 966)   | (pi . 960)    | (\ . 955)     | (lambda . 955) | (theta . 952) | (epsilon . 949) | ('d . 916)    | (delta . 916) | ('c . 947)   | (gamma . 947) | ('b . 946)   | (beta . 946)  | ('a . 945)   | (alpha . 945) | (sqrt . 8730) | (() . 8709)  | (-> . 10139)      | (<- . 8592)  | (>= . 8805)  | (<= . 8804)  | (/= . 8800)    |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| tuareg-mode     | (**n . 8319)  | (**3 . 179)  | (**2 . 178)    | (psi . 966)    | (pi . 960)      | (fun . 955)     | (lambda . 955) | (theta . 952) | (epsilon . 949) | ('d . 916)    | (delta . 916)   | ('c . 947)    | (gamma . 947) | ('b . 946)    | (beta . 946)   | ('a . 945)    | (alpha . 945)   | (sqrt . 8730) | (() . 8709)   | (\^ . 8593)  | (-> . 10139)  | (<- . 8592)  | (>= . 8805)   | (<= . 8804)  | (<> . 8800)   |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| octave-mode     | (^n . 8319)   | (**n . 8319) | (^3 . 179)     | (**3 . 179)    | (^2 . 178)      | (**2 . 178)     | (psi . 966)    | (pi . 960)    | (lambda . 955)  | (theta . 952) | (epsilon . 949) | (delta . 916) | (gamma . 947) | (beta . 946)  | (alpha . 945)  | (sqrt . 8730) | (>= . 8805)     | (<= . 8804)   | (~= . 8800)   | (<> . 8800)  | (!= . 8800)   |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| scheme-mode     | (psi . 966)   | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)  | (beta . 946)  | (alpha . 945)   | (sqrt . 8730) | (null . 8709)   | (>= . 8805)   | (<= . 8804)   | (!= . 8800)   |                |               |                 |               |               |              |               |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| csharp-mode     | (&& . 8743)   | ([x] . 8339) | ([v] . 7525)   | ([u] . 7524)   | ([t] . 8348)    | ([s] . 8347)    | ([r] . 7523)   | ([p] . 8346)  | ([o] . 8338)    | ([n] . 8345)  | ([m] . 8344)    | ([l] . 8343)  | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)   | ([h] . 8341)  | ([e] . 8337)    | ([a] . 8336)  | ([9] . 8329)  | ([8] . 8328) | ([7] . 8327)  | ([6] . 8326) | ([5] . 8325)  | ([4] . 8324) | ([3] . 8323)  | ([2] . 8322)  | ([1] . 8321) | ([0] . 8320)      | (^i . 8305)  | (^n . 8319)  | (psi . 966)  | (pi . 960)     | (lambda . 955) | (theta . 952)   | (epsilon . 949) | (delta . 916)   | (gamma . 947)   | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (null . 8709) | (>= . 8805)    | (<= . 8804)   | (!= . 8800)     |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| ruby-mode       | ([x] . 8339)  | ([v] . 7525) | ([u] . 7524)   | ([t] . 8348)   | ([s] . 8347)    | ([r] . 7523)    | ([p] . 8346)   | ([o] . 8338)  | ([n] . 8345)    | ([m] . 8344)  | ([l] . 8343)    | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341)   | ([e] . 8337)  | ([a] . 8336)    | ([9] . 8329)  | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323) | ([2] . 8322)  | ([1] . 8321)  | ([0] . 8320) | (^i . 8305)       | (^n . 8319)  | (psi . 966)  | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)   | (beta . 946)    | (alpha . 945) | (sqrt . 8730) | (nil . 8709)  | (=> . 10233)  | (>= . 8805)    | (<= . 8804)   | (!= . 8800)     |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| ess-mode        | ([x] . 8339)  | ([v] . 7525) | ([u] . 7524)   | ([t] . 8348)   | ([s] . 8347)    | ([r] . 7523)    | ([p] . 8346)   | ([o] . 8338)  | ([n] . 8345)    | ([m] . 8344)  | ([l] . 8343)    | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341)   | ([e] . 8337)  | ([a] . 8336)    | ([9] . 8329)  | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323) | ([2] . 8322)  | ([1] . 8321)  | ([0] . 8320) | (^i . 8305)       | (^n . 8319)  | (psi . 966)  | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)   | (beta . 946)    | (alpha . 945) | (sqrt . 8730) | (-> . 10139)  | (<- . 8592)   | (>= . 8805)    | (<= . 8804)   | (!= . 8800)     |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| java-mode       | ([x] . 8339)  | ([v] . 7525) | ([u] . 7524)   | ([t] . 8348)   | ([s] . 8347)    | ([r] . 7523)    | ([p] . 8346)   | ([o] . 8338)  | ([n] . 8345)    | ([m] . 8344)  | ([l] . 8343)    | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341)   | ([e] . 8337)  | ([a] . 8336)    | ([9] . 8329)  | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323) | ([2] . 8322)  | ([1] . 8321)  | ([0] . 8320) | (^i . 8305)       | (^n . 8319)  | (psi . 966)  | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)   | (beta . 946)    | (alpha . 945) | (sqrt . 8730) | (null . 8709) | (>= . 8805)   | (<= . 8804)    | (!= . 8800)   |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| python-mode     | ([x] . 8339)  | ([v] . 7525) | ([u] . 7524)   | ([t] . 8348)   | ([s] . 8347)    | ([r] . 7523)    | ([p] . 8346)   | ([o] . 8338)  | ([n] . 8345)    | ([m] . 8344)  | ([l] . 8343)    | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341)   | ([e] . 8337)  | ([a] . 8336)    | ([9] . 8329)  | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323) | ([2] . 8322)  | ([1] . 8321)  | ([0] . 8320) | (^i . 8305)       | (^n . 8319)  | (**n . 8319) | (**3 . 179)  | (**2 . 178)    | (psi . 966)    | (pi . 960)      | (lambda . 955)  | (theta . 952)   | (epsilon . 949) | (delta . 916) | (gamma . 947) | (beta . 946)  | (alpha . 945) | (sum . 8721)   | (sqrt . 8730) | (>= . 8805)     | (<= . 8804)   | (!= . 8800)     |               |               |               |               |               |               |              |             |             |             |
+	| sh-mode         | (\<!\> . 172) | ([x] . 8339) | ([v] . 7525)   | ([u] . 7524)   | ([t] . 8348)    | ([s] . 8347)    | ([r] . 7523)   | ([p] . 8346)  | ([o] . 8338)    | ([n] . 8345)  | ([m] . 8344)    | ([l] . 8343)  | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)   | ([h] . 8341)  | ([e] . 8337)    | ([a] . 8336)  | (\<!\> . 172) | ([9] . 8329) | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323)  | ([2] . 8322) | ([1] . 8321)      | ([0] . 8320) | (^i . 8305)  | (^n . 8319)  | (psi . 966)    | (pi . 960)     | (lambda . 955)  | (theta . 952)   | (epsilon . 949) | (delta . 916)   | (gamma . 947) | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (>= . 8805)    | (<= . 8804)   | (!= . 8800)     |               |                 |               |               |               |               |               |               |              |             |             |             |
+	| perl-mode       | (\<!\> . 172) | (            |                | . 8744)        | (&& . 8743)     | ([x] . 8339)    | ([v] . 7525)   | ([u] . 7524)  | ([t] . 8348)    | ([s] . 8347)  | ([r] . 7523)    | ([p] . 8346)  | ([o] . 8338)  | ([n] . 8345)  | ([m] . 8344)   | ([l] . 8343)  | ([k] . 8342)    | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341) | ([e] . 8337)  | ([a] . 8336) | (\<!\> . 172) | (            |               | . 8744)       | (&& . 8743)  | ([9] . 8329)      | ([8] . 8328) | ([7] . 8327) | ([6] . 8326) | ([5] . 8325)   | ([4] . 8324)   | ([3] . 8323)    | ([2] . 8322)    | ([1] . 8321)    | ([0] . 8320)    | (^i . 8305)   | (^n . 8319)   | (psi . 966)   | (pi . 960)    | (lambda . 955) | (theta . 952) | (epsilon . 949) | (delta . 916) | (gamma . 947)   | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (=> . 10233)  | (-> . 10139)  | (>= . 8805)   | (<= . 8804)  | (!= . 8800) |             |             |
+	| c++-mode        | (\<!\> . 172) | (            |                | . 8744)        | (&& . 8743)     | ([x] . 8339)    | ([v] . 7525)   | ([u] . 7524)  | ([t] . 8348)    | ([s] . 8347)  | ([r] . 7523)    | ([p] . 8346)  | ([o] . 8338)  | ([n] . 8345)  | ([m] . 8344)   | ([l] . 8343)  | ([k] . 8342)    | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341) | ([e] . 8337)  | ([a] . 8336) | (\<!\> . 172) | (            |               | . 8744)       | (&& . 8743)  | (HUGE_VAL . 8734) | ([9] . 8329) | ([8] . 8328) | ([7] . 8327) | ([6] . 8326)   | ([5] . 8325)   | ([4] . 8324)    | ([3] . 8323)    | ([2] . 8322)    | ([1] . 8321)    | ([0] . 8320)  | (^i . 8305)   | (^n . 8319)   | (psi . 966)   | (M_PI . 960)   | (pi . 960)    | (lambda . 955)  | (theta . 952) | (epsilon . 949) | (delta . 916) | (gamma . 947) | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (NULL . 8709) | (-> . 10139) | (>= . 8805) | (<= . 8804) | (!= . 8800) |
+	| c-mode          | (\<!\> . 172) | (            |                | . 8744)        | (&& . 8743)     | ([x] . 8339)    | ([v] . 7525)   | ([u] . 7524)  | ([t] . 8348)    | ([s] . 8347)  | ([r] . 7523)    | ([p] . 8346)  | ([o] . 8338)  | ([n] . 8345)  | ([m] . 8344)   | ([l] . 8343)  | ([k] . 8342)    | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341) | ([e] . 8337)  | ([a] . 8336) | (\<!\> . 172) | (            |               | . 8744)       | (&& . 8743)  | (HUGE_VAL . 8734) | ([9] . 8329) | ([8] . 8328) | ([7] . 8327) | ([6] . 8326)   | ([5] . 8325)   | ([4] . 8324)    | ([3] . 8323)    | ([2] . 8322)    | ([1] . 8321)    | ([0] . 8320)  | (^i . 8305)   | (^n . 8319)   | (psi . 966)   | (M_PI . 960)   | (pi . 960)    | (lambda . 955)  | (theta . 952) | (epsilon . 949) | (delta . 916) | (gamma . 947) | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (NULL . 8709) | (-> . 10139) | (>= . 8805) | (<= . 8804) | (!= . 8800) |
+
 ***** DONE move my changes from pretty-mode.el to this file
 			:LOGBOOK:
 			- State "DONE"       from "TODO"       [2013-07-02 ti 23:45]
@@ -1390,7 +1444,7 @@ that I share between work and home
         ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
         
         ;; support for inferior haskell shell
-        (add-hook 'haskell-mode-hook (lambda (jiha-safe-require 'inf-haskell ())))
+        ;;(add-hook 'haskell-mode-hook (lambda (jiha-safe-require 'inf-haskell ())))
         
         ;; keep my files looking good
         (setq haskell-stylish-on-save t)
@@ -2730,6 +2784,20 @@ that I share between work and home
 		Piotr
 
 *** Filesets for OrgFiles                                          :filesets:
+
+		Creates filesets for all org files.
+    #+BEGIN_SRC emacs-lisp
+      (dolist (directory my-org-directories)
+        (let ((directory-part (concat "Org: " (car (last (split-string directory "/") 2)))))
+          (add-to-list 'filesets-data 
+                       (list directory-part
+                             (list ':tree
+                                   directory
+                                   "^.+\\.org$")))))
+		#+END_SRC
+
+    #+RESULTS:
+
 *** Logging and clocking
     
     I want to have the chance to enter a message for every change a
@@ -2758,16 +2826,6 @@ that I share between work and home
       (setq org-clock-report-include-clocking-task t) 
     #+END_SRC
     
-		Creates filesets for all org files.
-    #+BEGIN_SRC emacs-lisp
-      (dolist (directory my-org-directories)
-        (let ((directory-part (concat "Org: " (car (last (split-string directory "/") 2)))))
-          (add-to-list 'filesets-data 
-                       (list directory-part
-                             (list ':tree
-                                   directory
-                                   "^.+\\.org$")))))
-		#+END_SRC
 
 		The Commands for clocking in and clocking out are by default only bound in org-mode
 		this means I always have to switch to a org-mode buffer and that annoys me very
