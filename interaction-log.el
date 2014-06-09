@@ -108,7 +108,7 @@ more stuff is added.
 When nil, the cursor will stay at the same text position."
   :group 'interaction-log :type 'boolean)
 
-(defcustom ilog-log-max 1000
+(defcustom ilog-log-max 10000
   "Maximum number of lines to keep in the *Emacs Log* buffer.
 If t, don't truncate the buffer when it becomes large"
   :group 'interaction-log :type '(choice (const  :tag "Unlimited" t)
@@ -116,7 +116,7 @@ If t, don't truncate the buffer when it becomes large"
 
 (defcustom ilog-sexp-form-log t
 	"tells if we want logging to be in a format that can be easlly
-processed and analized. so we can telle the users what they are
+processed and analized. so we can tell the users what they are
 	doing wrong and should improve on when using emacs." 
 	:group 'interaction-log :type 'boolean)
 
@@ -377,7 +377,7 @@ Return the result."
   "Format and propertize messages in STRING."
   (if (and (stringp string) (not (equal string "")))
       (let ((messages (ilog-cut-surrounding-newlines string)))
-        (concat ";;"
+        (concat ";; "
          (mapconcat
           (lambda (line)
             (let ((load-mesg-p (when (get-text-property 0 'load-message line)
