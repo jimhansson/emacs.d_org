@@ -16,7 +16,8 @@ different points. This is placed in a git repository that I share between work a
 	
 * Bugs
 	:LOGBOOK:
-	CLOCK: [2014-06-09 må 14:55]
+	CLOCK: [2014-06-09 må 14:55]--[2014-06-09 må 16:40] =>  1:45
+	- changed omnisharp to be from elpa instead of using my own version.
 	:END:
 *** TODO CSharp mode does something funny with { in csharp-mode
 		it does not let me use cc-mode indentation to control what should be indented and how.
