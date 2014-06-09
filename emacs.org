@@ -49,19 +49,6 @@ different points. This is placed in a git repository that I share between work a
 
 		seems that the function that i should use i customize-set-variable instead.
 
-*** BUG %U "macro" in capture tempates does not work in longrunning instances of emacs.
-		:LOGBOOK:
-		CLOCK: [2013-06-16 sö 23:56]--[2013-06-17 må 00:02] =>  0:06
-		- signat upp mig på org-mode mailing lista, borde sätta upp filter på gmail
-		:END:
-		I a let a emacs instance run for a few days the %U macro does not reflect the current
-		date as it should, I am guessing a get the date from the last restart of emacs.
-		I should try to mail this to the org-mode list to see if the can tell me what is
-		wrong.
-		
-		Also the date+tree capture templates does not work. For some reason it also adds
-		entries under way to old dates. and sometime even in the future. 
-
 *** TODO add ibuffer "layouts" that are different between work, code, home, otherstuff....
 
 		- I need one for work related stuff that are not code, things like mail, org-files...
@@ -114,6 +101,21 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 
   #+RESULTS:
+
+*** DONE %U "macro" in capture tempates does not work in longrunning instances of emacs.
+		:LOGBOOK:
+		- State "DONE"       from "BUG"        [2014-06-09 må 23:25] \\
+			looks like it is not a problem any more, none of the entries added today are back-dated.
+		CLOCK: [2013-06-16 sö 23:56]--[2013-06-17 må 00:02] =>  0:06
+		- signat upp mig på org-mode mailing lista, borde sätta upp filter på gmail
+		:END:
+		I a let a emacs instance run for a few days the %U macro does not reflect the current
+		date as it should, I am guessing a get the date from the last restart of emacs.
+		I should try to mail this to the org-mode list to see if the can tell me what is
+		wrong.
+		
+		Also the date+tree capture templates does not work. For some reason it also adds
+		entries under way to old dates. and sometime even in the future. 
 
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
