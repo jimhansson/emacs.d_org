@@ -207,7 +207,7 @@ different points. This is placed in a git repository that I share between work a
       (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
 		#+END_EXAMPLE
 
-*** Things you should install from package-system                 :instw:instl:
+*** Things you should install from package-system								:instw:instl:
 		- oauth2 :: for google integration for some reason I need to add oauth directory to
 		load-path, should not elpa take care of that. 
 		- bookmark+ :: can do so much more than the normal bookmark package. 
@@ -678,7 +678,7 @@ different points. This is placed in a git repository that I share between work a
       ;;(add-hook 'auto-save-hook ...)
 		#+END_SRC
 
-*** Fly-spell                                                     :keybindings:
+*** Fly-spell																										:keybindings:
 
 		My spelling is terrible so we use fly-spell as much as possible when it is
 		available. It needs to be easy to activate and deactivate, we also need an easy way to
@@ -2094,7 +2094,7 @@ different points. This is placed in a git repository that I share between work a
       (setq org-toc-follow-mode t)
 		#+END_SRC
 
-*** Global Keys for OrgMode                                       :keybindings:
+*** Global Keys for OrgMode																			:keybindings:
 		
 		#+BEGIN_SRC emacs-lisp
       ;; org-mode Links
@@ -2127,7 +2127,7 @@ different points. This is placed in a git repository that I share between work a
 
 		#+END_SRC
 
-*** Org Protocol                                        :instw:instl:outlook:
+*** Org Protocol																				:instw:instl:outlook:
 
 		this is an example on how you could setup windows to accept
 		org-protocol: urls and route them to emacsclientw. the path on the
@@ -2266,9 +2266,9 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 
   #+RESULTS:
-	| c | Add note to currently clocked-in item.          | entry | (clock)                                                         | ** %^{Title}\n   Added: %U\n   %?                                                     | :clock-keep   | :empty-lines | 1 | :unnarrowed |
-	| o | Outlook integration - creates items from mails. | entry | (file+headline c:/Users/jiha/Documents/org/mdms/mdms.org Inbox) | ** TODO %c\n   Added: %U\n   %?\n,   #+begin_quote\n     %:initial\n,   #+end_quote\n | :clock-resume | :empty-lines | 1 | :prepend    |
-	| w | Default template                                | entry | (file+headline ~/org/capture.org Notes)                         | ** %^{Title}\n   Added: %U\n   Source: %c\n   %i\n                                    | :empty-lines  | 1            |   |             |
+  | c | Add note to currently clocked-in item.          | entry | (clock)                                                         | ** %^{Title}\n   Added: %U\n   %?                                                      | :clock-keep   | :empty-lines | 1 | :unnarrowed |
+  | o | Outlook integration - creates items from mails. | entry | (file+headline c:/Users/jiha/Documents/org/mdms/mdms.org Inbox) | ** TODO %c\n   Added: %U\n   %?\n,   #+begin_quote\n     %:initial\n,   #+end_quote\n | :clock-resume | :empty-lines | 1 | :prepend    |
+  | w | Default template                                | entry | (file+headline ~/org/capture.org Notes)                         | ** %^{Title}\n   Added: %U\n   Source: %c\n   %i\n                                     | :empty-lines  | 1            |   |             |
 
 ***** Things that could be used in templates
 
@@ -3125,7 +3125,7 @@ different points. This is placed in a git repository that I share between work a
 	#+END_SRC
 
 * TODO BBDB
-* Windows context menu integration                                      :instw:
+* Windows context menu integration																		:instw:
 	:LOGBOOK:
 	- State "DONE"       from "TODO"  [2013-03-15 fr 10:35]
 		works fine
