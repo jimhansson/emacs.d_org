@@ -576,3 +576,17 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	the major mode is a programming mode and "vanilla" flyspell-mode when it is
 	not. and bind that to *C-<F8>*.
 
+
+* DONE make customization group
+	:LOGBOOK:
+	- State "DONE"       from "TODO"       [2013-10-02 on 19:54] \\
+		Done it, need to create a pull request for maintainer.
+	:END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2014-06-09 må 21:22
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Coding/Languages modes/C#
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: DONE
+	:END:
+

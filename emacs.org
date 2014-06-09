@@ -1727,21 +1727,10 @@ different points. This is placed in a git repository that I share between work a
 			
 			we should make a csharp-mode-hook that activates it and sets up keybindings.
 			#+BEGIN_SRC emacs-lisp
-        (add-to-list 'load-path (concat local-emacs-org-dir "omnisharp"))
-        ;;(require 'omnisharp)
         (add-hook 'csharp-mode-hook 'omnisharp-mode)
         (eval-after-load 'company
           '(add-to-list 'company-backends 'company-omnisharp))
 			#+END_SRC
-
-			#+RESULTS:
-			: omnisharp
-
-******* DONE make customization group
-				:LOGBOOK:
-				- State "DONE"       from "TODO"       [2013-10-02 on 19:54] \\
-					Done it, need to create a pull request for maintainer.
-				:END:
 
 ******* TODO make it call msbuild in the right way, when building solutions.
 				:LOGBOOK:
