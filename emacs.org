@@ -114,36 +114,6 @@ different points. This is placed in a git repository that I share between work a
 
   #+RESULTS:
 
-*** FIXED we maybe should remove flyspell-prog-mode from languages hooks
-		:LOGBOOK:
-		CLOCK: [2013-06-13 to 13:44]--[2013-06-13 to 15:01] =>  1:17
-		- State "FIXED"      from "TODO"       [2013-06-13 to 15:01] \\
-			Fixed now, but need to add modes that tells what to use.
-		- Refiled on [2013-06-12 on 01:17] \\
-			should not have issues spread out in the file
-		:END:
-		and instead implement a jiha-flyspell-mode that will activate flyspell-prog-mode if
-		the major mode is a programming mode and "vanilla" flyspell-mode when it is
-		not. and bind that to *C-<F8>*.
-
-*** FIXED [[*Iswitch%20Buffers][Iswitch Buffers]] has problem on windows with defining my own columns
-		:LOGBOOK:
-		CLOCK: [2013-09-23 må 16:26]--[2013-09-23 må 16:40] =>  0:14
-		- by defining ibuffer-inline-columns before it is used, I get around the
-      problem. Maybe i should require something instead.
-		CLOCK: [2013-07-02 ti 23:25]--[2013-07-02 ti 23:27] =>  0:02
-		:END:
-		have comment out the src section
-
-		It seems to work now, will leave the bug for now. might resurface and in that case i
-		will write more about it.
-
-		tried starting emacs again, it did not work, commented out the region again.
-*** CANCELLED check out smex.
-		:LOGBOOK:
-		- State "CANCELLED"  from "TODO"       [2014-02-04 ti 13:06]
-		:END:
-
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
