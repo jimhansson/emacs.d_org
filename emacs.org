@@ -3168,16 +3168,6 @@ different points. This is placed in a git repository that I share between work a
 
 	- Julien Danjou :: http://git.naquadah.org/git/~jd/emacs.d.git
 	- Thomas Krennwallner's :: http://www.postsubmeta.net/MyConfig/Emacs 
-
-* Licensies
-
-	Here I will try to collect the license information for all the parts that make up my
-	config. 
-
-	| package          | Licens |
-	|------------------+--------|
-	| multiple-cursors | GPL 3  |
-	|                  |        |
 	
 * Variable list @ end of file
 
