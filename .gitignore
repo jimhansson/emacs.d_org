@@ -7,3 +7,4 @@ csharp/*.dll
 *~
 auto-complete-1.3.1
 
+/.project

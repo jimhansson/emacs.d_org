@@ -15,6 +15,11 @@ different points. This is placed in a git repository that I share between work a
 #+LINK: wiki http://emacswiki.org/emacs/
 	
 * Bugs
+	:LOGBOOK:
+	CLOCK: [2014-06-09 må 14:55]
+	:END:
+*** TODO CSharp mode does something funny with { in csharp-mode
+		it does not let me use cc-mode indentation to control what should be indented and how.
 *** TODO check out script in org-outlook, for new ideas.
 *** TODO I don't want submodules to show up in git status
 		:LOGBOOK:
@@ -79,10 +84,11 @@ different points. This is placed in a git repository that I share between work a
       ;;(org-require-autoloaded-modules)
       
 		#+END_EXAMPLE
-
+		
 *** TODO advice tabify/untabify to use the whole buffer if no region is marked. :noexport:
 		:LOGBOOK:
-		CLOCK: [2014-02-04 ti 12:15]
+		CLOCK: [2014-02-05 on 12:15]--[2014-02-05 on 15:17] =>  3:02
+		CLOCK: [2014-02-04 ti 12:15]--[2014-02-04 ti 15:50] =>  3:35
 		:END:
 
 		does not work at the moment as I would like it to need to fix it somehow.

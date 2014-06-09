@@ -488,3 +488,37 @@ Archived entries from file c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
 	:ARCHIVE_TODO: DONE
 	:END:
 
+
+* TODO advice tabify/untabify to use the whole buffer if no region is marked.
+	 :LOGBOOK:
+	 CLOCK: [2014-02-04 ti 12:15]--[2014-02-04 ti 15:22] =>  3:07
+	 :END:
+	:PROPERTIES:
+	:ARCHIVE_TIME: 2014-02-04 ti 12:54
+	:ARCHIVE_FILE: c:/Users/jiha/Documents/GitHub/emacs.d_org/emacs.org
+	:ARCHIVE_OLPATH: Bugs
+	:ARCHIVE_CATEGORY: emacs
+	:ARCHIVE_TODO: TODO
+	:END:
+	 #+BEGIN_SRC elisp
+		 (defadvice tabify (around mark-whole-buffer-if-no-region activate)
+			 "When using tabify without marking a region, the normal thing in emacs is to do tabify
+		 on everthing below point, this feel unatural, this changes that to instead do it on the
+		 whole buffer."
+			 (save-excursion
+				 (if (not (region-active-p)) 
+						 (progn
+							 (mark-whole-buffer)
+							 (ad-do-it)))))
+			 
+	 #+END_SRC
+
+	 #+RESULTS:
+	 : tabify
+
+	 #+BEGIN_SRC elisp
+	 (ad-disable-advice 'tabify 'before 'mark-whole-buffer-if-no-region)
+	 #+END_SRC
+
+ #+RESULTS:
+
