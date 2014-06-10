@@ -29,15 +29,6 @@ different points. This is placed in a git repository that I share between work a
 *** TODO I want to use tabs for indentation instead of spaces
 		this might not be a good idea with lisp but I should try it out.
 
-*** TODO Fix font
-		i want deja vu or something else that works good.
-		http://emacswiki.org/emacs/SetFonts
-		http://www.emacswiki.org/emacs/GoodFonts#toc12
-		https://gist.github.com/haxney/3055728
-
-		other fonts are
-		Source Code Pro and bitstream
-
 *** TODO add some classes for directories that are not by default writeable
 		http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables
 *** TODO replace setq and other things with custom-set-variables calls
@@ -101,6 +92,20 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 
   #+RESULTS:
+
+*** DONE Fix font
+		:LOGBOOK:
+		CLOCK: [2014-06-10 ti 21:59]--[2014-06-10 ti 23:47] =>  1:48
+		- Only fixed it on my work computer, by using the options menu -> set default
+      font.
+		:END:
+		i want deja vu or something else that works good.
+		http://emacswiki.org/emacs/SetFonts
+		http://www.emacswiki.org/emacs/GoodFonts#toc12
+		https://gist.github.com/haxney/3055728
+
+		other fonts are
+		Source Code Pro and bitstream
 
 *** DONE %U "macro" in capture tempates does not work in longrunning instances of emacs.
 		:LOGBOOK:
