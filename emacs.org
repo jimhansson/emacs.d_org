@@ -122,8 +122,11 @@ different points. This is placed in a git repository that I share between work a
 		Also the date+tree capture templates does not work. For some reason it also adds
 		entries under way to old dates. and sometime even in the future. 
 
-*** TODO remove org-outlook submodule
+*** CANCELLED remove org-outlook submodule
 		:LOGBOOK:
+		- State "CANCELLED"  from "TODO"       [2014-06-11 on 22:55] \\
+			My own version has some small changes, will still use that one instead.
+		CLOCK: [2014-06-11 on 22:37]--[2014-06-11 on 22:55] =>  0:18
 		- Refiled on [2014-06-11 on 22:36]
 		:END:
 		Added: [2014-06-10 ti]
