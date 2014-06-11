@@ -93,45 +93,6 @@ different points. This is placed in a git repository that I share between work a
 
   #+RESULTS:
 
-*** DONE Fix font
-		:LOGBOOK:
-		CLOCK: [2014-06-10 ti 21:59]--[2014-06-10 ti 23:47] =>  1:48
-		- Only fixed it on my work computer, by using the options menu -> set default
-      font.
-		:END:
-		i want deja vu or something else that works good.
-		http://emacswiki.org/emacs/SetFonts
-		http://www.emacswiki.org/emacs/GoodFonts#toc12
-		https://gist.github.com/haxney/3055728
-
-		other fonts are
-		Source Code Pro and bitstream
-
-*** DONE %U "macro" in capture tempates does not work in longrunning instances of emacs.
-		:LOGBOOK:
-		- State "DONE"       from "BUG"        [2014-06-09 må 23:25] \\
-			looks like it is not a problem any more, none of the entries added today are back-dated.
-		CLOCK: [2013-06-16 sö 23:56]--[2013-06-17 må 00:02] =>  0:06
-		- signat upp mig på org-mode mailing lista, borde sätta upp filter på gmail
-		:END:
-		I a let a emacs instance run for a few days the %U macro does not reflect the current
-		date as it should, I am guessing a get the date from the last restart of emacs.
-		I should try to mail this to the org-mode list to see if the can tell me what is
-		wrong.
-		
-		Also the date+tree capture templates does not work. For some reason it also adds
-		entries under way to old dates. and sometime even in the future. 
-
-*** CANCELLED remove org-outlook submodule
-		:LOGBOOK:
-		- State "CANCELLED"  from "TODO"       [2014-06-11 on 22:55] \\
-			My own version has some small changes, will still use that one instead.
-		CLOCK: [2014-06-11 on 22:37]--[2014-06-11 on 22:55] =>  0:18
-		- Refiled on [2014-06-11 on 22:36]
-		:END:
-		Added: [2014-06-10 ti]
-		use the one from elpa instead
-
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
 	then I would have harder time to replicate that between machines.
@@ -2945,14 +2906,7 @@ different points. This is placed in a git repository that I share between work a
 	most of these things comes from http://julien.danjou.info/
 *** Google maps                                                         :org:
 
-    #+BEGIN_SRC emacs-lisp
-      ;;(add-to-list 'load-path (concat local-emacs-org-dir
-      ;;                                "google-maps"))
-      ;;
-      ;;(jiha-safe-require 'google-maps
-      ;;                  (jiha-safe-require 'org-location-google-maps ()))
-      
-    #+END_SRC
+		using melpa version
 
     You can then use M-x google-maps and type a location.
     
@@ -2977,14 +2931,8 @@ different points. This is placed in a git repository that I share between work a
     If you want to use advanced feature, you should take a look at
     google-maps-static-show and google-maps-geocode-request functions.
 *** Google Contacts                                                  :oauth2:
-    http://julien.danjou.info/projects/emacs-packages#google-contacts
 
-    The easiest way to use it is to load it from your .emacs:
-    #+BEGIN_SRC emacs-lisp
-      (add-to-list 'load-path (concat local-emacs-org-dir "google-contacts"))
-      (jiha-safe-require 'google-contacts ())
-    #+END_SRC
-    You can then use M-x google-contacts and type a query string.
+		using melpa version
     
     Various key bindings are available. Here's a few:
     
@@ -2993,20 +2941,6 @@ different points. This is placed in a git repository that I share between work a
     m to send an e-mail to a contact;
     s to make a new search;
     q to quit.
-    You can integrate directly Google Contacts into Gnus:
-
-    #+BEGIN_SRC emacs-lisp
-      (jiha-safe-require 'google-contacts-gnus ())
-    #+END_SRC
-
-    Then you can use ; to go to a contact information while reading an
-    e-mail.
-    
-    You can integrate directly Google Contacts into message-mode;
-
-    #+BEGIN_SRC emacs-lisp
-      (jiha-safe-require 'google-contacts-message ())
-    #+END_SRC
 
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
