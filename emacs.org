@@ -2635,26 +2635,28 @@ different points. This is placed in a git repository that I share between work a
 		from: http://lists.gnu.org/archive/html/emacs-orgmode/2007-10/msg00551.html
 		Hi,
 		
-		Here's a small piece of elisp code that might be useful to some of
-		you.	Pressing '*' now inserts '*' as before, but if there are only
-		spaces between the beginning of the current line and the point,
-		then all of them are converted to stars.	Useful for inserting new
-		headlines.
+		Here's a small piece of elisp code that might be useful to some of you. Pressing '*'
+		now inserts '*' as before, but if there are only spaces between the beginning of the
+		current line and the point, then all of them are converted to stars. Useful for
+		inserting new headlines.
 		
 		Longer explanaition: assume you have the following structure:
 		
-		* first level headline
-		_* second level headline
-		__* third level headline
+		#+BEGIN_EXAMPLE
+      * first level headline
+      _* second level headline
+      __* third level headline
+		#+END_EXAMPLE
 
-		(_ denotes an invisible star) Since stars are invisible, I often
-		find myself trying to create a new subheadline by just inserting a
-		single star
+		(_ denotes an invisible star) Since stars are invisible, I often find myself trying to
+		create a new subheadline by just inserting a single star
 
-		* first level headline
-		_* second level headline
-		__* third level headline
-			 *
+		#+BEGIN_EXAMPLE
+      * first level headline
+      _* second level headline
+      __* third level headline
+         *
+		#+END_EXAMPLE
 
 		which of course doesn't normally work, hence this elisp code.
 
@@ -2667,6 +2669,7 @@ different points. This is placed in a git repository that I share between work a
       
       (define-key org-mode-map "*" 'local-org-insert-stars)
 		#+END_SRC
+
 		Haven't thoroughly tested it, but it seems to work ok.
 
 		Piotr
