@@ -2030,11 +2030,10 @@ different points. This is placed in a git repository that I share between work a
 * Org-Mode
 *** Basic
 		
-		A large part of the configuration has to do with how org should
-		behave. it's a pretty complex mode with lot of things you could
-		change. I have tried to make it as simple a possible with sub-trees
-		for every main function of OrgMode.
-
+		A large part of the configuration has to do with how org should behave. it's a pretty
+		complex mode with lot of things you could change. I have tried to make it as simple a
+		possible with sub-trees for every main function of OrgMode.
+		
 		#+BEGIN_SRC emacs-lisp
       (setq org-deadline-warning-days 14)
       (setq org-timeline-show-empty-dates t)
@@ -2068,6 +2067,13 @@ different points. This is placed in a git repository that I share between work a
       (setq org-hide-leading-stars t)
       (setq org-toc-default-depth 3)
       (setq org-toc-follow-mode t)
+		#+END_SRC
+
+		we need this in newer org-mode for some reason or everthing I write will be interpret
+		as a list item and will give warnings.
+
+		#+BEGIN_SRC emacs-lisp
+      (setq org-list-allow-alphabetical t)
 		#+END_SRC
 
 *** Global Keys for OrgMode																			:keybindings:
