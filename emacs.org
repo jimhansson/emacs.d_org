@@ -1862,51 +1862,7 @@ different points. This is placed in a git repository that I share between work a
 		emacsclientw.
 
 *** CEDET
-
-		Use a local installation of CEDET so we have control over what version we use. This
-		means that we should not use any version from ELPA or local package system.
-		
-		If you get some problem with this code it might be that you have not byte-compiled it,
-		I do not check-in byte-compiled files into the repo. You then need to folow the
-		instructions in cedet/cedet-build.el. So on a new checkout this is a common problem.
-
-		#+BEGIN_SRC emacs-lisp
-      ;; using my own
-      ;;(load-file (concat local-emacs-org-dir "cedet-src/common/cedet.el"))
-      ;;(require 'edmacro)
-      ;;(require 'cedet)
-      ;; Enable EDE (Project Management) features
-      ;;(global-ede-mode t)                    
-      ;;(semantic-load-enable-gaudy-code-helpers)
-      ;;(global-semantic-tag-folding-mode 1)
-      ;; Enable prototype help and smart completion 
-      ;; (semantic-load-enable-code-helpers)
-      ;; Enable SRecode (Template management) minor-mode.
-      ;;(global-srecode-minor-mode 1)
-		#+END_SRC
-
-		#+BEGIN_SRC emacs-lisp
-      ;;  (require 'semantic)
-		#+END_SRC
-
-***** EDE
-
-			#+BEGIN_SRC emacs-lisp
-        ;;  (global-ede-mode t)
-			#+END_SRC
-
-***** Code helpers
-
-			#+BEGIN_SRC emacs-lisp
-        ;;  (semantic-load-enable-excessive-code-helpers)
-			#+END_SRC      
 *** ECB
-
-		#+BEGIN_SRC emacs-lisp
-      ;; (add-to-list 'load-path (concat local-emacs-org-dir "ecb"))
-      ;; (require 'ecb)
-		#+END_SRC
-
 *** Completion
 ***** Language
 ******* C#
@@ -2106,7 +2062,6 @@ different points. This is placed in a git repository that I share between work a
 																	 org-info org-jsinfo org-habit 
 																	 org-irc org-mew org-mhe org-rmail 
 																	 org-vm org-wl org-w3m))
-
 		#+END_SRC
 
 *** Org Protocol																				:instw:instl:outlook:
@@ -2736,7 +2691,7 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 
 		
-*** Agenda                                                           :habits:
+*** Agenda																										:habits:agenda:
 
 		#+BEGIN_SRC emacs-lisp
       ;; popup new frame for org-agenda, so we get full width
