@@ -155,7 +155,6 @@ different points. This is placed in a git repository that I share between work a
       ;; this is what is needed in the real .emacs file.
       ;; remember to change the paths at the bottom of this file
       
-      (add-to-list 'load-path "~/.emacs.d/")
       (require 'cl)
       
       ;; set-up org babel
@@ -204,8 +203,7 @@ different points. This is placed in a git repository that I share between work a
 		- tfs :: for Team Foundation Server.
 						 
 		Not so important, but nice to have.
-		- pretty-lambdada :: Show the word `lambda' as the Greek letter.
-				 less important now when i have pretty-mode
+		- pretty-symbols
 
 
 *** Other important stuff
@@ -835,7 +833,7 @@ different points. This is placed in a git repository that I share between work a
 		#+BEGIN_SRC emacs-lisp
       ;; Only works sometime
       (defadvice show-paren-function
-        (after show-matching-paren-offscreen activate)
+        (after show-matching-paren-offscreen disable)
         "If the matching paren is offscreen, show the matching line in the
         echo area. Has no effect if the character before point is not of
         the syntax class ')'."
@@ -862,8 +860,8 @@ different points. This is placed in a git repository that I share between work a
 		Its a mode for displaying lambda signs and other things in a nice way.
 
 		#+BEGIN_SRC emacs-lisp
-      (jiha-safe-require 'pretty-mode
-                        (global-pretty-mode 1))
+      ;; we should add pretty-symbols-mode to a bunch of mode hooks.
+      (jiha-safe-require 'pretty-symbols-mode ())
 		#+END_SRC
 
 		now we need to configure what characters that should be used.
