@@ -866,7 +866,7 @@ different points. This is placed in a git repository that I share between work a
 
 		now we need to configure what characters that should be used.
 
-		#+BEGIN_SRC emacs-lisp
+		#+BEGIN_example emacs-lisp
       (setq pretty-patterns
             (let* ((lispy '(scheme emacs-lisp lisp))
                    (mley '(tuareg haskell sml))
@@ -981,7 +981,7 @@ different points. This is placed in a git repository that I share between work a
                  
                  ))))
       
-		#+END_SRC
+		#+END_example
 
   #+RESULTS:
 	| sml-mode        | (psi . 966)   | (pi . 960)   | (fn . 955)     | (lambda . 955) | (theta . 952)   | (epsilon . 949) | ('d . 916)     | (delta . 916) | ('c . 947)      | (gamma . 947) | ('b . 946)      | (beta . 946)  | ('a . 945)    | (alpha . 945) | (sqrt . 8730)  | (() . 8709)   | (=> . 10233)    | (-> . 10139)  | (<- . 8592)   | (>= . 8805)  | (<= . 8804)   |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
@@ -2172,9 +2172,9 @@ different points. This is placed in a git repository that I share between work a
                    '("o"
                      "Outlook integration - creates items from mails."
                      entry
-                     (file+headline "c:/Users/jiha/Documents/org/mdms/mdms.org" 
+                     (file+headline "c:/Users/jiha.POWELASA/Documents/org/mdms/mdms.org" 
                                     "Inbox")
-                     "** TODO %c
+                     "** TODO %c :%:sender:
          Added: %U
          %?
       ,   #+begin_quote
@@ -2201,9 +2201,9 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 
   #+RESULTS:
-  | c | Add note to currently clocked-in item.          | entry | (clock)                                                         | ** %^{Title}\n   Added: %U\n   %?                                                      | :clock-keep   | :empty-lines | 1 | :unnarrowed |
-  | o | Outlook integration - creates items from mails. | entry | (file+headline c:/Users/jiha/Documents/org/mdms/mdms.org Inbox) | ** TODO %c\n   Added: %U\n   %?\n,   #+begin_quote\n     %:initial\n,   #+end_quote\n | :clock-resume | :empty-lines | 1 | :prepend    |
-  | w | Default template                                | entry | (file+headline ~/org/capture.org Notes)                         | ** %^{Title}\n   Added: %U\n   Source: %c\n   %i\n                                     | :empty-lines  | 1            |   |             |
+	| c | Add note to currently clocked-in item.          | entry | (clock)                                                                  | ** %^{Title}\n   Added: %U\n   %?                                                                | :clock-keep   | :empty-lines | 1 | :unnarrowed |
+	| o | Outlook integration - creates items from mails. | entry | (file+headline c:/Users/jiha.POWELASA/Documents/org/mdms/mdms.org Inbox) | ** TODO %c :%:sender:\n   Added: %U\n   %?\n,   #+begin_quote\n     %:initial\n,   #+end_quote\n | :clock-resume | :empty-lines | 1 | :prepend    |
+	| w | Default template                                | entry | (file+headline ~/org/capture.org Notes)                                  | ** %^{Title}\n   Added: %U\n   Source: %c\n   %i\n                                               | :empty-lines  | 1            |   |             |
 
 ***** Things that could be used in templates
 
