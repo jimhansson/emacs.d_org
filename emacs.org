@@ -2002,16 +2002,12 @@ different points. This is placed in a git repository that I share between work a
       (setq org-insert-mode-line-in-empty-file t)
       ;; setup automatic expiring of old entries with creation date
       ;; if entries does not have creation date they will never expire.
-      (load-file (concat local-emacs-org-dir "org-modules/org-expiry.el"))
-      (setq org-expiry-wait "+2m")
-      ;;(org-expiry-insinuate)
       (load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
       (jiha-safe-require 'org-crypt ())
       (org-crypt-use-before-save-magic)
       (setq org-tags-exclude-from-inheritance '("crypt"))
       (run-at-time "00:59" 3600 'org-save-all-org-buffers)
       (jiha-safe-require 'org-protocol ())
-      
       (setq org-capture-use-agenda-date t)
       (setq org-columns-ellipses "…")
       (setq org-fontify-done-headline t)
@@ -2025,7 +2021,7 @@ different points. This is placed in a git repository that I share between work a
 
 		we need this in newer org-mode for some reason or everthing I write will be interpret
 		as a list item and will give warnings.
-
+		
 		#+BEGIN_SRC emacs-lisp
       (setq org-list-allow-alphabetical t)
 		#+END_SRC
