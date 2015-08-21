@@ -2000,8 +2000,6 @@ different points. This is placed in a git repository that I share between work a
       (setq org-treat-S-cursor-todo-selection-as-state-change nil)
       (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
       (setq org-insert-mode-line-in-empty-file t)
-      ;; setup automatic expiring of old entries with creation date
-      ;; if entries does not have creation date they will never expire.
       (load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
       (jiha-safe-require 'org-crypt ())
       (org-crypt-use-before-save-magic)
