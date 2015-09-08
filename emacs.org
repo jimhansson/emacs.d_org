@@ -267,10 +267,6 @@ different points. This is placed in a git repository that I share between work a
 
 		#+END_SRC
 
-		#+BEGIN_SRC emacs-lisp
-      (load "server")
-      (unless (server-running-p) (server-start))
-		#+END_SRC
 *** Disable warnings for first time users
 		
 		For some reason some questions in emacs are yes/no and some are y/n this trips me
@@ -617,6 +613,35 @@ different points. This is placed in a git repository that I share between work a
 			
 			You should have received a copy of the GNU General Public License
 			along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*** Server
+		
+		I run emacs with a shortcut containing, this starts a new emacs if nothing is running
+		else it connects the the same one
+
+		#+BEGIN_QUOTE
+      C:\ProgramData\chocolatey\bin\emacsclientw.exe -n -a "C:\ProgramData\chocolatey\bin\runemacs.exe" -e "(make-frame-visible)"		
+		#+END_QUOTE
+
+		#+BEGIN_SRC elisp
+
+      ;; start server if it's not running
+      (require 'server)
+      (if (not (server-running-p)) (server-start))
+
+      ;; allows me to kill a buffer that has been brought up by client in a normal fashion.
+      (defun jiha-mark-buffer-as-done ()
+        "Marks this buffer as done and kills it. hides the window"
+        (interactive)
+        (server-edit)
+        (make-frame-invisible nil t))
+
+      ;; rebind things
+      (global-set-key (kbd "C-x C-c") 'jiha-mark-buffer-as-done)
+      (global-set-key (kbd "C-M-x C-M-c") 'save-buffers-kill-emacs)
+
+		#+END_SRC
+
 * Minor Modes
 
 	We configure the basics of minor modes first, before the majors modes. in the major
@@ -2736,7 +2761,7 @@ different points. This is placed in a git repository that I share between work a
     (setq erc-save-buffer-on-part t)
     (setq erc-hide-timestamps nil)
     
-    (defadvice save-buffers-kill-emacs (before save-logs (arg) activate)
+    (defadvice save-buffers-kill-emacs (before save-logs (arg) disable)
       (save-some-buffers t (lambda () (when (and (eq major-mode 'erc-mode)
                                                  (not (null buffer-file-name)))))))
     
