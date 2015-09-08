@@ -1469,7 +1469,7 @@ different points. This is placed in a git repository that I share between work a
 				autmatically, after every connection, use the following in your ~/.emacs file: 
 
 				#+BEGIN_SRC emacs-lisp
-        	;;(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
+        	(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
 				#+END_SRC
 
 				Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
@@ -1611,10 +1611,6 @@ different points. This is placed in a git repository that I share between work a
 				#+END_SRC
 
 ******* Placeholder support in sql querys
-				:LOGBOOK:
-				- State "DONE"       from "TODO"       [2013-03-15 fr 15:55]
-				CLOCK: [2013-03-15 fr 14:11]--[2013-03-15 fr 15:55] =>  1:44
-				:END:
 
 				#+BEGIN_EXAMPLE emacs-lisp
         	(eval-after-load "sql"
@@ -1628,7 +1624,6 @@ different points. This is placed in a git repository that I share between work a
                                                   	'sql-send-region-with-placeholders)))
         	
 				#+END_EXAMPLE
-******* TODO need to test all this to see if it works.
 ***** nXML
 			:LOGBOOK:
     	CLOCK: [2013-03-17 sö 12:08]--[2013-03-17 sö 12:23] =>  0:15
