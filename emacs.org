@@ -623,7 +623,7 @@ different points. This is placed in a git repository that I share between work a
       C:\ProgramData\chocolatey\bin\emacsclientw.exe -n -a "C:\ProgramData\chocolatey\bin\runemacs.exe" -e "(make-frame-visible)"		
 		#+END_QUOTE
 
-		#+BEGIN_SRC elisp
+		#+BEGIN_SRC emacs-lisp
 
       ;; start server if it's not running
       (require 'server)
