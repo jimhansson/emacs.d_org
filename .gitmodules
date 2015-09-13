@@ -1,6 +1,3 @@
-[submodule "emacs-calfw"]
-	path = emacs-calfw
-	url = https://github.com/kiwanami/emacs-calfw.git
 [submodule "google-maps"]
 	path = google-maps
 	url = https://github.com/emacsmirror/google-maps.git
