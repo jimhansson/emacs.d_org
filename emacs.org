@@ -2020,7 +2020,6 @@ different points. This is placed in a git repository that I share between work a
       (setq org-treat-S-cursor-todo-selection-as-state-change nil)
       (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
       (setq org-insert-mode-line-in-empty-file t)
-      (load-file (concat local-emacs-org-dir "org-modules/org-toc.el"))
       (jiha-safe-require 'org-crypt ())
       (org-crypt-use-before-save-magic)
       (setq org-tags-exclude-from-inheritance '("crypt"))
@@ -2588,13 +2587,6 @@ different points. This is placed in a git repository that I share between work a
 				included or find a way to force loading of my version
 
 *** Org-sync
-    #+BEGIN_EXAMPLE emacs-lisp
-      ;;(load-file "org-modules/org-element.el")
-      ;;(load-file "org-sync2/os.el") ;; org-sync
-      ;;(load-file "org-sync2/os-github.el") ;; github
-      ;;(load-file "org-sync2/os-bb.el") ;; bitbucket  
-    #+END_EXAMPLE
-
 *** Post
 
 		Read [[Init]]. here is the last call and it gives the local a chance to overide everything
