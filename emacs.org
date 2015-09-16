@@ -319,6 +319,16 @@ different points. This is placed in a git repository that I share between work a
       (setq size-indication-mode t)
 		#+END_SRC
 
+***** remove which function												 :headerline:whichfunction:
+			we remove which-function from the modeline because we are going to place that in
+			headerline instead
+
+			#+BEGIN_SRC 
+      	(setq mode-line-misc-info
+                  	;; We remove Which Function Mode from the mode line, because it's mostly
+                  	;; invisible here anyway.
+                  	(assq-delete-all 'which-func-mode mode-line-misc-info))		
+			#+END_SRC
 ***** PowerLine
 
 			#+BEGIN_SRC emacs-lisp
@@ -327,6 +337,15 @@ different points. This is placed in a git repository that I share between work a
          ())
 
 			#+END_SRC
+
+*** Header line																		 :headerline:whichfunction:
+
+		#+BEGIN_SRC emacs-lisp
+      (which-function-mode 1)
+      (setq-default header-line-format
+                    '((which-func-mode ("" which-func-format " "))))
+		#+END_SRC
+
 *** Scrolling
 
 		#+BEGIN_SRC emacs-lisp
