@@ -19,3 +19,6 @@
 [submodule "omnisharp"]
 	path = omnisharp
 	url = https://github.com/jimhansson/omnisharp-emacs.git
+[submodule "org-dashboard"]
+	path = org-dashboard
+	url = git@github.com:jimhansson/org-dashboard.git
