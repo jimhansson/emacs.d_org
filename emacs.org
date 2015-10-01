@@ -182,7 +182,7 @@ different points. This is placed in a git repository that I share between work a
       (org-babel-load-file (concat local-emacs-org-dir "emacs.org"))
 		#+END_EXAMPLE
 
-*** Things you should install from package-system								:instw:instl:
+*** Things you should install from package-system														 :instw:instl:
 		- oauth2 :: for google integration for some reason I need to add oauth directory to
 		load-path, should not elpa take care of that. 
 		- bookmark+ :: can do so much more than the normal bookmark package. 
@@ -285,7 +285,7 @@ different points. This is placed in a git repository that I share between work a
             (quote ((auto-fill-mode . t) (indent-tab-mode))))
 		#+END_SRC
 
-*** Uniquify                                               :uniquify:buffers:
+*** Uniquify																														:uniquify:buffers:
 
 		Better naming of buffers so we can easly tell the differens between
 		buffers. Have some problem together with Iswitch
@@ -305,7 +305,7 @@ different points. This is placed in a git repository that I share between work a
 
 		Good as it is.
 
-*** Mode-line                                                      :modeline:
+*** Mode-line																																		:modeline:
 		
 		this for the normal mode-line, but if we have powerline installed that will may be
 		used instead, configuration for that is below
@@ -319,7 +319,7 @@ different points. This is placed in a git repository that I share between work a
       (setq size-indication-mode t)
 		#+END_SRC
 
-***** remove which function												 :headerline:whichfunction:
+***** remove which function																			:headerline:whichfunction:
 			we remove which-function from the modeline because we are going to place that in
 			headerline instead
 
@@ -338,7 +338,7 @@ different points. This is placed in a git repository that I share between work a
 
 			#+END_SRC
 
-*** Header line																		 :headerline:whichfunction:
+*** Header line																									:headerline:whichfunction:
 
 		#+BEGIN_SRC emacs-lisp
       (which-function-mode 1)
@@ -697,7 +697,7 @@ different points. This is placed in a git repository that I share between work a
       ;;(add-hook 'auto-save-hook ...)
 		#+END_SRC
 
-*** Fly-spell																										:keybindings:
+*** Fly-spell																																 :keybindings:
 
 		My spelling is terrible so we use fly-spell as much as possible when it is
 		available. It needs to be easy to activate and deactivate, we also need an easy way to
@@ -765,7 +765,7 @@ different points. This is placed in a git repository that I share between work a
       
 		#+END_SRC        
 
-***** Installing ispell on windows                                    :instw:
+***** Installing ispell on windows																								 :instw:
 		To solve the problem with multiple languages we first need to define what languages
 		we are interesting in switching between, if we don't do that the result will be that
 		on systems with many dictionaries it will be to much of a problem switching. So first
@@ -773,14 +773,14 @@ different points. This is placed in a git repository that I share between work a
 		from one language after another and that function is defined at [[(dict_func)][defun]], and at last
 		we bind that function to a key-combo for easy access at [[(dict_cycle)][global-set...]]
 
-***** Installing ispell on windows                                    :instw:
+***** Installing ispell on windows																								 :instw:
 
 			look here and download everthing you need.
 			http://aspell.net/win32/
 
 			add aspell directory to path
 
-*** Whitespace                                                  :keybindings:
+*** Whitespace																															 :keybindings:
 
 		I use whitespace mode a lot, maybe because I dont have configured the programming
 		modes to "do the right thing" yet and some other programmers around me are experts at
@@ -1066,7 +1066,7 @@ different points. This is placed in a git repository that I share between work a
 	| lambda | nil | (interactive) | (display-buffer ilog-buffer-name) |
 	
 * Other Major Modes
-* Iswitch Buffers                                                   :buffers:
+* Iswitch Buffers																																 :buffers:
 
 	To prevent certain buffers from showing up in the completion list, set
 	'iswitchb-buffer-ignore': (setq iswitchb-buffer-ignore '("^ " "*Buffer")) This one is
@@ -1208,7 +1208,7 @@ different points. This is placed in a git repository that I share between work a
 
 	
 
-*** Colours in buffer list                                            :faces:
+*** Colours in buffer list																												 :faces:
 
 		#+BEGIN_SRC emacs-lisp
       (setq ibuffer-fontification-alist
@@ -1224,7 +1224,7 @@ different points. This is placed in a git repository that I share between work a
 	| 2 | (eq major-mode (quote Custom-mode)) | (font-lock-preprocessor-face) |
 	| 3 | (eq major-mode (quote erc-mode))    | (font-lock-string-face)       |
 
-*** Iswitch and uniquify compatibility                             :uniquify:
+*** Iswitch and uniquify compatibility																					:uniquify:
 
 		The library uniquify overrides Emacs default mechanism for making buffer names unique
 		(using suffixes like <2>, <3> etc.) with a more sensible behaviour which use parts of
@@ -1347,7 +1347,7 @@ different points. This is placed in a git repository that I share between work a
 			(ido), which implements regex selection for files, directory buffers etc...
 
 * Buffer Menu
-*** Font lock                                                      :fontlock:
+*** Font lock																																		:fontlock:
 
 		If you use ElectricBufferList, then simply use this instead for the last line:
 		(add-hook 'electric-buffer-menu-mode-hook 'buffer-menu-custom-font-lock)
@@ -1791,7 +1791,7 @@ different points. This is placed in a git repository that I share between work a
         ;; we will active this when I have a configuration that will work on both windows and linux.
         ;;(load-file (concat local-emacs-org-dir "flymake-cursor.el"))
       #+END_SRC
-*** Compile                                                       :keybindings:
+*** Compile																																	 :keybindings:
 
 		#+BEGIN_SRC emacs-lisp
       (jiha-safe-require 'compile 
@@ -2074,7 +2074,7 @@ different points. This is placed in a git repository that I share between work a
       (setq org-list-allow-alphabetical t)
 		#+END_SRC
 
-*** Global Keys for OrgMode																			:keybindings:
+*** Global Keys for OrgMode																									 :keybindings:
 		
 		#+BEGIN_SRC emacs-lisp
       ;; org-mode Links
@@ -2106,7 +2106,7 @@ different points. This is placed in a git repository that I share between work a
 																	 org-vm org-wl org-w3m))
 		#+END_SRC
 
-*** Org Protocol																				:instw:instl:outlook:
+*** Org Protocol																										 :instw:instl:outlook:
 
 		this is an example on how you could setup windows to accept
 		org-protocol: urls and route them to emacsclientw. the path on the
@@ -2131,7 +2131,7 @@ different points. This is placed in a git repository that I share between work a
       gconftool-2 -s /desktop/gnome/url-handlers/org-protocol/enabled --type Boolean true
 		#+END_EXAMPLE
 
-***** adobe acrobat reader                                      :instw:insti:
+***** adobe acrobat reader																									 :instw:insti:
 
 			Add these scripts to <somewhere>\Adobe\Reader 10.0\Reader\Javascripts makes it easy
 			to takes notes from pdf's and store links to where they are.
@@ -2318,7 +2318,7 @@ different points. This is placed in a git repository that I share between work a
       
 		#+END_SRC
 
-*** Org todo keyword faces                                            :faces:
+*** Org todo keyword faces																												 :faces:
 
 		All kewords are should be bold, that tells me they are keywords
 		#+BEGIN_SRC emacs-lisp
@@ -2349,7 +2349,7 @@ different points. This is placed in a git repository that I share between work a
 
   #+RESULTS:
 
-*** Org-outlook integration                                   :instw:outlook:
+*** Org-outlook integration																								 :instw:outlook:
 
 		using the org-outlook from melpa and follows instructions
 
@@ -2409,7 +2409,7 @@ different points. This is placed in a git repository that I share between work a
 
 		Piotr
 
-*** Filesets for OrgFiles                                          :filesets:
+*** Filesets for OrgFiles																												:filesets:
 
 		Creates filesets for all org files.
     #+BEGIN_SRC emacs-lisp
@@ -2471,7 +2471,7 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 
 		
-*** Agenda																										:habits:agenda:
+*** Agenda																																 :habits:agenda:
 
 		#+BEGIN_SRC emacs-lisp
       ;; popup new frame for org-agenda, so we get full width
@@ -2655,7 +2655,7 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 * Google Integration
 	most of these things comes from http://julien.danjou.info/
-*** Google maps                                                         :org:
+*** Google maps																																			 :org:
 
 		using melpa version
 
@@ -2681,7 +2681,7 @@ different points. This is placed in a git repository that I share between work a
 
     If you want to use advanced feature, you should take a look at
     google-maps-static-show and google-maps-geocode-request functions.
-*** Google Contacts                                                  :oauth2:
+*** Google Contacts																																:oauth2:
 
 		using melpa version
     
@@ -2695,7 +2695,7 @@ different points. This is placed in a git repository that I share between work a
 
     Then you can use TAB to go to complete e-mail addresses in the
     header fields.
-* Other Setup                                                   :keybindings:
+* Other Setup																																 :keybindings:
 
 	#+BEGIN_SRC emacs-lisp
     (setq-default indent-tabs-mode t)
@@ -2713,7 +2713,7 @@ different points. This is placed in a git repository that I share between work a
     (org-babel-load-file (concat local-emacs-org-dir "local/emacs.org"))
 	#+END_SRC
   
-* File-sets                                                        :filesets:
+* File-sets																																			:filesets:
 	
 	The commands that can operate on file sets are specified in the global
 	custom variable "filesets-commands". You can add your own commands to
@@ -2825,7 +2825,7 @@ different points. This is placed in a git repository that I share between work a
 	#+END_SRC
 
 * TODO BBDB
-* Windows context menu integration																		:instw:
+* Windows context menu integration																								 :instw:
 	:LOGBOOK:
 	- State "DONE"       from "TODO"  [2013-03-15 fr 10:35]
 		works fine
