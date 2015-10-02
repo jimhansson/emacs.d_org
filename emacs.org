@@ -1509,13 +1509,14 @@ different points. This is placed in a git repository that I share between work a
         (add-to-list 'auto-mode-alist '("\\.plb\\'" . sql-mode))
         (add-hook 'sql-interactive-mode-hook (lambda ()
                                                (toggle-truncate-lines 1)))
-        (add-hook 'sql-interactive-mood-hook (lambda ()
+        (add-hook 'sql-interactive-mode-hook (lambda ()
                                                (setq comint-input-ring-name
                                                      (concat (sql-make-alternate-buffer-name)
                                                              ".history"))))
 			#+END_SRC
 
    #+RESULTS:
+	 | (lambda nil (setq comint-input-ring-name (concat (sql-make-alternate-buffer-name) .history))) | sql-rename-buffer | (lambda nil (toggle-truncate-lines 1)) |
 
 ******* Support Multiple connections
 
