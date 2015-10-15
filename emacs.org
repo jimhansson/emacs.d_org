@@ -320,14 +320,15 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 
 ***** remove which function																			:headerline:whichfunction:
+
 			we remove which-function from the modeline because we are going to place that in
 			headerline instead
 
-			#+BEGIN_SRC 
+			#+BEGIN_SRC emacs-lisp
       	(setq mode-line-misc-info
                   	;; We remove Which Function Mode from the mode line, because it's mostly
                   	;; invisible here anyway.
-                  	(assq-delete-all 'which-func-mode mode-line-misc-info))		
+                  	(assq-delete-all 'which-func-mode mode-line-misc-info))
 			#+END_SRC
 ***** PowerLine
 
