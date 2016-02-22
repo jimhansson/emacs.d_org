@@ -673,6 +673,19 @@ different points. This is placed in a git repository that I share between work a
 
 		#+END_SRC
 
+		My fingers are hardwired to type C-x k for killing buffers so most of the time a
+		abourt that action and type C-x C-c after that. but maybe this can solve it in a nice
+		way.
+
+		#+BEGIN_SRC emacs-lisp
+      (add-hook 'server-switch-hook
+                (lambda ()
+                  (when (current-local-map)
+                    (use-local-map (copy-keymap (current-local-map))))
+                  (when server-buffer-clients
+                    (local-set-key (kbd "C-x k") 'server-edit))))
+		#+END_SRC
+		
 * Minor Modes
 
 	We configure the basics of minor modes first, before the majors modes. in the major
