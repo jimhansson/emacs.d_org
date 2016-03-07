@@ -685,7 +685,7 @@ different points. This is placed in a git repository that I share between work a
                   (when server-buffer-clients
                     (local-set-key (kbd "C-x k") 'server-edit))))
 		#+END_SRC
-		
+
 * Minor Modes
 
 	We configure the basics of minor modes first, before the majors modes. in the major
@@ -1510,24 +1510,69 @@ different points. This is placed in a git repository that I share between work a
 			#+BEGIN_SRC emacs-lisp
       	;;(jiha-safe-require 'plsql ())
 			#+END_SRC
-***** SQL-mode
+***** SQL-mode																																		 :hooks:
 
 			First we need to associate oracles sql files with sql-mode, and deactiveate
 			linewrapping, it's idiotic in sqli-mode
 
 			#+BEGIN_SRC emacs-lisp
+        (defun jiha/comint-write-history-on-exit (process event)
+          (message "saving input ring")
+          (comint-write-input-ring)
+          (let ((buf (process-buffer process)))
+            (when (buffer-live-p buf)
+              (with-current-buffer buf
+                (insert (format "\nProcess %s %s" process event))))))
+
+        (defun jiha/turn-on-comint-history (filename)
+          (let ((process (get-buffer-process (current-buffer))))
+            (when process
+              (setq comint-input-ring-file-name filename)
+              (comint-read-input-ring)
+              (set-process-sentinel process #'jiha/comint-write-history-on-exit))))
+
         (add-to-list 'auto-mode-alist '("\\.plb\\'" . sql-mode))
+
         (add-hook 'sql-interactive-mode-hook (lambda ()
                                                (toggle-truncate-lines 1)))
-        (add-hook 'sql-interactive-mode-hook (lambda ()
-                                               (setq comint-input-ring-name
-                                                     (concat (sql-make-alternate-buffer-name)
-                                                             ".history"))))
+        (add-hook 'sql-interactive-mode-hook
+                  (lambda ()
+                    (jiha/turn-on-comint-history (concat
+                                                  (getenv "TMP")
+                                                  "\\"
+                                                  sql-connection
+                                                  ".history"))))
+
 			#+END_SRC
 
-   #+RESULTS:
-	 | (lambda nil (setq comint-input-ring-name (concat (sql-make-alternate-buffer-name) .history))) | sql-rename-buffer | (lambda nil (toggle-truncate-lines 1)) |
+      #+RESULTS:
+	    | lambda | nil | (jiha/turn-on-comint-history (concat (getenv TMP) \ sql-connection .history)) |
+	    | lambda | nil | (toggle-truncate-lines 1)                                                     |
 
+			but that is not enough, when killing the buffer without exit, the history will not
+			be saved. by adding comint-write-input-ring to the kill-buffer hook for all comint
+			derived modes we fix that
+
+			#+BEGIN_SRC emacs-lisp
+        (add-hook 'kill-buffer-hook 'comint-write-input-ring)
+			#+END_SRC
+
+			when killing emacs the kill-buffer-hook's will not be run for some reason, to fix
+			that we add a looping over all buffers in kill-emacs-hook
+
+			#+BEGIN_SRC emacs-lisp
+        (defun jiha/mapc-buffers (fn)
+          (mapc (lambda (buffer)
+                  (with-current-buffer buffer
+                    (funcall fn)))
+                (buffer-list)))
+
+        (defun jiha/comint-write-input-ring-all-buffers ()
+          (jiha/mapc-buffers 'comint-write-input-ring))
+
+        (add-hook 'kill-emacs-hook 'jiha/comint-write-input-ring-all-buffers)
+
+			#+END_SRC
 ******* Support Multiple connections
 
 				If you work with multiple connections, you need to rename them such that the next
@@ -1538,6 +1583,9 @@ different points. This is placed in a git repository that I share between work a
 				#+BEGIN_SRC emacs-lisp
         	(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
 				#+END_SRC
+
+				#+RESULTS:
+				| sql-rename-buffer | (lambda nil (rename-buffer (sql-make-alternate-buffer-name))) | (lambda nil (jiha/turn-on-comint-history (concat (getenv TMP) \ sql-connection .history))) | (lambda nil (toggle-truncate-lines 1)) |
 
 				Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
 				
