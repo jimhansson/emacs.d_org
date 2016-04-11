@@ -406,7 +406,7 @@ different points. This is placed in a git repository that I share between work a
 
 		It also needs to be enabled with the function ‘midnight-delay-set’
 		which also defines “midnight”.
-
+		
 		#+BEGIN_SRC emacs-lisp
       ;;(midnight-delay-set 'midnight-delay "4:30am")
       ;;Some people use the number of seconds after midnight:
@@ -595,8 +595,7 @@ different points. This is placed in a git repository that I share between work a
 			- All key bindings that refer to lambdas are always run for all cursors. If you need
         to limit it, you will have to give it a name. 
 			- Redo might screw with your cursors. Undo works very well.
-				
-				
+								
 ***** Contribute
 			
 			Yes, please do. There's a suite of tests, so remember to add tests for your
@@ -644,7 +643,7 @@ different points. This is placed in a git repository that I share between work a
 			You should have received a copy of the GNU General Public License
 			along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*** Server
+*** Server																																	 :keybindings:
 		
 		I run emacs with a shortcut containing, this starts a new emacs if nothing is running
 		else it connects the the same one
@@ -1542,13 +1541,12 @@ different points. This is placed in a git repository that I share between work a
                                                   "\\"
                                                   sql-connection
                                                   ".history"))))
-
 			#+END_SRC
 
       #+RESULTS:
 	    | lambda | nil | (jiha/turn-on-comint-history (concat (getenv TMP) \ sql-connection .history)) |
 	    | lambda | nil | (toggle-truncate-lines 1)                                                     |
-
+			
 			but that is not enough, when killing the buffer without exit, the history will not
 			be saved. by adding comint-write-input-ring to the kill-buffer hook for all comint
 			derived modes we fix that
@@ -2655,7 +2653,7 @@ different points. This is placed in a git repository that I share between work a
               (goto-char (point-min))
               (search-forward ",")
               (buffer-substring (point-min) (match-beginning 0)))))
-        
+
         (defun diary-sunset ()
           (let ((dss (diary-sunrise-sunset))
                 start end)
@@ -2672,7 +2670,7 @@ different points. This is placed in a git repository that I share between work a
               (goto-char start)
               (capitalize-word 1)
               (buffer-substring start end))))
-        
+
 			#+END_SRC
 			
 			We also need to set where on earth we are because without that
