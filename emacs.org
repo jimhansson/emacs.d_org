@@ -248,6 +248,7 @@ different points. This is placed in a git repository that I share between work a
       (add-hook 'text-mode-hook 'turn-on-auto-fill)
       ;; show matching paren
       (show-paren-mode t)
+      (delete-selection-mode 1) 
       (iswitchb-mode 1)
       (setq filesets-data nil)
       (global-font-lock-mode t)
@@ -266,6 +267,16 @@ different points. This is placed in a git repository that I share between work a
       ;;(write-region-inhibit-fsync t)
 
 		#+END_SRC
+
+		#+BEGIN_SRC emacs-lisp
+      (defadvice toggle-frame-fullscreen (before toggle-menu activate)
+        "also hide the menu when going fullscreen"
+        (menu-bar-mode)
+        (scroll-bar-mode))
+		#+END_SRC
+
+  #+RESULTS:
+	: toggle-frame-fullscreen
 
 *** Disable warnings for first time users
 		
@@ -396,7 +407,7 @@ different points. This is placed in a git repository that I share between work a
 
 		It also needs to be enabled with the function ‘midnight-delay-set’
 		which also defines “midnight”.
-
+		
 		#+BEGIN_SRC emacs-lisp
       ;;(midnight-delay-set 'midnight-delay "4:30am")
       ;;Some people use the number of seconds after midnight:
@@ -585,8 +596,7 @@ different points. This is placed in a git repository that I share between work a
 			- All key bindings that refer to lambdas are always run for all cursors. If you need
         to limit it, you will have to give it a name. 
 			- Redo might screw with your cursors. Undo works very well.
-				
-				
+								
 ***** Contribute
 			
 			Yes, please do. There's a suite of tests, so remember to add tests for your
@@ -634,7 +644,7 @@ different points. This is placed in a git repository that I share between work a
 			You should have received a copy of the GNU General Public License
 			along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*** Server
+*** Server																																	 :keybindings:
 		
 		I run emacs with a shortcut containing, this starts a new emacs if nothing is running
 		else it connects the the same one
@@ -661,6 +671,19 @@ different points. This is placed in a git repository that I share between work a
       (global-set-key (kbd "C-x C-c") 'jiha-mark-buffer-as-done)
       (global-set-key (kbd "C-M-x C-M-c") 'save-buffers-kill-emacs)
 
+		#+END_SRC
+
+		My fingers are hardwired to type C-x k for killing buffers so most of the time a
+		abourt that action and type C-x C-c after that. but maybe this can solve it in a nice
+		way.
+
+		#+BEGIN_SRC emacs-lisp
+      (add-hook 'server-switch-hook
+                (lambda ()
+                  (when (current-local-map)
+                    (use-local-map (copy-keymap (current-local-map))))
+                  (when server-buffer-clients
+                    (local-set-key (kbd "C-x k") 'server-edit))))
 		#+END_SRC
 
 * Minor Modes
@@ -907,12 +930,14 @@ different points. This is placed in a git repository that I share between work a
 
 		#+BEGIN_SRC emacs-lisp
       ;; we should add pretty-symbols-mode to a bunch of mode hooks.
-      (jiha-safe-require 'pretty-symbols-mode ())
+      (jiha-safe-require 'pretty-mode ())
 		#+END_SRC
+
+  #+RESULTS:
 
 		now we need to configure what characters that should be used.
 
-		#+BEGIN_example emacs-lisp
+		#+BEGIN_src emacs-lisp
       (setq pretty-patterns
             (let* ((lispy '(scheme emacs-lisp lisp))
                    (mley '(tuareg haskell sml))
@@ -953,16 +978,41 @@ different points. This is placed in a git repository that I share between work a
                  (?π ("pi" ,@all)
                      ("M_PI" c c++))
                  (?φ ("psi" ,@all))
-                 
+
+                 (?¹ ("**1" python tuareg octave)
+                     ("^1" octave haskell)
+                     ("^1" ,@c-like))
                  (?² ("**2" python tuareg octave)
-                     ("^2" octave haskell))
+                     ("^2" octave haskell)
+                     ("^2" ,@c-like))
                  (?³ ("**3" python tuareg octave)
-                     ("^3" octave haskell))
+                     ("^3" octave haskell)
+                     ("^3" ,@c-like))
+                 (?⁴ ("**4" python tuareg octave)
+                     ("^4" octave haskell)
+                     ("^4" ,@c-like))
+                 (?⁵ ("**5" python tuareg octave)
+                     ("^5" octave haskell)
+                     ("^5" ,@c-like))
+                 (?⁶ ("**6" python tuareg octave)
+                     ("^6" octave haskell)
+                     ("^6" ,@c-like))
+                 (?⁷ ("**7" python tuareg octave)
+                     ("^7" octave haskell)
+                     ("^7" ,@c-like))
+                 (?⁸ ("**8" python tuareg octave)
+                     ("^8" octave haskell)
+                     ("^8" ,@c-like))
+                 (?⁹ ("**9" python tuareg octave)
+                     ("^9" octave haskell)
+                     ("^9" ,@c-like))
                  (?ⁿ ("**n" python tuareg octave)
                      ("^n" octave haskell)
                      ("^n" ,@c-like))
-                 (?ⁱ ("^i" ,@c-like))
-                 
+                 (?ⁱ ("**i" python tuareg octave)
+                     ("^i" octave haskell)
+                     ("^i" ,@c-like))
+
                  (?₀ ("[0]" ,@c-like))
                  (?₁ ("[1]" ,@c-like))
                  (?₂ ("[2]" ,@c-like))
@@ -1000,52 +1050,11 @@ different points. This is placed in a git repository that I share between work a
                  
                  (?∧ ("&&" c c++ csharp perl haskell))
                  (?∨ ("||" c c++ perl haskell))
-                 (?¬ ("\\<!\\>" c c++ perl sh))
-                 
-      ;;;    (?∙ ())
-      ;;;    (?× ())
-      ;;;    (?⋂ "\\<intersection\\>"   (,@lispen))
-      ;;;    (?⋃ "\\<union\\>"          (,@lispen))
-                 
-      ;;;    this one would be nice for org-mode
-      ;;;    (?… ("\\.\\.\\." scheme))
-      
-      ;;;    (?∀ ("List.for_all" tuareg))
-      ;;;    (?∃ ("List.exists" tuareg))
-      ;;;    (?∈ ("List.mem" tuareg)
-      ;;;        ("member" ,@lispy))
-      ;;;    (?∉ ())
-         
-      ;;;    (?∧ ("\\<And\\>"     emacs-lisp lisp python)
-      ;;;        ("\\<andalso\\>" sml)
-      ;;;        ("&&"            c c++ perl haskell))
-      ;;;    (?∨ ("\\<or\\>"      emacs-lisp lisp)
-      ;;;        ("\\<orelse\\>"  sml)
-      ;;;        ("||"            c c++ perl haskell))
-      ;;;    (?¬ ("\\<!\\>"       c c++ perl sh)
-      ;;;        ("\\<not\\>"     lisp emacs-lisp scheme haskell sml))
-                 
-                 ))))
-      
-		#+END_example
+                 (?¬ ("\\<!\\>" c c++ perl sh))))))
+
+		#+END_src
 
   #+RESULTS:
-	| sml-mode        | (psi . 966)   | (pi . 960)   | (fn . 955)     | (lambda . 955) | (theta . 952)   | (epsilon . 949) | ('d . 916)     | (delta . 916) | ('c . 947)      | (gamma . 947) | ('b . 946)      | (beta . 946)  | ('a . 945)    | (alpha . 945) | (sqrt . 8730)  | (() . 8709)   | (=> . 10233)    | (-> . 10139)  | (<- . 8592)   | (>= . 8805)  | (<= . 8804)   |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| lisp-mode       | (psi . 966)   | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)  | (beta . 946)  | (alpha . 945)   | (sqrt . 8730) | (>= . 8805)     | (<= . 8804)   |               |               |                |               |                 |               |               |              |               |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| emacs-lisp-mode | (psi . 966)   | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)  | (beta . 946)  | (alpha . 945)   | (sqrt . 8730) | (nil . 8709)    | (>= . 8805)   | (<= . 8804)   | (/= . 8800)   |                |               |                 |               |               |              |               |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| haskell-mode    | (             |              | . 8744)        | (&& . 8743)    | (               |                 | . 8744)        | (&& . 8743)   | (^n . 8319)     | (^3 . 179)    | (^2 . 178)      | (psi . 966)   | (pi . 960)    | (\ . 955)     | (lambda . 955) | (theta . 952) | (epsilon . 949) | ('d . 916)    | (delta . 916) | ('c . 947)   | (gamma . 947) | ('b . 946)   | (beta . 946)  | ('a . 945)   | (alpha . 945) | (sqrt . 8730) | (() . 8709)  | (-> . 10139)      | (<- . 8592)  | (>= . 8805)  | (<= . 8804)  | (/= . 8800)    |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| tuareg-mode     | (**n . 8319)  | (**3 . 179)  | (**2 . 178)    | (psi . 966)    | (pi . 960)      | (fun . 955)     | (lambda . 955) | (theta . 952) | (epsilon . 949) | ('d . 916)    | (delta . 916)   | ('c . 947)    | (gamma . 947) | ('b . 946)    | (beta . 946)   | ('a . 945)    | (alpha . 945)   | (sqrt . 8730) | (() . 8709)   | (\^ . 8593)  | (-> . 10139)  | (<- . 8592)  | (>= . 8805)   | (<= . 8804)  | (<> . 8800)   |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| octave-mode     | (^n . 8319)   | (**n . 8319) | (^3 . 179)     | (**3 . 179)    | (^2 . 178)      | (**2 . 178)     | (psi . 966)    | (pi . 960)    | (lambda . 955)  | (theta . 952) | (epsilon . 949) | (delta . 916) | (gamma . 947) | (beta . 946)  | (alpha . 945)  | (sqrt . 8730) | (>= . 8805)     | (<= . 8804)   | (~= . 8800)   | (<> . 8800)  | (!= . 8800)   |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| scheme-mode     | (psi . 966)   | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)  | (beta . 946)  | (alpha . 945)   | (sqrt . 8730) | (null . 8709)   | (>= . 8805)   | (<= . 8804)   | (!= . 8800)   |                |               |                 |               |               |              |               |              |               |              |               |               |              |                   |              |              |              |                |                |                 |                 |                 |                 |               |               |               |               |                |               |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| csharp-mode     | (&& . 8743)   | ([x] . 8339) | ([v] . 7525)   | ([u] . 7524)   | ([t] . 8348)    | ([s] . 8347)    | ([r] . 7523)   | ([p] . 8346)  | ([o] . 8338)    | ([n] . 8345)  | ([m] . 8344)    | ([l] . 8343)  | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)   | ([h] . 8341)  | ([e] . 8337)    | ([a] . 8336)  | ([9] . 8329)  | ([8] . 8328) | ([7] . 8327)  | ([6] . 8326) | ([5] . 8325)  | ([4] . 8324) | ([3] . 8323)  | ([2] . 8322)  | ([1] . 8321) | ([0] . 8320)      | (^i . 8305)  | (^n . 8319)  | (psi . 966)  | (pi . 960)     | (lambda . 955) | (theta . 952)   | (epsilon . 949) | (delta . 916)   | (gamma . 947)   | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (null . 8709) | (>= . 8805)    | (<= . 8804)   | (!= . 8800)     |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| ruby-mode       | ([x] . 8339)  | ([v] . 7525) | ([u] . 7524)   | ([t] . 8348)   | ([s] . 8347)    | ([r] . 7523)    | ([p] . 8346)   | ([o] . 8338)  | ([n] . 8345)    | ([m] . 8344)  | ([l] . 8343)    | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341)   | ([e] . 8337)  | ([a] . 8336)    | ([9] . 8329)  | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323) | ([2] . 8322)  | ([1] . 8321)  | ([0] . 8320) | (^i . 8305)       | (^n . 8319)  | (psi . 966)  | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)   | (beta . 946)    | (alpha . 945) | (sqrt . 8730) | (nil . 8709)  | (=> . 10233)  | (>= . 8805)    | (<= . 8804)   | (!= . 8800)     |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| ess-mode        | ([x] . 8339)  | ([v] . 7525) | ([u] . 7524)   | ([t] . 8348)   | ([s] . 8347)    | ([r] . 7523)    | ([p] . 8346)   | ([o] . 8338)  | ([n] . 8345)    | ([m] . 8344)  | ([l] . 8343)    | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341)   | ([e] . 8337)  | ([a] . 8336)    | ([9] . 8329)  | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323) | ([2] . 8322)  | ([1] . 8321)  | ([0] . 8320) | (^i . 8305)       | (^n . 8319)  | (psi . 966)  | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)   | (beta . 946)    | (alpha . 945) | (sqrt . 8730) | (-> . 10139)  | (<- . 8592)   | (>= . 8805)    | (<= . 8804)   | (!= . 8800)     |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| java-mode       | ([x] . 8339)  | ([v] . 7525) | ([u] . 7524)   | ([t] . 8348)   | ([s] . 8347)    | ([r] . 7523)    | ([p] . 8346)   | ([o] . 8338)  | ([n] . 8345)    | ([m] . 8344)  | ([l] . 8343)    | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341)   | ([e] . 8337)  | ([a] . 8336)    | ([9] . 8329)  | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323) | ([2] . 8322)  | ([1] . 8321)  | ([0] . 8320) | (^i . 8305)       | (^n . 8319)  | (psi . 966)  | (pi . 960)   | (lambda . 955) | (theta . 952)  | (epsilon . 949) | (delta . 916)   | (gamma . 947)   | (beta . 946)    | (alpha . 945) | (sqrt . 8730) | (null . 8709) | (>= . 8805)   | (<= . 8804)    | (!= . 8800)   |                 |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| python-mode     | ([x] . 8339)  | ([v] . 7525) | ([u] . 7524)   | ([t] . 8348)   | ([s] . 8347)    | ([r] . 7523)    | ([p] . 8346)   | ([o] . 8338)  | ([n] . 8345)    | ([m] . 8344)  | ([l] . 8343)    | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341)   | ([e] . 8337)  | ([a] . 8336)    | ([9] . 8329)  | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323) | ([2] . 8322)  | ([1] . 8321)  | ([0] . 8320) | (^i . 8305)       | (^n . 8319)  | (**n . 8319) | (**3 . 179)  | (**2 . 178)    | (psi . 966)    | (pi . 960)      | (lambda . 955)  | (theta . 952)   | (epsilon . 949) | (delta . 916) | (gamma . 947) | (beta . 946)  | (alpha . 945) | (sum . 8721)   | (sqrt . 8730) | (>= . 8805)     | (<= . 8804)   | (!= . 8800)     |               |               |               |               |               |               |              |             |             |             |
-	| sh-mode         | (\<!\> . 172) | ([x] . 8339) | ([v] . 7525)   | ([u] . 7524)   | ([t] . 8348)    | ([s] . 8347)    | ([r] . 7523)   | ([p] . 8346)  | ([o] . 8338)    | ([n] . 8345)  | ([m] . 8344)    | ([l] . 8343)  | ([k] . 8342)  | ([j] . 11388) | ([i] . 7522)   | ([h] . 8341)  | ([e] . 8337)    | ([a] . 8336)  | (\<!\> . 172) | ([9] . 8329) | ([8] . 8328)  | ([7] . 8327) | ([6] . 8326)  | ([5] . 8325) | ([4] . 8324)  | ([3] . 8323)  | ([2] . 8322) | ([1] . 8321)      | ([0] . 8320) | (^i . 8305)  | (^n . 8319)  | (psi . 966)    | (pi . 960)     | (lambda . 955)  | (theta . 952)   | (epsilon . 949) | (delta . 916)   | (gamma . 947) | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (>= . 8805)    | (<= . 8804)   | (!= . 8800)     |               |                 |               |               |               |               |               |               |              |             |             |             |
-	| perl-mode       | (\<!\> . 172) | (            |                | . 8744)        | (&& . 8743)     | ([x] . 8339)    | ([v] . 7525)   | ([u] . 7524)  | ([t] . 8348)    | ([s] . 8347)  | ([r] . 7523)    | ([p] . 8346)  | ([o] . 8338)  | ([n] . 8345)  | ([m] . 8344)   | ([l] . 8343)  | ([k] . 8342)    | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341) | ([e] . 8337)  | ([a] . 8336) | (\<!\> . 172) | (            |               | . 8744)       | (&& . 8743)  | ([9] . 8329)      | ([8] . 8328) | ([7] . 8327) | ([6] . 8326) | ([5] . 8325)   | ([4] . 8324)   | ([3] . 8323)    | ([2] . 8322)    | ([1] . 8321)    | ([0] . 8320)    | (^i . 8305)   | (^n . 8319)   | (psi . 966)   | (pi . 960)    | (lambda . 955) | (theta . 952) | (epsilon . 949) | (delta . 916) | (gamma . 947)   | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (=> . 10233)  | (-> . 10139)  | (>= . 8805)   | (<= . 8804)  | (!= . 8800) |             |             |
-	| c++-mode        | (\<!\> . 172) | (            |                | . 8744)        | (&& . 8743)     | ([x] . 8339)    | ([v] . 7525)   | ([u] . 7524)  | ([t] . 8348)    | ([s] . 8347)  | ([r] . 7523)    | ([p] . 8346)  | ([o] . 8338)  | ([n] . 8345)  | ([m] . 8344)   | ([l] . 8343)  | ([k] . 8342)    | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341) | ([e] . 8337)  | ([a] . 8336) | (\<!\> . 172) | (            |               | . 8744)       | (&& . 8743)  | (HUGE_VAL . 8734) | ([9] . 8329) | ([8] . 8328) | ([7] . 8327) | ([6] . 8326)   | ([5] . 8325)   | ([4] . 8324)    | ([3] . 8323)    | ([2] . 8322)    | ([1] . 8321)    | ([0] . 8320)  | (^i . 8305)   | (^n . 8319)   | (psi . 966)   | (M_PI . 960)   | (pi . 960)    | (lambda . 955)  | (theta . 952) | (epsilon . 949) | (delta . 916) | (gamma . 947) | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (NULL . 8709) | (-> . 10139) | (>= . 8805) | (<= . 8804) | (!= . 8800) |
-	| c-mode          | (\<!\> . 172) | (            |                | . 8744)        | (&& . 8743)     | ([x] . 8339)    | ([v] . 7525)   | ([u] . 7524)  | ([t] . 8348)    | ([s] . 8347)  | ([r] . 7523)    | ([p] . 8346)  | ([o] . 8338)  | ([n] . 8345)  | ([m] . 8344)   | ([l] . 8343)  | ([k] . 8342)    | ([j] . 11388) | ([i] . 7522)  | ([h] . 8341) | ([e] . 8337)  | ([a] . 8336) | (\<!\> . 172) | (            |               | . 8744)       | (&& . 8743)  | (HUGE_VAL . 8734) | ([9] . 8329) | ([8] . 8328) | ([7] . 8327) | ([6] . 8326)   | ([5] . 8325)   | ([4] . 8324)    | ([3] . 8323)    | ([2] . 8322)    | ([1] . 8321)    | ([0] . 8320)  | (^i . 8305)   | (^n . 8319)   | (psi . 966)   | (M_PI . 960)   | (pi . 960)    | (lambda . 955)  | (theta . 952) | (epsilon . 949) | (delta . 916) | (gamma . 947) | (beta . 946)  | (alpha . 945) | (sqrt . 8730) | (NULL . 8709) | (-> . 10139) | (>= . 8805) | (<= . 8804) | (!= . 8800) |
 
 ***** DONE move my changes from pretty-mode.el to this file
 			:LOGBOOK:
@@ -1501,23 +1510,68 @@ different points. This is placed in a git repository that I share between work a
 			#+BEGIN_SRC emacs-lisp
       	;;(jiha-safe-require 'plsql ())
 			#+END_SRC
-***** SQL-mode
+***** SQL-mode																																		 :hooks:
 
 			First we need to associate oracles sql files with sql-mode, and deactiveate
 			linewrapping, it's idiotic in sqli-mode
 
 			#+BEGIN_SRC emacs-lisp
+        (defun jiha/comint-write-history-on-exit (process event)
+          (message "saving input ring")
+          (comint-write-input-ring)
+          (let ((buf (process-buffer process)))
+            (when (buffer-live-p buf)
+              (with-current-buffer buf
+                (insert (format "\nProcess %s %s" process event))))))
+
+        (defun jiha/turn-on-comint-history (filename)
+          (let ((process (get-buffer-process (current-buffer))))
+            (when process
+              (setq comint-input-ring-file-name filename)
+              (comint-read-input-ring)
+              (set-process-sentinel process #'jiha/comint-write-history-on-exit))))
+
         (add-to-list 'auto-mode-alist '("\\.plb\\'" . sql-mode))
+
         (add-hook 'sql-interactive-mode-hook (lambda ()
                                                (toggle-truncate-lines 1)))
-        (add-hook 'sql-interactive-mood-hook (lambda ()
-                                               (setq comint-input-ring-name
-                                                     (concat (sql-make-alternate-buffer-name)
-                                                             ".history"))))
+        (add-hook 'sql-interactive-mode-hook
+                  (lambda ()
+                    (jiha/turn-on-comint-history (concat
+                                                  (getenv "TMP")
+                                                  "\\"
+                                                  sql-connection
+                                                  ".history"))))
 			#+END_SRC
 
-   #+RESULTS:
+      #+RESULTS:
+	    | lambda | nil | (jiha/turn-on-comint-history (concat (getenv TMP) \ sql-connection .history)) |
+	    | lambda | nil | (toggle-truncate-lines 1)                                                     |
+			
+			but that is not enough, when killing the buffer without exit, the history will not
+			be saved. by adding comint-write-input-ring to the kill-buffer hook for all comint
+			derived modes we fix that
 
+			#+BEGIN_SRC emacs-lisp
+        (add-hook 'kill-buffer-hook 'comint-write-input-ring)
+			#+END_SRC
+
+			when killing emacs the kill-buffer-hook's will not be run for some reason, to fix
+			that we add a looping over all buffers in kill-emacs-hook
+
+			#+BEGIN_SRC emacs-lisp
+        (defun jiha/mapc-buffers (fn)
+          (mapc (lambda (buffer)
+                  (with-current-buffer buffer
+                    (funcall fn)))
+                (buffer-list)))
+
+        (defun jiha/comint-write-input-ring-all-buffers ()
+          (jiha/mapc-buffers 'comint-write-input-ring))
+
+        (add-hook 'kill-emacs-hook 'jiha/comint-write-input-ring-all-buffers)
+
+			#+END_SRC
 ******* Support Multiple connections
 
 				If you work with multiple connections, you need to rename them such that the next
@@ -1528,6 +1582,9 @@ different points. This is placed in a git repository that I share between work a
 				#+BEGIN_SRC emacs-lisp
         	(add-hook 'sql-interactive-mode-hook 'sql-rename-buffer)
 				#+END_SRC
+
+				#+RESULTS:
+				| sql-rename-buffer | (lambda nil (rename-buffer (sql-make-alternate-buffer-name))) | (lambda nil (jiha/turn-on-comint-history (concat (getenv TMP) \ sql-connection .history))) | (lambda nil (toggle-truncate-lines 1)) |
 
 				Sometimes you can change the connection parameters, however. In Oracle, for example, you would to it as follows:
 				
@@ -1766,6 +1823,16 @@ different points. This is placed in a git repository that I share between work a
 				CLOCK: [2013-10-02 on 19:55]--[2013-10-03 to 00:20] =>  4:25
 				:END:
 ******* TODO Make it able to start and control what solution is used.
+***** Lisp
+			
+			#+BEGIN_SRC emacs-lisp
+        (require 'slime-autoloads)
+        (load (expand-file-name "~/quicklisp/slime-helper.el"))
+        (setq inferior-lisp-program "sbcl --noinform")
+			#+END_SRC
+
+   #+RESULTS:
+	 : sbcl --noinform
 
 *** Flymake
 ***** Haskell
@@ -2068,12 +2135,29 @@ different points. This is placed in a git repository that I share between work a
       (setq org-toc-follow-mode t)
 		#+END_SRC
 
+		#+RESULTS:
+		: t
+
 		we need this in newer org-mode for some reason or everthing I write will be interpret
 		as a list item and will give warnings.
 		
 		#+BEGIN_SRC emacs-lisp
       (setq org-list-allow-alphabetical t)
 		#+END_SRC
+*** newer org-mode needs newer outline 																		 :FIX:TEMPORARY:
+		
+		org-mode maintaners are using newer outline.el, where show-all has been renamed to
+		outline-show-all, this solves that problem.
+
+		#+BEGIN_SRC emacs-lisp
+      (unless (boundp 'outline-show-all)
+        (defun outline-show-all ()
+          (interactive)
+          (show-all)))
+		#+END_SRC
+
+  #+RESULTS:
+	: outline-show-all
 
 *** Global Keys for OrgMode																									 :keybindings:
 		
@@ -2086,6 +2170,7 @@ different points. This is placed in a git repository that I share between work a
       ;; Agenda
       (global-set-key (kbd "S-<f6>") 'org-agenda)
       (global-set-key (kbd "<f6>") 'org-agenda-list)
+			(global-set-key (kbd "C-<f6>") 'org-todo-list)
       
       ;; capture
       ;; ask me what type of item to capture
@@ -2313,7 +2398,8 @@ different points. This is placed in a git repository that I share between work a
 		#+BEGIN_SRC emacs-lisp
       (setq org-todo-keywords
             (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d@/@)")
-                    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE")
+                    (sequence "WAITING(w@/!)" "|" "CANCELLED(c@/!)")
+										(sequence "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
                     (sequence "INVESTIGATE(i@/!)" "BUG(b@/!)" "|" "NOT_A_BUG(!)" "FIXED(f@/@)")
                     (sequence "ESTIMATE" "|" "ESTIMATED"))))
       
@@ -2460,6 +2546,8 @@ different points. This is placed in a git repository that I share between work a
 
 		#+BEGIN_SRC emacs-lisp
       (let ((key "<f2>"))
+        (add-hook 'org-mode-hook (lambda () (local-set-key [f2] 'org-clock-in)))
+        (add-hook 'org-agenda-mode-hook (lambda () (local-set-key [f2] 'org-agenda-clock-in)))
         (global-set-key (kbd key) 'org-clock-in)
         (global-set-key (kbd (concat "M-" key)) 'org-clock-goto)
         (global-set-key (kbd (concat "S-" key)) 'org-clock-out)
@@ -2482,7 +2570,7 @@ different points. This is placed in a git repository that I share between work a
       (setq org-agenda-ndays 14)
       (setq org-agenda-repeating-timestamp-show-all nil)
       (setq org-agenda-include-diary t)
-      
+      (setq org-agenda-inhibit-startup t)
       (setq org-agenda-clock-consistency-checks 
             (quote (:max-duration "10:00" 
                     :min-duration "00:03" 
@@ -2504,13 +2592,16 @@ different points. This is placed in a git repository that I share between work a
       (setq org-agenda-time-leading-zero t)
       
       ;; habits, and modification of tags column so it's not in way of habits
-      (setq org-habit-graph-column 80)
-      (setq org-agenda-tags-column 120)
+      (setq org-habit-graph-column 70)
+      (setq org-agenda-tags-column 110)
       (setq org-habit-show-habits-only-for-today nil)
       (setq org-habit-preceding-days 20)
       (setq org-habit-following-days 15)
       
 		#+END_SRC
+
+		#+RESULTS:
+		: 15
 
 		From Julien Danjou we borrow a function to be able to get our own
 		Holidays and Vaction days marked in the right face.	 for this to
@@ -2535,6 +2626,15 @@ different points. This is placed in a git repository that I share between work a
 		#+END_SRC
 		
 ***** Agenda templates
+			#+BEGIN_SRC emacs-lisp
+        ;(setq org-agenda-custom-commands
+        ;  '(("h" . "HOME + Name tag searches") ; describe prefix "h"
+        ;    ("hl" tags "+HOME+Lisa")
+        ;    ("hp" tags "+HOME+Peter")
+        ;    ("hk" tags "+HOME+Kim")))
+
+			#+END_SRC
+
 ***** Diary integration																						:appt:midnight:calendar:
 
 			functions to use in the agenda view, include calles to these
@@ -2554,7 +2654,7 @@ different points. This is placed in a git repository that I share between work a
               (goto-char (point-min))
               (search-forward ",")
               (buffer-substring (point-min) (match-beginning 0)))))
-        
+
         (defun diary-sunset ()
           (let ((dss (diary-sunrise-sunset))
                 start end)
@@ -2571,7 +2671,7 @@ different points. This is placed in a git repository that I share between work a
               (goto-char start)
               (capitalize-word 1)
               (buffer-substring start end))))
-        
+
 			#+END_SRC
 			
 			We also need to set where on earth we are because without that
@@ -2653,6 +2753,7 @@ different points. This is placed in a git repository that I share between work a
 		#+BEGIN_SRC emacs-lisp
       ;; Save the running clock and all clock history when exiting Emacs, load it on startup
       (setq org-clock-persist t)      
+			(org-clock-persistence-insinuate)
 		#+END_SRC
 * Google Integration
 	most of these things comes from http://julien.danjou.info/
