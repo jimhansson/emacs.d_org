@@ -91,7 +91,10 @@ different points. This is placed in a git repository that I share between work a
 		(ad-disable-advice 'tabify 'around 'mark-whole-buffer-if-no-region)
 		#+END_SRC
 
-  #+RESULTS:
+
+*** When pulling between my work machine and private machine I get dos line-endings 
+		on every line, this is not good, my work machine will not like it and fail to tangle
+		this file.
 
 * Introduction
 	Basic things that could have been done throu custom-set-variable but
@@ -2978,8 +2981,5 @@ different points. This is placed in a git repository that I share between work a
 	emacs.org and in the exported emacs.el
 
 	#+BEGIN_SRC emacs-lisp
-    ;; Local Variables:
-    ;; tab-width: 2;
-    ;; LocalWords: Uniquify Iswitch emacs src Whitespace Google LocalWords BBDB SQL PLSQL nXML Krennwallner's
-    ;; End:
+	;;
 	#+END_SRC
