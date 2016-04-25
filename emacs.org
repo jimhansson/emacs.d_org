@@ -2174,7 +2174,7 @@ different points. This is placed in a git repository that I share between work a
       (global-set-key (kbd "S-<f6>") 'org-agenda)
       (global-set-key (kbd "<f6>") 'org-agenda-list)
 			(global-set-key (kbd "C-<f6>") 'org-todo-list)
-      
+      (global-set-key (kbd "C-c n") 'org-add-note)
       ;; capture
       ;; ask me what type of item to capture
       (global-set-key (kbd "<f7>") 'org-capture)
